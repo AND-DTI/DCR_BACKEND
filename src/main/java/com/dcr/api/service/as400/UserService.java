@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dcr.api.configs.security.Auditoria;
-import com.dcr.api.model.as400.User;
+import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.repository.as400.UserRepository;
 import com.dcr.api.utils.Auxiliar;
 
@@ -26,13 +26,13 @@ public class UserService {
 
     }
 
-    public List<User> listarTodos() {
+    public List<Accuser> listarTodos() {
 
         return userRepository.findAll();
 
     }
 
-    public List<User> listByUsername(String username) {
+    public List<Accuser> listByUsername(String username) {
 
         try {
             username = username.toUpperCase();
@@ -43,13 +43,13 @@ public class UserService {
 
     }
 
-    public List<User> listByEmail(String email) {
+    public List<Accuser> listByEmail(String email) {
 
         return userRepository.findDistinctByEmail(email);
 
     }
 
-    public Optional<User> getByUsernameOptional(String username) {
+    public Optional<Accuser> getByUsernameOptional(String username) {
 
         try {
             username = username.toUpperCase();
@@ -60,14 +60,14 @@ public class UserService {
 
     }
 
-    public User getByUsername(String username) {
+    public Accuser getByUsername(String username) {
 
         try {
             username = username.toUpperCase();
         } catch (Exception e) {
         }
 
-        return (User) userRepository.findDistinctByUsername(username);
+        return (Accuser) userRepository.findDistinctByUsername(username);
 
     }
 
@@ -80,10 +80,10 @@ public class UserService {
         } catch (Exception e) {
         }
 
-        Optional<User> optUser = userRepository.findByUsername(username);
+        Optional<Accuser> optUser = userRepository.findByUsername(username);
 
         if (!optUser.isEmpty()) {
-            User user = optUser.get();
+            Accuser user = optUser.get();
             matricula = user.getUserid();
         }
 
@@ -110,14 +110,14 @@ public class UserService {
 //
 //    }
 
-    public User save(User user) {
+    public Accuser save(Accuser user) {
 
         user.setUsername(user.getUsername().toUpperCase());
         return userRepository.save(user);
 
     }
 
-    public User save0(User user) {
+    public Accuser save0(Accuser user) {
 
         return userRepository.save(user);
 

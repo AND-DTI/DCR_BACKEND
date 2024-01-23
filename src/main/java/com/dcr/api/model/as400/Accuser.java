@@ -1,28 +1,31 @@
 package com.dcr.api.model.as400;
 
-import static com.dcr.api.utils.Auxiliar.*;
+import static com.dcr.api.utils.Auxiliar.trimNull;
 
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import org.springframework.security.core.GrantedAuthority;
-
-import org.springframework.security.core.userdetails.UserDetails;
-
 @Entity
-@Table(name = "ctpuser")
-public class User implements UserDetails {
+@Table(name = "ACCUSER", schema = "HD4DCDHH")
+public class Accuser implements UserDetails {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -920972556965250153L;
+
+	@Id
     @Column(columnDefinition = "char(10)", unique = true)
     private String username;
 
@@ -66,7 +69,7 @@ public class User implements UserDetails {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-    public User(String username, String name, Integer userid, String email, String idarea, String ativo,
+    public Accuser(String username, String name, Integer userid, String email, String idarea, String ativo,
             String password, String token, List<User_Role> roles) {
         this.username = username;
         this.name = name;
@@ -79,7 +82,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public User() {
+    public Accuser() {
 
     }
 
@@ -189,7 +192,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
+		return null;
+        //return this.roles;
     }
 
     @Override

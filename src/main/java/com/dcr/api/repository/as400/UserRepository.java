@@ -5,16 +5,16 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import com.dcr.api.model.as400.User;
+import com.dcr.api.model.as400.Accuser;
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<Accuser, String> {
 
-    List<User> findAll();
+    List<Accuser> findAll();
 
-    Optional<User> findByUsername(String username);
+    Optional<Accuser> findByUsername(String username);
 
-    List<User> findDistinctByUsername(String username);
+    List<Accuser> findDistinctByUsername(String username);
 
-    List<User> findDistinctByEmail(String email);
+    List<Accuser> findDistinctByEmail(String email);
 
 }

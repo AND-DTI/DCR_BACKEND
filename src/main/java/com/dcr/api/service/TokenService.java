@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.dcr.api.model.as400.User;
+import com.dcr.api.model.as400.Accuser;
 
 @Component
 public class TokenService {
@@ -23,7 +23,7 @@ public class TokenService {
     @Value("${data.token_pass:SUPER_SECRET_WORD}")
     String TOKEN_PASS;
 
-    public String gerarToken(User user) {
+    public String gerarToken(Accuser user) {
 
         return JWT.create()
                 .withSubject(user.getUsername())
@@ -32,7 +32,7 @@ public class TokenService {
 
     }
 
-    public TokenCST gerarToken2(User user) {
+    public TokenCST gerarToken2(Accuser user) {
 
         String tokenString = JWT.create()
                 .withSubject(user.getUsername().trim())

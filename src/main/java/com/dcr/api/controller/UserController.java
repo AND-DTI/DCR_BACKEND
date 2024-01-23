@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import com.dcr.api.configs.security.Security;
 import com.dcr.api.model.ApiResponseCST;
 import com.dcr.api.model.ApiResponseCST.Status;
-import com.dcr.api.model.as400.User;
+import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.LoginAD;
 import com.dcr.api.service.AuthenticationService;
 import com.dcr.api.service.as400.UserService;
@@ -74,10 +74,10 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
     })
-    public ResponseEntity<List<User>> listAll(
+    public ResponseEntity<List<Accuser>> listAll(
             @PageableDefault(page = 0, size = 10, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        List<User> users = userService.listarTodos();
+        List<Accuser> users = userService.listarTodos();
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -147,10 +147,10 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Usuário não cadastrado no sistema FERG.COM!"),
     })
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> update(@RequestBody User user) throws ParseException {
+    public ResponseEntity<Accuser> update(@RequestBody Accuser user) throws ParseException {
 
-        List<User> users = userService.listByUsername(user.getUsername());
-        User userALT = null;
+        List<Accuser> users = userService.listByUsername(user.getUsername());
+        Accuser userALT = null;
 
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)

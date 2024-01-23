@@ -78,6 +78,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/securityuser/changepassword").permitAll()
                         .requestMatchers("/api/securityuser/getall").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/health-check/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()

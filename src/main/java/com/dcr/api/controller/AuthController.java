@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.dcr.api.configs.security.Security;
-import com.dcr.api.model.as400.User;
+import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.Login;
 import com.dcr.api.model.dto.LoginAD;
 import com.dcr.api.model.dto.RoleDTO;
@@ -51,6 +51,27 @@ public class AuthController {
     @Autowired
     Security sec;
 
+    @PostMapping(value = "/login", produces = "application/json")
+    @Operation(summary = "Autenticar.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autenticado com sucesso!"),
+            @ApiResponse(responseCode = "404", description = "Usuário não cadastrado no sistema FERG.COM."),
+    })
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<User_x_RoleDTO> autheticateSimples(@RequestBody Login login) {
+
+        Optional<Accuser> optUser = userService.getByUsernameOptional(login.username());
+        if (optUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .header("Accept", "application/json")
+                    .body(null);
+        }
+        Accuser user = optUser.get();
+        
+		return null;
+
+    }
+    
     @PostMapping(value = "/login2", produces = "application/json")
     @Operation(summary = "Autenticar.")
     @ApiResponses(value = {
@@ -60,13 +81,13 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User_x_RoleDTO> autheticate2(@RequestBody Login login) {
 
-        Optional<User> optUser = userService.getByUsernameOptional(login.username());
+        Optional<Accuser> optUser = userService.getByUsernameOptional(login.username());
         if (optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .header("Accept", "application/json")
                     .body(null);
         }
-        User user = optUser.get();
+        Accuser user = optUser.get();
 
         UsernamePasswordAuthenticationToken userpassAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 login.username().toUpperCase(), login.password());
@@ -76,7 +97,7 @@ public class AuthController {
 
                 Authentication authenticate = this.authManager.authenticate(userpassAuthenticationToken);
 
-                var usuario = (User) authenticate.getPrincipal();
+                var usuario = (Accuser) authenticate.getPrincipal();
 
                 TokenCST token = tokenService.gerarToken2(usuario);
 
@@ -117,7 +138,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User_x_RoleDTO> getroles(@RequestBody Login login) {
 
-        Optional<User> optUser = userService.getByUsernameOptional(login.username());
+        Optional<Accuser> optUser = userService.getByUsernameOptional(login.username());
         if (optUser.isEmpty()) {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -125,7 +146,7 @@ public class AuthController {
                     .body(null);
 
         }
-        User user = optUser.get();
+        Accuser user = optUser.get();
 
         User_x_RoleDTO user_role = new User_x_RoleDTO(user.getUsername(), user.getName(), user.getIdarea(),
                 user.getAtivo(), "", null);
@@ -144,7 +165,7 @@ public class AuthController {
 
     }
 
-    @PostMapping(value = "/login", produces = "application/json")
+    @PostMapping(value = "/login3", produces = "application/json")
     @Operation(summary = "Autenticar.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autenticado com sucesso!"),
@@ -153,14 +174,14 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> autheticate(@RequestBody Login login) {
 
-        Optional<User> optUser = userService.getByUsernameOptional(login.username());
+        Optional<Accuser> optUser = userService.getByUsernameOptional(login.username());
         if (optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .header("Accept", "application/json")
                     .body(null);
 
         }
-        User user = optUser.get();
+        Accuser user = optUser.get();
 
         UsernamePasswordAuthenticationToken userpassAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 login.username().toUpperCase(), login.password());
@@ -170,7 +191,7 @@ public class AuthController {
 
                 Authentication authenticate = this.authManager.authenticate(userpassAuthenticationToken);
 
-                var usuario = (User) authenticate.getPrincipal();
+                var usuario = (Accuser) authenticate.getPrincipal();
 
                 TokenCST token = tokenService.gerarToken2(usuario);
 
@@ -231,7 +252,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> autheticate0(@RequestBody Login login) {
 
-        List<User> users = userService.listByUsername(login.username());
+        List<Accuser> users = userService.listByUsername(login.username());
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .header("Accept", "application/json")
@@ -246,7 +267,7 @@ public class AuthController {
 
                 Authentication authenticate = this.authManager.authenticate(userpassAuthenticationToken);
 
-                var usuario = (User) authenticate.getPrincipal();
+                var usuario = (Accuser) authenticate.getPrincipal();
                 String token = tokenService.gerarToken(usuario);
 
                 usuario.setToken(token);

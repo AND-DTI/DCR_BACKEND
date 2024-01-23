@@ -14,13 +14,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "ctpuserrl", uniqueConstraints = { @UniqueConstraint(columnNames = { "username", "roleid" }) })
+@Table(name = "ACCROLES", schema = "HD4DCDHH")
 @IdClass(User_RoleKey.class)
 public class User_Role implements GrantedAuthority {
-
-    @Id
-    @Column(columnDefinition = "char(10)", unique = true)
-    private String username;
 
     @Id
     @Column(columnDefinition = "int", unique = true)
@@ -29,28 +25,17 @@ public class User_Role implements GrantedAuthority {
     @Column(columnDefinition = "char(20)")
     private String rolename;
 
-    @Column(columnDefinition = "char(8)")
-    private String dtacad;
 
     public User_Role() {
 
     }
 
-    public User_Role(String username, Integer roleid, String rolename, String dtacad) {
+    public User_Role(Integer roleid, String rolename) {
         super();
-        this.username = username;
         this.roleid = roleid;
         this.rolename = rolename;
-        this.dtacad = dtacad;
     }
 
-    public String getUsername() {
-        return trimNull(username);
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public Integer getRoleid() {
         return roleid;
@@ -64,13 +49,6 @@ public class User_Role implements GrantedAuthority {
         this.rolename = rolename;
     }
 
-    public String getDtacad() {
-        return dtacad;
-    }
-
-    public void setDtacad(String dtacad) {
-        this.dtacad = dtacad;
-    }
 
     @Override
     public String getAuthority() {
