@@ -1,64 +1,42 @@
 package com.dcr.api.configs.persistence;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.*;
-import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-@Configuration
-@EnableJpaRepositories(basePackages = "com.dcr.api.repository.as400", entityManagerFactoryRef = "as400_EntityManager", transactionManagerRef = "as400_TransactionManager")
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PersistenceAS400Config {
 
-    @Autowired
-    Environment env;
-    String ds_dialect = "as400.datasource.database-platform";
-    String ds_ddlauto = "as400.datasource.hibernate.ddl-auto";
-    String ds_modelPackages = "com.dcr.api.model.as400";
-
-    @Primary
-    @Bean
-    @ConfigurationProperties(prefix = "as400.datasource")
-    public DataSource as400_DataSource() {
-
-        return DataSourceBuilder.create().build();
-
-    }
-
-    @Primary
-    @Bean
-    public LocalContainerEntityManagerFactoryBean as400_EntityManager() {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(as400_DataSource());
-        em.setPackagesToScan(
-                new String[] { ds_modelPackages });
-
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", env.getProperty(ds_ddlauto));
-        properties.put("hibernate.dialect", env.getProperty(ds_dialect));
-        em.setJpaPropertyMap(properties);
-
-        return em;
-    }
-
-    @Primary
-    @Bean
-    public PlatformTransactionManager as400_TransactionManager() {
-
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(
-                as400_EntityManager().getObject());
-        return transactionManager;
-    }
+	private static final Logger logger = LoggerFactory.getLogger(PersistenceAS400Config.class);
+	public static Connection getConnectionAS400Db2() {
+		// # PRODUÇÃO #
+			String url = "jdbc:as400://hsa0014;libraries=,HD4BPDHD;translate binary=true;user=SBS00020;password=manaus@01;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate";
+		// # HOMOLOGAÇÃO #
+		//	String url = "jdbc:as400://hsa0014;translate binary=true;user=SBS00020;password=manaus@01;driverClassName=com.ibm.as400.access.AS400JDBCDriver";
+				
+		try {
+			Class.forName("com.ibm.as400.access.AS400JDBCDriver");
+			Connection con = DriverManager.getConnection(url);						
+			return con;
+		} catch (SQLException e) {
+			String msg = "Ocorreu um erro na API JDBC: "
+					+  "=> " + e.getMessage();
+			logger.error(msg);
+			//e.printStackTrace();
+			//System.out.println(msg);
+			//throw new RuntimeException(msg);
+			return null;
+		} catch (ClassNotFoundException e) {
+			String msg = "Ocorreu um erro na API JDBC: "
+					+  "=> " + e.getMessage();
+			logger.error(msg);
+			//e.printStackTrace();
+			//System.out.println(msg);
+			//throw new RuntimeException(msg);
+			return null;
+		}
+	}
 
 }
