@@ -190,6 +190,11 @@ public class Accuser implements UserDetails {
         this.itaudhr = itaudhr;
     }
 
+    public List<User_Role> getRoles() {
+    	return this.roles;
+    }
+
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;

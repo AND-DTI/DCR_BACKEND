@@ -2,6 +2,7 @@ package com.dcr.api.controller;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -12,22 +13,25 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.configs.security.Security;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.Login;
-import com.dcr.api.model.dto.LoginAD;
-import com.dcr.api.model.dto.RoleDTO;
-import com.dcr.api.model.dto.RoleUserDTO;
 import com.dcr.api.model.dto.User_x_RoleDTO;
+import com.dcr.api.response.LoginResponse;
 import com.dcr.api.service.TokenCST;
 import com.dcr.api.service.TokenService;
 import com.dcr.api.service.as400.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.*;
-import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -51,14 +55,15 @@ public class AuthController {
     @Autowired
     Security sec;
 
+    
     @PostMapping(value = "/login", produces = "application/json")
     @Operation(summary = "Autenticar.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autenticado com sucesso!"),
-            @ApiResponse(responseCode = "404", description = "Usuário não cadastrado no sistema FERG.COM."),
+            @ApiResponse(responseCode = "404", description = "Usuário não cadastrado no sistema"),
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<User_x_RoleDTO> autheticateSimples(@RequestBody Login login) {
+    public ResponseEntity<Object> autheticateSimples(@RequestBody Login login) {
 
         Optional<Accuser> optUser = userService.getByUsernameOptional(login.username());
         if (optUser.isEmpty()) {
@@ -66,9 +71,39 @@ public class AuthController {
                     .header("Accept", "application/json")
                     .body(null);
         }
-        Accuser user = optUser.get();
-        
-		return null;
+
+        try {
+        	
+	        UsernamePasswordAuthenticationToken userpassAuthenticationToken = new UsernamePasswordAuthenticationToken(
+	                login.username().toUpperCase(), login.password());
+	        
+	        Authentication authenticate = this.authManager.authenticate(userpassAuthenticationToken);
+	
+	        var usuario = (Accuser) authenticate.getPrincipal();
+	        
+	        TokenCST token = tokenService.gerarToken2(usuario);
+	
+	        usuario.setToken(token.token());
+	        userService.save0(usuario);
+	        
+	        LoginResponse response = new LoginResponse();
+	        response.setRoles(usuario.getRoles());
+	        response.setToken(token.token());
+	        response.setUsername(usuario.getUsername());
+	        
+	        return ResponseEntity.status(HttpStatus.OK) 
+	                .header("Accept", "application/json")
+	                .body(response);          
+	        
+        } catch (BadCredentialsException be) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED) 
+            		.header("Accept", "application/json")
+            		.body("Usuário ou senha inválidos");             
+        } catch (AuthenticationException ae) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED) 
+            		.header("Accept", "application/json")
+            		.body(ae.getMessage());                
+        }        
 
     }
     
@@ -223,25 +258,7 @@ public class AuthController {
 
     }
 
-    @GetMapping(value = "/showuser", produces = "application/json")
-    @Operation(summary = "Show AD User.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário encontrado!"),
-    })
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<LoginAD> showuser(HttpServletRequest request) {
 
-        LoginAD userAD = new LoginAD(request);
-
-        RoleDTO ur = new RoleDTO(
-                0, "USER", "Basic user access");
-        userAD.getRoles().add(ur);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Accept", "application/json")
-                .body(userAD);
-
-    }
 
     @PostMapping(value = "/login0", produces = "application/json")
 

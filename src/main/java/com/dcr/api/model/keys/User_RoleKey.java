@@ -2,25 +2,29 @@ package com.dcr.api.model.keys;
 
 import java.io.Serializable;
 
-public class User_RoleKey implements Serializable {
+public class User_RoleKey implements Serializable{
 
-    private String rolename;
-    private Integer roleid;
+    
+    private String username;			
+	private Integer roleid;
+	
+	
 
-    public User_RoleKey() {
+    public User_RoleKey(){
 
     }
 
-    public User_RoleKey(String rolename, Integer roleid) {
-        this.rolename = rolename;
-        this.roleid = roleid;
+    public User_RoleKey(String username, Integer roleid ) { 
+        this.username = username;
+        this.roleid = roleid;        
     }
 
-
-    public Integer getRoleid() {
-        return roleid;
+    public String getUsername() {        return username;    }
+    public void setUsername(String username) {
+        this.username = username;
     }
 
+    public Integer getRoleid() {        return roleid;    }
     public void setRoleid(Integer roleid) {
         this.roleid = roleid;
     }
@@ -29,7 +33,7 @@ public class User_RoleKey implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((rolename == null) ? 0 : rolename.hashCode());
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
         result = prime * result + ((roleid == null) ? 0 : roleid.hashCode());
         return result;
     }
@@ -43,10 +47,10 @@ public class User_RoleKey implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         User_RoleKey other = (User_RoleKey) obj;
-        if (rolename == null) {
-            if (other.rolename != null)
+        if (username == null) {
+            if (other.username != null)
                 return false;
-        } else if (!rolename.equals(other.rolename))
+        } else if (!username.equals(other.username))
             return false;
         if (roleid == null) {
             if (other.roleid != null)
@@ -55,5 +59,6 @@ public class User_RoleKey implements Serializable {
             return false;
         return true;
     }
+
 
 }

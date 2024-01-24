@@ -73,7 +73,7 @@ public class WebSecurityConfig {
                 .csrf((csrf) -> csrf
                         .disable())
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/securityuser/checktoken").permitAll()
+                        .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/securityuser/add").permitAll()
                         .requestMatchers("/api/securityuser/changepassword").permitAll()
                         .requestMatchers("/api/securityuser/getall").permitAll()
