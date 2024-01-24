@@ -27,6 +27,8 @@ import com.dcr.api.model.dto.User_x_RoleDTO;
 import com.dcr.api.response.LoginResponse;
 import com.dcr.api.service.TokenCST;
 import com.dcr.api.service.TokenService;
+import com.dcr.api.service.as400.RoleService;
+import com.dcr.api.service.as400.UserRoleService;
 import com.dcr.api.service.as400.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,10 +42,16 @@ public class AuthController {
 
     @Autowired
     AuthenticationManager authManager;
+   
     @Autowired
     private UserService userService;
+   
+    @Autowired
+    private RoleService roleService;
+    
     @Autowired
     PasswordEncoder encoder;
+    
     @Autowired
     TokenService tokenService;
 //    @Autowired
@@ -87,7 +95,7 @@ public class AuthController {
 	        userService.save0(usuario);
 	        
 	        LoginResponse response = new LoginResponse();
-	        response.setRoles(usuario.getRoles());
+	        response.setRoles(roleService.listByUsername(usuario.getRoles()));
 	        response.setToken(token.token());
 	        response.setUsername(usuario.getUsername());
 	        

@@ -82,7 +82,7 @@ public class UserController {
         acc.setName(user.name());
         acc.setUsername(user.username());
         acc.setEmail(user.email());
-        acc.setPassword(encoder.encode(user.password()));
+        acc.setPassword(encoder.encode(user.password())); 
         acc.setIdarea(user.idArea());
         acc.setItauddt(user.itauddt());
         acc.setItaudhr(user.itaudhr());

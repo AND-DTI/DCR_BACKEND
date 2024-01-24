@@ -7,7 +7,7 @@ import com.dcr.api.model.as400.User_Role;
 public class LoginResponse {
 	private String username;
 	private String token;
-	private List<User_Role> roles;
+	private List<RoleResponse> roles;
 	
 	public String getUsername() {
 		return username;
@@ -21,10 +21,10 @@ public class LoginResponse {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	public List<User_Role> getRoles() {
+	public List<RoleResponse> getRoles() {
 		return roles;
 	}
-	public void setRoles(List<User_Role> roles) {
+	public void setRoles(List<RoleResponse> roles) {
 		this.roles = roles;
 	}
 }

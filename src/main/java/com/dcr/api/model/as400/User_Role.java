@@ -29,9 +29,6 @@ public class User_Role implements GrantedAuthority {
     @Column(columnDefinition = "char(20)")
     private String rolename;
 
-    @Column(columnDefinition = "char(8)")
-    private String dtacad;
-
     public User_Role() {
 
     }
@@ -41,7 +38,6 @@ public class User_Role implements GrantedAuthority {
         this.username = username;
         this.roleid = roleid;
         this.rolename = rolename;
-        this.dtacad = dtacad;
     }
 
     public String getUsername() {        return trimNull(username);    }
@@ -57,11 +53,6 @@ public class User_Role implements GrantedAuthority {
     //public String getRolname() {        return rolename;    }
     public void setRolname(String rolename) {
         this.rolename = rolename;
-    }
-
-    public String getDtacad() {        return dtacad;    }
-    public void setDtacad(String dtacad) {
-        this.dtacad = dtacad;
     }
 
     @Override
