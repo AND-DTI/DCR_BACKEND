@@ -75,7 +75,13 @@
 			<scope>test</scope>
 		</dependency>
 	
-
+		<!-- Mail -->
+		
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
 
 		<!-- full project dependencies-->
 		<dependency>
@@ -88,8 +94,6 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.4.0</version>
 		</dependency>
-						
-	
 
 		<!-- SWAGGER commented 18.10.2023  -vulnerabilities-->
 		<!--

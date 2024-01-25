@@ -1,11 +1,12 @@
 package com.dcr.api.controller;
 
+import java.math.BigInteger;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -23,11 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dcr.api.configs.security.Security;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.service.AuthenticationService;
 import com.dcr.api.service.as400.UserService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,18 +51,6 @@ public class UserController {
     @Autowired
     AuthenticationManager authManager;
 
-    @Autowired
-    Security sec;
-
-    @Value("${data.source:hda}")
-    String ENV;
-    @Value("${data.api_se.adm:https://...}")
-    String api_se_adm;
-    @Value("${data.api_se.base_url:https://...}")
-    String api_se_baseurl;
-    @Value("${app.name:apiName}")
-    String app_name;
-
     @PutMapping(value = "/create", produces = "application/json")
     @Operation(summary = "Autenticar.")
     @ApiResponses(value = {
@@ -78,6 +67,11 @@ public class UserController {
                     .body("Usuário já cadastrado!");
         }
         
+        if(!Auxiliar.validatePassword(user.password())) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Accept", "application/json")
+                    .body("Senha fora do padrão");
+        }
         Accuser acc = new Accuser();
         acc.setName(user.name());
         acc.setUsername(user.username());
@@ -89,6 +83,13 @@ public class UserController {
         acc.setItaudhst(user.itaudhst());
         acc.setItaudsys(user.itaudsys());
         acc.setItaudusr(user.itaudusr());
+        acc.setTimevrfy(new Date(0L));
+        acc.setCdvrfy("");
+        acc.setFlex1flw(new BigInteger("0"));
+        acc.setFlex2flw(Double.valueOf(0));
+        acc.setFlex3flw("");
+        acc.setFlex4flw("");
+        acc.setFlex5flw("");
         acc.setToken("");
         acc.setUserid(2);
         acc.setAtivo("S");
@@ -103,7 +104,6 @@ public class UserController {
     @GetMapping(value = "/checktoken", produces = "application/json")
     @Operation(summary = "Simple request to check token return")
     public ResponseEntity<String> checkToken() {
-
         return ResponseEntity.status(HttpStatus.OK).body("Token alive!");
 
     }
@@ -165,8 +165,5 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Accept", "application/json")
                 .body(userALT);
-
     }
-
-
 }

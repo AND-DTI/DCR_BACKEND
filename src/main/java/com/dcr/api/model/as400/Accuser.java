@@ -2,7 +2,9 @@ package com.dcr.api.model.as400;
 
 import static com.dcr.api.utils.Auxiliar.trimNull;
 
+import java.math.BigInteger;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +17,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "ACCUSER", schema = "HD4DCDHH")
@@ -49,6 +53,28 @@ public class Accuser implements UserDetails {
 
     @Column(columnDefinition = "char(200)")
     private String token;
+    
+    @Column(columnDefinition = "char(100)")
+    private String cdvrfy;
+    
+    @Column(name = "timevrfy")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timevrfy;
+    
+    @Column(columnDefinition = "bigint(19)")
+    private BigInteger flex1flw;
+    
+    @Column(columnDefinition = "decimal(15,5)")
+    private Double flex2flw;
+    
+    @Column(columnDefinition = "char(8)")
+    private String flex3flw;
+    
+    @Column(columnDefinition = "char(40)")
+    private String flex4flw;
+    
+    @Column(columnDefinition = "char(1000)")
+    private String flex5flw;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "username", referencedColumnName = "username")
@@ -227,5 +253,65 @@ public class Accuser implements UserDetails {
         return this.getAtivo().equals("S");
 
     }
+
+	public String getCdvrfy() {
+		return cdvrfy;
+	}
+
+	public void setCdvrfy(String cdvrfy) {
+		this.cdvrfy = cdvrfy;
+	}
+
+	public BigInteger getFlex1flw() {
+		return flex1flw;
+	}
+
+	public void setFlex1flw(BigInteger flex1flw) {
+		this.flex1flw = flex1flw;
+	}
+
+	public Double getFlex2flw() {
+		return flex2flw;
+	}
+
+	public void setFlex2flw(Double flex2flw) {
+		this.flex2flw = flex2flw;
+	}
+
+	public String getFlex3flw() {
+		return flex3flw;
+	}
+
+	public void setFlex3flw(String flex3flw) {
+		this.flex3flw = flex3flw;
+	}
+
+	public String getFlex4flw() {
+		return flex4flw;
+	}
+
+	public void setFlex4flw(String flex4flw) {
+		this.flex4flw = flex4flw;
+	}
+
+	public String getFlex5flw() {
+		return flex5flw;
+	}
+
+	public void setFlex5flw(String flex5flw) {
+		this.flex5flw = flex5flw;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setTimevrfy(Date timevrfy) {
+		this.timevrfy = timevrfy;
+	}
+
+	public Date getTimevrfy() {
+		return timevrfy;
+	}
 
 }

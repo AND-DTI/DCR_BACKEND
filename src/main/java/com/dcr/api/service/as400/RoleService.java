@@ -26,12 +26,27 @@ public class RoleService {
 	        for (User_Role user_Role : userRoles) {
 				RoleResponse response = new RoleResponse();
 				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid().toString());
-				response.setRoleDesc(user.get().getRoledesc());
-				response.setRoleName(user.get().getRolename());
+				response.setRoleDesc(user.get().getRoledesc().trim());
+				response.setRoleName(user.get().getRolename().trim());
 				roles.add(response);
 			}
 
 	        return roles;
 
-	    }
+	 }
+	 
+	 public List<RoleResponse> listAllRoles() {
+		 List<RoleResponse> rolesResponse =  new ArrayList<>();
+		 List<Accroles> roles = roleRepository.findAll();
+	        for (Accroles user_Role : roles) {
+				RoleResponse response = new RoleResponse();
+				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid().toString());
+				response.setRoleDesc(user.get().getRoledesc().trim());
+				response.setRoleName(user.get().getRolename().trim());
+				rolesResponse.add(response);
+			}
+
+	        return rolesResponse;
+
+	 }
 }

@@ -74,6 +74,7 @@ public class WebSecurityConfig {
                         .disable())
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/api/user/**").permitAll()
+                        .requestMatchers("/api/roles/**").permitAll()
                         .requestMatchers("/api/securityuser/add").permitAll()
                         .requestMatchers("/api/securityuser/changepassword").permitAll()
                         .requestMatchers("/api/securityuser/getall").permitAll()
@@ -84,8 +85,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/**.html").permitAll()
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/wellcome/**").permitAll()
-                        .requestMatchers("/api/ctpcomp/**").authenticated())
+                        .requestMatchers("/wellcome/**").permitAll())
 
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
