@@ -1,5 +1,6 @@
 package com.dcr.api.service.as400;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,8 @@ import com.dcr.api.repository.as400.RoleRepository;
 import com.dcr.api.repository.as400.UserRepository;
 import com.dcr.api.repository.as400.UserRoleRepository;
 import com.dcr.api.utils.Auxiliar;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class UserService {
@@ -123,8 +126,11 @@ public class UserService {
 //
 //    }
 
-    public Accuser save(Accuser user) {
-
+    public Accuser save(Accuser user, HttpServletRequest request) throws UnknownHostException {
+    	user.setItauddt(Auxiliar.getDtFormated());
+    	user.setItaudhr(Auxiliar.getHrFormated());
+    	user.setItaudhst(Auxiliar.getClientHost(request));
+    	user.setItaudsys("DCR-Backend");
         return userRepository.save(user);
 
     }

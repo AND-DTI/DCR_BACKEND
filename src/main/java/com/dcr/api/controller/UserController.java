@@ -82,10 +82,6 @@ public class UserController {
 	        acc.setEmail(user.email());
 	        acc.setPassword(encoder.encode(user.password())); 
 	        acc.setIdarea(user.idArea());
-	        acc.setItauddt(Auxiliar.getDtFormated());
-	        acc.setItaudhr(Auxiliar.getHrFormated());
-	        acc.setItaudhst(Auxiliar.getClientHost(request));
-	        acc.setItaudsys("DCR-Backend");
 			acc.setItaudusr(user.itaudusr());
 			acc.setTimevrfy(new Date(0L));
 	        acc.setCdvrfy("");
@@ -97,7 +93,7 @@ public class UserController {
 	        acc.setToken("");
 	        acc.setUserid(2);
 	        acc.setAtivo(user.ativo());
-	        userService.save(acc);
+	        userService.save(acc, request);
 		} catch (UnknownHostException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Accept", "application/json")
@@ -158,7 +154,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Usuário não cadastrado no sistema FERG.COM!"),
     })
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Accuser> update(@RequestBody Accuser user) throws ParseException {
+    public ResponseEntity<Object> update(@RequestBody Accuser user, HttpServletRequest request) throws ParseException {
 
         List<Accuser> users = userService.listByUsername(user.getUsername());
         Accuser userALT = null;
@@ -169,7 +165,14 @@ public class UserController {
                     .body(null);
         } else {
             user.setPassword(encoder.encode(user.getPassword()));
-            userALT = userService.save(user);
+            try {
+            	userALT = userService.save(user, request);
+            } catch (UnknownHostException e) {
+            		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+		                .header("Accept", "application/json")
+		                .body("Erro!");
+            }
+            
         }
 
         return ResponseEntity.status(HttpStatus.CREATED)

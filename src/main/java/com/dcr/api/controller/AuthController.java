@@ -115,7 +115,7 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
     })
-    public ResponseEntity<Object> generateCode(@RequestParam String username, @RequestParam String email) {
+    public ResponseEntity<Object> generateCode(@RequestParam String username, @RequestParam String email, HttpServletRequest request) {
 
     	Optional<Accuser> optUser = userService.getByUsernameOptional(username);
         if (optUser.isEmpty()) {
@@ -144,10 +144,16 @@ public class AuthController {
                     .body(msg);	
 		}
         
-        userService.save(optUser.get());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .header("Accept", "application/json")
-                .body("E-mail enviado com sucesso!");
+        try {
+        	userService.save(optUser.get(), request);
+        	return ResponseEntity.status(HttpStatus.CREATED)
+                    .header("Accept", "application/json")
+                    .body("E-mail enviado com sucesso!");
+	    } catch (UnknownHostException e) {
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+		                .header("Accept", "application/json")
+		                .body("Erro!");
+		}
         
     }
     
@@ -183,12 +189,8 @@ public class AuthController {
         
         try {
 	          optUser.get().setPassword(encoder.encode(reset.password()));
-	          optUser.get().setItauddt(Auxiliar.getDtFormated());
-	          optUser.get().setItaudhr(Auxiliar.getHrFormated());
-	          optUser.get().setItaudhst(Auxiliar.getClientHost(request));
-	          optUser.get().setItaudsys("DCR-Backend");
 	          
-	          userService.save(optUser.get());
+	          userService.save(optUser.get(), request);
 	          
 	          return ResponseEntity.status(HttpStatus.OK)
 	                  .header("Accept", "application/json")
@@ -226,12 +228,8 @@ public class AuthController {
       
         try {
 	          optUser.get().setPassword(encoder.encode(pass.passwordNew()));
-	          optUser.get().setItauddt(Auxiliar.getDtFormated());
-	          optUser.get().setItaudhr(Auxiliar.getHrFormated());
-	          optUser.get().setItaudhst(Auxiliar.getClientHost(request));
-	          optUser.get().setItaudsys("DCR-Backend");
-	          
-	          userService.save(optUser.get());
+	         
+	          userService.save(optUser.get(), request);
 	          
 	          return ResponseEntity.status(HttpStatus.OK)
 	                  .header("Accept", "application/json")
