@@ -5,9 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,8 +21,15 @@ import org.apache.commons.io.FileUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 public class Auxiliar {
 
+	public static final String timezone = "GMT-4";
+	public static final String dtFormat = "yyyyMMdd";
+	public static final String hrFormat = "hh:mm:ss";
+	public static final String dtHrFormat = "dd MMM yyyy hh:mm:ss";
+	
     public static String trimNull(String field) {
         return field == null ? "" : field.trim();
     }
@@ -160,4 +173,71 @@ public class Auxiliar {
         
         return matcher.matches();
     }
+    
+    public static String getClientHost(HttpServletRequest request) throws UnknownHostException {
+        
+        String req = request.getHeader("X-FORWARDED-FOR");
+        String ip = "";
+        String host = "";
+        
+        if (req == null || req.isEmpty()) {
+            host = request.getRemoteHost();
+            ip = request.getRemoteAddr();
+        }
+         
+        InetAddress addr = InetAddress.getByName(ip);
+        host = addr.getHostName().replace(".sa.mds.honda.com", "");
+        host = host.substring(0, host.length());
+    
+        return host;
+    }   
+    
+    //for web app
+    public static String getClientIP(HttpServletRequest request) {
+        String ip = request.getHeader("X-FORWARDED-FOR");
+         
+        if (ip == null || ip.isEmpty()) {
+            ip = request.getRemoteAddr();
+        }
+         
+        return ip;
+    }
+
+    public static String getClientUser(HttpServletRequest request) {
+        
+        String req = request.getHeader("X-FORWARDED-FOR");
+        String username = "";
+        //String host = "";
+        //String ip = "";
+        
+        if (req == null || req.isEmpty()) {
+            username = request.getRemoteUser();
+            //host = request.getRemoteHost();
+            //ip = request.getLocalAddr();
+            //ip = request.getRemoteAddr();
+        }
+         
+        //InetSocketAddress socketAddress = (InetSocketAddress) connectedSocket.getRemoteSocketAddress();
+
+        return username;
+    }
+    
+    public static String getDtFormated() {
+    	Date date = new Date();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(dtFormat);
+	
+		sdf.setTimeZone(TimeZone.getTimeZone(timezone));
+		return sdf.format(date);
+    }
+    
+	public static String getHrFormated() {
+    	Date date = new Date();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(hrFormat);
+	
+		sdf.setTimeZone(TimeZone.getTimeZone(timezone));
+		return sdf.format(date);
+    }
+
 }

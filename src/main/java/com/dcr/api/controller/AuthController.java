@@ -1,5 +1,6 @@
 package com.dcr.api.controller;
 
+import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -36,6 +37,7 @@ import com.dcr.api.utils.EmailUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -154,7 +156,7 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
     })
-    public ResponseEntity<Object> resetPassword(@RequestBody ResetPassword reset) {
+    public ResponseEntity<Object> resetPassword(@RequestBody ResetPassword reset, HttpServletRequest request) {
 
     	Optional<Accuser> optUser = userService.getByUsernameOptional(reset.username());
     	
@@ -179,20 +181,31 @@ public class AuthController {
                     .body("Senha fora do padrão");
         }
         
-        optUser.get().setPassword(encoder.encode(reset.password()));
-        
-        userService.save(optUser.get());
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Accept", "application/json")
-                .body(optUser.get());
+        try {
+	          optUser.get().setPassword(encoder.encode(reset.password()));
+	          optUser.get().setItauddt(Auxiliar.getDtFormated());
+	          optUser.get().setItaudhr(Auxiliar.getHrFormated());
+	          optUser.get().setItaudhst(Auxiliar.getClientHost(request));
+	          optUser.get().setItaudsys("DCR-Backend");
+	          
+	          userService.save(optUser.get());
+	          
+	          return ResponseEntity.status(HttpStatus.OK)
+	                  .header("Accept", "application/json")
+	                  .body(optUser.get());
+		} catch (UnknownHostException e) {
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+		                .header("Accept", "application/json")
+		                .body("Erro!");
+		}
     }
 
     @PostMapping(value = "/newPassword", produces = "application/json")
     @Operation(summary = "Listar usuários")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
+            @ApiResponse(responseCode = "400", description = "Dados inconsistentes!")
     })
-    public ResponseEntity<Object> resetPassword(@RequestBody NewPassword pass) {
+    public ResponseEntity<Object> resetPassword(@RequestBody NewPassword pass, HttpServletRequest request) {
 
     	Optional<Accuser> optUser = userService.getByUsernameOptional(pass.username());
     	
@@ -210,12 +223,24 @@ public class AuthController {
                     .header("Accept", "application/json")
                     .body("Senha fora do padrão");
         }
-        Auxiliar.validatePassword(pass.passwordNew());
-        optUser.get().setPassword(encoder.encode(pass.passwordNew()));
-        
-        userService.save(optUser.get());
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Accept", "application/json")
-                .body(optUser.get());
+      
+        try {
+	          optUser.get().setPassword(encoder.encode(pass.passwordNew()));
+	          optUser.get().setItauddt(Auxiliar.getDtFormated());
+	          optUser.get().setItaudhr(Auxiliar.getHrFormated());
+	          optUser.get().setItaudhst(Auxiliar.getClientHost(request));
+	          optUser.get().setItaudsys("DCR-Backend");
+	          
+	          userService.save(optUser.get());
+	          
+	          return ResponseEntity.status(HttpStatus.OK)
+	                  .header("Accept", "application/json")
+	                  .body(optUser.get());
+		} catch (UnknownHostException e) {
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+		                .header("Accept", "application/json")
+		                .body("Erro!");
+		}
+       
     }
 }

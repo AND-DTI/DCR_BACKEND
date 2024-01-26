@@ -1,6 +1,7 @@
 package com.dcr.api.controller;
 
 import java.math.BigInteger;
+import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,7 @@ import com.dcr.api.utils.Auxiliar;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -58,7 +60,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuário já cadastrado no sistema"),
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> autheticateSimples(@RequestBody User user) {
+    public ResponseEntity<Object> autheticateSimples(@RequestBody User user, HttpServletRequest request) {
     	
     	Optional<Accuser> optUser = userService.getByUsernameOptional(user.username());
         if (!optUser.isEmpty()) {
@@ -72,28 +74,36 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body("Senha fora do padrão");
         }
-        Accuser acc = new Accuser();
-        acc.setName(user.name());
-        acc.setUsername(user.username());
-        acc.setEmail(user.email());
-        acc.setPassword(encoder.encode(user.password())); 
-        acc.setIdarea(user.idArea());
-        acc.setItauddt(user.itauddt());
-        acc.setItaudhr(user.itaudhr());
-        acc.setItaudhst(user.itaudhst());
-        acc.setItaudsys(user.itaudsys());
-        acc.setItaudusr(user.itaudusr());
-        acc.setTimevrfy(new Date(0L));
-        acc.setCdvrfy("");
-        acc.setFlex1flw(new BigInteger("0"));
-        acc.setFlex2flw(Double.valueOf(0));
-        acc.setFlex3flw("");
-        acc.setFlex4flw("");
-        acc.setFlex5flw("");
-        acc.setToken("");
-        acc.setUserid(2);
-        acc.setAtivo("S");
-        userService.save(acc);
+        
+        try {
+	        Accuser acc = new Accuser();
+	        acc.setName(user.name());
+	        acc.setUsername(user.username());
+	        acc.setEmail(user.email());
+	        acc.setPassword(encoder.encode(user.password())); 
+	        acc.setIdarea(user.idArea());
+	        acc.setItauddt(Auxiliar.getDtFormated());
+	        acc.setItaudhr(Auxiliar.getHrFormated());
+	        acc.setItaudhst(Auxiliar.getClientHost(request));
+	        acc.setItaudsys("DCR-Backend");
+			acc.setItaudusr(user.itaudusr());
+			acc.setTimevrfy(new Date(0L));
+	        acc.setCdvrfy("");
+	        acc.setFlex1flw(new BigInteger("0"));
+	        acc.setFlex2flw(Double.valueOf(0));
+	        acc.setFlex3flw("");
+	        acc.setFlex4flw("");
+	        acc.setFlex5flw("");
+	        acc.setToken("");
+	        acc.setUserid(2);
+	        acc.setAtivo(user.ativo());
+	        userService.save(acc);
+		} catch (UnknownHostException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .header("Accept", "application/json")
+                    .body("Erro interno!");
+		}
+        
         
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header("Accept", "application/json")

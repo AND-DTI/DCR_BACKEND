@@ -6,5 +6,5 @@ import com.dcr.api.model.as400.Accroles;
 
 public interface RoleRepository extends JpaRepository<Accroles, String> {
 
-
+	
 }

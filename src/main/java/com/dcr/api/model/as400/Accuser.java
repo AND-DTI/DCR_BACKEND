@@ -7,9 +7,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,15 +21,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "ACCUSER", schema = "HD4DCDHH")
 public class Accuser implements UserDetails {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -920972556965250153L;
 
 	@Id
     @Column(columnDefinition = "char(10)", unique = true)
@@ -76,8 +75,7 @@ public class Accuser implements UserDetails {
     @Column(columnDefinition = "char(1000)")
     private String flex5flw;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "username", referencedColumnName = "username")
+    @OneToMany(mappedBy = "username", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<User_Role> roles;
 
     @Column(columnDefinition = "char(40)")
@@ -86,7 +84,7 @@ public class Accuser implements UserDetails {
     @Column(columnDefinition = "char(10)")
     private String itaudusr;
 
-    @Column(columnDefinition = "char(20)")
+    @Column(columnDefinition = "char(30)")
     private String itaudhst;
 
     @Column(columnDefinition = "char(8)")
@@ -302,16 +300,16 @@ public class Accuser implements UserDetails {
 		this.flex5flw = flex5flw;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public void setTimevrfy(Date timevrfy) {
 		this.timevrfy = timevrfy;
 	}
 
 	public Date getTimevrfy() {
 		return timevrfy;
+	}
+
+	public void setRoles(List<User_Role> roles) {
+		this.roles = roles;
 	}
 
 }

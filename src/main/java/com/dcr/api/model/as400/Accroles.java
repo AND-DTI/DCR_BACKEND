@@ -2,6 +2,8 @@ package com.dcr.api.model.as400;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -13,7 +15,7 @@ public class Accroles {
     @Column(columnDefinition = "int", unique = true)
     private String roleid;
 	
-	@Column(columnDefinition = "char(100)")
+	@Column(columnDefinition = "char(25)")
     private String rolename;
 	
 	@Column(columnDefinition = "char(200)")

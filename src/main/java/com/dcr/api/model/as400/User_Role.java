@@ -10,6 +10,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -18,8 +20,9 @@ import jakarta.persistence.UniqueConstraint;
 @IdClass(User_RoleKey.class)
 public class User_Role implements GrantedAuthority {
 
+
 	@Id
-    @Column(columnDefinition = "char(10)", unique = true)
+    @Column(columnDefinition = "char(10)")
     private String username;
 
     @Id
@@ -28,6 +31,11 @@ public class User_Role implements GrantedAuthority {
 
     @Column(columnDefinition = "char(20)")
     private String rolename;
+
+    @Column(columnDefinition = "char(8)")
+    private String dtacad;
+
+
 
     public User_Role() {
 
@@ -38,6 +46,7 @@ public class User_Role implements GrantedAuthority {
         this.username = username;
         this.roleid = roleid;
         this.rolename = rolename;
+        this.dtacad = dtacad;
     }
 
     public String getUsername() {        return trimNull(username);    }
@@ -53,6 +62,11 @@ public class User_Role implements GrantedAuthority {
     //public String getRolname() {        return rolename;    }
     public void setRolname(String rolename) {
         this.rolename = rolename;
+    }
+
+    public String getDtacad() {        return dtacad;    }
+    public void setDtacad(String dtacad) {
+        this.dtacad = dtacad;
     }
 
     @Override

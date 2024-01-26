@@ -1,5 +1,6 @@
 package com.dcr.api.service.as400;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
@@ -9,13 +10,19 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.configs.security.Auditoria;
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.as400.User_Role;
+import com.dcr.api.repository.as400.RoleRepository;
 import com.dcr.api.repository.as400.UserRepository;
+import com.dcr.api.repository.as400.UserRoleRepository;
 import com.dcr.api.utils.Auxiliar;
 
 @Service
 public class UserService {
 
     final UserRepository userRepository;
+    
+    @Autowired
+    RoleService roleService;
 
     @Autowired
     private ModelMapper mapper;
@@ -32,6 +39,12 @@ public class UserService {
 
     }
 
+    public void updatePassword(String username, String password) {
+
+      userRepository.setPassword(username, password);
+
+    }
+    
     public List<Accuser> listByUsername(String username) {
 
         try {
@@ -112,7 +125,6 @@ public class UserService {
 
     public Accuser save(Accuser user) {
 
-        user.setUsername(user.getUsername().toUpperCase());
         return userRepository.save(user);
 
     }

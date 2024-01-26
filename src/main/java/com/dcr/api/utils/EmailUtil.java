@@ -48,12 +48,12 @@ public class EmailUtil {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("<html><head>\r\n"
-				+ "<title>Page Title</title>\r\n"
+				+ "<title>DCR - Reset de senha</title>\r\n"
 				+ "</head>\r\n"
 				+ "<body>\r\n"
 				+ " <div class=\"container\" style=\"\r\n"
-				+ "    width: 1000px;\">\r\n"
-				+ "<h1 style=\"color: rgba(204,0,0,1);font-family: helvetica,arial,sans-serif;\"> DCR - Redefina sua senha!</h1>\r\n"
+				+ "    width: 800px;\">\r\n"
+				+ "<h1 style=\"color: rgba(204,0,0,1);font-family: helvetica,arial,sans-serif;\"> SGDCR – Sistema de Gestão da Obrigação Fiscal DCR-e/DCI - Redefina sua senha!</h1>\r\n"
 				+ "<p style=\"\r\n"
 				+ "    font-weight: 400;\r\n"
 				+ "    font-size: 1.3em;\r\n"
