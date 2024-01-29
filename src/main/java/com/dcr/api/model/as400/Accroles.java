@@ -12,8 +12,9 @@ import jakarta.persistence.Table;
 public class Accroles {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "int", unique = true)
-    private String roleid;
+    private Integer roleid;
 	
 	@Column(columnDefinition = "char(25)")
     private String rolename;
@@ -25,7 +26,7 @@ public class Accroles {
     private String rolecad;
 	
 	@Column(columnDefinition = "char(40)")
-    private String itaudsys;
+    private String itaudsys;	
 	
 	@Column(columnDefinition = "char(10)")
     private String itaudusr;
@@ -38,14 +39,6 @@ public class Accroles {
 	
 	@Column(columnDefinition = "char(8)")
     private String itaudhr;
-
-	public String getRoleid() {
-		return roleid;
-	}
-
-	public void setRoleid(String roleid) {
-		this.roleid = roleid;
-	}
 
 	public String getRolename() {
 		return rolename;
@@ -109,5 +102,13 @@ public class Accroles {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public Integer getRoleid() {
+		return roleid;
+	}
+
+	public void setRoleid(Integer roleid) {
+		this.roleid = roleid;
 	}
 }

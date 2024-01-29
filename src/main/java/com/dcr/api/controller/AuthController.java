@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.dto.GenerateCode;
 import com.dcr.api.model.dto.Login;
 import com.dcr.api.model.dto.NewPassword;
 import com.dcr.api.model.dto.ResetPassword;
@@ -110,19 +111,19 @@ public class AuthController {
 
     }
     
-    @GetMapping(value = "/generateCode", produces = "application/json")
+    @PostMapping(value = "/generateCode", produces = "application/json")
     @Operation(summary = "Listar usuários")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
     })
-    public ResponseEntity<Object> generateCode(@RequestParam String username, @RequestParam String email, HttpServletRequest request) {
+    public ResponseEntity<Object> generateCode(@RequestBody GenerateCode generateCode, HttpServletRequest request) {
 
-    	Optional<Accuser> optUser = userService.getByUsernameOptional(username);
+    	Optional<Accuser> optUser = userService.getByUsernameOptional(generateCode.username());
         if (optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
                     .body("Dados inconsistentes");
-        }else if(!optUser.get().getEmail().trim().equals(email)) {
+        }else if(!optUser.get().getEmail().trim().equals(generateCode.email())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
                     .body("Dados inconsistentes");
@@ -134,7 +135,7 @@ public class AuthController {
         
         
         try {
-        	EmailUtil.sendMail(email, code);
+        	EmailUtil.sendMail(generateCode.email(), code);
 		} catch (Exception e) {
 			String msg = "Método main() da classe EmailUtil lançou uma Exception: "
 					+  "=> " + e.getMessage();

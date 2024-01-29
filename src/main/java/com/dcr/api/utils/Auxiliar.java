@@ -10,7 +10,6 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
@@ -18,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
@@ -25,10 +25,10 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class Auxiliar {
 
-	public static final String timezone = "GMT-4";
-	public static final String dtFormat = "yyyyMMdd";
-	public static final String hrFormat = "hh:mm:ss";
-	public static final String dtHrFormat = "dd MMM yyyy hh:mm:ss";
+	private static final String timezone = "GMT-4";
+	private static final String dtFormat = "yyyyMMdd";
+	private static final String hrFormat = "HH:mm:ss";
+	private static final String dtHrFormat = "dd MMM yyyy hh:mm:ss";
 	
     public static String trimNull(String field) {
         return field == null ? "" : field.trim();

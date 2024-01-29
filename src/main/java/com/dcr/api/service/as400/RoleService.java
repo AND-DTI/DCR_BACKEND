@@ -1,5 +1,6 @@
 package com.dcr.api.service.as400;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,9 +11,13 @@ import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Accroles;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.as400.User_Role;
+import com.dcr.api.model.dto.Role;
 import com.dcr.api.repository.as400.RoleRepository;
 import com.dcr.api.repository.as400.UserRepository;
 import com.dcr.api.response.RoleResponse;
+import com.dcr.api.utils.Auxiliar;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class RoleService {
@@ -47,6 +52,18 @@ public class RoleService {
 			}
 
 	        return rolesResponse;
-
+	 }
+	 
+	 public Accroles createRole(Role role, HttpServletRequest request) throws UnknownHostException {
+		 Accroles newRole = new Accroles();
+		 newRole.setRolename(role.roleName());
+		 newRole.setRoledesc(role.roleDesc());
+		 newRole.setRolecad(Auxiliar.getDtFormated());
+		 newRole.setItauddt(Auxiliar.getDtFormated());
+		 newRole.setItaudhr(Auxiliar.getHrFormated());
+		 newRole.setItaudsys("DCR-Backend");
+		 newRole.setItaudusr(role.itaudusr());
+		 newRole.setItaudhst(Auxiliar.getClientHost(request));
+		 return roleRepository.save(newRole);
 	 }
 }
