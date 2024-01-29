@@ -7,7 +7,6 @@ app:
 
 env:    
     source: hda
-    #hda / home
 
 server:
     port: 3000      

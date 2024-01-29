@@ -1,0 +1,315 @@
+package com.dcr.api.model.as400;
+
+import static com.dcr.api.utils.Auxiliar.trimNull;
+
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.hibernate.annotations.Cascade;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "ACCUSER", schema = "HD4DCDHH")
+public class Accuser implements UserDetails {
+
+
+	@Id
+    @Column(columnDefinition = "char(10)", unique = true)
+    private String username;
+
+    @Column(columnDefinition = "char(100)")
+    private String name;
+
+    @Column(columnDefinition = "int")
+    private Integer userid;
+
+    @Column(columnDefinition = "char(70)")
+    private String email;
+
+    @Column(columnDefinition = "char(20)")
+    private String idarea;
+
+    @Column(columnDefinition = "char(1)")
+    private String ativo;
+
+    @Column(columnDefinition = "char(100)")
+    private String password;
+
+    @Column(columnDefinition = "char(200)")
+    private String token;
+    
+    @Column(columnDefinition = "char(100)")
+    private String cdvrfy;
+    
+    @Column(name = "timevrfy")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timevrfy;
+    
+    @Column(columnDefinition = "bigint(19)")
+    private BigInteger flex1flw;
+    
+    @Column(columnDefinition = "decimal(15,5)")
+    private Double flex2flw;
+    
+    @Column(columnDefinition = "char(8)")
+    private String flex3flw;
+    
+    @Column(columnDefinition = "char(40)")
+    private String flex4flw;
+    
+    @Column(columnDefinition = "char(1000)")
+    private String flex5flw;
+
+    @OneToMany(mappedBy = "username", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<User_Role> roles;
+
+    @Column(columnDefinition = "char(40)")
+    private String itaudsys;
+
+    @Column(columnDefinition = "char(10)")
+    private String itaudusr;
+
+    @Column(columnDefinition = "char(30)")
+    private String itaudhst;
+
+    @Column(columnDefinition = "char(8)")
+    private String itauddt;
+
+    @Column(columnDefinition = "char(8)")
+    private String itaudhr;
+
+    public Accuser(String username, String name, Integer userid, String email, String idarea, String ativo,
+            String password, String token, List<User_Role> roles) {
+        this.username = username;
+        this.name = name;
+        this.userid = userid;
+        this.email = email;
+        this.idarea = idarea;
+        this.ativo = ativo;
+        this.password = password;
+        this.token = token;
+        this.roles = roles;
+    }
+
+    public Accuser() {
+
+    }
+
+    public String getUsername() {
+        return trimNull(username);
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getName() {
+        return trimNull(name);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getUserid() {
+        return userid;
+    }
+
+    public void setUserid(Integer userid) {
+        this.userid = userid;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getIdarea() {
+        return idarea;
+    }
+
+    public void setIdarea(String idarea) {
+        this.idarea = idarea;
+    }
+
+    public String getAtivo() {
+        return trimNull(ativo);
+    }
+
+    public void setAtivo(String ativo) {
+        this.ativo = ativo;
+    }
+
+    public String getPassword() {
+        return trimNull(password);
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getToken() {
+        return trimNull(token);
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getItaudsys() {
+        return trimNull(itaudsys);
+    }
+
+    public void setItaudsys(String itaudsys) {
+        this.itaudsys = itaudsys;
+    }
+
+    public String getItaudusr() {
+        return itaudusr;
+    }
+
+    public void setItaudusr(String itaudusr) {
+        this.itaudusr = itaudusr;
+    }
+
+    public String getItaudhst() {
+        return trimNull(itaudhst);
+    }
+
+    public void setItaudhst(String itaudhst) {
+        this.itaudhst = itaudhst;
+    }
+
+    public String getItauddt() {
+        return itauddt;
+    }
+
+    public void setItauddt(String itauddt) {
+        this.itauddt = itauddt;
+    }
+
+    public String getItaudhr() {
+        return itaudhr;
+    }
+
+    public void setItaudhr(String itaudhr) {
+        this.itaudhr = itaudhr;
+    }
+
+    public List<User_Role> getRoles() {
+    	return this.roles;
+    }
+
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+        //return this.roles;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+
+        return true;
+
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+
+        return true;
+
+    }
+
+    @Override
+    public boolean isEnabled() {
+
+        return this.getAtivo().equals("S");
+
+    }
+
+	public String getCdvrfy() {
+		return cdvrfy;
+	}
+
+	public void setCdvrfy(String cdvrfy) {
+		this.cdvrfy = cdvrfy;
+	}
+
+	public BigInteger getFlex1flw() {
+		return flex1flw;
+	}
+
+	public void setFlex1flw(BigInteger flex1flw) {
+		this.flex1flw = flex1flw;
+	}
+
+	public Double getFlex2flw() {
+		return flex2flw;
+	}
+
+	public void setFlex2flw(Double flex2flw) {
+		this.flex2flw = flex2flw;
+	}
+
+	public String getFlex3flw() {
+		return flex3flw;
+	}
+
+	public void setFlex3flw(String flex3flw) {
+		this.flex3flw = flex3flw;
+	}
+
+	public String getFlex4flw() {
+		return flex4flw;
+	}
+
+	public void setFlex4flw(String flex4flw) {
+		this.flex4flw = flex4flw;
+	}
+
+	public String getFlex5flw() {
+		return flex5flw;
+	}
+
+	public void setFlex5flw(String flex5flw) {
+		this.flex5flw = flex5flw;
+	}
+
+	public void setTimevrfy(Date timevrfy) {
+		this.timevrfy = timevrfy;
+	}
+
+	public Date getTimevrfy() {
+		return timevrfy;
+	}
+
+	public void setRoles(List<User_Role> roles) {
+		this.roles = roles;
+	}
+
+}
