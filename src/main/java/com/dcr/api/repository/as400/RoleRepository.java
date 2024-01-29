@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.dcr.api.model.as400.Accroles;
 
-public interface RoleRepository extends JpaRepository<Accroles, String> {
+public interface RoleRepository extends JpaRepository<Accroles, Integer> {
 
 	
 }

@@ -30,7 +30,7 @@ public class RoleService {
 		 	List<RoleResponse> roles = new ArrayList<>();
 	        for (User_Role user_Role : userRoles) {
 				RoleResponse response = new RoleResponse();
-				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid().toString());
+				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid());
 				response.setRoleDesc(user.get().getRoledesc().trim());
 				response.setRoleName(user.get().getRolename().trim());
 				roles.add(response);
@@ -45,7 +45,7 @@ public class RoleService {
 		 List<Accroles> roles = roleRepository.findAll();
 	        for (Accroles user_Role : roles) {
 				RoleResponse response = new RoleResponse();
-				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid().toString());
+				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid());
 				response.setRoleDesc(user.get().getRoledesc().trim());
 				response.setRoleName(user.get().getRolename().trim());
 				rolesResponse.add(response);
