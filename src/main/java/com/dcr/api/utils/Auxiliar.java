@@ -17,10 +17,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.aspectj.apache.bcel.generic.ObjectType;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+import aj.org.objectweb.asm.Type;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class Auxiliar {
@@ -239,5 +241,19 @@ public class Auxiliar {
 		sdf.setTimeZone(TimeZone.getTimeZone(timezone));
 		return sdf.format(date);
     }
+	
+	public static Boolean validateField(ObjectType type, int size, Object field) {
+		if(field.getClass().getTypeName().equals(type.getClassName())) {			
+			return Boolean.TRUE;
+		}
+		if(type.getClassName().equals("java.lang.String")) {
+			if(field.toString().length() <= size) {
+				return Boolean.TRUE;
+			}else { 
+				return Boolean.FALSE;
+			}
+		}
+		return Boolean.TRUE;
+	}
 
 }
