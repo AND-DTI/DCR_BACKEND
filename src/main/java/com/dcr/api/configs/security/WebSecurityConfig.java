@@ -75,6 +75,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers("/api/roles/**").permitAll()
+                        .requestMatchers("/api/processamento/**").permitAll()
                         .requestMatchers("/api/securityuser/add").permitAll()
                         .requestMatchers("/api/securityuser/changepassword").permitAll()
                         .requestMatchers("/api/securityuser/getall").permitAll()
