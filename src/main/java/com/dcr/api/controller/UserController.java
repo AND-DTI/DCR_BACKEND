@@ -54,13 +54,15 @@ public class UserController {
     AuthenticationManager authManager;
 
     @PutMapping(value = "/create", produces = "application/json")
-    @Operation(summary = "Autenticar.")
+    @Operation(summary = "Create User")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário cadastrado com sucesso!"),
-            @ApiResponse(responseCode = "404", description = "Usuário já cadastrado no sistema"),
+            @ApiResponse(responseCode = "400", description = "Usuário já cadastrado!"),
+            @ApiResponse(responseCode = "400", description = "Senha fora do padrão!"),
+            @ApiResponse(responseCode = "500", description = "Erro interno!"),
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> autheticateSimples(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<Object> createUser(@RequestBody User user, HttpServletRequest request) {
     	
     	Optional<Accuser> optUser = userService.getByUsernameOptional(user.username());
         if (!optUser.isEmpty()) {
@@ -72,7 +74,7 @@ public class UserController {
         if(!Auxiliar.validatePassword(user.password())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Senha fora do padrão");
+                    .body("Senha fora do padrão!");
         }
         
         try {
@@ -107,17 +109,18 @@ public class UserController {
 
     }
     
-    @GetMapping(value = "/checktoken", produces = "application/json")
-    @Operation(summary = "Simple request to check token return")
-    public ResponseEntity<String> checkToken() {
-        return ResponseEntity.status(HttpStatus.OK).body("Token alive!");
-
-    }
+//    @GetMapping(value = "/checktoken", produces = "application/json")
+//    @Operation(summary = "Simple request to check token return")
+//    public ResponseEntity<String> checkToken() {
+//        return ResponseEntity.status(HttpStatus.OK).body("Token alive!");
+//
+//    }
 
     @GetMapping(value = "/getAll", produces = "application/json")
     @Operation(summary = "Listar usuários")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
+            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!"),
+            @ApiResponse(responseCode = "200", description = "Ok!")
     })
     public ResponseEntity<List<Accuser>> listAll(
             @PageableDefault(page = 0, size = 10, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -131,9 +134,10 @@ public class UserController {
     }
     
     @GetMapping(value = "/getUser", produces = "application/json")
-    @Operation(summary = "Listar usuários")
+    @Operation(summary = "Listar usuário por username")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
+            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!"),
+            @ApiResponse(responseCode = "200", description = "Ok!")
     })
     public ResponseEntity<Accuser> listUser(@RequestParam String username) {
 
@@ -150,17 +154,18 @@ public class UserController {
     @PostMapping(value = "/update", produces = "application/json")
     @Operation(summary = "Alterar usuário.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Usuário alterado com sucesso!"),
-            @ApiResponse(responseCode = "403", description = "Usuário não cadastrado no sistema FERG.COM!"),
+            @ApiResponse(responseCode = "200", description = "Usuário alterado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Usuário não encontrado!"),
+            @ApiResponse(responseCode = "500", description = "Erro!"),
     })
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> update(@RequestBody Accuser user, HttpServletRequest request) throws ParseException {
 
         List<Accuser> users = userService.listByUsername(user.getUsername());
         Accuser userALT = null;
 
         if (users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
                     .body(null);
         } else {
@@ -175,7 +180,7 @@ public class UserController {
             
         }
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .header("Accept", "application/json")
                 .body(userALT);
     }

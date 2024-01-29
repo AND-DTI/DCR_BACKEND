@@ -61,10 +61,12 @@ public class AuthController {
     TokenService tokenService;
     
     @PostMapping(value = "/login", produces = "application/json")
-    @Operation(summary = "Autenticar.")
+    @Operation(summary = "Realiza o login do usuário")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autenticado com sucesso!"),
-            @ApiResponse(responseCode = "404", description = "Usuário não cadastrado no sistema"),
+            @ApiResponse(responseCode = "401", description = "Usuário ou senha inválidos!"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos!"),
+
     })
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> authenticateSimples(@RequestBody Login login) {
@@ -73,7 +75,7 @@ public class AuthController {
         if (optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("");
+                    .body("Dados inválidos!");
         }
 
         try {
@@ -102,7 +104,7 @@ public class AuthController {
         } catch (BadCredentialsException be) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED) 
             		.header("Accept", "application/json")
-            		.body("Usuário ou senha inválidos");             
+            		.body("Usuário ou senha inválidos!");             
         } catch (AuthenticationException ae) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED) 
             		.header("Accept", "application/json")
@@ -114,7 +116,9 @@ public class AuthController {
     @PostMapping(value = "/generateCode", produces = "application/json")
     @Operation(summary = "Listar usuários")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
+            @ApiResponse(responseCode = "201", description = "E-mail enviado com sucesso!"),
+            @ApiResponse(responseCode = "500", description = "Erro!"),
+            @ApiResponse(responseCode = "400", description = "Dados inconsistentes!"),
     })
     public ResponseEntity<Object> generateCode(@RequestBody GenerateCode generateCode, HttpServletRequest request) {
 
@@ -122,11 +126,11 @@ public class AuthController {
         if (optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Dados inconsistentes");
+                    .body("Dados inconsistentes!");
         }else if(!optUser.get().getEmail().trim().equals(generateCode.email())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Dados inconsistentes");
+                    .body("Dados inconsistentes!");
         }
         
         String code = Auxiliar.getCaptcha();
@@ -159,9 +163,14 @@ public class AuthController {
     }
     
     @PostMapping(value = "/resetPassword", produces = "application/json")
-    @Operation(summary = "Listar usuários")
+    @Operation(summary = "Reset de senha")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!")
+            @ApiResponse(responseCode = "400", description = "Dados inconsistentes!"),
+            @ApiResponse(responseCode = "400", description = "Código inválido!"),
+            @ApiResponse(responseCode = "400", description = "Código expirado!"),
+            @ApiResponse(responseCode = "400", description = "Senha fora do padrão!"),
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "500", description = "Erro!"),
     })
     public ResponseEntity<Object> resetPassword(@RequestBody ResetPassword reset, HttpServletRequest request) {
 
@@ -173,19 +182,19 @@ public class AuthController {
         if (optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Dados inconsistentes");
+                    .body("Dados inconsistentes!");
         }else if(!optUser.get().getCdvrfy().trim().equals(reset.code())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Código inválido");
+                    .body("Código inválido!");
         }else if ((dataNew - dataOld) > 120000) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Código expirado");
+                    .body("Código expirado!");
 		}else if(!Auxiliar.validatePassword(reset.password())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Senha fora do padrão");
+                    .body("Senha fora do padrão!");
         }
         
         try {
@@ -204,9 +213,12 @@ public class AuthController {
     }
 
     @PostMapping(value = "/newPassword", produces = "application/json")
-    @Operation(summary = "Listar usuários")
+    @Operation(summary = "Nova senha")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "400", description = "Dados inconsistentes!")
+    		 @ApiResponse(responseCode = "400", description = "Dados inconsistentes!"),
+             @ApiResponse(responseCode = "400", description = "Senha fora do padrão!"),
+             @ApiResponse(responseCode = "200", description = "Ok"),
+             @ApiResponse(responseCode = "500", description = "Erro!")
     })
     public ResponseEntity<Object> resetPassword(@RequestBody NewPassword pass, HttpServletRequest request) {
 
@@ -216,15 +228,15 @@ public class AuthController {
         if (optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Dados inconsistentes");
+                    .body("Dados inconsistentes!");
         }else if(!encoder.matches(pass.passwordOld(), optUser.get().getPassword())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Dados inconsistentes");
+                    .body("Dados inconsistentes!");
         }else if(!Auxiliar.validatePassword(pass.passwordNew())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Senha fora do padrão");
+                    .body("Senha fora do padrão!");
         }
       
         try {

@@ -39,10 +39,11 @@ public class RoleController {
     private RoleService roleService;
     
 	@GetMapping(value = "/getByUser", produces = "application/json")
-	@Operation(summary = "Pegar Roles.")
+	@Operation(summary = "Busca role por usuário.")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "200", description = "Roles retornadas com sucesso!"),
-	@ApiResponse(responseCode = "404", description = "Usuário não cadastrado no sistema FERG.COM."),
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "404", description = "Usuário não encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getroles(@RequestParam String username) {
@@ -72,10 +73,10 @@ public class RoleController {
 	
 	 
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Pegar Roles.")
+	@Operation(summary = "Busca todas as roles.")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "200", description = "Roles retornadas com sucesso!"),
-	@ApiResponse(responseCode = "404", description = "Usuário não cadastrado no sistema FERG.COM."),
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	@ApiResponse(responseCode = "500", description = "Error!"),
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAllroles() {
@@ -95,10 +96,10 @@ public class RoleController {
 	}
 	
 	@PutMapping(value = "/createRole", produces = "application/json")
-	@Operation(summary = "Pegar Roles.")
+	@Operation(summary = "Criação de role")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "200", description = "Roles retornadas com sucesso!"),
-	@ApiResponse(responseCode = "404", description = "Usuário não cadastrado no sistema FERG.COM."),
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	@ApiResponse(responseCode = "500", description = "Error"),
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> createRole(@RequestBody Role role, HttpServletRequest request) {
