@@ -78,6 +78,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/processamento/**").permitAll()
                         .requestMatchers("/api/config/**").permitAll()
                         .requestMatchers("/api/regras/**").permitAll()
+                        .requestMatchers("/api/pendencia/**").permitAll()
                         .requestMatchers("/api/securityuser/add").permitAll()
                         .requestMatchers("/api/securityuser/changepassword").permitAll()
                         .requestMatchers("/api/securityuser/getall").permitAll()

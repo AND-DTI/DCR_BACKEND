@@ -157,7 +157,7 @@ public class Auxiliar {
                 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6',
                 '7', '8', '9'};
-        char index[] = new char[7];
+        char index[] = new char[8];
 
         Random r = new Random();
         int i = 0;
