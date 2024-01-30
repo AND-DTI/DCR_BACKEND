@@ -14,6 +14,9 @@ public class Dcroriprd {
 	@EmbeddedId
     private DcroriprdKey dcroriprdKey;
 	
+	@Column(columnDefinition = "char(5)")
+	private Integer stsconfig;
+	
     @Column(columnDefinition = "int")
     private Integer planopd;
     
@@ -207,6 +210,14 @@ public class Dcroriprd {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public Integer getStsconfig() {
+		return stsconfig;
+	}
+
+	public void setStsconfig(Integer stsconfig) {
+		this.stsconfig = stsconfig;
 	}
 
 }

@@ -14,6 +14,9 @@ public class Dcrregra {
 	@EmbeddedId
     private DcrregraKey dcrregraKey;
 	
+	@Column(columnDefinition = "char(5)")
+	private Integer stsconfig;
+	 
     @Column(columnDefinition = "int")
     private Integer peritran;
     
@@ -218,6 +221,14 @@ public class Dcrregra {
 
 	public void setDcrregraKey(DcrregraKey dcrregraKey) {
 		this.dcrregraKey = dcrregraKey;
+	}
+
+	public Integer getStsconfig() {
+		return stsconfig;
+	}
+
+	public void setStsconfig(Integer stsconfig) {
+		this.stsconfig = stsconfig;
 	}
     
 }

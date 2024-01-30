@@ -14,6 +14,7 @@ import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.Role;
 import com.dcr.api.repository.as400.RoleRepository;
 import com.dcr.api.repository.as400.UserRepository;
+import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.utils.Auxiliar;
 
@@ -65,5 +66,24 @@ public class RoleService {
 		 newRole.setItaudusr(role.itaudusr());
 		 newRole.setItaudhst(Auxiliar.getClientHost(request));
 		 return roleRepository.save(newRole);
+	 }
+	 
+	 public ErrorResponse validateRole(Role role) {
+			ErrorResponse response = new ErrorResponse();
+	    	response.setIsValid(Boolean.TRUE);
+	    	
+	    	if(role.roleName().length() > 25) {
+	    		response.setIsValid(Boolean.FALSE);
+	    		response.setMsg("O campo rolename é inválido!");
+	    	}else if(role.roleDesc().length() > 200) {
+	    		response.setIsValid(Boolean.FALSE);
+	    		response.setMsg("O campo roleDesc é inválido!");
+	    	}else if(role.itaudusr().length() > 10) {
+	    		response.setIsValid(Boolean.FALSE);
+	    		response.setMsg("O campo itaudusr é inválido!");
+	    	}
+	    
+	    	
+	    	return response;
 	 }
 }

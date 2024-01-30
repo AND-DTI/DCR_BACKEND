@@ -3,7 +3,6 @@ package com.dcr.api.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.aspectj.apache.bcel.generic.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +16,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Dcrapi;
-import com.dcr.api.model.as400.Dcroriprd;
-import com.dcr.api.model.as400.Dcrregra;
-import com.dcr.api.model.dto.DcroriprdDTO;
-import com.dcr.api.model.dto.DcroriprdKeyDTO;
-import com.dcr.api.model.dto.DcrregraDTO;
-import com.dcr.api.model.dto.DcrregraKeyDTO;
-import com.dcr.api.model.keys.DcrregraKey;
-import com.dcr.api.service.as400.DcrregraService;
+import com.dcr.api.model.dto.DcrapiDTO;
+import com.dcr.api.model.dto.DcrapiKeyDTO;
+import com.dcr.api.service.as400.DcrapiService;
 import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,28 +28,28 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/regras")
-public class RegrasController {
+@RequestMapping("/api/config")
+public class ApiController {
 
 	@Autowired
-	DcrregraService service;
+	DcrapiService service;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Busca todas as regras")
+	@Operation(summary = "Busca todas as configurações")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma regra encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma configuração encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getroles() {
 	
 		try {
-			List<Dcrregra> lista = service.getAll();
+			List<Dcrapi> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma regra encontrada!");
+	                    .body("Nenhuma configuração encontrada!");
 	        }
 		
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -68,53 +62,22 @@ public class RegrasController {
 		}   
 	}
 	
-	@PutMapping(value = "/create", produces = "application/json")
-	@Operation(summary = "Cria uma regra")
-	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "201", description = "Regra criada!"),
-	        @ApiResponse(responseCode = "400", description = "Regra com essa data já existe!"),
-	        @ApiResponse(responseCode = "500", description = "Error!")
-	})
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> createProcessamento(@RequestBody DcrregraDTO dto, HttpServletRequest request) {
-	
-		try {
-			Optional<Dcrregra> dcr = service.getAtivo();
-			
-			if (!dcr.isEmpty()) {
-				dcr.get().getDcrregraKey().setConfvigfim(Auxiliar.getDtFormated());
-				dcr.get().setStsconfig(0);
-				service.update(dto, dcr.get(), request);
-		    }
-			
-			Dcrregra dcrNew = service.create(dto, request);
-			return ResponseEntity.status(HttpStatus.CREATED)
-			        .header("Accept", "application/json")
-			            .body(dcrNew);
-	       
-		} catch (Exception ae) {
-		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
-		    		.header("Accept", "application/json")
-		        		.body(ae.getMessage());                
-		}   
-	}
-	
 	@GetMapping(value = "/getAtivo", produces = "application/json")
-	@Operation(summary = "Busca uma regra através da data")
+	@Operation(summary = "Busca uma configuração através da data")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "200", description = "Ok!"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma regra encontrada!"),
+	        @ApiResponse(responseCode = "201", description = "Configuração criada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma configuração encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAtivo(HttpServletRequest request) {
 	
 		try {
-			Optional<Dcrregra> dcr = service.getAtivo();
+			Optional<Dcrapi> dcr = service.getAtivo();
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.header("Accept", "application/json")
-						.body("Nenhum processamento encontrado!");
+						.body("Nenhuma configuração encontrada!");
 		    }
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
@@ -126,5 +89,37 @@ public class RegrasController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+	
+	@PutMapping(value = "/create", produces = "application/json")
+	@Operation(summary = "Cria uma configuração")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Configuração criada!"),
+	        @ApiResponse(responseCode = "400", description = "Configuração com essa data já existe!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Object> createProcessamento(@RequestBody DcrapiDTO dto, HttpServletRequest request) {
+	
+		try {
+			Optional<Dcrapi> dcr = service.getAtivo();
+			
+			if (!dcr.isEmpty()) {
+				dcr.get().getDcrapiKey().setConfvigfim(Auxiliar.getDtFormated());
+				dcr.get().setStsconfig(0);
+				service.update(dto, dcr.get(), request);
+		    }
+			
+			Dcrapi dcrNew = service.create(dto, request);
+			return ResponseEntity.status(HttpStatus.CREATED)
+			        .header("Accept", "application/json")
+			            .body(dcrNew);
+	       
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
 	
 }

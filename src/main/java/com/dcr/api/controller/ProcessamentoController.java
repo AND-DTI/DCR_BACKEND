@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.as400.Dcrapi;
 import com.dcr.api.model.as400.Dcroriprd;
 import com.dcr.api.model.dto.DcroriprdDTO;
 import com.dcr.api.model.dto.DcroriprdKeyDTO;
 import com.dcr.api.model.keys.DcroriprdKey;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.as400.DcroriprdService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -77,13 +79,13 @@ public class ProcessamentoController {
 	public ResponseEntity<Object> createProcessamento(@RequestBody DcroriprdDTO dto, HttpServletRequest request) {
 	
 		try {
-			DcroriprdKeyDTO key = new DcroriprdKeyDTO(dto.confvigini(), dto.confvigfim());
-			Optional<Dcroriprd> dcr = service.getByDate(key);
+			
+			Optional<Dcroriprd> dcr = service.getAtivo();
 			
 			if (!dcr.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-						.header("Accept", "application/json")
-						.body("Processamento com essa data já existe!");
+					dcr.get().getDcroriprdKey().setConfvigfim(Auxiliar.getDtFormated());
+					dcr.get().setStsconfig(0);
+					service.update(dto, dcr.get(), request);
 		    }
 			
 			Dcroriprd dcrNew = service.create(dto, request);
@@ -98,50 +100,18 @@ public class ProcessamentoController {
 		}   
 	}
 	
-	@PutMapping(value = "/update", produces = "application/json")
-	@Operation(summary = "Altera um processamento existente")
-	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "201", description = "Processamento criado!"),
-	        @ApiResponse(responseCode = "500", description = "Error!")
-	})
-	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> updateProcessamento(@RequestBody DcroriprdDTO dto, HttpServletRequest request) {
-	
-		try {
-			DcroriprdKeyDTO key = new DcroriprdKeyDTO(dto.confvigini(), dto.confvigfim());
-			
-			Optional<Dcroriprd> dcr = service.getByDate(key);
-			
-			if (dcr.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-						.header("Accept", "application/json")
-						.body("Nenhum processamento encontrado!");
-		    }
-			
-			Dcroriprd dcrNew = service.update(dto, dcr.get(), request);
-			return ResponseEntity.status(HttpStatus.CREATED)
-			        .header("Accept", "application/json")
-			            .body(dcrNew);
-	       
-		} catch (Exception ae) {
-		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
-		    		.header("Accept", "application/json")
-		        		.body(ae.getMessage());                
-		}   
-	}
-	
-	@PostMapping(value = "/getByDate", produces = "application/json")
-	@Operation(summary = "Busca um processamento através da data")
+	@GetMapping(value = "/getAtivo", produces = "application/json")
+	@Operation(summary = "Busca o processamento ativo")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Processamento criado!"),
 	        @ApiResponse(responseCode = "400", description = "Nenhum processamento encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getByDate(@RequestBody DcroriprdKeyDTO key, HttpServletRequest request) {
+	public ResponseEntity<Object> getAtivo(HttpServletRequest request) {
 	
 		try {
-			Optional<Dcroriprd> dcr = service.getByDate(key);
+			Optional<Dcroriprd> dcr = service.getAtivo();
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.header("Accept", "application/json")

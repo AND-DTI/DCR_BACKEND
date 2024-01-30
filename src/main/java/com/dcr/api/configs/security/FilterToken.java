@@ -7,6 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.dcr.api.service.TokenService;
 
@@ -29,14 +31,17 @@ public class FilterToken extends OncePerRequestFilter {
         TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
 
         String atributo = request.getHeader("Authorization");
-        if (atributo == null) {
-            chain.doFilter(request, response);
+        String path = request.getRequestURL().toString();
+        if(path.contains("/api/auth") || path.contains("/api/health-check")) {
+        	chain.doFilter(request, response);
             return;
         }
-
-        if (!atributo.startsWith("Bearer ")) {
-            chain.doFilter(request, response);
-            return;
+        
+        if (atributo == null) {
+        	 response.setStatus(401);
+             response.getOutputStream()
+                     .println("Informar o token, realize login no sistema!");
+             return;
         }
 
         String token = atributo.replace("Bearer ", "");
@@ -52,6 +57,12 @@ public class FilterToken extends OncePerRequestFilter {
             response.setStatus(401);
             response.getOutputStream()
                     .println("Seu Token expirou. Realize novo login no sistema!\nDetalhe: " + e.getMessage());
+
+        } catch (JWTDecodeException e) {
+
+            response.setStatus(401);
+            response.getOutputStream()
+                    .println("Token incorreto, verifique!");
 
         }
 

@@ -22,12 +22,17 @@ public class DcroriprdService {
 	@Autowired
 	DcroriprdRepository repository;
 	
+	public Optional<Dcroriprd> getAtivo() {
+		return repository.findAtivo();
+	}
+	
+	
 	public Dcroriprd create(DcroriprdDTO dto, HttpServletRequest request) throws UnknownHostException {
 		Dcroriprd dcr = new Dcroriprd();
 		
 		DcroriprdKey key = new DcroriprdKey();
-		key.setConfvigfim(dto.confvigfim());
-		key.setConfvigini(dto.confvigini());
+		key.setConfvigfim("");
+		key.setConfvigini(Auxiliar.getDtFormated());
 		dcr.setDcroriprdKey(key);
 		
 		dcr.setPlanopd(dto.planopd());
@@ -38,6 +43,7 @@ public class DcroriprdService {
 		dcr.setGarantia(dto.garantia());
 		dcr.setPlanon0(dto.planon0());
 		dcr.setPlanon1(dto.planon1());
+		dcr.setStsconfig(1);
 		dcr.setAstecpedn0(dto.astecpedn0());
 		dcr.setAstecpedn1(dto.astecpedn1());
 		dcr.setAstecppan0(dto.astecppan0());
@@ -53,18 +59,7 @@ public class DcroriprdService {
 	}
 	
 	public Dcroriprd update(DcroriprdDTO dto, Dcroriprd dcr, HttpServletRequest request) throws UnknownHostException {		
-		dcr.setPlanopd(dto.planopd());
-		dcr.setEstoq(dto.estoq());
-		dcr.setAstecped(dto.astecped());
-		dcr.setAstecopen(dto.astecopen());
-		dcr.setAstecppa(dto.astecppa());
-		dcr.setGarantia(dto.garantia());
-		dcr.setPlanon0(dto.planon0());
-		dcr.setPlanon1(dto.planon1());
-		dcr.setAstecpedn0(dto.astecpedn0());
-		dcr.setAstecpedn1(dto.astecpedn1());
-		dcr.setAstecppan0(dto.astecppan0());
-		dcr.setAstecppan1(dto.astecppan1());
+		dcr.setStsconfig(0);
 		
 		dcr.setItauddt(Auxiliar.getDtFormated());
 		dcr.setItaudhr(Auxiliar.getHrFormated());

@@ -1,5 +1,6 @@
 package com.dcr.api.controller;
 
+import java.io.Serial;
 import java.math.BigInteger;
 import java.net.UnknownHostException;
 import java.text.ParseException;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.User;
+import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.service.AuthenticationService;
 import com.dcr.api.service.as400.UserService;
 import com.dcr.api.utils.Auxiliar;
@@ -71,6 +73,13 @@ public class UserController {
                     .body("Usuário já cadastrado!");
         }
         
+        ErrorResponse resp = userService.validateDto(user);
+        if(!resp.getIsValid()) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Accept", "application/json")
+                    .body(resp.getMsg());
+        }
+        	
         if(!Auxiliar.validatePassword(user.password())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
@@ -109,12 +118,6 @@ public class UserController {
 
     }
     
-//    @GetMapping(value = "/checktoken", produces = "application/json")
-//    @Operation(summary = "Simple request to check token return")
-//    public ResponseEntity<String> checkToken() {
-//        return ResponseEntity.status(HttpStatus.OK).body("Token alive!");
-//
-//    }
 
     @GetMapping(value = "/getAll", produces = "application/json")
     @Operation(summary = "Listar usuários")

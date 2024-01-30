@@ -1,20 +1,17 @@
 package com.dcr.api.service.as400;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
-import com.dcr.api.configs.security.Auditoria;
 import com.dcr.api.model.as400.Accuser;
-import com.dcr.api.model.as400.User_Role;
-import com.dcr.api.repository.as400.RoleRepository;
+import com.dcr.api.model.dto.User;
 import com.dcr.api.repository.as400.UserRepository;
-import com.dcr.api.repository.as400.UserRoleRepository;
+import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.utils.Auxiliar;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +33,36 @@ public class UserService {
 
     }
 
+    public ErrorResponse validateDto(User dto) {
+    	ErrorResponse response = new ErrorResponse();
+    	response.setIsValid(Boolean.TRUE);
+    	
+    	if(dto.username().length() > 10) {
+    		response.setIsValid(Boolean.FALSE);
+    		response.setMsg("O campo username é inválido!");
+    	}else if(dto.name().length() > 100) {
+    		response.setIsValid(Boolean.FALSE);
+    		response.setMsg("O campo name é inválido!");
+    	}else if(dto.email().length() > 70) {
+    		response.setIsValid(Boolean.FALSE);
+    		response.setMsg("O campo email é inválido!");
+    	}else if(dto.idArea().length() > 20) {
+    		response.setIsValid(Boolean.FALSE);
+    		response.setMsg("O campo idArea é inválido!");
+    	}else if(dto.ativo().length() > 1 || (!dto.ativo().toUpperCase().equals("S") && !dto.ativo().toUpperCase().equals("N"))) {
+    		response.setIsValid(Boolean.FALSE);
+    		response.setMsg("O campo ativo é inválido!");
+    	}else if(dto.password().length() > 100) {
+    		response.setIsValid(Boolean.FALSE);
+    		response.setMsg("O campo password é inválido!");
+    	}else if(dto.itaudusr().length() > 10) {
+    		response.setIsValid(Boolean.FALSE);
+    		response.setMsg("O campo itaudusr é inválido!");
+    	}
+    	
+    	return response;
+    }
+    
     public List<Accuser> listarTodos() {
 
         return userRepository.findAll();

@@ -7,13 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dcr.api.model.as400.Dcroriprd;
 import com.dcr.api.model.as400.Dcrregra;
-import com.dcr.api.model.dto.DcroriprdDTO;
-import com.dcr.api.model.dto.DcroriprdKeyDTO;
 import com.dcr.api.model.dto.DcrregraDTO;
 import com.dcr.api.model.dto.DcrregraKeyDTO;
-import com.dcr.api.model.keys.DcroriprdKey;
 import com.dcr.api.model.keys.DcrregraKey;
 import com.dcr.api.repository.as400.DcrregraRepository;
 import com.dcr.api.utils.Auxiliar;
@@ -26,12 +22,16 @@ public class DcrregraService {
 	@Autowired
 	DcrregraRepository repository;
 	
+	public Optional<Dcrregra> getAtivo() {
+		return repository.findAtivo();
+	}
+	
 	public Dcrregra create(DcrregraDTO dto, HttpServletRequest request) throws UnknownHostException {
 		Dcrregra regra = new Dcrregra();
 		
 		DcrregraKey key = new DcrregraKey();
-		key.setConfvigfim(dto.confvigfim());
-		key.setConfvigini(dto.confvigini());
+		key.setConfvigfim("");
+		key.setConfvigini(Auxiliar.getDtFormated());
 		regra.setDcrregraKey(key);
 		
 		regra.setAlertaprev(dto.alertaprev());
@@ -46,6 +46,7 @@ public class DcrregraService {
 		regra.setSubstituto(dto.substituto());
 		regra.setTaxamanual(dto.taxamanual());
 		regra.setTpvalor(dto.tpvalor());
+		regra.setStsconfig(1);
 		regra.setTrancarenc(dto.trancarenc());
 		regra.setItauddt(Auxiliar.getDtFormated());
 		regra.setItaudhr(Auxiliar.getHrFormated());
@@ -57,19 +58,9 @@ public class DcrregraService {
 	}
 	
 	public Dcrregra update(DcrregraDTO dto, Dcrregra regra, HttpServletRequest request) throws UnknownHostException {		
-		regra.setAlertaprev(dto.alertaprev());
-		regra.setCarencia(dto.carencia());
-		regra.setDiasprevia(dto.diasprevia());
-		regra.setExpiraprev(dto.expiraprev());
-		regra.setPeritran(dto.peritran());
-		regra.setProccarenc(dto.proccarenc());
-		regra.setProcsemppb(dto.procsemppb());
-		regra.setSubstfat(dto.substfat());
-		regra.setSubstfatn(dto.substfatn());
-		regra.setSubstituto(dto.substituto());
-		regra.setTaxamanual(dto.taxamanual());
-		regra.setTpvalor(dto.tpvalor());
-		regra.setTrancarenc(dto.trancarenc());
+
+		regra.setStsconfig(0);
+			
 		regra.setItauddt(Auxiliar.getDtFormated());
 		regra.setItaudhr(Auxiliar.getHrFormated());
 		regra.setItaudhst(Auxiliar.getClientHost(request));
