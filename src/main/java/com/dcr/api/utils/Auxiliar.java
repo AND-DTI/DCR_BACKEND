@@ -220,4 +220,13 @@ public class Auxiliar {
         itaudhr.setAccessible(true);
         itaudhr.set(obj, getHrFormated());
 	}
+	
+	public static String formatName(String name) {
+		
+		String[] names = name.split(" ");
+		if(names.length > 1) {
+			name = names[0] + " " +  names[names.length-1];			
+		}
+		return name;
+	}
 }

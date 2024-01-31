@@ -95,7 +95,9 @@ public class AuthController {
 	        LoginResponse response = new LoginResponse();
 	        response.setRoles(roleService.listByUsername(usuario.getRoles()));
 	        response.setToken(token.token());
-	        response.setUsername(usuario.getUsername());
+	        response.setUsername(usuario.getUsername().trim());
+	        response.setIdArea(usuario.getIdarea().trim());
+	        response.setName(Auxiliar.formatName(usuario.getName()));
 	        
 	        return ResponseEntity.status(HttpStatus.OK) 
 	                .header("Accept", "application/json")
