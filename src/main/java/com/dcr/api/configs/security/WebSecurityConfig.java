@@ -82,6 +82,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/produto/**").permitAll()
                         .requestMatchers("/api/taxa/**").permitAll()
                         .requestMatchers("/api/cor/**").permitAll()
+                        .requestMatchers("/api/incoterm/**").permitAll()
                         .requestMatchers("/api/securityuser/add").permitAll()
                         .requestMatchers("/api/securityuser/changepassword").permitAll()
                         .requestMatchers("/api/securityuser/getall").permitAll()
