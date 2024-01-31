@@ -13,6 +13,8 @@ import com.dcr.api.model.dto.DcroriprdKeyDTO;
 import com.dcr.api.model.keys.DcroriprdKey;
 import com.dcr.api.repository.as400.DcroriprdRepository;
 import com.dcr.api.utils.Auxiliar;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -27,7 +29,7 @@ public class DcroriprdService {
 	}
 	
 	
-	public Dcroriprd create(DcroriprdDTO dto, HttpServletRequest request) throws UnknownHostException {
+	public Dcroriprd create(DcroriprdDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Dcroriprd dcr = new Dcroriprd();
 		
 		DcroriprdKey key = new DcroriprdKey();
@@ -49,23 +51,16 @@ public class DcroriprdService {
 		dcr.setAstecppan0(dto.astecppan0());
 		dcr.setAstecppan1(dto.astecppan1());
 		
-		dcr.setItauddt(Auxiliar.getDtFormated());
-		dcr.setItaudhr(Auxiliar.getHrFormated());
-		dcr.setItaudhst(Auxiliar.getClientHost(request));
-		dcr.setItaudsys("DCR-Backend");
-		dcr.setItaudusr(dto.itaudusr());
+		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
 	}
 	
-	public Dcroriprd update(DcroriprdDTO dto, Dcroriprd dcr, HttpServletRequest request) throws UnknownHostException {		
+	public Dcroriprd update(DcroriprdDTO dto, Dcroriprd dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 		dcr.setStsconfig(0);
 		
-		dcr.setItauddt(Auxiliar.getDtFormated());
-		dcr.setItaudhr(Auxiliar.getHrFormated());
-		dcr.setItaudhst(Auxiliar.getClientHost(request));
-		dcr.setItaudsys("DCR-Backend");
-		dcr.setItaudusr(dto.itaudusr());
+	
+		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
 	}

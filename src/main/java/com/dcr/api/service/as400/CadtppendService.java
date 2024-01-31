@@ -11,6 +11,8 @@ import com.dcr.api.model.as400.Cadtppend;
 import com.dcr.api.model.dto.CadtppendDTO;
 import com.dcr.api.repository.as400.CadtppendRepository;
 import com.dcr.api.utils.Auxiliar;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -30,31 +32,23 @@ public class CadtppendService {
 		return repository.findById(id);
 	}
 	
-	public Cadtppend create(CadtppendDTO dto, HttpServletRequest request) throws UnknownHostException {
+	public Cadtppend create(CadtppendDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Cadtppend pend = new Cadtppend();
 		
 		pend.setCdpend(dto.cdpend());
 		pend.setDescpend(dto.descpend());
 		pend.setObspend(dto.obspend());
 		
-		pend.setItauddt(Auxiliar.getDtFormated());
-		pend.setItaudhr(Auxiliar.getHrFormated());
-		pend.setItaudhst(Auxiliar.getClientHost(request));
-		pend.setItaudsys("DCR-Backend");
-		pend.setItaudusr(dto.itaudusr());
+		Auxiliar.preencheAuditoria(pend, request);
 		
 		return repository.save(pend);
 	}
 	
-	public Cadtppend update(Cadtppend pend, CadtppendDTO dto, HttpServletRequest request) throws UnknownHostException {
+	public Cadtppend update(Cadtppend pend, CadtppendDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		pend.setDescpend(dto.descpend());
 		pend.setObspend(dto.obspend());
 		
-		pend.setItauddt(Auxiliar.getDtFormated());
-		pend.setItaudhr(Auxiliar.getHrFormated());
-		pend.setItaudhst(Auxiliar.getClientHost(request));
-		pend.setItaudsys("DCR-Backend");
-		pend.setItaudusr(dto.itaudusr());
+		Auxiliar.preencheAuditoria(pend, request);
 		
 		return repository.save(pend);
 	}

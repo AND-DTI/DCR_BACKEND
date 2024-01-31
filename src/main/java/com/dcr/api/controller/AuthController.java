@@ -154,7 +154,7 @@ public class AuthController {
         	return ResponseEntity.status(HttpStatus.CREATED)
                     .header("Accept", "application/json")
                     .body("E-mail enviado com sucesso!");
-	    } catch (UnknownHostException e) {
+	    } catch (Exception e) {
 			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");
@@ -205,7 +205,7 @@ public class AuthController {
 	          return ResponseEntity.status(HttpStatus.OK)
 	                  .header("Accept", "application/json")
 	                  .body("Senha alterada com sucesso!");
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");
@@ -247,7 +247,7 @@ public class AuthController {
 	          return ResponseEntity.status(HttpStatus.OK)
 	                  .header("Accept", "application/json")
 	                  .body("Senha alterada com sucesso!");
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");

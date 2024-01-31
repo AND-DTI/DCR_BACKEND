@@ -91,7 +91,7 @@ public class ProcessamentoController {
 			Dcroriprd dcrNew = service.create(dto, request);
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
-			            .body(dcrNew);
+			            .body("OK");
 	       
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 

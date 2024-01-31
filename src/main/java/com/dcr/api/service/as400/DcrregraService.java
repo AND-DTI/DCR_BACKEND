@@ -13,6 +13,8 @@ import com.dcr.api.model.dto.DcrregraKeyDTO;
 import com.dcr.api.model.keys.DcrregraKey;
 import com.dcr.api.repository.as400.DcrregraRepository;
 import com.dcr.api.utils.Auxiliar;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -26,7 +28,7 @@ public class DcrregraService {
 		return repository.findAtivo();
 	}
 	
-	public Dcrregra create(DcrregraDTO dto, HttpServletRequest request) throws UnknownHostException {
+	public Dcrregra create(DcrregraDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Dcrregra regra = new Dcrregra();
 		
 		DcrregraKey key = new DcrregraKey();
@@ -48,24 +50,18 @@ public class DcrregraService {
 		regra.setTpvalor(dto.tpvalor());
 		regra.setStsconfig(1);
 		regra.setTrancarenc(dto.trancarenc());
-		regra.setItauddt(Auxiliar.getDtFormated());
-		regra.setItaudhr(Auxiliar.getHrFormated());
-		regra.setItaudhst(Auxiliar.getClientHost(request));
-		regra.setItaudsys("DCR-Backend");
-		regra.setItaudusr(dto.itaudusr());
+		
+		Auxiliar.preencheAuditoria(regra, request);
+		
 		
 		return repository.save(regra);
 	}
 	
-	public Dcrregra update(DcrregraDTO dto, Dcrregra regra, HttpServletRequest request) throws UnknownHostException {		
+	public Dcrregra update(DcrregraDTO dto, Dcrregra regra, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
 		regra.setStsconfig(0);
 			
-		regra.setItauddt(Auxiliar.getDtFormated());
-		regra.setItaudhr(Auxiliar.getHrFormated());
-		regra.setItaudhst(Auxiliar.getClientHost(request));
-		regra.setItaudsys("DCR-Backend");
-		regra.setItaudusr(dto.itaudusr());
+		Auxiliar.preencheAuditoria(regra, request);
 		
 		return repository.save(regra);
 	}

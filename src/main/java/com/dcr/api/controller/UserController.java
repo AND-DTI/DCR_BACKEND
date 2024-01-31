@@ -93,7 +93,6 @@ public class UserController {
 	        acc.setEmail(user.email());
 	        acc.setPassword(encoder.encode(user.password())); 
 	        acc.setIdarea(user.idArea());
-			acc.setItaudusr(user.itaudusr());
 			acc.setTimevrfy(new Date(0L));
 	        acc.setCdvrfy("");
 	        acc.setFlex1flw(new BigInteger("0"));
@@ -105,7 +104,7 @@ public class UserController {
 	        acc.setUserid(2);
 	        acc.setAtivo(user.ativo());
 	        userService.save(acc, request);
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .header("Accept", "application/json")
                     .body("Erro interno!");
@@ -175,7 +174,7 @@ public class UserController {
             user.setPassword(encoder.encode(user.getPassword()));
             try {
             	userALT = userService.save(user, request);
-            } catch (UnknownHostException e) {
+            } catch (Exception e) {
             		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");

@@ -32,7 +32,7 @@ public class FilterToken extends OncePerRequestFilter {
 
         String atributo = request.getHeader("Authorization");
         String path = request.getRequestURL().toString();
-        if(path.contains("/api/auth") || path.contains("/api/health-check")) {
+        if(path.contains("/api/auth") || path.contains("/api/health-check") || path.contains("/swagger-ui") || path.contains("/v3/api-docs")) {
         	chain.doFilter(request, response);
             return;
         }

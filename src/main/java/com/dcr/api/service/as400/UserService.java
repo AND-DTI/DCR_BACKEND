@@ -13,6 +13,8 @@ import com.dcr.api.model.dto.User;
 import com.dcr.api.repository.as400.UserRepository;
 import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.utils.Auxiliar;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -55,9 +57,6 @@ public class UserService {
     	}else if(dto.password().length() > 100) {
     		response.setIsValid(Boolean.FALSE);
     		response.setMsg("O campo password é inválido!");
-    	}else if(dto.itaudusr().length() > 10) {
-    		response.setIsValid(Boolean.FALSE);
-    		response.setMsg("O campo itaudusr é inválido!");
     	}
     	
     	return response;
@@ -153,11 +152,8 @@ public class UserService {
 //
 //    }
 
-    public Accuser save(Accuser user, HttpServletRequest request) throws UnknownHostException {
-    	user.setItauddt(Auxiliar.getDtFormated());
-    	user.setItaudhr(Auxiliar.getHrFormated());
-    	user.setItaudhst(Auxiliar.getClientHost(request));
-    	user.setItaudsys("DCR-Backend");
+    public Accuser save(Accuser user, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    	Auxiliar.preencheAuditoria(user, request);
         return userRepository.save(user);
 
     }

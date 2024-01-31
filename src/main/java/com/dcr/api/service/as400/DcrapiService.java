@@ -13,6 +13,8 @@ import com.dcr.api.model.dto.DcrapiKeyDTO;
 import com.dcr.api.model.keys.DcrapiKey;
 import com.dcr.api.repository.as400.DcrapiRepository;
 import com.dcr.api.utils.Auxiliar;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,7 +40,7 @@ public class DcrapiService {
 		return repository.findById(key);
 	}
 	
-	public Dcrapi create(DcrapiDTO dto, HttpServletRequest request) throws UnknownHostException {
+	public Dcrapi create(DcrapiDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Dcrapi dcr = new Dcrapi();
 		
 		DcrapiKey key = new DcrapiKey();
@@ -56,23 +58,15 @@ public class DcrapiService {
 		dcr.setColignac(dto.colignac());
 		dcr.setColigproc(dto.coligproc());
 		dcr.setStsconfig(1);
-		dcr.setItauddt(Auxiliar.getDtFormated());
-		dcr.setItaudhr(Auxiliar.getHrFormated());
-		dcr.setItaudhst(Auxiliar.getClientHost(request));
-		dcr.setItaudsys("DCR-Backend");
-		dcr.setItaudusr(dto.itaudusr());
+		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
 	}
 	
-	public Dcrapi update(DcrapiDTO dto, Dcrapi dcr, HttpServletRequest request) throws UnknownHostException {	
+	public Dcrapi update(DcrapiDTO dto, Dcrapi dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {	
 		
 		dcr.setStsconfig(0);
-		dcr.setItauddt(Auxiliar.getDtFormated());
-		dcr.setItaudhr(Auxiliar.getHrFormated());
-		dcr.setItaudhst(Auxiliar.getClientHost(request));
-		dcr.setItaudsys("DCR-Backend");
-		dcr.setItaudusr(dto.itaudusr());
+		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
 	}

@@ -118,7 +118,7 @@ public class RoleController {
 			
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
-			            .body(roleNew);
+			            .body("OK");
 		
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 

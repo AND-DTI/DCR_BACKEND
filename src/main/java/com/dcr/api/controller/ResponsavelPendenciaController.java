@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dcr.api.model.as400.Cadtppend;
-import com.dcr.api.model.as400.Dcroriprd;
-import com.dcr.api.model.dto.CadtppendDTO;
-import com.dcr.api.model.dto.DcroriprdDTO;
-import com.dcr.api.service.as400.CadtppendService;
-import com.dcr.api.utils.Auxiliar;
+import com.dcr.api.model.as400.Pendresp;
+import com.dcr.api.model.dto.PendrespDTO;
+import com.dcr.api.model.keys.PendenciaKey;
+import com.dcr.api.service.as400.PendrespService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,28 +28,28 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/pendencia")
-public class PendenciaController {
+@RequestMapping("/api/pendencia/responsavel")
+public class ResponsavelPendenciaController {
 
 	@Autowired
-	CadtppendService service;
+	PendrespService service;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Busca todas as pendências")
+	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Cadtppend> lista = service.getAll();
+			List<Pendresp> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma pendência encontrado!");
+	                    .body("Nenhum responsável encontrado!");
 	        }
 		
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -64,22 +62,26 @@ public class PendenciaController {
 		}   
 	}
 	
-	@GetMapping(value = "/getByID", produces = "application/json")
-	@Operation(summary = "Busca todas as pendências")
+	@GetMapping(value = "/getByKey", produces = "application/json")
+	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getByID(@RequestParam String id) {
+	public ResponseEntity<Object> getByKey(@RequestParam String cdpend, @RequestParam String cdresp) {
 	
 		try {
-			Optional<Cadtppend> lista = service.getByID(id);
+			PendenciaKey key = new PendenciaKey();
+			key.setCdpend(cdpend);
+			key.setCdresp(cdresp);
+			
+			Optional<Pendresp> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma pendência encontrado!");
+	                    .body("Nenhum responsável encontrado!");
 	        }
 		
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -93,26 +95,31 @@ public class PendenciaController {
 	}
 	
 	@DeleteMapping(value = "/delete", produces = "application/json")
-	@Operation(summary = "Busca todas as pendências")
+	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam String id) {
+	public ResponseEntity<Object> delete(@RequestParam String cdpend, @RequestParam String cdresp) {
 	
 		try {
-			Optional<Cadtppend> pend = service.getByID(id);
-	        if (pend.isEmpty()) {
+			PendenciaKey key = new PendenciaKey();
+			key.setCdpend(cdpend);
+			key.setCdresp(cdresp);
+			
+			Optional<Pendresp> lista = service.getByID(key);
+	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma pendência encontrado!");
+	                    .body("Nenhum responsável encontrado!");
 	        }
-	        service.delete(pend.get());
+		
+	        service.delete(lista.get());
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
-		            .body("Pendência apagada");
+		            .body("Associação deletada com sucesso!");
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -120,67 +127,74 @@ public class PendenciaController {
 		}   
 	}
 	
-	
 	@PutMapping(value = "/create", produces = "application/json")
-	@Operation(summary = "Cria um Tipo de Pendência")
+	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "201", description = "Pendência criada!"),
-	        @ApiResponse(responseCode = "400", description = "Tipo de Pendência já existe!"),
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> createPendencia(@RequestBody CadtppendDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> create(@RequestBody PendrespDTO dto, HttpServletRequest request) {
 	
 		try {
+			PendenciaKey key = new PendenciaKey();
+			key.setCdpend(dto.cdpend());
+			key.setCdresp(dto.cdresp());
 			
-			Optional<Cadtppend> dcr = service.getByID(dto.cdpend());
-			
-			if (!dcr.isEmpty()) {
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				        .header("Accept", "application/json")
-				        .body("Tipo de Pendência já existe");
-		    }
-			
-			Cadtppend pendNew = service.create(dto, request);
-			return ResponseEntity.status(HttpStatus.CREATED)
-			        .header("Accept", "application/json")
-			            .body("OK");
-	       
+			Optional<Pendresp> lista = service.getByID(key);
+	        if (!lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Essa associação de Responsável e pendência já existe!");
+	        }
+		
+	        service.create(dto, request);
+	        return ResponseEntity.status(HttpStatus.CREATED)
+		        	.header("Accept", "application/json")
+		            .body("OK");
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
-		    		.header("Accept", "application/json")
+		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
 	}
 	
 	@PutMapping(value = "/update", produces = "application/json")
-	@Operation(summary = "Cria um Tipo de Pendência")
+	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "201", description = "Pendência criada!"),
-	        @ApiResponse(responseCode = "400", description = "Tipo de Pendência já existe!"),
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> updatePendencia(@RequestBody CadtppendDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody PendrespDTO dto, HttpServletRequest request) {
 	
 		try {
+			PendenciaKey key = new PendenciaKey();
+			key.setCdpend(dto.cdpend());
+			key.setCdresp(dto.cdresp());
 			
-			Optional<Cadtppend> dcr = service.getByID(dto.cdpend());
-			
-			if (dcr.isEmpty()) {
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				        .header("Accept", "application/json")
-				        .body("Tipo de Pendência não existe");
-		    }
-			
-			Cadtppend pendNew = service.update(dcr.get(), dto, request);
-			return ResponseEntity.status(HttpStatus.OK)
-			        .header("Accept", "application/json")
-			            .body("Ok");
-	       
+			Optional<Pendresp> lista = service.getByID(key);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Associação não encontrada!");
+	        }
+		
+	        if (dto.nmresp().equals(lista.get().getNmresp().trim())) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Associação não tem alteração!");
+	        }
+	        
+	        service.update(lista.get(), dto,  request);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("OK");
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
-		    		.header("Accept", "application/json")
+		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
 	}
