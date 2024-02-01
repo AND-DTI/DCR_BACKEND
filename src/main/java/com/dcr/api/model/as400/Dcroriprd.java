@@ -1,7 +1,10 @@
 package com.dcr.api.model.as400;
 
 import com.dcr.api.model.keys.DcroriprdKey;
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,47 +12,74 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "DCRORIPRD", schema = "HD4DCDHH")
+@ApiModel
 public class Dcroriprd {
 
 	@EmbeddedId
     private DcroriprdKey dcroriprdKey;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(5)")
 	private Integer stsconfig;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer planopd;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer estoq;
     
-    @Column(columnDefinition = "int")
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "int")
     private Integer astecped;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer astecopen;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer astecppa;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer garantia;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer planon0;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer planon1;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer astecpedn0;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer astecpedn1;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer astecppan0;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer astecppan1;
 

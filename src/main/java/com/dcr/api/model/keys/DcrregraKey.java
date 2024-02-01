@@ -2,10 +2,14 @@ package com.dcr.api.model.keys;
 
 import java.util.Objects;
 
+import com.dcr.api.validator.TamanhoMaximo;
+
 public class DcrregraKey {
 
+	@TamanhoMaximo(8)
 	 private String confvigini;
 		
+	@TamanhoMaximo(8)
 	 private String confvigfim;
 
 	public String getConfvigini() {

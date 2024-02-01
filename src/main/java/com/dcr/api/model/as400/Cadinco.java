@@ -1,5 +1,9 @@
 package com.dcr.api.model.as400;
 
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
+
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -7,16 +11,23 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "CADINCO", schema = "HD4DCDHH")
+@ApiModel
 public class Cadinco {
 	
 	@Id
 	@Column(columnDefinition = "char(3)")
+	@TamanhoMaximo(3)
+	@TamanhoMinimo(1)
     private String codinco;
 	
 	@Column(columnDefinition = "char(100)")
-    private String dscinco;
+	@TamanhoMaximo(100)
+	@TamanhoMinimo(1)
+	private String dscinco;
 	
 	@Column(columnDefinition = "int")
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     private Integer frtembut;
 	
     @Column(columnDefinition = "char(40)")

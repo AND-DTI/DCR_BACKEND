@@ -1,7 +1,10 @@
 package com.dcr.api.model.as400;
 
 import com.dcr.api.model.keys.ProdutoKey;
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,20 +12,29 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "CADPPB", schema = "HD4DCDHH")
+@ApiModel
 public class Cadppb {
 
 	@EmbeddedId
 	private ProdutoKey key;
 	
+	@TamanhoMaximo(150)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(150)")
 	private String desccom;
 	
+	@TamanhoMaximo(80)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(80)")
 	private String descrfb;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
 	private String prddest;
 	
+	@TamanhoMaximo(80)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(80)")
 	private String ppbprd;
 	 

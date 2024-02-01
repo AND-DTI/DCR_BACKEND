@@ -2,10 +2,14 @@ package com.dcr.api.model.keys;
 
 import java.io.Serializable;
 
+import com.dcr.api.validator.TamanhoMaximo;
+
 public class User_RoleKey implements Serializable{
 
-    
-    private String username;			
+	@TamanhoMaximo(10)
+    private String username;	
+	
+	@TamanhoMaximo(9)
 	private Integer roleid;
 	
 	

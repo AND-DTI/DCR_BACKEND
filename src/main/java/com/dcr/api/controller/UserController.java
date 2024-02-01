@@ -58,10 +58,8 @@ public class UserController {
     @PutMapping(value = "/create", produces = "application/json")
     @Operation(summary = "Create User")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário cadastrado com sucesso!"),
-            @ApiResponse(responseCode = "400", description = "Usuário já cadastrado!"),
-            @ApiResponse(responseCode = "400", description = "Senha fora do padrão!"),
-            @ApiResponse(responseCode = "500", description = "Erro interno!"),
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", useReturnTypeSchema = true),
     })
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> createUser(@RequestBody User user, HttpServletRequest request) {
@@ -71,13 +69,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
                     .body("Usuário já cadastrado!");
-        }
-        
-        ErrorResponse resp = userService.validateDto(user);
-        if(!resp.getIsValid()) {
-        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .header("Accept", "application/json")
-                    .body(resp.getMsg());
         }
         	
         if(!Auxiliar.validatePassword(user.password())) {
@@ -105,9 +96,9 @@ public class UserController {
 	        acc.setAtivo(user.ativo());
 	        userService.save(acc, request);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Erro interno!");
+                    .body(e.getMessage());
 		}
         
         

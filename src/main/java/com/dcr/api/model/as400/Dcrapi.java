@@ -1,7 +1,10 @@
 package com.dcr.api.model.as400;
 
 import com.dcr.api.model.keys.DcrapiKey;
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,38 +12,59 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "DCRAPI", schema = "HD4DCDHH")
+@ApiModel
 public class Dcrapi {
 	
 	@EmbeddedId
     private DcrapiKey dcrapiKey;
 	
 	@Column(columnDefinition = "int")
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	private Integer stsconfig;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private String coligproc;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private String coligcust;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private String colignac;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private String coligexpir;
 	
+	@TamanhoMaximo(60)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(60)")
 	private String coligemai1;
 	
+	@TamanhoMaximo(60)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(60)")
 	private String coligemai2;
 	
+	@TamanhoMaximo(150)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(150)")
 	private String alerturl;
 	
+	@TamanhoMaximo(250)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(250)")
 	private String alerthead;
 	
+	@TamanhoMaximo(800)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(800)")
 	private String alertbody;
 	

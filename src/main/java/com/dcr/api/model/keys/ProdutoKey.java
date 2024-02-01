@@ -2,8 +2,13 @@ package com.dcr.api.model.keys;
 
 import java.util.Objects;
 
+import com.dcr.api.validator.TamanhoMaximo;
+
 public class ProdutoKey {
+	@TamanhoMaximo(25)
 	private String cdprd;
+	
+	@TamanhoMaximo(4)
 	private String tpprd;
 	public String getCdprd() {
 		return cdprd;

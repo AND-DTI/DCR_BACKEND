@@ -1,7 +1,10 @@
 package com.dcr.api.model.as400;
 
 import com.dcr.api.model.keys.PendenciaKey;
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,11 +12,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "PENDRESP", schema = "HD4DCDHH")
+@ApiModel
 public class Pendresp {
 
 	@EmbeddedId
     private PendenciaKey key;
 	
+	@TamanhoMaximo(150)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(150)")
     private String nmresp;
 	

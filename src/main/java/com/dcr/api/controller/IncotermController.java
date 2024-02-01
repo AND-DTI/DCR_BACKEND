@@ -105,7 +105,7 @@ public class IncotermController {
 			
 			Optional<Cadinco> lista = service.getByID(dto.codinco());
 	        if (!lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
 	                    .body("Esse incoterm já existe!");
 	        }
@@ -118,7 +118,7 @@ public class IncotermController {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
-		}   
+		} 
 	}
 	
 	@PutMapping(value = "/update", produces = "application/json")

@@ -2,8 +2,13 @@ package com.dcr.api.model.keys;
 
 import java.util.Objects;
 
+import com.dcr.api.validator.TamanhoMaximo;
+
 public class PendenciaKey {
+	@TamanhoMaximo(10)
 	private String cdpend;
+	
+	@TamanhoMaximo(10)
 	private String cdresp;
 	
 	public String getCdpend() {

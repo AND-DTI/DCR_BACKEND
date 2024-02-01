@@ -1,9 +1,6 @@
 package com.dcr.api.utils;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,12 +13,11 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.aspectj.apache.bcel.generic.ObjectType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import com.dcr.api.service.TokenService;
+import com.dcr.api.validator.Validator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -200,6 +196,8 @@ public class Auxiliar {
 	public static void preencheAuditoria(Object obj, HttpServletRequest request) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JsonMappingException, JsonProcessingException, UnknownHostException {
         Class<?> classe = obj.getClass();
         
+        Validator.validarTamanhos(obj);
+        
         Field itaudsys = classe.getDeclaredField("itaudsys");
         itaudsys.setAccessible(true);
         itaudsys.set(obj, "DCR-Backend");
@@ -229,4 +227,6 @@ public class Auxiliar {
 		}
 		return name;
 	}
+	
+	
 }

@@ -1,5 +1,8 @@
 package com.dcr.api.response;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel
 public class ErrorResponse {
 	private Boolean isValid;
 	private String msg;

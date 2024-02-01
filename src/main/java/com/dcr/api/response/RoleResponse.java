@@ -1,5 +1,8 @@
 package com.dcr.api.response;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel
 public class RoleResponse {
 	private String roleName;
 	private String roleDesc;

@@ -1,7 +1,10 @@
 package com.dcr.api.model.as400;
 
 import com.dcr.api.model.keys.DcrregraKey;
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -9,50 +12,79 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "DCRREGRA", schema = "HD4DCDHH")
+@ApiModel
 public class Dcrregra {
 
 	@EmbeddedId
     private DcrregraKey dcrregraKey;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(5)")
 	private Integer stsconfig;
 	 
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer peritran;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer proccarenc;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer trancarenc;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer procsemppb;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer expiraprev;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer diasprevia;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer alertaprev;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer tpvalor;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer taxamanual;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer carencia;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer substituto;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer substfat;
     
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer substfatn;
 
