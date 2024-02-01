@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
+import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
+import com.dcr.api.service.as400.MatriitmService;
 import com.dcr.api.service.as400.MatriprdService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,24 +30,24 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/matriz/produto")
-public class MatrizProdutoController {
+@RequestMapping("/api/matriz/item")
+public class MatrizItemController {
 
 	@Autowired
-	MatriprdService service;
+	MatriitmService service;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Busca todas as Matrizes de produto")
+	@Operation(summary = "Busca todas as Matrizes de item")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de produto encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de item encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Matriprd> lista = service.getAll();
+			List<Matriitm> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -62,10 +65,10 @@ public class MatrizProdutoController {
 	}
 	
 	@GetMapping(value = "/getById", produces = "application/json")
-	@Operation(summary = "Busca um tipo de produto")
+	@Operation(summary = "Busca uma matriz de item")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de produto encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de item encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
@@ -73,11 +76,11 @@ public class MatrizProdutoController {
 	
 		try {
 
-			Optional<Matriprd> lista = service.getByID(idmatriz);
+			Optional<Matriitm> lista = service.getByID(idmatriz);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma Matriz de produto encontrada!");
+	                    .body("Nenhuma Matriz de item encontrada!");
 	        }
 		
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -91,14 +94,14 @@ public class MatrizProdutoController {
 	}
 	
 	@PutMapping(value = "/create", produces = "application/json")
-	@Operation(summary = "Cria um tipo de produto")
+	@Operation(summary = "Cria uma matriz de item")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Esse Matriz de produto já existe!"),
+	        @ApiResponse(responseCode = "400", description = "Esse Matriz de item já existe!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody MatriprdDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> create(@RequestBody MatriitmDTO dto, HttpServletRequest request) {
 	
 		try {
 	        service.create(dto, request);
@@ -113,22 +116,22 @@ public class MatrizProdutoController {
 	}
 	
 	@PutMapping(value = "/update", produces = "application/json")
-	@Operation(summary = "Altera uma Matriz de produto")
+	@Operation(summary = "Altera uma Matriz de item")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Matriz de produto não encontrado!"),
+	        @ApiResponse(responseCode = "400", description = "Matriz de item não encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> update(@RequestBody MatriprdDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody MatriitmDTO dto, HttpServletRequest request) {
 	
 		try {
 	
-			Optional<Matriprd> lista = service.getByID(dto.idmatriz());
+			Optional<Matriitm> lista = service.getByID(dto.idmatriz());
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Matriz de produto não encontrada!");
+	                    .body("Matriz de item não encontrada!");
 	        }
 		
 	        service.update(lista.get(), dto,  request);
@@ -143,27 +146,27 @@ public class MatrizProdutoController {
 	}
 	
 	@DeleteMapping(value = "/delete", produces = "application/json")
-	@Operation(summary = "Deleta um tipo")
+	@Operation(summary = "Deleta uma matriz de item")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de produto encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de item encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz) {
 		try {
 			
-			Optional<Matriprd> lista = service.getByID(idmatriz);
+			Optional<Matriitm> lista = service.getByID(idmatriz);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma Matriz de produto encontrada!");
+	                    .body("Nenhuma Matriz de item encontrada!");
 	        }
 		
 	        service.delete(lista.get());
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
-		            .body("Matriz de produto deletada com sucesso!");
+		            .body("Matriz de item deletada com sucesso!");
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
