@@ -23,7 +23,7 @@ public class MatridocService {
 	@Autowired
 	MatridocRepository repository;
 	
-public List<Matridoc> getAll() {
+	public List<Matridoc> getAll() {
 		
 		return repository.findAll();
 	}

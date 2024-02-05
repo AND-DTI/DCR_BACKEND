@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Matridoc;
+import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MatridocDTO;
+import com.dcr.api.model.dto.PendprodDTO;
 import com.dcr.api.model.keys.MatridocKey;
-import com.dcr.api.service.as400.MatridocService;
+import com.dcr.api.model.keys.PendprodKey;
+import com.dcr.api.service.as400.PendprodService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,24 +31,24 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/matriz/documento")
-public class MatrizDocumentosController {
+@RequestMapping("/api/matriz/pendencia")
+public class MatrizPendenciaController {
 
 	@Autowired
-	MatridocService service;
+	PendprodService service;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Busca todas as Matrizes de documento")
+	@Operation(summary = "Busca todas as Matrizes de pendencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de documento encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de pendencia encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Matridoc> lista = service.getAll();
+			List<Pendprod> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -63,25 +66,25 @@ public class MatrizDocumentosController {
 	}
 	
 	@GetMapping(value = "/getById", produces = "application/json")
-	@Operation(summary = "Busca uma matriz de documento")
+	@Operation(summary = "Busca uma matriz de pendencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de documento encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de pendencia encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String tpdoc) {
+	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam Integer numpend) {
 	
 		try {
-			MatridocKey key = new MatridocKey();
+			PendprodKey key = new PendprodKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
-			key.setTpdoc(tpdoc);
-			Optional<Matridoc> lista = service.getByID(key);
+			key.setNumpend(numpend);
+			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma Matriz de documento encontrada!");
+	                    .body("Nenhuma Matriz de pendencia encontrada!");
 	        }
 		
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -95,14 +98,14 @@ public class MatrizDocumentosController {
 	}
 	
 	@PutMapping(value = "/create", produces = "application/json")
-	@Operation(summary = "Cria uma matriz de documento")
+	@Operation(summary = "Cria uma matriz de pendencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Esse Matriz de documento já existe!"),
+	        @ApiResponse(responseCode = "400", description = "Esse Matriz de pendencia já existe!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody MatridocDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> create(@RequestBody PendprodDTO dto, HttpServletRequest request) {
 	
 		try {
 	        service.create(dto, request);
@@ -117,26 +120,26 @@ public class MatrizDocumentosController {
 	}
 	
 	@PutMapping(value = "/update", produces = "application/json")
-	@Operation(summary = "Altera uma Matriz de documento")
+	@Operation(summary = "Altera uma Matriz de pendencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Matriz de documento não encontrado!"),
+	        @ApiResponse(responseCode = "400", description = "Matriz de pendencia não encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> update(@RequestBody MatridocDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody PendprodDTO dto, HttpServletRequest request) {
 	
 		try {
-			MatridocKey key = new MatridocKey();
+			PendprodKey key = new PendprodKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnum(dto.partnum());
-			key.setTpdoc(dto.tpdoc());
+			key.setNumpend(dto.numpend());
 			
-			Optional<Matridoc> lista = service.getByID(key);
+			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Matriz de documento não encontrada!");
+	                    .body("Matriz de pendencia não encontrada!");
 	        }
 		
 	        service.update(lista.get(), dto,  request);
@@ -151,32 +154,32 @@ public class MatrizDocumentosController {
 	}
 	
 	@DeleteMapping(value = "/delete", produces = "application/json")
-	@Operation(summary = "Deleta uma matriz de documento")
+	@Operation(summary = "Deleta uma matriz de pendencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de documento encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de pendencia encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String tpdoc) {
+	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam Integer numpend) {
 		try {
 			
-			MatridocKey key = new MatridocKey();
+			PendprodKey key = new PendprodKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
-			key.setTpdoc(tpdoc);
+			key.setNumpend(numpend);
 			
-			Optional<Matridoc> lista = service.getByID(key);
+			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) { 
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma Matriz de documento encontrada!");
+	                    .body("Nenhuma Matriz de pendencia encontrada!");
 	        }
 		
 	        service.delete(lista.get());
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
-		            .body("Matriz de documento deletada com sucesso!");
+		            .body("Matriz de pendencia deletada com sucesso!");
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
