@@ -2,10 +2,23 @@ package com.dcr.api.model.keys;
 
 import java.util.Objects;
 
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
+
 public class PendprodKey {
+	
+	@TamanhoMaximo(9)
+	@TamanhoMinimo(1)
 	private Integer idmatriz;
+	
+	@TamanhoMaximo(25)
+	@TamanhoMinimo(1)
 	private String partnum;
+	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	private Integer numpend;
+	
 	public Integer getIdmatriz() {
 		return idmatriz;
 	}
