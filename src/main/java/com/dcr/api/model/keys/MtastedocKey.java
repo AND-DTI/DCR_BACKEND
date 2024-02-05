@@ -1,0 +1,43 @@
+package com.dcr.api.model.keys;
+
+import java.util.Objects;
+
+public class MtastedocKey {
+	private Integer idmatriz;
+	private String partnum;
+	private String tpdoc;
+	public Integer getIdmatriz() {
+		return idmatriz;
+	}
+	public void setIdmatriz(Integer idmatriz) {
+		this.idmatriz = idmatriz;
+	}
+	public String getPartnum() {
+		return partnum;
+	}
+	public void setPartnum(String partnum) {
+		this.partnum = partnum;
+	}
+	public String getTpdoc() {
+		return tpdoc;
+	}
+	public void setTpdoc(String tpdoc) {
+		this.tpdoc = tpdoc;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(idmatriz, partnum, tpdoc);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MtastedocKey other = (MtastedocKey) obj;
+		return Objects.equals(idmatriz, other.idmatriz) && Objects.equals(partnum, other.partnum)
+				&& Objects.equals(tpdoc, other.tpdoc);
+	}
+}
