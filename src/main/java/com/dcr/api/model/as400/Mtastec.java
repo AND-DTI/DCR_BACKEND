@@ -6,10 +6,10 @@ import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,8 +17,11 @@ import jakarta.persistence.Table;
 @ApiModel
 public class Mtastec {
 
-	@EmbeddedId
-	private MtastecKey key;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer idmatriz;
+
+	private String partnumpd;
 	
 	@TamanhoMaximo(150)
 	@TamanhoMinimo(1)
@@ -84,14 +87,6 @@ public class Mtastec {
 	
 	@Column(columnDefinition = "char(8)")
     private String itaudhr;
-
-	public MtastecKey getKey() {
-		return key;
-	}
-
-	public void setKey(MtastecKey key) {
-		this.key = key;
-	}
 
 	public String getDesccom() {
 		return desccom;
@@ -211,5 +206,21 @@ public class Mtastec {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public Integer getIdmatriz() {
+		return idmatriz;
+	}
+
+	public void setIdmatriz(Integer idmatriz) {
+		this.idmatriz = idmatriz;
+	}
+
+	public String getPartnumpd() {
+		return partnumpd;
+	}
+
+	public void setPartnumpd(String partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 }

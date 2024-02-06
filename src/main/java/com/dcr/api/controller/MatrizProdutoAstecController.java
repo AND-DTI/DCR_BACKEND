@@ -74,10 +74,8 @@ public class MatrizProdutoAstecController {
 	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnumpd) {
 	
 		try {
-			MtastecKey key = new MtastecKey();
-			//key.setIdmatriz(idmatriz);
-			key.setPartnumpd(partnumpd);
-			Optional<Mtastec> lista = service.getByID(key);
+
+			Optional<Mtastec> lista = service.getByID(idmatriz, partnumpd);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -126,12 +124,8 @@ public class MatrizProdutoAstecController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> update(@RequestBody MtastecDTO dto, HttpServletRequest request) {
 	
-		try {
-			MtastecKey key = new MtastecKey();
-			//key.setIdmatriz(dto.idmatriz());
-			key.setPartnumpd(dto.partnumpd());
-			
-			Optional<Mtastec> lista = service.getByID(key);
+		try {		
+			Optional<Mtastec> lista = service.getByID(dto.idmatriz(), dto.partnumpd());
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -160,11 +154,7 @@ public class MatrizProdutoAstecController {
 	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnumpd) {
 		try {
 			
-			MtastecKey key = new MtastecKey();
-			//key.setIdmatriz(idmatriz);
-			key.setPartnumpd(partnumpd);
-			
-			Optional<Mtastec> lista = service.getByID(key);
+			Optional<Mtastec> lista = service.getByID(idmatriz, partnumpd);
 	        if (lista.isEmpty()) { 
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")

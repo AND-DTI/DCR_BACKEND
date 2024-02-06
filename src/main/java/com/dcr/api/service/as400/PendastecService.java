@@ -7,10 +7,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dcr.api.model.as400.Pendastec;
 import com.dcr.api.model.as400.Pendprod;
+import com.dcr.api.model.dto.PendastecDTO;
 import com.dcr.api.model.dto.PendprodDTO;
+import com.dcr.api.model.keys.PendastecKey;
 import com.dcr.api.model.keys.PendprodKey;
-import com.dcr.api.repository.as400.PendprodRepository;
+import com.dcr.api.repository.as400.PendastecRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -18,49 +21,45 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
-public class PendprodService {
+public class PendastecService {
 
 	@Autowired
-	PendprodRepository repository;
+	PendastecRepository repository;
 	
-	public List<Pendprod> getAll() {
+	public List<Pendastec> getAll() {
 		
 		return repository.findAll();
 	}
 	
-	public Optional<Pendprod> getByID(PendprodKey id) {
+	public Optional<Pendastec> getByID(PendastecKey id) {
 		
 		return repository.findById(id);
 	}
 	
-	public void delete(Pendprod matriz) {
+	public void delete(Pendastec matriz) {
 		
 		repository.delete(matriz);
 	}
 	
-	public Pendprod create(PendprodDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
-		Pendprod pend = new Pendprod();
+	public Pendastec create(PendastecDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+		Pendastec pend = new Pendastec();
 		
-		PendprodKey key = new PendprodKey();
+		PendastecKey key = new PendastecKey();
 		key.setIdmatriz(dto.idmatriz());
-		key.setPartnum(dto.partnum());
 		key.setNumpend(dto.numpend());
-		pend.setKey(key);
-
-		pend.setCdpend(dto.cdpend());
-		pend.setObspend(dto.obspend());
-		pend.setStatus(dto.status());
+		key.setPartnum(dto.partnum());
 		
+		pend.setKey(key);
+		pend.setCdpend(dto.cdpend());
+		pend.setStatus(dto.status());
 		Auxiliar.preencheAuditoria(pend, request);
 		return repository.save(pend);
 	}
 	
-	public Pendprod update(Pendprod pend,  PendprodDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+	public Pendastec update(Pendastec pend,  PendastecDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		pend.setCdpend(dto.cdpend());
-		pend.setObspend(dto.obspend());
 		pend.setStatus(dto.status());
-		
 		
 		Auxiliar.preencheAuditoria(pend, request);
 		return repository.save(pend);

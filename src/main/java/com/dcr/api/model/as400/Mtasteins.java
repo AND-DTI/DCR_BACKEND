@@ -1,6 +1,8 @@
 package com.dcr.api.model.as400;
 
 import com.dcr.api.model.keys.MtasteinsKey;
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
@@ -16,39 +18,61 @@ public class Mtasteins {
 	@EmbeddedId
 	private MtasteinsKey key;
 	
+	@TamanhoMaximo(30)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
     private String partdesc;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
     private String itmorg;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
     private String ittyp;
 	
+	@TamanhoMaximo(2)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(2)")
     private String unmsr;
 	
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(10,3)")
     private Double necfil;
 	
+	@TamanhoMaximo(20)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(20)")
     private String cdspn;
 	
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(7,3)")
     private Double weght;
 	
+	@TamanhoMaximo(20)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(20)")
     private String emcomp;
 	
+	@TamanhoMaximo(25)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(25)")
     private String partsugest;
 	
+	@TamanhoMaximo(30)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
     private String partsugdsc;
 	
+	@TamanhoMaximo(25)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(25)")
     private String partnew;
 	
+	@TamanhoMaximo(30)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
     private String partnewdsc;
 	
