@@ -13,8 +13,8 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 	  @Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
 	  		+ "					 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"
 	  		+ "		itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,\r\n"
-	  		+ "		cor.CODCOR, cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN,\r\n"
-	  		+ "		tpprd.TPPRD, tpprd.DSCPOR, tpprd.DSCING " +
+	  		+ "		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN,\r\n"
+	  		+ "		tpprd.DSCPOR, tpprd.DSCING " +
               "FROM HD4DCDHH.MATRIPRD prd " +
               "LEFT JOIN HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ " +
               "LEFT JOIN HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR " +
@@ -22,5 +22,15 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
               "WHERE prd.IDMATRIZ = :idmatriz", nativeQuery = true)
 	  List<Object[]> consultaJoin(Integer idmatriz);
 	  
-	 
+	  @Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
+	  		+ "					 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"
+	  		+ "		itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,\r\n"
+	  		+ "		ins.PARTNUM, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC,\r\n"
+	  		+ "		pend.NUMPEND, pend.CDPEND, pend.OBSPEND, pend.STATUS \r\n"
+	  		+ "FROM HD4DCDHH.MATRIPRD AS PRD\r\n"
+	  		+ "LEFT JOIN HD4DCDHH.MATRIITM AS ITM ON PRD.IDMATRIZ = ITM.IDMATRIZ \r\n"
+	  		+ "LEFT JOIN HD4DCDHH.MATRIINS AS INS ON ITM.IDMATRIZ = INS.IDMATRIZ \r\n"
+	  		+ "LEFT JOIN HD4DCDHH.PENDPROD AS PEND ON PRD.IDMATRIZ = PEND.IDMATRIZ " +
+	              "WHERE prd.IDMATRIZ = :idmatriz", nativeQuery = true)
+		  List<Object[]> consultaProdutoPendencia(Integer idmatriz);
 }

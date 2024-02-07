@@ -1,6 +1,7 @@
 package com.dcr.api.service.as400;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.model.dto.MtasteinsDTO;
 import com.dcr.api.model.keys.MtasteinsKey;
 import com.dcr.api.repository.as400.MtasteinsRepository;
+import com.dcr.api.response.PendenciaInsumoAstecResponse;
+import com.dcr.api.response.PendenciaInsumoResponse;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -38,6 +41,36 @@ public class MtasteinsService {
 	public void delete(Mtasteins matriz) {
 		
 		repository.delete(matriz);
+	}
+	
+	public List<PendenciaInsumoAstecResponse> getPendencia(Integer idmatriz, String partnum) {
+		List<Object[]> resultados = repository.consultaPendenciaInsumo(idmatriz, partnum);
+		
+		List<PendenciaInsumoAstecResponse> produtos = new ArrayList<>();
+
+        for (Object[] resultado : resultados) {
+        	PendenciaInsumoAstecResponse resp = new PendenciaInsumoAstecResponse();
+        	resp.setIdmatriz((Object) resultado[0]);
+        	resp.setPartnum((Object) resultado[1]);
+        	resp.setPartdesc((Object) resultado[2]);
+        	resp.setItmorg((Object) resultado[3]);
+        	resp.setIttyp((Object) resultado[4]);
+        	resp.setUnmsr((Object) resultado[5]);
+        	resp.setNecfil((Object) resultado[6]);
+        	resp.setCdspn((Object) resultado[7]);
+        	resp.setWeght((Object) resultado[8]);
+        	resp.setEmcomp((Object) resultado[9]);
+        	resp.setPartsugest((Object) resultado[10]);
+        	resp.setPartsugdsc((Object) resultado[11]);
+        	resp.setPartnew((Object) resultado[12]);
+        	resp.setPartnewdsc((Object) resultado[13]);
+        	resp.setNumpend((Object) resultado[14]);
+        	resp.setCdpend((Object) resultado[15]);
+        	resp.setStatus((Object) resultado[16]);
+            produtos.add(resp);
+        }
+        
+		return produtos;
 	}
 	
 	public Mtasteins create(MtasteinsDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {

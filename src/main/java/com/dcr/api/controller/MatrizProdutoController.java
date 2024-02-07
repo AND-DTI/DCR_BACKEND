@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.response.MatriprdResponse;
+import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.service.as400.MatriprdService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -91,34 +92,7 @@ public class MatrizProdutoController {
 		}   
 	}
 	
-	@GetMapping(value = "/getDetail", produces = "application/json")
-	@Operation(summary = "Busca um tipo de produto")
-	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de produto encontrada!"),
-	        @ApiResponse(responseCode = "500", description = "Error!")
-	})
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getDetail(@RequestParam Integer idmatriz) {
 	
-		try {
-
-			List<MatriprdResponse> lista = service.getDetail(idmatriz);
-	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Nenhuma Matriz de produto encontrada!");
-	        }
-		
-	        return ResponseEntity.status(HttpStatus.OK)
-		        	.header("Accept", "application/json")
-		            .body(lista);
-		} catch (Exception ae) {
-		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
-		    			.header("Accept", "application/json")
-		        		.body(ae.getMessage());                
-		}   
-	}
 	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um tipo de produto")

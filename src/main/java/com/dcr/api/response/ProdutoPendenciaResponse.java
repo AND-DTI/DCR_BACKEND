@@ -1,7 +1,6 @@
 package com.dcr.api.response;
 
-
-public class MatriprdResponse {
+public class ProdutoPendenciaResponse {
 	private Object idMatriz;
     private Object produto;
     private Object modelo;
@@ -24,12 +23,22 @@ public class MatriprdResponse {
     private Object partdesc;
     private Object unmed;
     private Object priocor;
-    private Object cdbeg;
-    private Object corpt;
-    private Object coreng;
-    private Object tppin;
-    private Object dscpor;
-    private Object dscing;
+    private Object partnum;
+    private Object itmorg;
+    private Object ittyp;
+    private Object unmsr;
+    private Object necfil;
+    private Object cdspn;
+    private Object weght;
+    private Object emcomp;
+    private Object partsugest;
+    private Object partsugdsc;
+    private Object partnew;
+    private Object partnewdsc;
+    private Object numpend;
+    private Object cdpend;
+    private Object obspend;
+    private Object status;
 	public Object getIdMatriz() {
 		return idMatriz;
 	}
@@ -162,42 +171,100 @@ public class MatriprdResponse {
 	public void setPriocor(Object priocor) {
 		this.priocor = priocor;
 	}
-	public Object getCdbeg() {
-		return cdbeg;
+	public Object getPartnum() {
+		return partnum;
 	}
-	public void setCdbeg(Object cdbeg) {
-		this.cdbeg = cdbeg;
+	public void setPartnum(Object partnum) {
+		this.partnum = partnum;
 	}
-	public Object getCorpt() {
-		return corpt;
+	public Object getItmorg() {
+		return itmorg;
 	}
-	public void setCorpt(Object corpt) {
-		this.corpt = corpt;
+	public void setItmorg(Object itmorg) {
+		this.itmorg = itmorg;
 	}
-	public Object getCoreng() {
-		return coreng;
+	public Object getIttyp() {
+		return ittyp;
 	}
-	public void setCoreng(Object coreng) {
-		this.coreng = coreng;
+	public void setIttyp(Object ittyp) {
+		this.ittyp = ittyp;
 	}
-	public Object getTppin() {
-		return tppin;
+	public Object getUnmsr() {
+		return unmsr;
 	}
-	public void setTppin(Object tppin) {
-		this.tppin = tppin;
+	public void setUnmsr(Object unmsr) {
+		this.unmsr = unmsr;
 	}
-	public Object getDscpor() {
-		return dscpor;
+	public Object getNecfil() {
+		return necfil;
 	}
-	public void setDscpor(Object dscpor) {
-		this.dscpor = dscpor;
+	public void setNecfil(Object necfil) {
+		this.necfil = necfil;
 	}
-	public Object getDscing() {
-		return dscing;
+	public Object getCdspn() {
+		return cdspn;
 	}
-	public void setDscing(Object dscing) {
-		this.dscing = dscing;
+	public void setCdspn(Object cdspn) {
+		this.cdspn = cdspn;
 	}
-    
-	
+	public Object getWeght() {
+		return weght;
+	}
+	public void setWeght(Object weght) {
+		this.weght = weght;
+	}
+	public Object getEmcomp() {
+		return emcomp;
+	}
+	public void setEmcomp(Object emcomp) {
+		this.emcomp = emcomp;
+	}
+	public Object getPartsugest() {
+		return partsugest;
+	}
+	public void setPartsugest(Object partsugest) {
+		this.partsugest = partsugest;
+	}
+	public Object getPartsugdsc() {
+		return partsugdsc;
+	}
+	public void setPartsugdsc(Object partsugdsc) {
+		this.partsugdsc = partsugdsc;
+	}
+	public Object getPartnew() {
+		return partnew;
+	}
+	public void setPartnew(Object partnew) {
+		this.partnew = partnew;
+	}
+	public Object getPartnewdsc() {
+		return partnewdsc;
+	}
+	public void setPartnewdsc(Object partnewdsc) {
+		this.partnewdsc = partnewdsc;
+	}
+	public Object getNumpend() {
+		return numpend;
+	}
+	public void setNumpend(Object numpend) {
+		this.numpend = numpend;
+	}
+	public Object getCdpend() {
+		return cdpend;
+	}
+	public void setCdpend(Object cdpend) {
+		this.cdpend = cdpend;
+	}
+	public Object getObspend() {
+		return obspend;
+	}
+	public void setObspend(Object obspend) {
+		this.obspend = obspend;
+	}
+	public Object getStatus() {
+		return status;
+	}
+	public void setStatus(Object status) {
+		this.status = status;
+	}
 }
