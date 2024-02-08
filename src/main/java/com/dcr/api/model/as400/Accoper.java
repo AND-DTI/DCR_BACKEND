@@ -1,5 +1,8 @@
 package com.dcr.api.model.as400;
 
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
+
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,27 +16,43 @@ public class Accoper {
 
 	@Id
 	@Column(columnDefinition = "int")
+	@TamanhoMaximo(9)
+	@TamanhoMinimo(1)
 	private Integer idoper;
 	
 	@Column(columnDefinition = "char(150)")
+	@TamanhoMaximo(150)
+	@TamanhoMinimo(1)
 	private String descoper;
 
 	@Column(columnDefinition = "char(5)")
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
 	private String cdmodule;
 	  
 	@Column(columnDefinition = "char(1)")
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
 	private String tpoper;
 	
 	@Column(columnDefinition = "int")
+	@TamanhoMaximo(2)
+	@TamanhoMinimo(1)
 	private Integer nivel;
 	
 	@Column(columnDefinition = "int")
+	@TamanhoMaximo(9)
+	@TamanhoMinimo(1)
 	private Integer idpai;
 	
 	@Column(columnDefinition = "int")
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
 	private Integer ativo;
 	
 	@Column(columnDefinition = "char(450)")
+	@TamanhoMaximo(450)
+	@TamanhoMinimo(1)
 	private String rota;
 	
     @Column(columnDefinition = "char(40)")
