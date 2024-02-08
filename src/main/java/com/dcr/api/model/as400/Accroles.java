@@ -1,5 +1,9 @@
 package com.dcr.api.model.as400;
 
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
+
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "ACCROLES", schema = "HD4DCDHH")
+@ApiModel
 public class Accroles {
 
 	@Id
@@ -16,12 +21,18 @@ public class Accroles {
     @Column(columnDefinition = "int", unique = true)
     private Integer roleid;
 	
+	@TamanhoMaximo(25)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(25)")
     private String rolename;
 	
+	@TamanhoMaximo(200)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(200)")
     private String roledesc;
 	
+	@TamanhoMaximo(8)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(8)")
     private String rolecad;
 	

@@ -5,7 +5,10 @@ import static com.dcr.api.utils.Auxiliar.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.dcr.api.model.keys.User_RoleKey;
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 
+import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,14 +21,19 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 @Table(name = "ACCUSERRL", schema = "HD4DCDHH", uniqueConstraints = { @UniqueConstraint(columnNames = { "username", "roleid" }) })
 @IdClass(User_RoleKey.class)
+@ApiModel
 public class User_Role implements GrantedAuthority {
 
 
 	@Id
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "char(10)")
     private String username;
 
     @Id
+	@TamanhoMaximo(10)
+    @TamanhoMinimo(1)
     @Column(columnDefinition = "int", unique = true)
     private Integer roleid;
 

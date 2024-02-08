@@ -1,5 +1,6 @@
 package com.dcr.api.controller;
 
+import java.io.Serial;
 import java.math.BigInteger;
 import java.net.UnknownHostException;
 import java.text.ParseException;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.User;
+import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.service.AuthenticationService;
 import com.dcr.api.service.as400.UserService;
 import com.dcr.api.utils.Auxiliar;
@@ -56,10 +58,8 @@ public class UserController {
     @PutMapping(value = "/create", produces = "application/json")
     @Operation(summary = "Create User")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário cadastrado com sucesso!"),
-            @ApiResponse(responseCode = "400", description = "Usuário já cadastrado!"),
-            @ApiResponse(responseCode = "400", description = "Senha fora do padrão!"),
-            @ApiResponse(responseCode = "500", description = "Erro interno!"),
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400", useReturnTypeSchema = true),
     })
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> createUser(@RequestBody User user, HttpServletRequest request) {
@@ -70,7 +70,7 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body("Usuário já cadastrado!");
         }
-        
+        	
         if(!Auxiliar.validatePassword(user.password())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
@@ -84,7 +84,6 @@ public class UserController {
 	        acc.setEmail(user.email());
 	        acc.setPassword(encoder.encode(user.password())); 
 	        acc.setIdarea(user.idArea());
-			acc.setItaudusr(user.itaudusr());
 			acc.setTimevrfy(new Date(0L));
 	        acc.setCdvrfy("");
 	        acc.setFlex1flw(new BigInteger("0"));
@@ -96,10 +95,10 @@ public class UserController {
 	        acc.setUserid(2);
 	        acc.setAtivo(user.ativo());
 	        userService.save(acc, request);
-		} catch (UnknownHostException e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
-                    .body("Erro interno!");
+                    .body(e.getMessage());
 		}
         
         
@@ -109,12 +108,6 @@ public class UserController {
 
     }
     
-//    @GetMapping(value = "/checktoken", produces = "application/json")
-//    @Operation(summary = "Simple request to check token return")
-//    public ResponseEntity<String> checkToken() {
-//        return ResponseEntity.status(HttpStatus.OK).body("Token alive!");
-//
-//    }
 
     @GetMapping(value = "/getAll", produces = "application/json")
     @Operation(summary = "Listar usuários")
@@ -172,7 +165,7 @@ public class UserController {
             user.setPassword(encoder.encode(user.getPassword()));
             try {
             	userALT = userService.save(user, request);
-            } catch (UnknownHostException e) {
+            } catch (Exception e) {
             		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");

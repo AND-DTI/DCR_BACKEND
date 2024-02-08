@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Accroles;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.Role;
+import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.as400.RoleService;
 import com.dcr.api.service.as400.UserService;
@@ -105,11 +106,19 @@ public class RoleController {
 	public ResponseEntity<Object> createRole(@RequestBody Role role, HttpServletRequest request) {
 	
 		try {
+			
+			ErrorResponse response = roleService.validateRole(role);
+			if(!response.getIsValid()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body(response.getMsg());
+			}
+			
 			Accroles roleNew =  roleService.createRole(role, request);
 			
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
-			            .body(roleNew);
+			            .body("OK");
 		
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 

@@ -95,7 +95,9 @@ public class AuthController {
 	        LoginResponse response = new LoginResponse();
 	        response.setRoles(roleService.listByUsername(usuario.getRoles()));
 	        response.setToken(token.token());
-	        response.setUsername(usuario.getUsername());
+	        response.setUsername(usuario.getUsername().trim());
+	        response.setIdArea(usuario.getIdarea().trim());
+	        response.setName(Auxiliar.formatName(usuario.getName()));
 	        
 	        return ResponseEntity.status(HttpStatus.OK) 
 	                .header("Accept", "application/json")
@@ -154,7 +156,7 @@ public class AuthController {
         	return ResponseEntity.status(HttpStatus.CREATED)
                     .header("Accept", "application/json")
                     .body("E-mail enviado com sucesso!");
-	    } catch (UnknownHostException e) {
+	    } catch (Exception e) {
 			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");
@@ -204,8 +206,8 @@ public class AuthController {
 	          
 	          return ResponseEntity.status(HttpStatus.OK)
 	                  .header("Accept", "application/json")
-	                  .body(optUser.get());
-		} catch (UnknownHostException e) {
+	                  .body("Senha alterada com sucesso!");
+		} catch (Exception e) {
 			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");
@@ -246,8 +248,8 @@ public class AuthController {
 	          
 	          return ResponseEntity.status(HttpStatus.OK)
 	                  .header("Accept", "application/json")
-	                  .body(optUser.get());
-		} catch (UnknownHostException e) {
+	                  .body("Senha alterada com sucesso!");
+		} catch (Exception e) {
 			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");

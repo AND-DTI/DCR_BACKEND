@@ -1,10 +1,7 @@
 package com.dcr.api.utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -16,15 +13,24 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
+import org.aspectj.apache.bcel.generic.ObjectType;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.dcr.api.service.TokenService;
+import com.dcr.api.validator.Validator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 public class Auxiliar {
 
+	 @Autowired
+	 TokenService tokenService;
+	 
 	private static final String timezone = "GMT-4";
 	private static final String dtFormat = "yyyyMMdd";
 	private static final String hrFormat = "HH:mm:ss";
@@ -40,88 +46,6 @@ public class Auxiliar {
 
     public static String nvl2(String valor) {
         return valor + "####";
-    }
-
-    public static void saveFile(String file, String content) throws IOException {
-
-        try {
-            FileUtils.delete(new File(file));
-        } catch (Exception e) {
-
-        }
-
-        PrintStream ps = new PrintStream(
-                new FileOutputStream(file, true));
-
-        ps.print(content + "\n");
-        ps.close();
-
-    }
-
-    public static String readFile(String fileSource) {
-
-        String content = "";
-
-        try {
-
-            File file = new File(fileSource);
-
-            content = FileUtils.readFileToString(file, "UTF-8");
-
-        } catch (IOException e) {
-
-        }
-
-        return content;
-
-    }
-
-    public static String decodeBase64(String encodedString, String outputPDF, String outputB64, String fileServer,
-            String fileServerPUB, boolean saveFile) {
-
-        Boolean decodificado = false;
-        String decodeError = "";
-
-        try {
-
-            try {
-
-                if (saveFile) {
-                    saveFile(fileServer + "/" + outputB64, encodedString);
-                }
-
-                byte[] decodedBytes = Base64
-                        .getDecoder()
-                        .decode(encodedString);
-
-                File outputIMG = new File(fileServer + "/" + outputPDF);
-                FileUtils.writeByteArrayToFile(outputIMG, decodedBytes);
-
-                if (saveFile) {
-                    File outputIMG_copy = new File(fileServerPUB + "/" + outputPDF);
-                    FileUtils.copyFile(outputIMG, outputIMG_copy);
-                }
-
-                decodificado = true;
-
-            } catch (FileNotFoundException e) {
-
-                decodeError = e.getMessage();
-                decodificado = false;
-            }
-
-        } catch (Exception e) {
-
-            decodeError = e.getMessage();
-            decodificado = false;
-        }
-
-        if (decodificado) {
-            return "OK";
-        } else {
-            return decodeError;
-        }
-
     }
 
     public static JsonNode nodeFromXML(String xml, String pathNode) throws IOException {
@@ -155,7 +79,7 @@ public class Auxiliar {
                 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6',
                 '7', '8', '9'};
-        char index[] = new char[7];
+        char index[] = new char[8];
 
         Random r = new Random();
         int i = 0;
@@ -239,5 +163,70 @@ public class Auxiliar {
 		sdf.setTimeZone(TimeZone.getTimeZone(timezone));
 		return sdf.format(date);
     }
+	
+	public static Boolean validateField(ObjectType type, int size, Object field) {
+		if(field.getClass().getTypeName().equals(type.getClassName())) {			
+			return Boolean.TRUE;
+		}
+		if(type.getClassName().equals("java.lang.String")) {
+			if(field.toString().length() <= size) {
+				return Boolean.TRUE;
+			}else { 
+				return Boolean.FALSE;
+			}
+		}
+		return Boolean.TRUE;
+	}
+	
+	public static String getUser(HttpServletRequest request) throws JsonMappingException, JsonProcessingException {
+		String atributo = request.getHeader("Authorization");
+		String token = atributo.replace("Bearer ", "");
+		
+		String[] chunks = token.split("\\.");
+		Base64.Decoder decoder = Base64.getUrlDecoder();
 
+		String payload = new String(decoder.decode(chunks[1]));
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(payload);
+
+		return jsonNode.get("sub").asText();
+	}
+
+	public static void preencheAuditoria(Object obj, HttpServletRequest request) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JsonMappingException, JsonProcessingException, UnknownHostException {
+        Class<?> classe = obj.getClass();
+        
+        Validator.validarTamanhos(obj);
+        
+        Field itaudsys = classe.getDeclaredField("itaudsys");
+        itaudsys.setAccessible(true);
+        itaudsys.set(obj, "DCR-Backend");
+        
+        Field itaudusr = classe.getDeclaredField("itaudusr");
+        itaudusr.setAccessible(true);
+        itaudusr.set(obj, getUser(request));
+        
+        Field itaudhst = classe.getDeclaredField("itaudhst");
+        itaudhst.setAccessible(true);
+        itaudhst.set(obj, getClientHost(request));
+        
+        Field itauddt = classe.getDeclaredField("itauddt");
+        itauddt.setAccessible(true);
+        itauddt.set(obj, getDtFormated());
+        
+        Field itaudhr = classe.getDeclaredField("itaudhr");
+        itaudhr.setAccessible(true);
+        itaudhr.set(obj, getHrFormated());
+	}
+	
+	public static String formatName(String name) {
+		
+		String[] names = name.split(" ");
+		if(names.length > 1) {
+			name = names[0] + " " +  names[names.length-1];			
+		}
+		return name;
+	}
+	
+	
 }

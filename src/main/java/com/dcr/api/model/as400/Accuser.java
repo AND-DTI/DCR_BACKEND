@@ -11,6 +11,11 @@ import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,25 +30,38 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "ACCUSER", schema = "HD4DCDHH")
+@ApiModel
 public class Accuser implements UserDetails {
 
 
 	@Id
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "char(10)", unique = true)
     private String username;
 
+	@TamanhoMaximo(100)
+	@TamanhoMinimo(5)
     @Column(columnDefinition = "char(100)")
     private String name;
 
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
     private Integer userid;
 
+    @TamanhoMaximo(70)
+    @TamanhoMinimo(1)
     @Column(columnDefinition = "char(70)")
     private String email;
 
+    @TamanhoMaximo(20)
+    @TamanhoMinimo(1)
     @Column(columnDefinition = "char(20)")
     private String idarea;
 
+    @TamanhoMaximo(1)
+    @TamanhoMinimo(1)
     @Column(columnDefinition = "char(1)")
     private String ativo;
 
