@@ -29,9 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.response.ErrorResponse;
+import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.AuthenticationService;
+import com.dcr.api.service.as400.RoleService;
 import com.dcr.api.service.as400.UserService;
 import com.dcr.api.utils.Auxiliar;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,6 +49,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleService roleService;
+    
     @Autowired
     PasswordEncoder encoder;
 
@@ -63,6 +69,29 @@ public class UserController {
     })
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> createUser(@RequestBody User user, HttpServletRequest request) {
+    	Boolean adm = Boolean.FALSE;
+    	Optional<Accuser> userLogado;
+		try {
+			userLogado = userService.getByUsernameOptional(Auxiliar.getUser(request));
+			List<RoleResponse> roles = roleService.listByUsername(userLogado.get().getRoles());
+			
+			for (RoleResponse roleResponse : roles) {
+				if(roleResponse.getRoleName().equals("ROLE_ADMIN")) {
+					adm = Boolean.TRUE;
+				}
+			}
+			if(!adm) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Usuário não possui acessos de Administrador");
+			}
+		} catch (JsonProcessingException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Accept", "application/json")
+                    .body(e.getMessage());
+		}
+		
+    	
     	
     	Optional<Accuser> optUser = userService.getByUsernameOptional(user.username());
         if (!optUser.isEmpty()) {
