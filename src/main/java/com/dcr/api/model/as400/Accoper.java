@@ -45,15 +45,20 @@ public class Accoper {
 	@TamanhoMinimo(1)
 	private Integer idpai;
 	
-	@Column(columnDefinition = "int")
+	@Column(columnDefinition = "char(5)")
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
-	private Integer ativo;
+	private String ativo;
 	
 	@Column(columnDefinition = "char(450)")
 	@TamanhoMaximo(450)
 	@TamanhoMinimo(1)
 	private String rota;
+	
+	@Column(columnDefinition = "char(100)")
+	@TamanhoMaximo(100)
+	@TamanhoMinimo(1)
+	private String icon;
 	
     @Column(columnDefinition = "char(40)")
     private String itaudsys;
@@ -118,14 +123,6 @@ public class Accoper {
 		this.idpai = idpai;
 	}
 
-	public Integer getAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(Integer ativo) {
-		this.ativo = ativo;
-	}
-
 	public String getRota() {
 		return rota;
 	}
@@ -172,5 +169,21 @@ public class Accoper {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public String getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(String ativo) {
+		this.ativo = ativo;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 }

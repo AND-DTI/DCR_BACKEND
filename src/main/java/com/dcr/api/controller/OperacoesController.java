@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.dto.AccoperDTO;
+import com.dcr.api.response.OperacoesItens;
+import com.dcr.api.response.OperacoesResponse;
 import com.dcr.api.service.as400.AccoperService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +46,7 @@ public class OperacoesController {
 	public ResponseEntity<Object> getroles() {
 	
 		try {
-			List<Accoper> lista = service.getAll();
+			List<OperacoesResponse> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -94,7 +96,7 @@ public class OperacoesController {
 		}   
 	}
 	
-	@GetMapping(value = "/getById", produces = "application/json")
+	@GetMapping(value = "/getByCdModule", produces = "application/json")
 	@Operation(summary = "Busca a operação pelo id")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
@@ -102,10 +104,10 @@ public class OperacoesController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idoper, HttpServletRequest request) {
+	public ResponseEntity<Object> getById(@RequestParam String cdmodule, HttpServletRequest request) {
 	
 		try {
-			Optional<Accoper> dcr = service.getByID(idoper);
+			List<OperacoesResponse> dcr = service.getByCdmodule(cdmodule);
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.header("Accept", "application/json")
