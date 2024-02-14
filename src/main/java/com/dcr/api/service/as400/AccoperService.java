@@ -111,7 +111,7 @@ public class AccoperService {
 	        }
 
 	        op.getChildrensItems().add(itens);
-	        processarNivelGen(filhos, nivelMap, op); // Chamada recursiva para processar os filhos
+	        processarNivelGen(filhos, nivelMap, op);
 	    }
 	}
 	

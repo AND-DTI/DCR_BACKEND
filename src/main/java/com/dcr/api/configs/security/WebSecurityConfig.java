@@ -87,6 +87,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/operacoes/**").permitAll()
                         .requestMatchers("/api/idioma/**").permitAll()
                         .requestMatchers("/api/module/**").permitAll()
+                        .requestMatchers("/api/processo/**").permitAll()
+                        .requestMatchers("/api/registro/**").permitAll()
                         .requestMatchers("/api/descricaoModulo/**").permitAll()
                         .requestMatchers("/api/descricaoOperacao/**").permitAll()
                         .requestMatchers("/api/securityuser/add").permitAll()
