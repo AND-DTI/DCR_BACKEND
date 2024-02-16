@@ -40,12 +40,12 @@ public class DetalheProdutoController {
 	
 		try {
 
-			List<MatriprdResponse> lista = service.getDetail(idmatriz);
-	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Nenhum detalhe de produto encontrado!");
-	        }
+			MatriprdResponse lista = service.getDetail(idmatriz);
+			  if (lista.getIdMatriz() == null) {
+		            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .header("Accept", "application/json")
+		                    .body("Nenhum produto encontrado!");
+		        }
 		
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
@@ -69,8 +69,8 @@ public class DetalheProdutoController {
 	
 		try {
 
-			List<ProdutoPendenciaResponse> lista = service.getProdutoPendencia(idmatriz);
-	        if (lista.isEmpty()) {
+			ProdutoPendenciaResponse lista = service.getProdutoPendencia(idmatriz);
+	        if (lista.getIdMatriz() == null) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência de produto encontrada!");

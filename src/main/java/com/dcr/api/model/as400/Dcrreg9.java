@@ -1,8 +1,6 @@
 package com.dcr.api.model.as400;
 
-import com.dcr.api.model.keys.DcrproccKey;
-import com.dcr.api.validator.TamanhoMaximo;
-import com.dcr.api.validator.TamanhoMinimo;
+import com.dcr.api.model.keys.Dcrreg9Key;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
@@ -11,33 +9,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "DCRPROCC", schema = "HD4DCDHH")
+@Table(name = "DCRREG9", schema = "HD4DCDHH")
 @ApiModel
-public class Dcrprocc {
+public class Dcrreg9 {
 
 	@EmbeddedId
-	private DcrproccKey key;
+	private Dcrreg9Key key;
 	
-	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(8)")
-	private String dtstatus;
+	@Column(columnDefinition = "char(1)")
+	private String idreg;
 	
-	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(8)")
-	private String hrstatus;
-	
-	@TamanhoMaximo(10)
-	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(10)")
-	private String respstaus;
+	@Column(columnDefinition = "int")
+	private Long qtdred;
 	
 	@Column(columnDefinition = "char(40)")
 	private String itaudsys;
 
-	@Column(columnDefinition = "char(10)")
-	private String itaudusr;
+    @Column(columnDefinition = "char(10)")
+    private String itaudusr;
 
     @Column(columnDefinition = "char(30)")
     private String itaudhst;
@@ -48,30 +37,29 @@ public class Dcrprocc {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public DcrproccKey getKey() {
+	public Dcrreg9Key getKey() {
 		return key;
 	}
 
-	public void setKey(DcrproccKey key) {
+	public void setKey(Dcrreg9Key key) {
 		this.key = key;
 	}
 
-	public String getDtstatus() {
-		return dtstatus;
+	public String getIdreg() {
+		return idreg;
 	}
 
-	public void setDtstatus(String dtstatus) {
-		this.dtstatus = dtstatus;
+	public void setIdreg(String idreg) {
+		this.idreg = idreg;
 	}
 
-	public String getHrstatus() {
-		return hrstatus;
+	public Long getQtdred() {
+		return qtdred;
 	}
 
-	public void setHrstatus(String hrstatus) {
-		this.hrstatus = hrstatus;
+	public void setQtdred(Long qtdred) {
+		this.qtdred = qtdred;
 	}
-
 
 	public String getItaudsys() {
 		return itaudsys;
@@ -111,13 +99,5 @@ public class Dcrprocc {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
-	}
-
-	public String getRespstaus() {
-		return respstaus;
-	}
-
-	public void setRespstaus(String respstaus) {
-		this.respstaus = respstaus;
 	}
 }

@@ -27,16 +27,17 @@ public class IpAddressValidation implements AccessDecisionVoter<Object> {
     }
 
     private boolean isAllowedIP(String ip) {
-        return "127.0.0.1".equals(ip);
+        return "127.0.0.0".equals(ip);
     }
 
 	@Override
 	public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
         String ipAddress = request.getRemoteAddr();
         if (!isAllowedIP(ipAddress)) {
-            return ACCESS_DENIED;
+            return ACCESS_GRANTED;
         }
-        return ACCESS_GRANTED;
+        return ACCESS_DENIED;
+        
     }
 
 	

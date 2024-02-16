@@ -35,7 +35,7 @@ public class DcrproccService {
 		dcr.setKey(key);
 		dcr.setDtstatus(dto.dtstatus());
 		dcr.setHrstatus(dto.hrstatus());
-		dcr.setRespstatus(dto.respstatus());
+		dcr.setRespstaus(dto.respstatus());
 		
 		Auxiliar.preencheAuditoria(dcr, request);
 		
@@ -46,8 +46,14 @@ public class DcrproccService {
 
 		dcr.setDtstatus(dto.dtstatus());
 		dcr.setHrstatus(dto.hrstatus());
-		dcr.setRespstatus(dto.respstatus());
+		dcr.setRespstaus(dto.respstatus());
 			
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
+	public Dcrprocc setStatus(Dcrprocc dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {				
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);

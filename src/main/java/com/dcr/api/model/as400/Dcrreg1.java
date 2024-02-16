@@ -28,7 +28,6 @@ public class Dcrreg1 {
 	@Column(columnDefinition = "char(80)")
 	private String descricao;
 	
-	@TamanhoMaximo(2)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,2)")
 	private Double preco;

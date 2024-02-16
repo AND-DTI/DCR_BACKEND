@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @PreAuthorize("@ipAddressValidation.vote(authentication, this, null) == T(org.springframework.security.access.AccessDecisionVoter).ACCESS_GRANTED")
 public class ExternalAccessController {
 
+	
 	@GetMapping(value = "/health-check", produces = "application/json")
 	public ResponseEntity<String> healthCheck(@RequestHeader String username, HttpServletRequest request) {
 	    return ResponseEntity.status(HttpStatus.OK)

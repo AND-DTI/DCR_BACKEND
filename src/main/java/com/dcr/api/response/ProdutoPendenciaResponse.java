@@ -1,11 +1,15 @@
 package com.dcr.api.response;
 
+import java.util.List;
+
 public class ProdutoPendenciaResponse {
 	private Object idMatriz;
     private Object produto;
     private Object modelo;
     private Object anomdl;
     private Object desccom;
+    
+    
     private Object descrfb;
     private Object tpprd;
     private Object protot;
@@ -35,10 +39,8 @@ public class ProdutoPendenciaResponse {
     private Object partsugdsc;
     private Object partnew;
     private Object partnewdsc;
-    private Object numpend;
-    private Object cdpend;
-    private Object obspend;
-    private Object status;
+    private List<ProdutoPendenciaResponseList> itens;
+    
 	public Object getIdMatriz() {
 		return idMatriz;
 	}
@@ -243,28 +245,11 @@ public class ProdutoPendenciaResponse {
 	public void setPartnewdsc(Object partnewdsc) {
 		this.partnewdsc = partnewdsc;
 	}
-	public Object getNumpend() {
-		return numpend;
+	public List<ProdutoPendenciaResponseList> getItens() {
+		return itens;
 	}
-	public void setNumpend(Object numpend) {
-		this.numpend = numpend;
+	public void setItens(List<ProdutoPendenciaResponseList> itens) {
+		this.itens = itens;
 	}
-	public Object getCdpend() {
-		return cdpend;
-	}
-	public void setCdpend(Object cdpend) {
-		this.cdpend = cdpend;
-	}
-	public Object getObspend() {
-		return obspend;
-	}
-	public void setObspend(Object obspend) {
-		this.obspend = obspend;
-	}
-	public Object getStatus() {
-		return status;
-	}
-	public void setStatus(Object status) {
-		this.status = status;
-	}
+	
 }
