@@ -50,8 +50,8 @@ public class Dcrlayout {
 	
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "int")
-	private Integer obrig;
+	@Column(columnDefinition = "char(1)")
+	private String obrig;
 	
     @Column(columnDefinition = "char(40)")
     private String itaudsys;
@@ -124,14 +124,6 @@ public class Dcrlayout {
 		this.regra = regra;
 	}
 
-	public Integer getObrig() {
-		return obrig;
-	}
-
-	public void setObrig(Integer obrig) {
-		this.obrig = obrig;
-	}
-
 	public String getItaudsys() {
 		return itaudsys;
 	}
@@ -170,5 +162,13 @@ public class Dcrlayout {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public String getObrig() {
+		return obrig;
+	}
+
+	public void setObrig(String obrig) {
+		this.obrig = obrig;
 	}
 }
