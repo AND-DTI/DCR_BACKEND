@@ -6,8 +6,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -226,6 +229,60 @@ public class Auxiliar {
 			name = names[0] + " " +  names[names.length-1];			
 		}
 		return name;
+	}
+	
+	public static void formatResponseList(List objects) {
+		
+		for (Object obj : objects) {
+			Class<?> clazz = obj.getClass();
+			
+		    Field[] fields = clazz.getDeclaredFields();
+		    	
+		    for (Field field : fields) {
+		    	
+		        if (field.getType().equals(String.class)) {
+		            try {
+		                field.setAccessible(true);
+		                String value = (String) field.get(obj);
+		                if (value != null) {
+		                    field.set(obj, value.trim());
+		                }
+		            } catch (IllegalAccessException e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    }
+		}
+	}
+	
+	public static void formatResponse(Object obj) {
+		
+		Class<?> type = obj.getClass();
+		if(type.equals(ArrayList.class) || type.equals(List.class)) {
+			formatResponseList((List) obj);
+			return;
+		}
+		if(type.equals(Optional.class)) {
+			obj = ((Optional) obj).get();
+		}
+		Class<?> clazz = obj.getClass();
+		
+	    Field[] fields = clazz.getDeclaredFields();
+	    	
+	    for (Field field : fields) {
+	    	
+	        if (field.getType().equals(String.class)) {
+	            try {
+	                field.setAccessible(true);
+	                String value = (String) field.get(obj);
+	                if (value != null) {
+	                    field.set(obj, value.trim());
+	                }
+	            } catch (IllegalAccessException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
 	}
 	
 	

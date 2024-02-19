@@ -22,6 +22,7 @@ import com.dcr.api.model.dto.CadcorDTO;
 import com.dcr.api.model.dto.CadtaxaDTO;
 import com.dcr.api.service.as400.CadcorService;
 import com.dcr.api.service.as400.CadtaxaService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,7 +54,7 @@ public class CorController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma cor encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -82,7 +83,7 @@ public class CorController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma cor encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

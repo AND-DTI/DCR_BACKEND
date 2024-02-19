@@ -23,6 +23,7 @@ import com.dcr.api.model.dto.PendprodDTO;
 import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.model.keys.PendprodKey;
 import com.dcr.api.service.as400.PendprodService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -54,7 +55,7 @@ public class MatrizPendenciaController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -86,7 +87,7 @@ public class MatrizPendenciaController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de pendencia encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

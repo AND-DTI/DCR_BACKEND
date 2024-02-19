@@ -22,6 +22,7 @@ import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.as400.RoleService;
 import com.dcr.api.service.as400.UserService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,7 +60,7 @@ public class RoleController {
 	        }
 	
 		List<RoleResponse> roles = roleService.listByUsername(optUser.get().getRoles());
-		
+		Auxiliar.formatResponse(roles);
 		return ResponseEntity.status(HttpStatus.OK)
 		        .header("Accept", "application/json")
 		            .body(roles);
@@ -84,7 +85,7 @@ public class RoleController {
 	
 		try {
 			List<RoleResponse> roles = roleService.listAllRoles();
-			
+			Auxiliar.formatResponse(roles);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(roles);

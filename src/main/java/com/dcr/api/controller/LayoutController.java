@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dcr.api.model.as400.Matriins;
-import com.dcr.api.model.dto.MatriinsDTO;
-import com.dcr.api.model.keys.MatriinsKey;
-import com.dcr.api.service.as400.MatriinsService;
+import com.dcr.api.model.as400.Dcrlayout;
+import com.dcr.api.model.dto.DcrlayoutDTO;
+import com.dcr.api.model.keys.DcrlayoutKey;
+import com.dcr.api.service.as400.DcrlayoutService;
 import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,24 +29,23 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/matriz/insumo")
-public class MatrizInsumoController {
-
+@RequestMapping("/api/layout")
+public class LayoutController {
 	@Autowired
-	MatriinsService service;
+	DcrlayoutService service;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Busca todas as Matrizes de insumo")
+	@Operation(summary = "Busca todos os layouts")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de insumo encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum layout encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Matriins> lista = service.getAll();
+			List<Dcrlayout> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -64,25 +63,24 @@ public class MatrizInsumoController {
 	}
 	
 	@GetMapping(value = "/getById", produces = "application/json")
-	@Operation(summary = "Busca uma matriz de insumo")
+	@Operation(summary = "Busca um layout")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de insumo encontrada!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum layout encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum) {
+	public ResponseEntity<Object> getById(@RequestParam String idreg, @RequestParam String campo) {
 	
 		try {
-			MatriinsKey key = new MatriinsKey();
-			key.setIdmatriz(idmatriz);
-			key.setPartnum(partnum);
-
-			Optional<Matriins> lista = service.getByID(key);
+			DcrlayoutKey key = new DcrlayoutKey();
+			key.setIdreg(idreg);
+			key.setCampo(campo);
+			Optional<Dcrlayout> lista = service.getById(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhuma Matriz de insumo encontrada!");
+	                    .body("Nenhum layout encontrado!");
 	        }
 	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -96,14 +94,14 @@ public class MatrizInsumoController {
 	}
 	
 	@PutMapping(value = "/create", produces = "application/json")
-	@Operation(summary = "Cria uma matriz de insumo")
+	@Operation(summary = "Cria um layout")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Esse Matriz de insumo já existe!"),
+	        @ApiResponse(responseCode = "400", description = "Esse Layout já existe!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody MatriinsDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> create(@RequestBody DcrlayoutDTO dto, HttpServletRequest request) {
 	
 		try {
 	        service.create(dto, request);
@@ -118,28 +116,28 @@ public class MatrizInsumoController {
 	}
 	
 	@PutMapping(value = "/update", produces = "application/json")
-	@Operation(summary = "Altera uma Matriz de insumo")
+	@Operation(summary = "Altera um layout")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Matriz de insumo não encontrado!"),
+	        @ApiResponse(responseCode = "400", description = "Layout não encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> update(@RequestBody MatriinsDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody DcrlayoutDTO dto, HttpServletRequest request) {
 	
 		try {
-			MatriinsKey key = new MatriinsKey();
-			key.setIdmatriz(dto.idmatriz());
-			key.setPartnum(dto.partnum());
+			DcrlayoutKey key = new DcrlayoutKey();
+			key.setIdreg(dto.idreg());
+			key.setCampo(dto.campo());
 			
-			Optional<Matriins> lista = service.getByID(key);
+			Optional<Dcrlayout> lista = service.getById(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Matriz de insumo não encontrada!");
+	                    .body("Layout não encontrado!");
 	        }
 		
-	        service.update(lista.get(), dto,  request);
+	        service.update(dto, lista.get(), request);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");
@@ -150,36 +148,5 @@ public class MatrizInsumoController {
 		}   
 	}
 	
-	@DeleteMapping(value = "/delete", produces = "application/json")
-	@Operation(summary = "Deleta uma matriz de insumo")
-	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de insumo encontrada!"),
-	        @ApiResponse(responseCode = "500", description = "Error!")
-	})
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum) {
-		try {
-			
-			MatriinsKey key = new MatriinsKey();
-			key.setIdmatriz(idmatriz);
-			key.setPartnum(partnum	);
-			
-			Optional<Matriins> lista = service.getByID(key);
-	        if (lista.isEmpty()) { 
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Nenhuma Matriz de insumo encontrada!");
-	        }
-		
-	        service.delete(lista.get());
-	        return ResponseEntity.status(HttpStatus.OK)
-		        	.header("Accept", "application/json")
-		            .body("Matriz de insumo deletada com sucesso!");
-		} catch (Exception ae) {
-		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
-		    			.header("Accept", "application/json")
-		        		.body(ae.getMessage());                
-		}   
-	}
+	
 }

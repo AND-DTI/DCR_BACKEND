@@ -18,6 +18,7 @@ import com.dcr.api.model.as400.Dcrreg0;
 import com.dcr.api.model.dto.Dcrreg0DTO;
 import com.dcr.api.model.keys.Dcrreg0Key;
 import com.dcr.api.service.as400.Dcrreg0Service;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,7 +50,7 @@ public class RegistroZeroController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum Registro encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -159,6 +160,7 @@ public class RegistroZeroController {
 						.header("Accept", "application/json")
 						.body("Nenhum Registro encontrado!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

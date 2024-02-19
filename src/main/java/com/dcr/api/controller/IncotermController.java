@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Cadinco;
 import com.dcr.api.model.as400.Cadinco;
 import com.dcr.api.model.dto.CadincoDTO;
 import com.dcr.api.service.as400.CadincoService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +52,7 @@ public class IncotermController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum incoterm encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -80,7 +81,7 @@ public class IncotermController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum incoterm encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

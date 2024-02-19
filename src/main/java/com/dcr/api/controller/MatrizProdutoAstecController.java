@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.dto.MtastecDTO;
 import com.dcr.api.model.keys.MtastecKey;
 import com.dcr.api.service.as400.MtastecService;
+import com.dcr.api.utils.Auxiliar;
 import com.dcr.api.service.as400.MtastecService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +53,7 @@ public class MatrizProdutoAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -81,7 +82,7 @@ public class MatrizProdutoAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de produto ASTEC encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

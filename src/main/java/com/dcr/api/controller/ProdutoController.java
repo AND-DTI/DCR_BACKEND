@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Cadppb;
 import com.dcr.api.model.dto.CadppbDTO;
 import com.dcr.api.model.keys.ProdutoKey;
 import com.dcr.api.service.as400.CadppbService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +52,7 @@ public class ProdutoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum produto encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -83,7 +84,7 @@ public class ProdutoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum produto encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

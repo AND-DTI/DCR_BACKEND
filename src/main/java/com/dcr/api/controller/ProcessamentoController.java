@@ -56,7 +56,7 @@ public class ProcessamentoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum processamento encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -117,6 +117,7 @@ public class ProcessamentoController {
 						.header("Accept", "application/json")
 						.body("Nenhum processamento encontrado!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

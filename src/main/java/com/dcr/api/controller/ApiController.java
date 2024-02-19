@@ -51,7 +51,7 @@ public class ApiController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma configuração encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -79,6 +79,7 @@ public class ApiController {
 						.header("Accept", "application/json")
 						.body("Nenhuma configuração encontrada!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

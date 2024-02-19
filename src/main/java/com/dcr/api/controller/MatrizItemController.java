@@ -22,6 +22,7 @@ import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.service.as400.MatriitmService;
 import com.dcr.api.service.as400.MatriprdService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,7 +54,7 @@ public class MatrizItemController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -82,7 +83,7 @@ public class MatrizItemController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de item encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

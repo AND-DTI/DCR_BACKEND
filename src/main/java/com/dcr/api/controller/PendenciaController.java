@@ -53,7 +53,7 @@ public class PendenciaController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -81,6 +81,7 @@ public class PendenciaController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência encontrado!");
 	        }
+	        Auxiliar.formatResponse(lista);
 		
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")

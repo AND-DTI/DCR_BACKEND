@@ -22,6 +22,7 @@ import com.dcr.api.model.dto.AccdscopeDTO;
 import com.dcr.api.model.keys.AccdscmodKey;
 import com.dcr.api.model.keys.AccdscopeKey;
 import com.dcr.api.service.as400.AccdscopeService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,7 +53,7 @@ public class DescricaoOperacaoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum incoterm encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -86,7 +87,7 @@ public class DescricaoOperacaoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum incoterm encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

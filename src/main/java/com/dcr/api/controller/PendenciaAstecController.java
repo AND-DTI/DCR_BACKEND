@@ -18,6 +18,7 @@ import com.dcr.api.response.PendenciaInsumoResponse;
 import com.dcr.api.service.as400.MatriinsService;
 import com.dcr.api.service.as400.MtastecService;
 import com.dcr.api.service.as400.MtasteinsService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -55,7 +56,7 @@ public class PendenciaAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -84,7 +85,7 @@ public class PendenciaAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência de insumo encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -113,7 +114,7 @@ public class PendenciaAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência de insumo astec encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

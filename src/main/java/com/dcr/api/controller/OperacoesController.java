@@ -21,6 +21,7 @@ import com.dcr.api.model.dto.AccoperDTO;
 import com.dcr.api.response.OperacoesItens;
 import com.dcr.api.response.OperacoesResponse;
 import com.dcr.api.service.as400.AccoperService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,7 +53,7 @@ public class OperacoesController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma operação encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -113,6 +114,7 @@ public class OperacoesController {
 						.header("Accept", "application/json")
 						.body("Nenhuma operação encontrada!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

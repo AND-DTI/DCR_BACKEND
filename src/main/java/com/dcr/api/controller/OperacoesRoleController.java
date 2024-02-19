@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Accoperol;
 import com.dcr.api.model.dto.AccoperolDTO;
 import com.dcr.api.model.keys.AccoperolKey;
 import com.dcr.api.service.as400.AccoperolService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +52,7 @@ public class OperacoesRoleController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma operação encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -119,6 +120,7 @@ public class OperacoesRoleController {
 						.header("Accept", "application/json")
 						.body("Nenhuma operação encontrada!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

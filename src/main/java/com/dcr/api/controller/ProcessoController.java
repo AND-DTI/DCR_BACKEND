@@ -21,6 +21,7 @@ import com.dcr.api.model.dto.DcrproccKeyDTO;
 import com.dcr.api.model.dto.DcrproccStatusNew;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.service.as400.DcrproccService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,7 +53,7 @@ public class ProcessoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum processo encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -162,6 +163,7 @@ public class ProcessoController {
 						.header("Accept", "application/json")
 						.body("Nenhum Processo encontrado!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

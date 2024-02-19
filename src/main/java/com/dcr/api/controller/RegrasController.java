@@ -57,7 +57,7 @@ public class RegrasController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma regra encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -116,6 +116,7 @@ public class RegrasController {
 						.header("Accept", "application/json")
 						.body("Nenhum processamento encontrado!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

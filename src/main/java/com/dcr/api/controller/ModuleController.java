@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Accmodule;
 import com.dcr.api.model.dto.AccmoduleDTO;
 import com.dcr.api.service.as400.AccmoduleService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,7 +51,7 @@ public class ModuleController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum módulo encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -111,6 +112,7 @@ public class ModuleController {
 						.header("Accept", "application/json")
 						.body("Nenhum módulo encontrado!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

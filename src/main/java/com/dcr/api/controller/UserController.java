@@ -144,13 +144,14 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!"),
             @ApiResponse(responseCode = "200", description = "Ok!")
     })
-    public ResponseEntity<List<Accuser>> listAll(
+    public ResponseEntity<Object> listAll(
             @PageableDefault(page = 0, size = 10, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
 
         List<Accuser> users = userService.listarTodos();
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        Auxiliar.formatResponse(users);
         return ResponseEntity.status(HttpStatus.OK).body(users);
 
     }
@@ -169,6 +170,7 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body(null);
         }
+        Auxiliar.formatResponse(optUser.get());
         return ResponseEntity.status(HttpStatus.OK).body(optUser.get());
 
     }

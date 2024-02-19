@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Cadtpprd;
 import com.dcr.api.model.dto.CadtpprdDTO;
 import com.dcr.api.service.as400.CadtpprdService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -50,7 +51,7 @@ public class TipoProdutoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum tipo de produto encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -79,7 +80,7 @@ public class TipoProdutoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum tipo encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
