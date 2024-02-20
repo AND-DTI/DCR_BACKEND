@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -78,9 +79,9 @@ public class ProcessoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> generate() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public ResponseEntity<Object> generate(@RequestParam Integer idmatriz,@RequestParam String partnumpd,@RequestParam String tpprd ) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		try {
-			txtService.gerarArquivoTXT("1");
+			txtService.gerarArquivoTXT(idmatriz, partnumpd, tpprd);
 			return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("Arquivo de texto gerado com sucesso!");

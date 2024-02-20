@@ -19,6 +19,12 @@ public class Dcrreg4 {
 	@Column(columnDefinition = "char(1)")
 	private String idreg;
 	
+	@Column(columnDefinition = "char(1)")
+	private String impdireta;
+	
+	@Column(columnDefinition = "char(1)")
+	private String suspens;
+	
 	@Column(columnDefinition = "char(10)")
 	private String di;
 	
@@ -242,5 +248,21 @@ public class Dcrreg4 {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public String getImpdireta() {
+		return impdireta;
+	}
+
+	public void setImpdireta(String impdireta) {
+		this.impdireta = impdireta;
+	}
+
+	public String getSuspens() {
+		return suspens;
+	}
+
+	public void setSuspens(String suspens) {
+		this.suspens = suspens;
 	}
 }

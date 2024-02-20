@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -284,6 +285,44 @@ public class Auxiliar {
 	        }
 	    }
 	}
+	
+	public static String addCasasDecimais(Object obj, Integer tamanhoMax, Integer casas) {
+        DecimalFormat df = new DecimalFormat("0".repeat(tamanhoMax -  casas) + "." + "0".repeat(casas));
+        String formatted = df.format(obj).replace(".", "").replace(",", "");
+        if (formatted.length() < tamanhoMax) {
+            formatted = "0".repeat(tamanhoMax - formatted.length()) + formatted;
+        }
+
+        return formatted;
+	}
+	
+	public static String addZeros(Object num, int tamanho) {
+        String str = num.toString();
+        if (str.length() >= tamanho) {
+            return str;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() + str.length() < tamanho) {
+            sb.append('0');
+        }
+        sb.append(str);
+        return sb.toString();
+    }
+	
+	
+	public static String addSpaces(Object obj, int tamanho) {
+		String str = obj.toString();
+        if (str.length() >= tamanho) {
+            return str;
+        }
+        
+        StringBuilder sb = new StringBuilder(str);
+        while (sb.length() < tamanho) {
+            sb.append(' ');
+        }
+        return sb.toString();
+    }
 	
 	
 }
