@@ -27,11 +27,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.dto.CreateUserDTO;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.AuthenticationService;
 import com.dcr.api.service.as400.RoleService;
+import com.dcr.api.service.as400.UserRoleService;
 import com.dcr.api.service.as400.UserService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -53,6 +55,9 @@ public class UserController {
     private RoleService roleService;
     
     @Autowired
+    UserRoleService userRoleService;
+    
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -68,7 +73,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", useReturnTypeSchema = true),
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> createUser(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<Object> createUser(@RequestBody CreateUserDTO user, HttpServletRequest request) {
     	Boolean adm = Boolean.FALSE;
     	Optional<Accuser> userLogado;
 		try {
@@ -123,8 +128,10 @@ public class UserController {
 	        acc.setToken("");
 	        acc.setUserid(2);
 	        acc.setAtivo(user.ativo());
+	        userRoleService.createRoleUser(user.roles(), user.username(), request);
 	        userService.save(acc, request);
 		} catch (Exception e) {
+			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
                     .body(e.getMessage());

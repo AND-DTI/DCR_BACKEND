@@ -43,7 +43,20 @@ public class User_Role implements GrantedAuthority {
     @Column(columnDefinition = "char(8)")
     private String dtacad;
 
-
+    @Column(columnDefinition = "char(40)")
+    private String itaudsys;	
+	
+	@Column(columnDefinition = "char(10)")
+    private String itaudusr;
+	
+	@Column(columnDefinition = "char(20)")
+    private String itaudhst;
+	
+	@Column(columnDefinition = "char(8)")
+    private String itauddt;
+	
+	@Column(columnDefinition = "char(8)")
+    private String itaudhr;
 
     public User_Role() {
 
@@ -67,11 +80,6 @@ public class User_Role implements GrantedAuthority {
         this.roleid = roleid;
     }
 
-    //public String getRolname() {        return rolename;    }
-    public void setRolname(String rolename) {
-        this.rolename = rolename;
-    }
-
     public String getDtacad() {        return dtacad;    }
     public void setDtacad(String dtacad) {
         this.dtacad = dtacad;
@@ -81,5 +89,53 @@ public class User_Role implements GrantedAuthority {
     public String getAuthority() {        
         return trimNull(this.rolename);
     }
+
+	public String getRolename() {
+		return rolename;
+	}
+
+	public void setRolename(String rolename) {
+		this.rolename = rolename;
+	}
+
+	public String getItaudsys() {
+		return itaudsys;
+	}
+
+	public void setItaudsys(String itaudsys) {
+		this.itaudsys = itaudsys;
+	}
+
+	public String getItaudusr() {
+		return itaudusr;
+	}
+
+	public void setItaudusr(String itaudusr) {
+		this.itaudusr = itaudusr;
+	}
+
+	public String getItaudhst() {
+		return itaudhst;
+	}
+
+	public void setItaudhst(String itaudhst) {
+		this.itaudhst = itaudhst;
+	}
+
+	public String getItauddt() {
+		return itauddt;
+	}
+
+	public void setItauddt(String itauddt) {
+		this.itauddt = itauddt;
+	}
+
+	public String getItaudhr() {
+		return itaudhr;
+	}
+
+	public void setItaudhr(String itaudhr) {
+		this.itaudhr = itaudhr;
+	}
 
 }
