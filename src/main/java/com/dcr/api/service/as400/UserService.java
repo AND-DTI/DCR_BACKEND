@@ -102,6 +102,18 @@ public class UserService {
 
     }
 
+    public List<Accuser> getByEmail(String email) {
+
+        return userRepository.findDistinctByEmail(email);
+
+    }
+    
+    public List<Accuser> getByUserId(Integer userid) {
+
+        return userRepository.findDistinctByUserid(userid);
+
+    }
+    
     public Accuser getByUsername(String username) {
 
         try {

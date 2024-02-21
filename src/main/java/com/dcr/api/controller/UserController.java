@@ -104,6 +104,20 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body("Usuário já cadastrado!");
         }
+        
+        List<Accuser> listEmail = userService.getByEmail(user.email());
+        if (!listEmail.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Accept", "application/json")
+                    .body("Email já cadastrado!");
+        }
+        
+//        List<Accuser> listUserId = userService.getByUserId(null);
+//        if (!listUserId.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .header("Accept", "application/json")
+//                    .body("Email já cadastrado!");
+//        }
         	
         if(!Auxiliar.validatePassword(user.password())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)

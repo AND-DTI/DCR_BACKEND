@@ -23,23 +23,21 @@ public class UserRoleService {
 	@Autowired
 	RoleRepository roleRepository;
 	public void createRoleUser(List<String> roles, String user, HttpServletRequest request) throws Exception {
-		User_Role userRole = new User_Role();
-		
-		for (String role : roles) {
-			Accroles accrole = roleRepository.consultaByRoleName(role);
-			
-			try {
-				userRole.setRoleid(accrole.getRoleid());
-				userRole.setRolename(accrole.getRolename().trim());
-				userRole.setUsername(user);
-				
-				Auxiliar.preencheAuditoria(userRole, request);
-				userRole.setDtacad(Auxiliar.getDtFormated());
-				repository.save(userRole);
-			} catch (Exception e) {
-				throw new Exception();
-			}
-			
-		}
+		 for (String role : roles) {
+		        Accroles accrole = roleRepository.consultaByRoleName(role);
+
+		        try {
+		            User_Role userRole = new User_Role();
+		            userRole.setRoleid(accrole.getRoleid());
+		            userRole.setRolename(accrole.getRolename().trim());
+		            userRole.setUsername(user);
+
+		            Auxiliar.preencheAuditoria(userRole, request);
+		            userRole.setDtacad(Auxiliar.getDtFormated());
+		            repository.save(userRole);
+		        } catch (Exception e) {
+		            throw new Exception();
+		        }
+		    }
 	}
 }

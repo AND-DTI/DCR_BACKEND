@@ -82,8 +82,6 @@ public class RegrasController {
 			Optional<Dcrregra> dcr = service.getAtivo();
 			
 			if (!dcr.isEmpty()) {
-				dcr.get().getDcrregraKey().setConfvigfim(Auxiliar.getDtFormated());
-				dcr.get().setStsconfig(0);
 				service.update(dto, dcr.get(), request);
 		    }
 			

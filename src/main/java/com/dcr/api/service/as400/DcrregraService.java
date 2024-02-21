@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 
 @Service
 public class DcrregraService {
@@ -57,15 +58,12 @@ public class DcrregraService {
 		return repository.save(regra);
 	}
 	
-	public Dcrregra update(DcrregraDTO dto, Dcrregra regra, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+	public void update(DcrregraDTO dto, Dcrregra regra, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
-		regra.setStsconfig(0);
+		repository.updateStsconfigAndConfvigfim(regra.getDcrregraKey().getConfvigini(), regra.getDcrregraKey().getConfvigfim(), 0, Auxiliar.getDtFormated());
 			
-		Auxiliar.preencheAuditoria(regra, request);
-		
-		return repository.save(regra);
 	}
-	
+	 
 	public List<Dcrregra> getAll() {
 		
 		return repository.findAll();
