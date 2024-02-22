@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Accroles;
 import com.dcr.api.model.as400.User_Role;
+import com.dcr.api.model.keys.User_RoleKey;
 import com.dcr.api.repository.as400.RoleRepository;
 import com.dcr.api.repository.as400.UserRoleRepository;
 import com.dcr.api.utils.Auxiliar;
@@ -28,9 +29,11 @@ public class UserRoleService {
 
 		        try {
 		            User_Role userRole = new User_Role();
-		            userRole.setRoleid(accrole.getRoleid());
+		            User_RoleKey key = new User_RoleKey();
+		            key.setRoleid(accrole.getRoleid());
+		            key.setUsername(user);
+		            userRole.setKey(key);
 		            userRole.setRolename(accrole.getRolename().trim());
-		            userRole.setUsername(user);
 
 		            Auxiliar.preencheAuditoria(userRole, request);
 		            userRole.setDtacad(Auxiliar.getDtFormated());

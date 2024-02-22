@@ -37,8 +37,8 @@ public class Dcrreg3 {
 	@Column(columnDefinition = "int")
 	private Integer itemadicao;
 	
-	@Column(columnDefinition = "char(10)")
-	private String numnf;
+	@Column(columnDefinition = "int")
+	private Long numnf;
 	
 	@Column(columnDefinition = "char(5)")
 	private String sernf;
@@ -147,14 +147,6 @@ public class Dcrreg3 {
 
 	public void setItemadicao(Integer itemadicao) {
 		this.itemadicao = itemadicao;
-	}
-
-	public String getNumnf() {
-		return numnf;
-	}
-
-	public void setNumnf(String numnf) {
-		this.numnf = numnf;
 	}
 
 	public String getSernf() {
@@ -275,5 +267,13 @@ public class Dcrreg3 {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public Long getNumnf() {
+		return numnf;
+	}
+
+	public void setNumnf(Long numnf) {
+		this.numnf = numnf;
 	}
 }

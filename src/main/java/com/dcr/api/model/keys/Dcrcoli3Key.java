@@ -15,4 +15,28 @@ public class Dcrcoli3Key {
 	@TamanhoMaximo(4)
 	@TamanhoMinimo(1)
 	private Integer numcomp;
+
+	public String getDcre() {
+		return dcre;
+	}
+
+	public void setDcre(String dcre) {
+		this.dcre = dcre;
+	}
+
+	public Integer getNumsubcomp() {
+		return numsubcomp;
+	}
+
+	public void setNumsubcomp(Integer numsubcomp) {
+		this.numsubcomp = numsubcomp;
+	}
+
+	public Integer getNumcomp() {
+		return numcomp;
+	}
+
+	public void setNumcomp(Integer numcomp) {
+		this.numcomp = numcomp;
+	}
 }

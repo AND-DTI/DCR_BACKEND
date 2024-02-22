@@ -22,6 +22,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -48,7 +49,7 @@ public class Accuser implements UserDetails {
 	@TamanhoMaximo(10)
 	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
-    private Integer userid;
+    private Long userid;
 
     @TamanhoMaximo(70)
     @TamanhoMinimo(1)
@@ -74,6 +75,9 @@ public class Accuser implements UserDetails {
     @Column(columnDefinition = "char(100)")
     private String cdvrfy;
     
+    @Column(columnDefinition = "char(1)")
+    private String tpfunc;
+    
     @Column(name = "timevrfy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timevrfy;
@@ -93,7 +97,10 @@ public class Accuser implements UserDetails {
     @Column(columnDefinition = "char(1000)")
     private String flex5flw;
 
-    @OneToMany(mappedBy = "username", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumns({
+        @JoinColumn(name = "username", referencedColumnName = "username")
+    })
     private List<User_Role> roles;
 
     @Column(columnDefinition = "char(40)")
@@ -111,7 +118,7 @@ public class Accuser implements UserDetails {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-    public Accuser(String username, String name, Integer userid, String email, String idarea, String ativo,
+    public Accuser(String username, String name, Long userid, String email, String idarea, String ativo,
             String password, String token, List<User_Role> roles) {
         this.username = username;
         this.name = name;
@@ -142,14 +149,6 @@ public class Accuser implements UserDetails {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Integer userid) {
-        this.userid = userid;
     }
 
     public String getEmail() {
@@ -328,6 +327,22 @@ public class Accuser implements UserDetails {
 
 	public void setRoles(List<User_Role> roles) {
 		this.roles = roles;
+	}
+
+	public Long getUserid() {
+		return userid;
+	}
+
+	public void setUserid(Long userid) {
+		this.userid = userid;
+	}
+
+	public String getTpfunc() {
+		return tpfunc;
+	}
+
+	public void setTpfunc(String tpfunc) {
+		this.tpfunc = tpfunc;
 	}
 
 }

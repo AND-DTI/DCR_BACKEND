@@ -77,9 +77,9 @@ public class DcrlayoutService {
          List<Dcrreg3> reg3 = reg3Repository.consultaByIds(idMatriz, partnumpd, tpprd);
          List<Dcrreg4> reg4 = reg4Repository.consultaByIds(idMatriz, partnumpd, tpprd);
          List<Dcrreg9> reg9 = reg9Repository.consultaByIds(idMatriz, partnumpd, tpprd);
-         for (Dcrlayout campo : map.get("0 ")) {
+         for (Dcrreg0 dcrreg0 : reg0) {
         	 
-    		for (Dcrreg0 dcrreg0 : reg0) {
+        	 for (Dcrlayout campo : map.get("0 ")) {
     			
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("denom")) {
     				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getDenom(), campo.getCampotam()) );
@@ -139,12 +139,14 @@ public class DcrlayoutService {
     			
     			sb.append(Auxiliar.addSpaces(field.get(dcrreg0), campo.getCampotam()));
 			}
+        	 
          }
          bw.write(sb.toString());
          sb = new StringBuffer();
          sb.append("\n");
-         for (Dcrlayout campo : map.get("1 ")) {
-        	 for (Dcrreg1 dcrreg1 : reg1) {
+         for (Dcrreg1 dcrreg1 : reg1) {
+        	 
+        	 for (Dcrlayout campo : map.get("1 ")) {
       			
       			if(campo.getKey().getCampo().toLowerCase().trim().equals("modelo")) {
       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getModelo(), campo.getCampotam()) );
@@ -178,10 +180,10 @@ public class DcrlayoutService {
          bw.write(sb.toString());
          sb = new StringBuffer();
          sb.append("\n");
-         for (Dcrlayout campo : map.get("2 ")) {
-        	 
-     		for (Dcrreg2 dcrreg2 : reg2) {
-     			
+         for (Dcrreg2 dcrreg2 : reg2) {
+        	 System.out.println(dcrreg2.getEspec());
+        	 for (Dcrlayout campo : map.get("2 ")) {
+        		 System.out.println(campo.getKey().getCampo());
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
      				sb.append(Auxiliar.addSpaces(dcrreg2.getKey().getNumcomp(), campo.getCampotam()) );
      				break;
@@ -216,9 +218,9 @@ public class DcrlayoutService {
           bw.write(sb.toString());
           sb = new StringBuffer();
           sb.append("\n");
-          for (Dcrlayout campo : map.get("3 ")) {
+          for (Dcrreg3 dcrreg3 : reg3) {
          	 
-       		for (Dcrreg3 dcrreg3 : reg3) {
+         	 for (Dcrlayout campo : map.get("3 ")) {
        			
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
        				sb.append(Auxiliar.addSpaces(dcrreg3.getKey().getNumcomp(), campo.getCampotam()) );
@@ -347,9 +349,9 @@ public class DcrlayoutService {
           sb = new StringBuffer();
           sb.append("\n");
           
-          for (Dcrlayout campo : map.get("4 ")) {
-          	 
-         		for (Dcrreg4 dcrreg4 : reg4) {
+          for (Dcrreg4 dcrreg4 : reg4) {
+         	 
+         	 for (Dcrlayout campo : map.get("4 ")) {
          			
          			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
          				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getNumcomp(), campo.getCampotam()) );
@@ -474,9 +476,9 @@ public class DcrlayoutService {
           sb = new StringBuffer();
           sb.append("\n");
           
-          for (Dcrlayout campo : map.get("9 ")) {
-           	 
-       		for (Dcrreg9 dcrreg9 : reg9) {
+          for (Dcrreg9 dcrreg9 : reg9) {
+         	 
+         	 for (Dcrlayout campo : map.get("9 ")) {
        			
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
        				sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getPartnumpd(), campo.getCampotam()) );

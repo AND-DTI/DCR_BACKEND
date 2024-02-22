@@ -111,13 +111,6 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body("Email já cadastrado!");
         }
-        
-//        List<Accuser> listUserId = userService.getByUserId(null);
-//        if (!listUserId.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .header("Accept", "application/json")
-//                    .body("Email já cadastrado!");
-//        }
         	
         if(!Auxiliar.validatePassword(user.password())) {
         	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -140,7 +133,21 @@ public class UserController {
 	        acc.setFlex4flw("");
 	        acc.setFlex5flw("");
 	        acc.setToken("");
-	        acc.setUserid(2);
+	        acc.setTpfunc(user.tpfunc());
+	        
+	        if(user.tpfunc().equals("1")) {
+	        	String id = Auxiliar.filterNumbers(user.username());
+		        if(id.length() > 0) {
+		        	Long idInt = Long.parseLong(id);
+			        acc.setUserid(idInt);
+		        }else {
+		        	acc.setUserid(0L);
+		        }
+	        } else {
+	        	acc.setUserid(0L);
+	        }
+	        
+	        
 	        acc.setAtivo(user.ativo());
 	        userRoleService.createRoleUser(user.roles(), user.username(), request);
 	        userService.save(acc, request);

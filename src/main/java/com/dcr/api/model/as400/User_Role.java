@@ -10,6 +10,7 @@ import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -19,23 +20,13 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "ACCUSERRL", schema = "HD4DCDHH", uniqueConstraints = { @UniqueConstraint(columnNames = { "username", "roleid" }) })
-@IdClass(User_RoleKey.class)
+@Table(name = "ACCUSERRL", schema = "HD4DCDHH")
 @ApiModel
 public class User_Role implements GrantedAuthority {
 
 
-	@Id
-	@TamanhoMaximo(10)
-	@TamanhoMinimo(1)
-    @Column(columnDefinition = "char(10)")
-    private String username;
-
-    @Id
-	@TamanhoMaximo(10)
-    @TamanhoMinimo(1)
-    @Column(columnDefinition = "int", unique = true)
-    private Integer roleid;
+	@EmbeddedId
+	private User_RoleKey key;
 
     @Column(columnDefinition = "char(20)")
     private String rolename;
@@ -60,24 +51,6 @@ public class User_Role implements GrantedAuthority {
 
     public User_Role() {
 
-    }
-
-    public User_Role(String username, Integer roleid, String rolename, String dtacad) {
-        super();
-        this.username = username;
-        this.roleid = roleid;
-        this.rolename = rolename;
-        this.dtacad = dtacad;
-    }
-
-    public String getUsername() {        return trimNull(username);    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getRoleid() {        return roleid;    }
-    public void setRoleid(Integer roleid) {
-        this.roleid = roleid;
     }
 
     public String getDtacad() {        return dtacad;    }
@@ -136,6 +109,14 @@ public class User_Role implements GrantedAuthority {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public User_RoleKey getKey() {
+		return key;
+	}
+
+	public void setKey(User_RoleKey key) {
+		this.key = key;
 	}
 
 }

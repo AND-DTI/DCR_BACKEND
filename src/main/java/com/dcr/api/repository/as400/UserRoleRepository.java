@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.dcr.api.model.as400.User_Role;
+import com.dcr.api.model.keys.User_RoleKey;
 
-public interface UserRoleRepository extends JpaRepository<User_Role, Integer> {
+public interface UserRoleRepository extends JpaRepository<User_Role, User_RoleKey> {
 
 	
 }

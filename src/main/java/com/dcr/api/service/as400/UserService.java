@@ -125,9 +125,9 @@ public class UserService {
 
     }
 
-    public Integer getMatricula(String username) {
+    public Long getMatricula(String username) {
 
-        Integer matricula = 0;
+        Long matricula = 0L;
 
         try {
             username = Auxiliar.trimNull(username).toUpperCase();

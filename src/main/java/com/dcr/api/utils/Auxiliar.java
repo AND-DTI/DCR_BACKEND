@@ -324,5 +324,18 @@ public class Auxiliar {
         return sb.toString();
     }
 	
+	public static String filterNumbers(String stringAFiltrar) {
+        Pattern padrao = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+");
+
+        Matcher matcher = padrao.matcher(stringAFiltrar);
+
+        StringBuilder numerosString = new StringBuilder();
+
+        while (matcher.find()) {
+            numerosString.append(matcher.group()).append("");
+        }
+
+        return numerosString.toString();
+    }
 	
 }
