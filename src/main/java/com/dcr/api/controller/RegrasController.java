@@ -81,11 +81,17 @@ public class RegrasController {
 		try {
 			Optional<Dcrregra> dcr = service.getAtivo();
 			DcrregraKeyDTO key = new DcrregraKeyDTO(Auxiliar.getDtFormated(), Auxiliar.getDtFormated());
-			Optional<Dcrregra> dcrOld = service.getByDate(key);
+			List<Dcrregra> dcrOld = service.getAll();
 			
-			if(dcrOld.isPresent()) {
-				String dt = Auxiliar.getDtFormated() + "-1";
-				service.update(dto, dcr.get(), dt, request);
+			if(dcrOld.size() > 1 && dcrOld.get(dcrOld.size() - 2) != null) {
+				Integer num = Auxiliar.verificarCampoData(dcrOld.get(dcrOld.size() - 2).getDcrregraKey().getConfvigfim()) + 1;
+				if(num > 0) {
+					String dt = Auxiliar.getDtFormated() + "-" + num;
+					service.update(dto, dcr.get(), dt, request);
+				}else {
+					String dt = Auxiliar.getDtFormated() + "-1";
+					service.update(dto, dcr.get(), dt, request);
+				}
 			}else if (!dcr.isEmpty()) {
 				service.update(dto, dcr.get(), dcr.get().getDcrregraKey().getConfvigfim(), request);
 		    }

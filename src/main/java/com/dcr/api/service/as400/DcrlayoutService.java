@@ -83,271 +83,233 @@ public class DcrlayoutService {
     			
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("denom")) {
     				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getDenom(), campo.getCampotam()) );
-    				break;
-    			}
+    			} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
     				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getPartnumpd(), campo.getCampotam()) );
-    				break;
-    			}
+    			} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
     				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getTpprd(), campo.getCampotam()) );
-    				break;
-    			}
+    			} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
     				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getIdmatriz(), campo.getCampotam()) );
-    				break;
-    			}
+    			} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("peso")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg0.getPeso(), campo.getCampotam(), 5));
-    				break;
-    			}
+    			} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("salarios")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg0.getSalarios(), campo.getCampotam(), 2));
-    				break;
-    			}
+    			} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("encargos")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg0.getEncargos(), campo.getCampotam(), 2));
-    				break;
-    			}
+    			} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("dcrant")) {
       				if(dcrreg0.getTpdcre().equals("N")) {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces(dcrreg0.getDcrant(), campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("procretif")) {
       				if(dcrreg0.getTpdcre().equals("N") || dcrreg0.getTpdcre().equals("S")) {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces(dcrreg0.getProcretif(), campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
     			if(campo.getKey().getCampo().toLowerCase().trim().equals("vrspgd")) {
       				if(dcrreg0.getOrigdcr().equals(2) || dcrreg0.getOrigdcr().equals("2")) {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces(dcrreg0.getVrspgd(), campo.getCampotam()));
       				}
-        			break;
+        		} else {
+	    			Class<?> classe = dcrreg0.getClass();
+	    			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+	    			field.setAccessible(true);
+	    			
+	    			sb.append(Auxiliar.addSpaces(field.get(dcrreg0), campo.getCampotam()));
         		}
-    			Class<?> classe = dcrreg0.getClass();
-    			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-    			field.setAccessible(true);
-    			
-    			sb.append(Auxiliar.addSpaces(field.get(dcrreg0), campo.getCampotam()));
 			}
-        	 
+        	 sb.append("\n");
          }
          bw.write(sb.toString());
          sb = new StringBuffer();
-         sb.append("\n");
          for (Dcrreg1 dcrreg1 : reg1) {
         	 
         	 for (Dcrlayout campo : map.get("1 ")) {
       			
       			if(campo.getKey().getCampo().toLowerCase().trim().equals("modelo")) {
       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getModelo(), campo.getCampotam()) );
-      				break;
-      			}
+      			} else
       			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getPartnumpd(), campo.getCampotam()) );
-      				break;
-      			}
+      			} else
       			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getTpprd(), campo.getCampotam()));
-      				break;
-      			}
+      			} else
       			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getIdmatriz(), campo.getCampotam()) );
-      				break;
-      			}
+      			} else
       			if(campo.getKey().getCampo().toLowerCase().trim().equals("preco")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg1.getPreco(), campo.getCampotam(), 2));
-    				break;
+    			} else {
+      			
+	      			Class<?> classe = dcrreg1.getClass();
+	      			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+	      			field.setAccessible(true);
+	      			
+	      			sb.append(Auxiliar.addSpaces(field.get(dcrreg1), campo.getCampotam()));
     			}
-      			
-      			Class<?> classe = dcrreg1.getClass();
-      			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-      			field.setAccessible(true);
-      			
-      			sb.append(Auxiliar.addSpaces(field.get(dcrreg1), campo.getCampotam()));
-     			}
-     		
+     		}
+        	 sb.append("\n");
           }
          bw.write(sb.toString());
          sb = new StringBuffer();
-         sb.append("\n");
          for (Dcrreg2 dcrreg2 : reg2) {
-        	 System.out.println(dcrreg2.getEspec());
         	 for (Dcrlayout campo : map.get("2 ")) {
-        		 System.out.println(campo.getKey().getCampo());
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
      				sb.append(Auxiliar.addSpaces(dcrreg2.getKey().getNumcomp(), campo.getCampotam()) );
-     				break;
-     			}
+     			} else
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
      				sb.append(Auxiliar.addSpaces(dcrreg2.getKey().getPartnumpd(), campo.getCampotam()) );
-     				break;
-     			}
+     			} else
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
      				sb.append(Auxiliar.addSpaces(dcrreg2.getKey().getTpprd(), campo.getCampotam()) );
-     				break;
-     			}
+     			} else
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
      				sb.append(Auxiliar.addSpaces(dcrreg2.getKey().getIdmatriz(), campo.getCampotam()) );
-     				break;
-     			}
+     			} else
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("qtde")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg2.getQtde(), campo.getCampotam(), 7));
-    				break;
-    			}
+    			} else
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("vlrunit")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg2.getVlrunit(), campo.getCampotam(), 6));
-    				break;
+    			} else {
+	     			Class<?> classe = dcrreg2.getClass();
+	     			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+	     			field.setAccessible(true);
+	     			
+	     			sb.append(Auxiliar.addSpaces(field.get(dcrreg2), campo.getCampotam()));
     			}
-     			Class<?> classe = dcrreg2.getClass();
-     			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-     			field.setAccessible(true);
-     			
-     			sb.append(Auxiliar.addSpaces(field.get(dcrreg2), campo.getCampotam()));
  			}
+        	 sb.append("\n");
           }
           bw.write(sb.toString());
           sb = new StringBuffer();
-          sb.append("\n");
           for (Dcrreg3 dcrreg3 : reg3) {
          	 
          	 for (Dcrlayout campo : map.get("3 ")) {
        			
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
        				sb.append(Auxiliar.addSpaces(dcrreg3.getKey().getNumcomp(), campo.getCampotam()) );
-       				break;
-       			}
+       			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("numsubcomp")) {
        				sb.append(Auxiliar.addSpaces(dcrreg3.getKey().getNumsubcomp(), campo.getCampotam()) );
-       				break;
-       			}
+       			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
        				sb.append(Auxiliar.addSpaces(dcrreg3.getKey().getPartnumpd(), campo.getCampotam()) );
-       				break;
-       			}
+       			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
        				sb.append(Auxiliar.addSpaces(dcrreg3.getKey().getTpprd(), campo.getCampotam()) );
-       				break;
-       			}
+       			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
        				sb.append(Auxiliar.addSpaces(dcrreg3.getKey().getIdmatriz(), campo.getCampotam()) );
-       				break;
-       			}
+       			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("qtde")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg3.getQtde(), campo.getCampotam(), 7));
-    				break;
-    			}
+    			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("vlrunit")) {
     		        sb.append(Auxiliar.addCasasDecimais(dcrreg3.getVlrunit(), campo.getCampotam(), 6));
-    				break;
-    			}
+    			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("di")) {
       				if(dcrreg3.getImpdireta().equals("S") || dcrreg3.getImpdireta().equals("s")) {
       					sb.append(Auxiliar.addZeros(dcrreg3.getDi(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("itemadicao")) {
       				if(dcrreg3.getImpdireta().equals("S") || dcrreg3.getImpdireta().equals("s")) {
       					sb.append(Auxiliar.addZeros(dcrreg3.getItemadicao(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("adicao")) {
       				if(dcrreg3.getImpdireta().equals("S") || dcrreg3.getImpdireta().equals("s")) {
       					sb.append(Auxiliar.addZeros(dcrreg3.getAdicao(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("numnf")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addZeros(dcrreg3.getNumnf(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addSpaces(dcrreg3.getSernf(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("cnpjfor")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addSpaces(dcrreg3.getCnpjfor(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addSpaces(dcrreg3.getAdicao(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("eminf")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addZeros(dcrreg3.getEminf(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("espec")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addSpaces(dcrreg3.getEspec(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
-      				}
-        			break;
-        		}if(campo.getKey().getCampo().toLowerCase().trim().equals("undcom")) {
+      				} 
+        		} else
+       			if(campo.getKey().getCampo().toLowerCase().trim().equals("undcom")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addSpaces(dcrreg3.getUndcom(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
       				}
-        			break;
-        		}
+        		} else
         		if(campo.getKey().getCampo().toLowerCase().trim().equals("ncm")) {
       				if(dcrreg3.getImpdireta().equals("n") || dcrreg3.getImpdireta().equals("N")) {
       					sb.append(Auxiliar.addZeros(dcrreg3.getNcm(), campo.getCampotam()));
       				}else {
       					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
       				}
-        			break;
+        		}else {
+	       			Class<?> classe = dcrreg3.getClass();
+	       			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+	       			field.setAccessible(true);
+	       			
+	       			sb.append(Auxiliar.addSpaces(field.get(dcrreg3), campo.getCampotam()));
         		}
-       			Class<?> classe = dcrreg3.getClass();
-       			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-       			field.setAccessible(true);
-       			
-       			sb.append(Auxiliar.addSpaces(field.get(dcrreg3), campo.getCampotam()));
    			}
+         	sb.append("\n");
           }
          
           bw.write(sb.toString());
           sb = new StringBuffer();
-          sb.append("\n");
           
           for (Dcrreg4 dcrreg4 : reg4) {
          	 
@@ -355,126 +317,112 @@ public class DcrlayoutService {
          			
          			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
          				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getNumcomp(), campo.getCampotam()) );
-         				break;
-         			}
+         			} else
          			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
          				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getPartnumpd(), campo.getCampotam()) );
-         				break;
-         			}
+         			} else
          			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
          				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getTpprd(), campo.getCampotam()) );
-         				break;
-         			}
+         			} else
          			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
          				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getIdmatriz(), campo.getCampotam()) );
-         				break;
-         			}
+         			} else
          			if(campo.getKey().getCampo().toLowerCase().trim().equals("qtde")) {
         		        sb.append(Auxiliar.addCasasDecimais(dcrreg4.getQtde(), campo.getCampotam(), 7));
-        				break;
-        			}
+        			} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("vlrunit")) {
         		        sb.append(Auxiliar.addCasasDecimais(dcrreg4.getVlrunit(), campo.getCampotam(), 6));
-        				break;
-        			}
+        			} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("di")) {
           				if(dcrreg4.getImpdireta().equals("S") || dcrreg4.getImpdireta().equals("s")) {
           					sb.append(Auxiliar.addZeros(dcrreg4.getDi(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("itemadicao")) {
           				if(dcrreg4.getImpdireta().equals("S") || dcrreg4.getImpdireta().equals("s")) {
           					sb.append(Auxiliar.addZeros(dcrreg4.getItemadicao(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("adicao")) {
           				if(dcrreg4.getImpdireta().equals("S") || dcrreg4.getImpdireta().equals("s")) {
           					sb.append(Auxiliar.addZeros(dcrreg4.getAdicao(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("numnf")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addZeros(dcrreg4.getNumnf(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addSpaces(dcrreg4.getSernf(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("cnpjfor")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addSpaces(dcrreg4.getCnpjfor(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addSpaces(dcrreg4.getAdicao(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("eminf")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addZeros(dcrreg4.getEminf(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
            			if(campo.getKey().getCampo().toLowerCase().trim().equals("espec")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addSpaces(dcrreg4.getEspec(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
           				}
-            			break;
-            		}if(campo.getKey().getCampo().toLowerCase().trim().equals("undcom")) {
+            		} else
+         			if(campo.getKey().getCampo().toLowerCase().trim().equals("undcom")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addSpaces(dcrreg4.getUndcom(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addSpaces("", campo.getCampotam()));
           				}
-            			break;
-            		}
+            		} else
             		if(campo.getKey().getCampo().toLowerCase().trim().equals("ncm")) {
           				if(dcrreg4.getImpdireta().equals("n") || dcrreg4.getImpdireta().equals("N")) {
           					sb.append(Auxiliar.addZeros(dcrreg4.getNcm(), campo.getCampotam()));
           				}else {
           					sb.append(Auxiliar.addZeros("", campo.getCampotam()));
           				}
-            			break;
+            		} else {
+            			Class<?> classe = dcrreg4.getClass();
+             			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+             			field.setAccessible(true);
+             			
+             			sb.append(Auxiliar.addSpaces(field.get(dcrreg4), campo.getCampotam()));
             		}
-         			Class<?> classe = dcrreg4.getClass();
-         			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-         			field.setAccessible(true);
          			
-         			sb.append(Auxiliar.addSpaces(field.get(dcrreg4), campo.getCampotam()));
      			}
+         	sb.append("\n");
             }
           
           bw.write(sb.toString());
           sb = new StringBuffer();
-          sb.append("\n");
           
           for (Dcrreg9 dcrreg9 : reg9) {
          	 
@@ -482,27 +430,26 @@ public class DcrlayoutService {
        			
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
        				sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getPartnumpd(), campo.getCampotam()) );
-       				break;
-       			}
+       			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
        				sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getTpprd(), campo.getCampotam()) );
-       				break;
-       			}
+       			} else
        			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
        				sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getIdmatriz(), campo.getCampotam()) );
-       				break;
+       			} else {
+       				Class<?> classe = dcrreg9.getClass();
+           			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+           			field.setAccessible(true);
+           			
+           			sb.append(Auxiliar.addSpaces(field.get(dcrreg9), campo.getCampotam()));
        			}
        				
-       			Class<?> classe = dcrreg9.getClass();
-       			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-       			field.setAccessible(true);
        			
-       			sb.append(Auxiliar.addSpaces(field.get(dcrreg9), campo.getCampotam()));
    			}
+         	sb.append("\n");
           }
           bw.write(sb.toString());
           sb = new StringBuffer();
-          sb.append("\n");
           bw.close();
     }
 	

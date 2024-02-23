@@ -338,4 +338,14 @@ public class Auxiliar {
         return numerosString.toString();
     }
 	
+	public static Integer verificarCampoData(String campo) {
+        Pattern pattern = Pattern.compile("-\\d+");
+        Matcher matcher = pattern.matcher(campo);
+
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group().substring(1)); 
+        }
+
+        return -1;
+    }
 }
