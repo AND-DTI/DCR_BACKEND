@@ -1,5 +1,7 @@
 package com.dcr.api.response;
 
+import java.util.List;
+
 public class MatriprdResponseList {
 
     private Object partnumpd;
@@ -11,9 +13,7 @@ public class MatriprdResponseList {
     private Object corpt;
     private Object coreng;
     private Object tppin;
-    private Object dscpor;
-    private Object dscing;
-	
+	private List<InsumosProdResponse> insumos;
 	public Object getPartnumpd() {
 		return partnumpd;
 	}
@@ -68,16 +68,10 @@ public class MatriprdResponseList {
 	public void setTppin(Object tppin) {
 		this.tppin = tppin;
 	}
-	public Object getDscpor() {
-		return dscpor;
+	public List<InsumosProdResponse> getInsumos() {
+		return insumos;
 	}
-	public void setDscpor(Object dscpor) {
-		this.dscpor = dscpor;
-	}
-	public Object getDscing() {
-		return dscing;
-	}
-	public void setDscing(Object dscing) {
-		this.dscing = dscing;
+	public void setInsumos(List<InsumosProdResponse> insumos) {
+		this.insumos = insumos;
 	}
 }

@@ -80,9 +80,14 @@ public class RegrasController {
 	
 		try {
 			Optional<Dcrregra> dcr = service.getAtivo();
+			DcrregraKeyDTO key = new DcrregraKeyDTO(Auxiliar.getDtFormated(), Auxiliar.getDtFormated());
+			Optional<Dcrregra> dcrOld = service.getByDate(key);
 			
-			if (!dcr.isEmpty()) {
-				service.update(dto, dcr.get(), request);
+			if(dcrOld.isPresent()) {
+				String dt = Auxiliar.getDtFormated() + "-1";
+				service.update(dto, dcr.get(), dt, request);
+			}else if (!dcr.isEmpty()) {
+				service.update(dto, dcr.get(), dcr.get().getDcrregraKey().getConfvigfim(), request);
 		    }
 			
 			Dcrregra dcrNew = service.create(dto, request);

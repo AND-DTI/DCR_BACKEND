@@ -14,8 +14,11 @@ import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.dto.MtastecDTO;
 import com.dcr.api.model.keys.MtastecKey;
 import com.dcr.api.repository.as400.MtastecRepository;
+import com.dcr.api.response.AstecDetailResponse;
 import com.dcr.api.response.AstecPendenciaResponse;
+import com.dcr.api.response.InsumosResponse;
 import com.dcr.api.response.MatriprdResponse;
+import com.dcr.api.response.MatriprdResponseList;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -48,6 +51,45 @@ public class MtastecService {
 		repository.delete(matriz);
 	}
 	
+	public List<AstecDetailResponse> getDetail(Integer idmatriz) {
+		List<Object[]> resultados = repository.consultaDetalhe(idmatriz);
+		
+		List<AstecDetailResponse> produtos = new ArrayList<>();
+		AstecDetailResponse res = new AstecDetailResponse();
+		
+		List<InsumosResponse> lista = new ArrayList();
+        
+		for (Object[] resultado : resultados) {
+        	InsumosResponse resp = new InsumosResponse();
+        	
+			res.setIdmatriz(  resultado[0].toString().trim());
+        	res.setDesccom(  resultado[1].toString().trim());
+        	res.setDescrfb(  resultado[2].toString().trim());
+        	res.setOrigprd(  resultado[3].toString().trim());
+        	res.setDtneci(  resultado[4].toString().trim());
+        	res.setPriourgen(  resultado[5].toString().trim());
+        	res.setPrevfat(  resultado[6].toString().trim());
+        	res.setPrioresp(  resultado[7].toString().trim());
+        	res.setPriodtmnt(  resultado[8].toString().trim());
+        	res.setPriohrmnt(  resultado[9].toString().trim());
+        	
+        	resp.setItmorg(  resultado[10].toString().trim());
+        	resp.setCdspn(  resultado[10].toString().trim());
+        	resp.setEmcomp(  resultado[10].toString().trim());
+        	resp.setIttyp(  resultado[10].toString().trim());
+        	resp.setPartdesc(  resultado[10].toString().trim());
+        	resp.setPartnew(  resultado[10].toString().trim());
+        	resp.setPartnewdsc(  resultado[10].toString().trim());
+        	resp.setPartsugdsc(  resultado[10].toString().trim());
+        	resp.setPartsugest(  resultado[10].toString().trim());
+        	resp.setUnmsr(  resultado[10].toString().trim());
+        	lista.add(resp);
+        	res.setInsumos(lista);
+        }
+		produtos.add(res);
+		return produtos;
+	}
+
 	public List<AstecPendenciaResponse> getPendencia(Integer idmatriz) {
 		List<Object[]> resultados = repository.consultaPendencia(idmatriz);
 		

@@ -58,9 +58,9 @@ public class DcrregraService {
 		return repository.save(regra);
 	}
 	
-	public void update(DcrregraDTO dto, Dcrregra regra, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+	public void update(DcrregraDTO dto, Dcrregra regra, String dtFim, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
-		repository.updateStsconfigAndConfvigfim(regra.getDcrregraKey().getConfvigini(), regra.getDcrregraKey().getConfvigfim(), 0, Auxiliar.getDtFormated());
+		repository.updateStsconfigAndConfvigfim(regra.getDcrregraKey().getConfvigini(), dtFim, 0, Auxiliar.getDtFormated());
 			
 	}
 	 

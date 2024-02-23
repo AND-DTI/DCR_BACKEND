@@ -20,6 +20,8 @@ public class MatriprdResponse {
     private Object prioresp;
     private Object priodtmnt;
     private Object prioHRmnt;
+    private Object dscpor;
+    private Object dscing;
     private List<MatriprdResponseList> itens;
     
 	public Object getIdMatriz() {
@@ -129,6 +131,18 @@ public class MatriprdResponse {
 	}
 	public void setPrioHRmnt(Object prioHRmnt) {
 		this.prioHRmnt = prioHRmnt;
+	}
+	public Object getDscpor() {
+		return dscpor;
+	}
+	public void setDscpor(Object dscpor) {
+		this.dscpor = dscpor;
+	}
+	public Object getDscing() {
+		return dscing;
+	}
+	public void setDscing(Object dscing) {
+		this.dscing = dscing;
 	}
 	
 	

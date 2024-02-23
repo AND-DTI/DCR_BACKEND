@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.repository.as400.MatriprdRepository;
+import com.dcr.api.response.InsumosProdResponse;
+import com.dcr.api.response.InsumosResponse;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.MatriprdResponseList;
 import com.dcr.api.response.ProdutoPendenciaResponse;
@@ -43,8 +45,10 @@ public class MatriprdService {
 		List<MatriprdResponse> produtos = new ArrayList<>();
 		MatriprdResponse res = new MatriprdResponse();
 		List<MatriprdResponseList> lista = new ArrayList();
+		List<InsumosProdResponse> listaIns = new ArrayList();
         for (Object[] resultado : resultados) {
         	MatriprdResponseList resp = new MatriprdResponseList();
+        	InsumosProdResponse ins = new InsumosProdResponse();
         	
 			res.setIdMatriz(  resultado[0].toString().trim());
         	res.setProduto(  resultado[1].toString().trim());
@@ -73,13 +77,49 @@ public class MatriprdService {
         	resp.setCorpt(  resultado[24].toString().trim());
         	resp.setCoreng(  resultado[25].toString().trim());
         	resp.setTppin(  resultado[26].toString().trim());
-        	resp.setDscpor(  resultado[27].toString().trim());
-        	resp.setDscing(  resultado[28].toString().trim());
-        	lista.add(resp);
-        	res.setItens(lista);
-            produtos.add(res);
+        	res.setDscpor(  resultado[27].toString().trim());
+        	res.setDscing(  resultado[28].toString().trim());
+        	
+        	ins.setItmorg(  resultado[29].toString().trim());
+        	ins.setIttyp(  resultado[30].toString().trim());
+        	ins.setUnmsr(  resultado[31].toString().trim());
+        	ins.setNecfil(  resultado[32].toString().trim());
+        	ins.setCdspn(  resultado[33].toString().trim());
+        	ins.setWeght(  resultado[34].toString().trim());
+        	ins.setEmcomp(  resultado[35].toString().trim());
+        	ins.setPartsugest(  resultado[36].toString().trim());
+        	ins.setPartsugdsc(  resultado[37].toString().trim());
+        	ins.setPartnew(  resultado[38].toString().trim());
+        	ins.setPartnewdsc(  resultado[39].toString().trim());
+        	ins.setPartdesc(  resultado[40].toString().trim());
+        	
+        	
+        	
+        	Boolean contemIns = Boolean.FALSE;
+        	for (InsumosProdResponse item : listaIns) {
+				if(ins.getPartdesc().equals(item.getPartdesc())) {
+					contemIns = Boolean.TRUE;
+				}
+			}
+        	if(!contemIns) {
+        		listaIns.add(ins);
+        	}
+        	
+        	Boolean contem = Boolean.FALSE;
+        	for (MatriprdResponseList item : lista) {
+				if(item.getPartnumpd().equals(resp.getPartnumpd())) {
+					contem = Boolean.TRUE;
+				}
+			}
+        	if(!contem) {
+        		lista.add(resp);
+        	}
+        	resp.setInsumos(listaIns);
+            
         }
-        
+       
+        res.setItens(lista);
+        produtos.add(res);
 		return res;
 	}
 	
