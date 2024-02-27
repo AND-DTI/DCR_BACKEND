@@ -9,7 +9,7 @@ public class DcrapiKey {
 	@TamanhoMaximo(8)
 	private String confvigini;
 	
-	@TamanhoMaximo(8)
+	@TamanhoMaximo(10)
 	private String confvigfim;
 	
 	public String getConfvigini() {

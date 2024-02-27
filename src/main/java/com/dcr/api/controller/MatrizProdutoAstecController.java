@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.dto.MtastecDTO;
 import com.dcr.api.model.keys.MtastecKey;
+import com.dcr.api.response.AstecDetailResponse;
 import com.dcr.api.service.as400.MtastecService;
+import com.dcr.api.utils.Auxiliar;
 import com.dcr.api.service.as400.MtastecService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +54,35 @@ public class MatrizProdutoAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getDetail", produces = "application/json")
+	@Operation(summary = "Busca todas as Matrizes de produto ASTEC")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de produto ASTEC encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getDetail(@RequestParam Integer idmatriz) {
+	
+		try {
+			List<AstecDetailResponse> lista = service.getDetail(idmatriz);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma matriz encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -81,7 +111,7 @@ public class MatrizProdutoAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de produto ASTEC encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

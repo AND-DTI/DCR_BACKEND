@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Dcrapi;
+import com.dcr.api.model.as400.Dcrregra;
 import com.dcr.api.model.dto.DcrapiDTO;
 import com.dcr.api.model.dto.DcrapiKeyDTO;
+import com.dcr.api.model.dto.DcrregraKeyDTO;
 import com.dcr.api.service.as400.DcrapiService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -51,7 +53,7 @@ public class ApiController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma configuração encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -79,6 +81,7 @@ public class ApiController {
 						.header("Accept", "application/json")
 						.body("Nenhuma configuração encontrada!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);
@@ -102,11 +105,21 @@ public class ApiController {
 	
 		try {
 			Optional<Dcrapi> dcr = service.getAtivo();
+			DcrapiKeyDTO key = new DcrapiKeyDTO(Auxiliar.getDtFormated(), Auxiliar.getDtFormated());
+			List<Dcrapi> dcrOld = service.getAll();
 			
-			if (!dcr.isEmpty()) {
-				dcr.get().getDcrapiKey().setConfvigfim(Auxiliar.getDtFormated());
-				dcr.get().setStsconfig(0);
-				service.update(dto, dcr.get(), request);
+			
+			if(dcrOld.size() > 1 && dcrOld.get(dcrOld.size() - 2) != null) {
+				Integer num = Auxiliar.verificarCampoData(dcrOld.get(dcrOld.size() - 2).getDcrapiKey().getConfvigfim()) + 1;
+				if(num > 0) {
+					String dt = Auxiliar.getDtFormated() + "-" + num;
+					service.update(dto, dcr.get(), request, dt);
+				}else {
+					String dt = Auxiliar.getDtFormated() + "-1";
+					service.update(dto, dcr.get(), request, dt);
+				}
+			}else if (!dcr.isEmpty()) {
+				service.update(dto, dcr.get(), request, Auxiliar.getDtFormated());
 		    }
 			
 			Dcrapi dcrNew = service.create(dto, request);

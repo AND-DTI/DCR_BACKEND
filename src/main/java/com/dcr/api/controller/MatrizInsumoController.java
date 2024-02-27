@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Matriins;
 import com.dcr.api.model.dto.MatriinsDTO;
 import com.dcr.api.model.keys.MatriinsKey;
 import com.dcr.api.service.as400.MatriinsService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +52,7 @@ public class MatrizInsumoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -83,7 +84,7 @@ public class MatrizInsumoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de insumo encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

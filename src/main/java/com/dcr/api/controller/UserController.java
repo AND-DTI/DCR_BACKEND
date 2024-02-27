@@ -27,11 +27,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.dto.CreateUserDTO;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.response.ErrorResponse;
+import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.AuthenticationService;
+import com.dcr.api.service.as400.RoleService;
+import com.dcr.api.service.as400.UserRoleService;
 import com.dcr.api.service.as400.UserService;
 import com.dcr.api.utils.Auxiliar;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,6 +51,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleService roleService;
+    
+    @Autowired
+    UserRoleService userRoleService;
+    
     @Autowired
     PasswordEncoder encoder;
 
@@ -62,13 +73,43 @@ public class UserController {
             @ApiResponse(responseCode = "400", useReturnTypeSchema = true),
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> createUser(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<Object> createUser(@RequestBody CreateUserDTO user, HttpServletRequest request) {
+    	Boolean adm = Boolean.FALSE;
+    	Optional<Accuser> userLogado;
+		try {
+			userLogado = userService.getByUsernameOptional(Auxiliar.getUser(request));
+			List<RoleResponse> roles = roleService.listByUsername(userLogado.get().getRoles());
+			
+			for (RoleResponse roleResponse : roles) {
+				if(roleResponse.getRoleName().equals("ROLE_ADMIN")) {
+					adm = Boolean.TRUE;
+				}
+			}
+			if(!adm) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Usuário não possui acessos de Administrador");
+			}
+		} catch (JsonProcessingException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Accept", "application/json")
+                    .body(e.getMessage());
+		}
+		
+    	
     	
     	Optional<Accuser> optUser = userService.getByUsernameOptional(user.username());
         if (!optUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
                     .body("Usuário já cadastrado!");
+        }
+        
+        List<Accuser> listEmail = userService.getByEmail(user.email());
+        if (!listEmail.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Accept", "application/json")
+                    .body("Email já cadastrado!");
         }
         	
         if(!Auxiliar.validatePassword(user.password())) {
@@ -92,10 +133,26 @@ public class UserController {
 	        acc.setFlex4flw("");
 	        acc.setFlex5flw("");
 	        acc.setToken("");
-	        acc.setUserid(2);
+	        acc.setTpfunc(user.tpfunc());
+	        
+	        if(user.tpfunc().equals("1")) {
+	        	String id = Auxiliar.filterNumbers(user.username());
+		        if(id.length() > 0) {
+		        	Long idInt = Long.parseLong(id);
+			        acc.setUserid(idInt);
+		        }else {
+		        	acc.setUserid(0L);
+		        }
+	        } else {
+	        	acc.setUserid(0L);
+	        }
+	        
+	        
 	        acc.setAtivo(user.ativo());
+	        userRoleService.createRoleUser(user.roles(), user.username(), request);
 	        userService.save(acc, request);
 		} catch (Exception e) {
+			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Accept", "application/json")
                     .body(e.getMessage());
@@ -115,13 +172,14 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!"),
             @ApiResponse(responseCode = "200", description = "Ok!")
     })
-    public ResponseEntity<List<Accuser>> listAll(
+    public ResponseEntity<Object> listAll(
             @PageableDefault(page = 0, size = 10, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
 
         List<Accuser> users = userService.listarTodos();
         if (users.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        Auxiliar.formatResponse(users);
         return ResponseEntity.status(HttpStatus.OK).body(users);
 
     }
@@ -140,6 +198,7 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body(null);
         }
+        Auxiliar.formatResponse(optUser.get());
         return ResponseEntity.status(HttpStatus.OK).body(optUser.get());
 
     }

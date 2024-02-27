@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Pendresp;
 import com.dcr.api.model.dto.PendrespDTO;
 import com.dcr.api.model.keys.PendenciaKey;
 import com.dcr.api.service.as400.PendrespService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +52,7 @@ public class ResponsavelPendenciaController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum responsável encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -83,7 +84,7 @@ public class ResponsavelPendenciaController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum responsável encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

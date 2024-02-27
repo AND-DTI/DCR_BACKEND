@@ -33,7 +33,7 @@ public class RoleService {
 		 	List<RoleResponse> roles = new ArrayList<>();
 	        for (User_Role user_Role : userRoles) {
 				RoleResponse response = new RoleResponse();
-				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid());
+				Optional<Accroles> user = roleRepository.findById(user_Role.getKey().getRoleid());
 				response.setRoleDesc(user.get().getRoledesc().trim());
 				response.setRoleName(user.get().getRolename().trim());
 				roles.add(response);

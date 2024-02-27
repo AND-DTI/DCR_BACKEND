@@ -19,4 +19,12 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 			+ "LEFT JOIN HD4DCDHH.PENDASTEC AS PEND ON PEND.IDMATRIZ = INS.IDMATRIZ " + 
               "WHERE mta.IDMATRIZ = :idmatriz", nativeQuery = true)
 	  List<Object[]> consultaPendencia(Integer idmatriz);
+	  
+	  @Query(value = "SELECT prd.IDMATRIZ, prd.DESCCOM, prd.DESCRFB,\r\n"
+	  		+ "	  							  prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"
+	  		+ "	  				ins.itmorg, ins.CDSPN, ins.EMCOMP, ins.ITTYP, ins.PARTDESC, ins.PARTNEW, ins.PARTNEWDSC, ins.PARTSUGDSC, ins.PARTSUGEST, ins.UNMSR	\r\n"
+	  		+ "            FROM HD4DCDHH.MTASTEC as prd \r\n"
+	  		+ "            LEFT JOIN HD4DCDHH.MTASTEINS ins ON prd.IDMATRIZ = ins.IDMATRIZ \r\n"
+	  		+ "            WHERE prd.IDMATRIZ = :idmatriz", nativeQuery = true)
+	  List<Object[]> consultaDetalhe(Integer idmatriz);
 }

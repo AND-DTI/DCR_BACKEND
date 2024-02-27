@@ -99,6 +99,7 @@ public class AuthController {
 	        response.setIdArea(usuario.getIdarea().trim());
 	        response.setName(Auxiliar.formatName(usuario.getName()));
 	        
+	        Auxiliar.formatResponse(response);
 	        return ResponseEntity.status(HttpStatus.OK) 
 	                .header("Accept", "application/json")
 	                .body(response);          

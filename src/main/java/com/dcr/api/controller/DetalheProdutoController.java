@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.service.as400.MatriprdService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,13 +41,13 @@ public class DetalheProdutoController {
 	
 		try {
 
-			List<MatriprdResponse> lista = service.getDetail(idmatriz);
-	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Nenhum detalhe de produto encontrado!");
-	        }
-		
+			MatriprdResponse lista = service.getDetail(idmatriz);
+			  if (lista.getIdMatriz() == null) {
+		            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .header("Accept", "application/json")
+		                    .body("Nenhum produto encontrado!");
+		        }
+			Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -69,13 +70,13 @@ public class DetalheProdutoController {
 	
 		try {
 
-			List<ProdutoPendenciaResponse> lista = service.getProdutoPendencia(idmatriz);
-	        if (lista.isEmpty()) {
+			ProdutoPendenciaResponse lista = service.getProdutoPendencia(idmatriz);
+	        if (lista.getIdMatriz() == null) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência de produto encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

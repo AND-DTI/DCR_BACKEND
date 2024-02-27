@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Mtastedoc;
 import com.dcr.api.model.dto.MtastedocDTO;
 import com.dcr.api.model.keys.MtastedocKey;
 import com.dcr.api.service.as400.MtastedocService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,7 +52,7 @@ public class MatrizDocumentosAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -83,7 +84,7 @@ public class MatrizDocumentosAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de documento encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

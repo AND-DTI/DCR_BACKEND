@@ -56,13 +56,8 @@ public class DcroriprdService {
 		return repository.save(dcr);
 	}
 	
-	public Dcroriprd update(DcroriprdDTO dto, Dcroriprd dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
-		dcr.setStsconfig(0);
-		
-	
-		Auxiliar.preencheAuditoria(dcr, request);
-		
-		return repository.save(dcr);
+	public void update(DcroriprdDTO dto, Dcroriprd dcr, String dtFim, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+		repository.updateStsconfigAndConfvigfim(dcr.getDcroriprdKey().getConfvigini(), dcr.getDcroriprdKey().getConfvigfim(), 0, dtFim);
 	}
 	
 	public List<Dcroriprd> getAll() {

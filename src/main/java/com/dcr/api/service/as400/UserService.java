@@ -102,6 +102,18 @@ public class UserService {
 
     }
 
+    public List<Accuser> getByEmail(String email) {
+
+        return userRepository.findDistinctByEmail(email);
+
+    }
+    
+    public List<Accuser> getByUserId(Integer userid) {
+
+        return userRepository.findDistinctByUserid(userid);
+
+    }
+    
     public Accuser getByUsername(String username) {
 
         try {
@@ -113,9 +125,9 @@ public class UserService {
 
     }
 
-    public Integer getMatricula(String username) {
+    public Long getMatricula(String username) {
 
-        Integer matricula = 0;
+        Long matricula = 0L;
 
         try {
             username = Auxiliar.trimNull(username).toUpperCase();

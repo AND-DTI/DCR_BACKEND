@@ -5,9 +5,13 @@ import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -228,5 +232,120 @@ public class Auxiliar {
 		return name;
 	}
 	
+	public static void formatResponseList(List objects) {
+		
+		for (Object obj : objects) {
+			Class<?> clazz = obj.getClass();
+			
+		    Field[] fields = clazz.getDeclaredFields();
+		    	
+		    for (Field field : fields) {
+		    	
+		        if (field.getType().equals(String.class)) {
+		            try {
+		                field.setAccessible(true);
+		                String value = (String) field.get(obj);
+		                if (value != null) {
+		                    field.set(obj, value.trim());
+		                }
+		            } catch (IllegalAccessException e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    }
+		}
+	}
 	
+	public static void formatResponse(Object obj) {
+		
+		Class<?> type = obj.getClass();
+		if(type.equals(ArrayList.class) || type.equals(List.class)) {
+			formatResponseList((List) obj);
+			return;
+		}
+		if(type.equals(Optional.class)) {
+			obj = ((Optional) obj).get();
+		}
+		Class<?> clazz = obj.getClass();
+		
+	    Field[] fields = clazz.getDeclaredFields();
+	    	
+	    for (Field field : fields) {
+	    	
+	        if (field.getType().equals(String.class)) {
+	            try {
+	                field.setAccessible(true);
+	                String value = (String) field.get(obj);
+	                if (value != null) {
+	                    field.set(obj, value.trim());
+	                }
+	            } catch (IllegalAccessException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	}
+	
+	public static String addCasasDecimais(Object obj, Integer tamanhoMax, Integer casas) {
+        DecimalFormat df = new DecimalFormat("0".repeat(tamanhoMax -  casas) + "." + "0".repeat(casas));
+        String formatted = df.format(obj).replace(".", "").replace(",", "");
+        if (formatted.length() < tamanhoMax) {
+            formatted = "0".repeat(tamanhoMax - formatted.length()) + formatted;
+        }
+
+        return formatted;
+	}
+	
+	public static String addZeros(Object num, int tamanho) {
+        String str = num.toString();
+        if (str.length() >= tamanho) {
+            return str;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() + str.length() < tamanho) {
+            sb.append('0');
+        }
+        sb.append(str);
+        return sb.toString();
+    }
+	
+	
+	public static String addSpaces(Object obj, int tamanho) {
+		String str = obj.toString();
+        if (str.length() >= tamanho) {
+            return str;
+        }
+        
+        StringBuilder sb = new StringBuilder(str);
+        while (sb.length() < tamanho) {
+            sb.append(' ');
+        }
+        return sb.toString();
+    }
+	
+	public static String filterNumbers(String stringAFiltrar) {
+        Pattern padrao = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+");
+
+        Matcher matcher = padrao.matcher(stringAFiltrar);
+
+        StringBuilder numerosString = new StringBuilder();
+
+        while (matcher.find()) {
+            numerosString.append(matcher.group()).append("");
+        }
+
+        return numerosString.toString();
+    }
+	
+	public static Integer verificarCampoData(String campo) {
+        Pattern pattern = Pattern.compile("-\\d+");
+        Matcher matcher = pattern.matcher(campo);
+
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group().substring(1)); 
+        }
+
+        return -1;
+    }
 }

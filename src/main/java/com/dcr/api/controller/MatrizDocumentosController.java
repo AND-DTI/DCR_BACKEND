@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import com.dcr.api.model.as400.Matridoc;
 import com.dcr.api.model.dto.MatridocDTO;
 import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.service.as400.MatridocService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +31,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/matriz/documento")
+@PreAuthorize("@ipAddressValidation.vote(authentication, this, null) == T(org.springframework.security.access.AccessDecisionVoter).ACCESS_GRANTED")
 public class MatrizDocumentosController {
 
 	@Autowired
@@ -51,7 +54,7 @@ public class MatrizDocumentosController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -83,7 +86,7 @@ public class MatrizDocumentosController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de documento encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

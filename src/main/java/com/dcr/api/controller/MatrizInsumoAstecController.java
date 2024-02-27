@@ -22,6 +22,7 @@ import com.dcr.api.model.dto.MtasteinsDTO;
 import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.model.keys.MtasteinsKey;
 import com.dcr.api.service.as400.MtasteinsService;
+import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,7 +54,7 @@ public class MatrizInsumoAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma matriz encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -84,7 +85,7 @@ public class MatrizInsumoAstecController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de documento encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);

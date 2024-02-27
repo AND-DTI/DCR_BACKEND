@@ -57,7 +57,7 @@ public class RegrasController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma regra encontrada!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -80,11 +80,20 @@ public class RegrasController {
 	
 		try {
 			Optional<Dcrregra> dcr = service.getAtivo();
+			DcrregraKeyDTO key = new DcrregraKeyDTO(Auxiliar.getDtFormated(), Auxiliar.getDtFormated());
+			List<Dcrregra> dcrOld = service.getAll();
 			
-			if (!dcr.isEmpty()) {
-				dcr.get().getDcrregraKey().setConfvigfim(Auxiliar.getDtFormated());
-				dcr.get().setStsconfig(0);
-				service.update(dto, dcr.get(), request);
+			if(dcrOld.size() > 1 && dcrOld.get(dcrOld.size() - 2) != null) {
+				Integer num = Auxiliar.verificarCampoData(dcrOld.get(dcrOld.size() - 2).getDcrregraKey().getConfvigfim()) + 1;
+				if(num > 0) {
+					String dt = Auxiliar.getDtFormated() + "-" + num;
+					service.update(dto, dcr.get(), dt, request);
+				}else {
+					String dt = Auxiliar.getDtFormated() + "-1";
+					service.update(dto, dcr.get(), dt, request);
+				}
+			}else if (!dcr.isEmpty()) {
+				service.update(dto, dcr.get(), dcr.get().getDcrregraKey().getConfvigfim(), request);
 		    }
 			
 			Dcrregra dcrNew = service.create(dto, request);
@@ -116,6 +125,7 @@ public class RegrasController {
 						.header("Accept", "application/json")
 						.body("Nenhum processamento encontrado!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

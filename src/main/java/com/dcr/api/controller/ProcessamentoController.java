@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.as400.Dcrapi;
 import com.dcr.api.model.as400.Dcroriprd;
+import com.dcr.api.model.as400.Dcrregra;
 import com.dcr.api.model.dto.DcroriprdDTO;
 import com.dcr.api.model.dto.DcroriprdKeyDTO;
+import com.dcr.api.model.dto.DcrregraKeyDTO;
 import com.dcr.api.model.keys.DcroriprdKey;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.as400.DcroriprdService;
@@ -56,7 +58,7 @@ public class ProcessamentoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum processamento encontrado!");
 	        }
-		
+	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -81,13 +83,21 @@ public class ProcessamentoController {
 		try {
 			
 			Optional<Dcroriprd> dcr = service.getAtivo();
+			DcroriprdKeyDTO key = new DcroriprdKeyDTO(Auxiliar.getDtFormated(), Auxiliar.getDtFormated());
+			List<Dcroriprd> dcrOld = service.getAll();
 			
-			if (!dcr.isEmpty()) {
-					dcr.get().getDcroriprdKey().setConfvigfim(Auxiliar.getDtFormated());
-					dcr.get().setStsconfig(0);
-					service.update(dto, dcr.get(), request);
+			if(dcrOld.size() > 1 && dcrOld.get(dcrOld.size() - 2) != null) {
+				Integer num = Auxiliar.verificarCampoData(dcrOld.get(dcrOld.size() - 2).getDcroriprdKey().getConfvigfim()) + 1;
+				if(num > 0) {
+					String dt = Auxiliar.getDtFormated() + "-" + num;
+					service.update(dto, dcr.get(), dt, request);
+				}else {
+					String dt = Auxiliar.getDtFormated() + "-1";
+					service.update(dto, dcr.get(), dt, request);
+				}
+			}else if (!dcr.isEmpty()) {
+				service.update(dto, dcr.get(), dcr.get().getDcroriprdKey().getConfvigfim(), request);
 		    }
-			
 			Dcroriprd dcrNew = service.create(dto, request);
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
@@ -117,6 +127,7 @@ public class ProcessamentoController {
 						.header("Accept", "application/json")
 						.body("Nenhum processamento encontrado!");
 		    }
+			Auxiliar.formatResponse(dcr);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

@@ -63,11 +63,8 @@ public class DcrapiService {
 		return repository.save(dcr);
 	}
 	
-	public Dcrapi update(DcrapiDTO dto, Dcrapi dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {	
+	public void update(DcrapiDTO dto, Dcrapi dcr, HttpServletRequest request, String dtFim) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {	
 		
-		dcr.setStsconfig(0);
-		Auxiliar.preencheAuditoria(dcr, request);
-		
-		return repository.save(dcr);
+		repository.updateStsconfigAndConfvigfim(dcr.getDcrapiKey().getConfvigini(), dcr.getDcrapiKey().getConfvigfim(), 0, dtFim);
 	}
 }
