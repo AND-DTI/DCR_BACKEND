@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Cadppb;
 import com.dcr.api.model.dto.CadppbDTO;
 import com.dcr.api.model.keys.ProdutoKey;
+import com.dcr.api.model.projection.TpprdProjection;
 import com.dcr.api.service.as400.CadppbService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -84,6 +85,32 @@ public class ProdutoController {
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum produto encontrado!");
 	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getByTpprd", produces = "application/json")
+	@Operation(summary = "Busca todos as responsáveis")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByTpprd(@RequestBody List<String> listaTpprd) {
+		
+	
+		try {
+			
+			TpprdProjection lista = service.getByTpprd(listaTpprd);
+	        
 	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
@@ -177,6 +204,7 @@ public class ProdutoController {
 			key.setTpprd(tpprd);
 			
 			Optional<Cadppb> lista = service.getByID(key);
+			
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
