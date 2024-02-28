@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.dcr.api.model.as400.Accroles;
 import com.dcr.api.model.as400.Dcrreg0;
+import com.dcr.api.model.keys.AccrolesKey;
 
-public interface RoleRepository extends JpaRepository<Accroles, Integer> {
+public interface RoleRepository extends JpaRepository<Accroles, AccrolesKey> {
 
 	  @Query(value = "SELECT * FROM HD4DCDHH.ACCROLES AS dcr WHERE dcr.rolename = :rolename", nativeQuery = true)
 	  Accroles consultaByRoleName(String rolename);

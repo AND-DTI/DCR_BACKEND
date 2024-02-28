@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.dto.AccoperDTO;
+import com.dcr.api.model.keys.AccoperKey;
 import com.dcr.api.repository.as400.AccoperRepository;
 import com.dcr.api.response.Item;
 import com.dcr.api.response.OperacoesItens;
@@ -123,9 +124,9 @@ public class AccoperService {
 		return formatJson(repository.findByCdmoduleAndAtivo(cdmodule));
 	}
 	
-	public Optional<Accoper> getByID(Integer id) {
+	public Optional<Accoper> getByID(AccoperKey key) {
 		
-		return repository.findById(id);
+		return repository.findById(key);
 	}
 	
 	public void delete(Accoper ppb) {
@@ -136,10 +137,14 @@ public class AccoperService {
 	public Accoper create(AccoperDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		Accoper oper = new Accoper();
 		
-		oper.setIdoper(dto.idoper());
+		AccoperKey key = new AccoperKey();
+		key.setCdmodule(dto.cdmodule());
+		key.setCdsys(dto.cdsys());
+		key.setIdoper(dto.idoper());
+		
+		oper.setIdoper(key);
 		oper.setAtivo(dto.ativo());
 		oper.setTpoper(dto.tpoper());
-		oper.setCdmodule(dto.cdmodule());
 		oper.setDescoper(dto.descoper());
 		oper.setIdpai(dto.idpai());
 		oper.setNivel(dto.nivel());
@@ -153,7 +158,6 @@ public class AccoperService {
 		
 		oper.setAtivo(dto.ativo());
 		oper.setTpoper(dto.tpoper());
-		oper.setCdmodule(dto.cdmodule());
 		oper.setDescoper(dto.descoper());
 		oper.setIdpai(dto.idpai());
 		oper.setNivel(dto.nivel());

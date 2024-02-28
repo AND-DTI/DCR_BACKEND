@@ -1,10 +1,12 @@
 package com.dcr.api.model.as400;
 
+import com.dcr.api.model.keys.AccrolesKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,10 +18,8 @@ import jakarta.persistence.Table;
 @ApiModel
 public class Accroles {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(columnDefinition = "int", unique = true)
-    private Integer roleid;
+	@EmbeddedId
+    private AccrolesKey key;
 	
 	@TamanhoMaximo(25)
 	@TamanhoMinimo(1)
@@ -115,11 +115,12 @@ public class Accroles {
 		this.itaudhr = itaudhr;
 	}
 
-	public Integer getRoleid() {
-		return roleid;
+	public AccrolesKey getKey() {
+		return key;
 	}
 
-	public void setRoleid(Integer roleid) {
-		this.roleid = roleid;
+	public void setKey(AccrolesKey key) {
+		this.key = key;
 	}
+
 }

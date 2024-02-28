@@ -1,10 +1,12 @@
 package com.dcr.api.model.as400;
 
+import com.dcr.api.model.keys.AccoperKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,22 +16,14 @@ import jakarta.persistence.Table;
 @ApiModel
 public class Accoper {
 
-	@Id
-	@Column(columnDefinition = "int")
-	@TamanhoMaximo(9)
-	@TamanhoMinimo(1)
-	private Integer idoper;
+	@EmbeddedId
+	private AccoperKey idoper;
 	
 	@Column(columnDefinition = "char(150)")
 	@TamanhoMaximo(150)
 	@TamanhoMinimo(1)
 	private String descoper;
 
-	@Column(columnDefinition = "char(5)")
-	@TamanhoMaximo(5)
-	@TamanhoMinimo(1)
-	private String cdmodule;
-	  
 	@Column(columnDefinition = "char(1)")
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
@@ -75,11 +69,11 @@ public class Accoper {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public Integer getIdoper() {
+	public AccoperKey getIdoper() {
 		return idoper;
 	}
 
-	public void setIdoper(Integer idoper) {
+	public void setIdoper(AccoperKey idoper) {
 		this.idoper = idoper;
 	}
 
@@ -89,14 +83,6 @@ public class Accoper {
 
 	public void setDescoper(String descoper) {
 		this.descoper = descoper;
-	}
-
-	public String getCdmodule() {
-		return cdmodule;
-	}
-
-	public void setCdmodule(String cdmodule) {
-		this.cdmodule = cdmodule;
 	}
 
 	public String getTpoper() {
@@ -123,12 +109,28 @@ public class Accoper {
 		this.idpai = idpai;
 	}
 
+	public String getAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(String ativo) {
+		this.ativo = ativo;
+	}
+
 	public String getRota() {
 		return rota;
 	}
 
 	public void setRota(String rota) {
 		this.rota = rota;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	public String getItaudsys() {
@@ -171,19 +173,5 @@ public class Accoper {
 		this.itaudhr = itaudhr;
 	}
 
-	public String getAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(String ativo) {
-		this.ativo = ativo;
-	}
-
-	public String getIcon() {
-		return icon;
-	}
-
-	public void setIcon(String icon) {
-		this.icon = icon;
-	}
+	
 }

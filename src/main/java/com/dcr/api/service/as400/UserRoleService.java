@@ -30,7 +30,7 @@ public class UserRoleService {
 		        try {
 		            User_Role userRole = new User_Role();
 		            User_RoleKey key = new User_RoleKey();
-		            key.setRoleid(accrole.getRoleid());
+		            key.setRoleid(accrole.getKey().getRoleid());
 		            key.setUsername(user);
 		            userRole.setKey(key);
 		            userRole.setRolename(accrole.getRolename().trim());

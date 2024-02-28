@@ -44,7 +44,7 @@ public class AccdscmodService {
 		
 		key.setCdmodule(dto.cdmodule());
 		key.setCodidioma(dto.codidioma());
-		
+		key.setCdsys("NEW_DCR");
 		oper.setKey(key);
 		oper.setDescmod(dto.descmod());
 		oper.setShorttitle(dto.shorttitle());

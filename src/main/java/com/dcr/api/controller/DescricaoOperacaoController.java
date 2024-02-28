@@ -113,7 +113,7 @@ public class DescricaoOperacaoController {
 			AccdscopeKey key = new AccdscopeKey();
 			key.setIdoper(dto.idoper());
 			key.setCodidioma(dto.codidioma());
-			
+			key.setCdsys("NEW_DCR");
 			Optional<Accdscope> lista = service.getByID(key);
 	        if (!lista.isEmpty()) {
 	        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -147,7 +147,7 @@ public class DescricaoOperacaoController {
 			AccdscopeKey key = new AccdscopeKey();
 			key.setIdoper(dto.idoper());
 			key.setCodidioma(dto.codidioma());
-	
+			key.setCdsys("NEW_DCR");
 			Optional<Accdscope> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -181,7 +181,7 @@ public class DescricaoOperacaoController {
 			AccdscopeKey key = new AccdscopeKey();
 			key.setIdoper(idoper);
 			key.setCodidioma(codidioma);
-			
+			key.setCdsys("NEW_DCR");
 			Optional<Accdscope> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)

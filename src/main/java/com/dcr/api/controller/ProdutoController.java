@@ -104,7 +104,7 @@ public class ProdutoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getByTpprd(@RequestBody List<String> listaTpprd) {
+	public ResponseEntity<Object> getByTpprd(@RequestParam List<String> listaTpprd) {
 		
 	
 		try {

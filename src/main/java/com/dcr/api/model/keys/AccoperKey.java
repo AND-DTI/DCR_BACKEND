@@ -3,23 +3,19 @@ package com.dcr.api.model.keys;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
-import jakarta.persistence.Column;
-
-public class AccdscopeKey {
+public class AccoperKey {
 	@TamanhoMaximo(9)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "int")
-    private Integer idoper;
+	private Integer idoper;
 	
-	@TamanhoMaximo(2)
+	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(2)")
-    private String codidioma;
-
+	private String cdmodule;
+	
 	@TamanhoMaximo(10)
 	@TamanhoMinimo(1)
-    private String cdsys;
-	
+	private String cdsys;
+
 	public Integer getIdoper() {
 		return idoper;
 	}
@@ -28,12 +24,12 @@ public class AccdscopeKey {
 		this.idoper = idoper;
 	}
 
-	public String getCodidioma() {
-		return codidioma;
+	public String getCdmodule() {
+		return cdmodule;
 	}
 
-	public void setCodidioma(String codidioma) {
-		this.codidioma = codidioma;
+	public void setCdmodule(String cdmodule) {
+		this.cdmodule = cdmodule;
 	}
 
 	public String getCdsys() {

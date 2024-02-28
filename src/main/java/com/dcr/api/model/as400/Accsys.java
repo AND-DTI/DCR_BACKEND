@@ -1,33 +1,38 @@
 package com.dcr.api.model.as400;
 
-import com.dcr.api.model.keys.AccModuleKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 @Entity
-@Table(name = "ACCMODULE", schema = "HD4DCDHH")
+@Table(name = "ACCSYS", schema = "HD4DCDHH")
 @ApiModel
-public class Accmodule {
-
-	@EmbeddedId
-	private AccModuleKey key;
+public class Accsys {
 	
-	@Column(columnDefinition = "char(100)")
-	@TamanhoMaximo(100)
-	@TamanhoMinimo(1)	
-	private String namemodule;
-	
-	@Column(columnDefinition = "char(40)")
-    private String itaudsys;
-	
+	@Id
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(10)")
+	private String cdsys;
+	
+	@TamanhoMaximo(60)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(60)")
+	private String namesys;
+	
+	@TamanhoMaximo(200)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(200)")
+	private String descsys;
+	
+    @Column(columnDefinition = "char(40)")
+    private String itaudsys;
+
+    @Column(columnDefinition = "char(10)")
     private String itaudusr;
 
     @Column(columnDefinition = "char(30)")
@@ -39,12 +44,36 @@ public class Accmodule {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public String getNamemodule() {
-		return namemodule;
+	public String getCdsys() {
+		return cdsys;
 	}
 
-	public void setNamemodule(String namemodule) {
-		this.namemodule = namemodule;
+	public void setCdsys(String cdsys) {
+		this.cdsys = cdsys;
+	}
+
+	public String getNamesys() {
+		return namesys;
+	}
+
+	public void setNamesys(String namesys) {
+		this.namesys = namesys;
+	}
+
+	public String getDescsys() {
+		return descsys;
+	}
+
+	public void setDescsys(String descsys) {
+		this.descsys = descsys;
+	}
+
+	public String getItaudsys() {
+		return itaudsys;
+	}
+
+	public void setItaudsys(String itaudsys) {
+		this.itaudsys = itaudsys;
 	}
 
 	public String getItaudusr() {
@@ -78,21 +107,4 @@ public class Accmodule {
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
 	}
-
-	public String getItaudsys() {
-		return itaudsys;
-	}
-
-	public void setItaudsys(String itaudsys) {
-		this.itaudsys = itaudsys;
-	}
-
-	public AccModuleKey getKey() {
-		return key;
-	}
-
-	public void setKey(AccModuleKey key) {
-		this.key = key;
-	}
-
 }

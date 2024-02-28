@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.dto.AccoperDTO;
+import com.dcr.api.model.keys.AccoperKey;
 import com.dcr.api.response.OperacoesItens;
 import com.dcr.api.response.OperacoesResponse;
 import com.dcr.api.service.as400.AccoperService;
@@ -76,8 +77,12 @@ public class OperacoesController {
 	public ResponseEntity<Object> createProcessamento(@RequestBody AccoperDTO dto, HttpServletRequest request) {
 	
 		try {
+			AccoperKey key = new AccoperKey();
+			key.setCdmodule(dto.cdmodule());
+			key.setCdsys(dto.cdsys());
+			key.setIdoper(dto.idoper());
 			
-			Optional<Accoper> dcr = service.getByID(dto.idoper());
+			Optional<Accoper> dcr = service.getByID(key);
 			
 			if (!dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -137,8 +142,11 @@ public class OperacoesController {
 	public ResponseEntity<Object> update(@RequestBody AccoperDTO dto, HttpServletRequest request) {
 	
 		try {
-	
-			Optional<Accoper> lista = service.getByID(dto.idoper());
+			AccoperKey key = new AccoperKey();
+			key.setCdmodule(dto.cdmodule());
+			key.setCdsys(dto.cdsys());
+			key.setIdoper(dto.idoper());
+			Optional<Accoper> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -164,11 +172,14 @@ public class OperacoesController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idoper) {
+	public ResponseEntity<Object> delete(@RequestParam Integer idoper, @RequestParam String cdmodule, @RequestParam String cdsys) {
 	
 		try {
-			
-			Optional<Accoper> lista = service.getByID(idoper);
+			AccoperKey key = new AccoperKey();
+			key.setCdmodule(cdmodule);
+			key.setCdsys(cdsys);
+			key.setIdoper(idoper);
+			Optional<Accoper> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")

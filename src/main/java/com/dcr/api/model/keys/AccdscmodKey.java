@@ -11,10 +11,13 @@ public class AccdscmodKey {
 	@TamanhoMaximo(5)
 	private String cdmodule;
 	
-
 	@TamanhoMinimo(1)
 	@TamanhoMaximo(2)
 	private String codidioma;
+	
+	@TamanhoMinimo(10)
+	@TamanhoMaximo(2)
+	private String cdsys;
 	
 	public String getCdmodule() {
 		return cdmodule;
@@ -42,5 +45,11 @@ public class AccdscmodKey {
 			return false;
 		AccdscmodKey other = (AccdscmodKey) obj;
 		return Objects.equals(cdmodule, other.cdmodule) && Objects.equals(codidioma, other.codidioma);
+	}
+	public String getCdsys() {
+		return cdsys;
+	}
+	public void setCdsys(String cdsys) {
+		this.cdsys = cdsys;
 	}
 }
