@@ -31,7 +31,6 @@ public class Dcrcoli1Service {
 		key.setModelo(dto.modelo());
 		dcr.setKey(key);
 		
-		dcr.setCodint(dto.codint());
 		dcr.setIdreg(dto.idreg());
 		dcr.setDescricao(dto.descricao());
 		dcr.setPreco(dto.preco());
@@ -43,7 +42,6 @@ public class Dcrcoli1Service {
 	
 	public Dcrcoli1 update(Dcrcoli1DTO dto, Dcrcoli1 dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
-		dcr.setCodint(dto.codint());
 		dcr.setIdreg(dto.idreg());
 		dcr.setDescricao(dto.descricao());
 		dcr.setPreco(dto.preco());
