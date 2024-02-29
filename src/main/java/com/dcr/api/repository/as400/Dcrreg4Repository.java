@@ -9,6 +9,6 @@ import com.dcr.api.model.as400.Dcrreg4;
 import com.dcr.api.model.keys.Dcrreg4Key;
 
 public interface Dcrreg4Repository extends JpaRepository<Dcrreg4, Dcrreg4Key>{
-	@Query(value = "SELECT * FROM HD4DCDHH.DCRREG4 AS dcr WHERE dcr.idmatriz = :idmatriz AND dcr.partnumpd = :partnumpd AND dcr.tpprd = :tpprd", nativeQuery = true)
+	@Query(value = "SELECT * FROM HD4DCDHH.DCRREG4 AS dcr WHERE dcr.idmatriz = :idmatriz AND dcr.partnumpd = :partnumpd AND dcr.tpprd = :tpprd ORDER BY dcr.numcomp", nativeQuery = true)
 	  List<Dcrreg4> consultaByIds(Integer idmatriz, String partnumpd, String tpprd);
 }
