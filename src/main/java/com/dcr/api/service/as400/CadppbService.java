@@ -65,7 +65,7 @@ public class CadppbService {
 			
 				TipoProjection tp = new TipoProjection();
 				tp.setTpPrd(obj.getTpPrd());
-				tp.setDescPor(obj.getDescPor());
+				tp.setDscPor(obj.getDscPor());
 				
 				
 				

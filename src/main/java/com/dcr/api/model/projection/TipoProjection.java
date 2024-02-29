@@ -2,17 +2,18 @@ package com.dcr.api.model.projection;
 
 public class TipoProjection {
 	private Object tpPrd;
-    private Object descPor;
+    private Object dscPor;
 	public Object getTpPrd() {
 		return tpPrd;
 	}
 	public void setTpPrd(Object tpPrd) {
 		this.tpPrd = tpPrd;
 	}
-	public Object getDescPor() {
-		return descPor;
+	public Object getDscPor() {
+		return dscPor;
 	}
-	public void setDescPor(Object descPor) {
-		this.descPor = descPor;
+	public void setDscPor(Object dscPor) {
+		this.dscPor = dscPor;
 	}
+
 }
