@@ -28,11 +28,6 @@ public class Dcrcoli1 {
 	@Column(columnDefinition = "char(80)")
 	private String descricao;
 	
-	@TamanhoMaximo(15)
-	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(15)")
-	private String codint;
-	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,2)")
 	private Double preco;
@@ -74,14 +69,6 @@ public class Dcrcoli1 {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public String getCodint() {
-		return codint;
-	}
-
-	public void setCodint(String codint) {
-		this.codint = codint;
 	}
 
 	public Double getPreco() {
