@@ -88,23 +88,23 @@ public class CadppbService {
 				}
 				
 				Nivel1Projection nvl1 = new Nivel1Projection();
-				nvl1.setCdPrd(obj.getCdPrd());
-	            nvl1.setDescCom(obj.getDescCom().trim());
-	            nvl1.setDescRfb(obj.getDescRfb().trim());
-	            nvl1.setPrdDest(obj.getPrdDest().trim());
-	            nvl1.setPpbPrd(obj.getPpbPrd().trim());
-	            nvl1.setModelo(obj.getModelo().trim());
-	            nvl1.setAnoMdl(obj.getAnoMdl());
-	            nvl1.setTpPrd(obj.getTpPrd());
+				nvl1.setCdPrd((obj.getCdPrd() != null) ? obj.getCdPrd().trim() : "");
+	            nvl1.setDescCom((obj.getDescCom() != null) ? obj.getDescCom().trim() : "");
+	            nvl1.setDescRfb((obj.getDescRfb() != null) ? obj.getDescRfb().trim() : "");
+	            nvl1.setPrdDest((obj.getPrdDest() != null) ? obj.getPrdDest().trim() : "");
+	            nvl1.setPpbPrd((obj.getPpbPrd() != null) ? obj.getPpbPrd().trim() : "");
+	            nvl1.setModelo((obj.getModelo() != null) ? obj.getModelo().trim() : "");
+	            nvl1.setAnoMdl((obj.getAnoMdl() != null) ? obj.getAnoMdl() : "");
+	            nvl1.setTpPrd((obj.getTpPrd() != null) ? obj.getTpPrd().trim() : "");
 	            nvl1.setCores(new ArrayList());
 				for (ProdsProjection result : entry.getValue()) {
 		            Nivel2Projection nvl2 = new Nivel2Projection();
-		            nvl2.setPartnumPd(result.getPartnumPd().trim());
-		            nvl2.setDescPor(result.getDescPor().trim());
-		            nvl2.setDescIng(result.getDescIng().trim());
-		            nvl2.setuEngNo(result.getuEngNo().trim());
-		            nvl2.setCodCor(result.getCodCor());
-		            nvl2.setCorPt(result.getCorPt().trim());
+		            nvl2.setPartnumPd((result.getPartnumPd() != null) ? result.getPartnumPd().trim() : "");
+		            nvl2.setDescPor((result.getDescPor() != null) ? result.getDescPor().trim() : "");
+		            nvl2.setDescIng((result.getDescIng() != null) ? result.getDescIng().trim() : "");
+		            nvl2.setuEngNo((result.getuEngNo() != null) ? result.getuEngNo().trim() : "");
+		            nvl2.setCodCor((result.getCodCor() != null) ? result.getCodCor().trim() : "");
+		            nvl2.setCorPt((result.getCorPt() != null) ? result.getCorPt().trim() : "");
 		            Boolean existeCor = Boolean.FALSE;
 		            for (Nivel2Projection prod : nvl1.getCores()) {
 		            	if(prod.getCodCor().equals(result.getCodCor())) {
