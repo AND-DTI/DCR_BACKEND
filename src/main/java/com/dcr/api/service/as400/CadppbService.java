@@ -65,7 +65,7 @@ public class CadppbService {
 			
 				TipoProjection tp = new TipoProjection();
 				tp.setTpPrd(obj.getTpPrd());
-				tp.setDscPor(obj.getDscPor());
+				tp.setDscPor(obj.getDscPor().trim());
 				
 				
 				
@@ -82,7 +82,9 @@ public class CadppbService {
 				
 				Boolean existePr = Boolean.FALSE;
 				for (Nivel1Projection prod : tpprdProjection.getProdutos()) {
-					if(prod.getCdPrd().equals(obj.getCdPrd()) && prod.getTpPrd().equals(obj.getTpPrd())) {
+					String tpprd = prod.getTpPrd().toString().trim();
+					String cdprd = prod.getCdPrd().toString().trim();
+					if(cdprd.equals(obj.getCdPrd().trim()) && tpprd.equals(obj.getTpPrd().trim())) {
 						existePr = Boolean.TRUE;
 					}
 				}
@@ -107,7 +109,7 @@ public class CadppbService {
 		            nvl2.setCorPt((result.getCorPt() != null) ? result.getCorPt().trim() : "");
 		            Boolean existeCor = Boolean.FALSE;
 		            for (Nivel2Projection prod : nvl1.getCores()) {
-		            	if(prod.getCodCor().equals(result.getCodCor())) {
+		            	if(prod.getCodCor().toString().trim().equals(result.getCodCor().trim())) {
 		            		existeCor = Boolean.TRUE;
 		            	}
 		            }
