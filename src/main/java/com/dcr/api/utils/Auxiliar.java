@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.aspectj.apache.bcel.generic.ObjectType;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.dcr.api.model.as400.Dcrlayout;
 import com.dcr.api.service.TokenService;
 import com.dcr.api.validator.Validator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -347,5 +348,29 @@ public class Auxiliar {
         }
 
         return -1;
+    }
+	
+	public static String verificarPreenchimento(Object reg, Dcrlayout campo, String campoAcessado) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+			Class<?> classe = reg.getClass();
+			Field field = classe.getDeclaredField(campo.getCondfield().toLowerCase().trim());
+			field.setAccessible(true);
+			
+			
+			Field camposAcess = classe.getDeclaredField(campoAcessado);
+			camposAcess.setAccessible(true);
+			
+			if(field.get(reg).equals(campo.getCondvalue().toLowerCase().trim()) || field.get(reg).equals(campo.getCondvalue().toUpperCase().trim()) ) {
+				
+				if(campo.getFillblank() != null) {
+					return Auxiliar.addSpaces("", campo.getCampotam());
+				}
+				if(campo.getFillzero() != null) {
+					return Auxiliar.addZeros("", campo.getCampotam());
+				}
+			}else {
+				return Auxiliar.addSpaces(camposAcess.get(reg), campo.getCampotam());
+			} 
+			
+			return Auxiliar.addSpaces(camposAcess.get(reg), campo.getCampotam());
     }
 }

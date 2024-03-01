@@ -97,6 +97,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/layout").permitAll()
                         .requestMatchers("/api/coligado/**").permitAll()
                         .requestMatchers("/api/sistema/**").permitAll()
+                        .requestMatchers("/api/txt/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/health-check/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
