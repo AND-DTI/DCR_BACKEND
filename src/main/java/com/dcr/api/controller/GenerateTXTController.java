@@ -1,9 +1,15 @@
 package com.dcr.api.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,9 +42,14 @@ public class GenerateTXTController {
 	public ResponseEntity<Object> generate(@RequestParam Integer idmatriz,@RequestParam String partnumpd,@RequestParam String tpprd ) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		try {
 			txtService.gerarArquivoTXT(idmatriz, partnumpd, tpprd);
-			return ResponseEntity.status(HttpStatus.OK)
-		        	.header("Accept", "application/json")
-		            .body("Arquivo de texto gerado com sucesso!");
+			var file = new File("arquivoTeste2.txt");
+	        var path = Paths.get(file.getAbsolutePath());
+	        var resource = new ByteArrayResource(Files.readAllBytes(path));
+	        return ResponseEntity
+	                .ok()
+	                .contentType(MediaType.TEXT_PLAIN)
+	                .contentLength(file.length())
+	                .body(resource);
 		} catch (IOException e) {
 			return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
@@ -46,4 +57,5 @@ public class GenerateTXTController {
 		}
 		
 	}
+    
 }
