@@ -97,7 +97,7 @@ public class Accuser implements UserDetails {
     @Column(columnDefinition = "char(1000)")
     private String flex5flw;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumns({
         @JoinColumn(name = "username", referencedColumnName = "username")
     })
@@ -137,6 +137,10 @@ public class Accuser implements UserDetails {
 
     public String getUsername() {
         return trimNull(username);
+    }
+    
+    public String getUsernameForUpdate() {
+        return username;
     }
 
     public void setUsername(String username) {

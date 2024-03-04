@@ -4,6 +4,7 @@ import java.io.Serial;
 import java.math.BigInteger;
 import java.net.UnknownHostException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.CreateUserDTO;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.response.ErrorResponse;
@@ -221,8 +223,19 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body(null);
         } else {
-            user.setPassword(encoder.encode(user.getPassword()));
+//        	List<User_Role> roles = new ArrayList();
+//        	for (User_Role role : users.get(0).getRoles()) {
+//        		for (User_Role roleNew : user.getRoles()) {
+//    				if(!role.getKey().getRoleid().equals(role.getKey().getRoleid())) {
+//    					roles.add(roleNew);
+//    				}
+//    			}
+//			}
+//        	user.setRoles(roles);
+        	
+            //user.setPassword(encoder.encode(user.getPassword()));
             try {
+            	user.setUsername(users.get(0).getUsernameForUpdate());
             	userALT = userService.save(user, request);
             } catch (Exception e) {
             		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
