@@ -156,16 +156,16 @@ public class MatriprdService {
         	res.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "" );
         	
         	resp.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "" );
-        	resp.setCodcor(  (resultado[18] != null) ? resultado[18].toString().trim() : "" );
-        	resp.setPartdesc(  (resultado[19] != null) ? resultado[19].toString().trim() : "" );
-        	resp.setUnmed(  (resultado[20] != null) ? resultado[20].toString().trim() : "" );
-        	resp.setPriocor(  (resultado[21] != null) ? resultado[21].toString().trim() : "" );
-        	resp.setCdbeg(  (resultado[22] != null) ? resultado[22].toString().trim() : "" );
-        	resp.setCorpt(  (resultado[23] != null) ? resultado[23].toString().trim() : "" );
-        	resp.setCoreng(  (resultado[24] != null) ? resultado[24].toString().trim() : "" );
-        	resp.setTppin(  (resultado[25] != null) ? resultado[25].toString().trim() : "" );
-        	res.setDscpor(  (resultado[26] != null) ? resultado[26].toString().trim() : "" );
-        	res.setDscing(  (resultado[27] != null) ? resultado[27].toString().trim() : "" );
+        	resp.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "" );
+        	resp.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "" );
+        	resp.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "" );
+        	resp.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "" );
+        	resp.setCdbeg(  (resultado[23] != null) ? resultado[23].toString().trim() : "" );
+        	resp.setCorpt(  (resultado[24] != null) ? resultado[24].toString().trim() : "" );
+        	resp.setCoreng(  (resultado[25] != null) ? resultado[25].toString().trim() : "" );
+        	resp.setTppin(  (resultado[26] != null) ? resultado[26].toString().trim() : "" );
+        	res.setDscpor(  (resultado[27] != null) ? resultado[27].toString().trim() : "" );
+        	res.setDscing(  (resultado[28] != null) ? resultado[28].toString().trim() : "" );
 
         	Boolean contem = Boolean.FALSE;
         	for (MatriprdByTpprdResponseList item : lista) {
