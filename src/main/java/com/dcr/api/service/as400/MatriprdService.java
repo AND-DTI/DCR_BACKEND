@@ -2,6 +2,7 @@ package com.dcr.api.service.as400;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.repository.as400.MatriprdRepository;
 import com.dcr.api.response.InsumosProdResponse;
 import com.dcr.api.response.InsumosResponse;
+import com.dcr.api.response.MatriprdByTpprdResponse;
+import com.dcr.api.response.MatriprdByTpprdResponseList;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.MatriprdResponseList;
 import com.dcr.api.response.ProdutoPendenciaResponse;
@@ -121,6 +124,77 @@ public class MatriprdService {
         res.setItens(lista);
         produtos.add(res);
 		return res;
+	}
+	
+	public List<MatriprdByTpprdResponse> getDetailByTpprd(List<String> tpprdList) {
+		List<Object[]> resultados = repository.consultaByTpprd(tpprdList);
+		
+		List<MatriprdByTpprdResponse> listaResponse = new ArrayList();
+		
+		List<MatriprdByTpprdResponseList> lista = new ArrayList();
+		List<InsumosProdResponse> listaIns = new ArrayList();
+        for (Object[] resultado : resultados) {
+        	MatriprdByTpprdResponseList resp = new MatriprdByTpprdResponseList();
+        	MatriprdByTpprdResponse res = new MatriprdByTpprdResponse();
+        	
+        	res.setIdMatriz( (resultado[0] != null) ? resultado[0].toString().trim() : "" );
+        	res.setProduto(  (resultado[1] != null) ? resultado[1].toString().trim() : "" );
+        	res.setModelo(  (resultado[2] != null) ? resultado[2].toString().trim() : "" ); 
+        	res.setAnomdl(  (resultado[3] != null) ? resultado[3].toString().trim() : "" );
+        	res.setDesccom(  (resultado[4] != null) ? resultado[4].toString().trim() : "" );
+        	res.setDescrfb( (resultado[5] != null) ? resultado[5].toString().trim() : "" );
+        	res.setTpprd(  (resultado[6] != null) ? resultado[6].toString().trim() : "" );
+        	res.setProtot(  (resultado[7] != null) ? resultado[7].toString().trim() : "" );
+        	res.setSpecial( (resultado[8] != null) ? resultado[8].toString().trim() : "" );
+        	res.setTpdcre((resultado[9] != null) ? resultado[9].toString().trim() : "" );
+        	res.setOrig((resultado[10] != null) ? resultado[10].toString().trim() : "" );
+        	res.setDtneci(  (resultado[11] != null) ? resultado[11].toString().trim() : "" );
+        	res.setPriourgen(  (resultado[12] != null) ? resultado[12].toString().trim() : "" );
+        	res.setPrevfat(  (resultado[13] != null) ? resultado[13].toString().trim() : "" );
+        	res.setPrioresp(  (resultado[14] != null) ? resultado[14].toString().trim() : "" );
+        	res.setPriodtmnt(  (resultado[15] != null) ? resultado[15].toString().trim() : "" );
+        	res.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "" );
+        	
+        	resp.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "" );
+        	resp.setCodcor(  (resultado[18] != null) ? resultado[18].toString().trim() : "" );
+        	resp.setPartdesc(  (resultado[19] != null) ? resultado[19].toString().trim() : "" );
+        	resp.setUnmed(  (resultado[20] != null) ? resultado[20].toString().trim() : "" );
+        	resp.setPriocor(  (resultado[21] != null) ? resultado[21].toString().trim() : "" );
+        	resp.setCdbeg(  (resultado[22] != null) ? resultado[22].toString().trim() : "" );
+        	resp.setCorpt(  (resultado[23] != null) ? resultado[23].toString().trim() : "" );
+        	resp.setCoreng(  (resultado[24] != null) ? resultado[24].toString().trim() : "" );
+        	resp.setTppin(  (resultado[25] != null) ? resultado[25].toString().trim() : "" );
+        	res.setDscpor(  (resultado[26] != null) ? resultado[26].toString().trim() : "" );
+        	res.setDscing(  (resultado[27] != null) ? resultado[27].toString().trim() : "" );
+
+        	Boolean contem = Boolean.FALSE;
+        	for (MatriprdByTpprdResponseList item : lista) {
+				if(item.getPartnumpd().equals(resp.getPartnumpd())) {
+					contem = Boolean.TRUE;
+				}
+			}
+        	if(!contem) {
+        		lista.add(resp);
+        	}
+        	
+        	Boolean contemItem = Boolean.FALSE;
+        	for (MatriprdByTpprdResponse item : listaResponse) {
+				if(item.getProduto().equals(res.getProduto())) {
+					contemItem = Boolean.TRUE;
+					lista = new ArrayList();
+				}
+			}
+        	
+        	if(!contemItem) {
+        		 res.setItens(lista);
+        		 listaResponse.add(res); 
+        		 
+        	}
+        	
+        	
+        }
+       
+		return listaResponse;
 	}
 	
 	public ProdutoPendenciaResponse getProdutoPendencia(Integer id) {

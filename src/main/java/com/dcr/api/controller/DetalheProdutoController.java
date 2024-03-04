@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.response.MatriprdByTpprdResponse;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.service.as400.MatriprdService;
@@ -58,6 +59,35 @@ public class DetalheProdutoController {
 		}   
 	}
 	
+	
+	@GetMapping(value = "/getDetailByTpprd", produces = "application/json")
+	@Operation(summary = "Busca um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum detalhe de produto encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getDetail(@RequestParam List<String> listaTpprd) {
+	
+		try {
+
+			List<MatriprdByTpprdResponse> lista = service.getDetailByTpprd(listaTpprd);
+			  if (lista.isEmpty()) {
+		            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .header("Accept", "application/json")
+		                    .body("Nenhum produto encontrado!");
+		        }
+			Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
 	@GetMapping(value = "/getProdutoPendencia", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
