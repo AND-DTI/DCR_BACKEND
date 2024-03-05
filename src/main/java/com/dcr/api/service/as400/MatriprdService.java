@@ -270,7 +270,7 @@ public class MatriprdService {
 		matriz.setPrevfat(dto.prevfat());
 		matriz.setPriodtmnt(Auxiliar.getDtFormated());
 		matriz.setPriohrmnt(Auxiliar.getHrFormatedSemSegundo());
-		matriz.setPrioresp(dto.prioresp());
+		matriz.setPrioresp(Auxiliar.getUser(request));
 		matriz.setPriourgen(dto.priourgen());
 		matriz.setProduto(dto.produto());
 		matriz.setProtot(dto.protot());
