@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.PendprodDTO;
 import com.dcr.api.model.keys.PendprodKey;
@@ -33,6 +34,11 @@ public class PendprodService {
 		return repository.findById(id);
 	}
 	
+	public List<Pendprod> getByCdPend(String cdpend) {
+		
+		return repository.findByCdPend(cdpend);
+	}
+
 	public void delete(Pendprod matriz) {
 		
 		repository.delete(matriz);

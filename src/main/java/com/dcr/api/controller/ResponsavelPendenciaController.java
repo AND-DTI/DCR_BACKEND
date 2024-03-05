@@ -95,6 +95,35 @@ public class ResponsavelPendenciaController {
 		}   
 	}
 	
+	@GetMapping(value = "/getResponsaveis", produces = "application/json")
+	@Operation(summary = "Busca todos as responsáveis")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByPendencia(@RequestParam String cdpend) {
+	
+		try {
+	
+			List<Pendresp> lista = service.getByCdPend(cdpend);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhum responsável encontrado!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {

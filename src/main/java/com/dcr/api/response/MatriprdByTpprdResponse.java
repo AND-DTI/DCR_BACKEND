@@ -22,6 +22,7 @@ public class MatriprdByTpprdResponse {
     private Object prioHRmnt;
     private Object dscpor;
     private Object dscing;
+    private Object nome;
     private List<MatriprdByTpprdResponseList> itens;
     
 	public Object getIdMatriz() {
@@ -144,6 +145,12 @@ public class MatriprdByTpprdResponse {
 	}
 	public void setItens(List<MatriprdByTpprdResponseList> itens) {
 		this.itens = itens;
+	}
+	public Object getNome() {
+		return nome;
+	}
+	public void setNome(Object nome) {
+		this.nome = nome;
 	}
 	
 	

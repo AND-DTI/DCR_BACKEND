@@ -154,7 +154,7 @@ public class MatriprdService {
         	res.setPrioresp(  (resultado[14] != null) ? resultado[14].toString().trim() : "" );
         	res.setPriodtmnt(  (resultado[15] != null) ? resultado[15].toString().trim() : "" );
         	res.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "" );
-        	
+        	res.setNome((resultado[29] != null) ? resultado[29].toString().trim() : "" );
         	resp.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "" );
         	resp.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "" );
         	resp.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "" );

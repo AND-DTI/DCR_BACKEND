@@ -18,9 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Cadtppend;
 import com.dcr.api.model.as400.Dcroriprd;
+import com.dcr.api.model.as400.Pendastec;
+import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.CadtppendDTO;
 import com.dcr.api.model.dto.DcroriprdDTO;
+import com.dcr.api.model.keys.PendprodKey;
 import com.dcr.api.service.as400.CadtppendService;
+import com.dcr.api.service.as400.PendastecService;
+import com.dcr.api.service.as400.PendprodService;
 import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +40,12 @@ public class PendenciaController {
 
 	@Autowired
 	CadtppendService service;
+	
+	@Autowired
+	PendprodService pendprod;
+	
+	@Autowired
+	PendastecService pendastec;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as pendências")
@@ -104,6 +115,16 @@ public class PendenciaController {
 	public ResponseEntity<Object> delete(@RequestParam String id) {
 	
 		try {
+
+			List<Pendprod> pendprods = pendprod.getByCdPend(id);
+			List<Pendastec> pendastecs = pendastec.getByCdPend(id);
+			
+			if(!pendastecs.isEmpty() && !pendprods.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Não é possivel deletar essa pendência, pois ela já esta em uma matriz!");
+			}
+			
 			Optional<Cadtppend> pend = service.getByID(id);
 	        if (pend.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)

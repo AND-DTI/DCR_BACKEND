@@ -33,6 +33,11 @@ public class PendrespService {
 		return repository.findById(key);
 	}
 	
+	public List<Pendresp> getByCdPend(String cdpend) {
+		
+		return repository.findByCdPend(cdpend);
+	}
+	
 	public void delete(Pendresp pend) {
 		
 		repository.delete(pend);
