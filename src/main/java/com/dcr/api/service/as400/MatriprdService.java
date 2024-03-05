@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Matriprd;
+import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.repository.as400.MatriprdRepository;
 import com.dcr.api.response.InsumosProdResponse;
@@ -254,6 +255,30 @@ public class MatriprdService {
 	public void delete(Matriprd matriz) {
 		
 		repository.delete(matriz);
+	}
+	
+	public Matriprd createComCor(MatriprdComCorDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+		Matriprd matriz = new Matriprd();
+		
+		matriz.setAnomdl(dto.anomdl());
+		matriz.setDesccom(dto.desccom());
+		matriz.setDescrfb(dto.descrfb());
+		matriz.setDtneci(dto.dtneci());
+		matriz.setIdmatriz(dto.idmatriz());
+		matriz.setModelo(dto.modelo());
+		matriz.setOrigprd(dto.origprd());
+		matriz.setPrevfat(dto.prevfat());
+		matriz.setPriodtmnt(Auxiliar.getDtFormated());
+		matriz.setPriohrmnt(Auxiliar.getHrFormatedSemSegundo());
+		matriz.setPrioresp(dto.prioresp());
+		matriz.setPriourgen(dto.priourgen());
+		matriz.setProduto(dto.produto());
+		matriz.setProtot(dto.protot());
+		matriz.setSpecial(dto.special());
+		matriz.setTpdcre(dto.tpdcre());
+		matriz.setTpprd(dto.tpprd());
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
 	}
 	
 	public Matriprd create(MatriprdDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {

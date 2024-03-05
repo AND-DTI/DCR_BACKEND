@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Matriprd;
+import com.dcr.api.model.dto.MatriitmDTO;
+import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
+import com.dcr.api.service.as400.MatriitmService;
 import com.dcr.api.service.as400.MatriprdService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -35,6 +38,9 @@ public class MatrizProdutoController {
 
 	@Autowired
 	MatriprdService service;
+	
+	@Autowired
+	MatriitmService corService;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto")
@@ -107,6 +113,32 @@ public class MatrizProdutoController {
 	
 		try {
 	        service.create(dto, request);
+	        return ResponseEntity.status(HttpStatus.CREATED)
+		        	.header("Accept", "application/json")
+		            .body("OK");
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@PutMapping(value = "/createComCor", produces = "application/json")
+	@Operation(summary = "Cria um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Esse Matriz de produto já existe!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Object> createComCor(@RequestBody MatriprdComCorDTO dto, HttpServletRequest request) {
+	
+		try {
+			for (MatriitmDTO cor : dto.cores()) {
+				corService.create(cor, request);
+			}
+			
+	        service.createComCor(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
 		            .body("OK");

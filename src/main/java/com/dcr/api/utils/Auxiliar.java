@@ -39,6 +39,7 @@ public class Auxiliar {
 	private static final String timezone = "GMT-4";
 	private static final String dtFormat = "yyyyMMdd";
 	private static final String hrFormat = "HH:mm:ss";
+	private static final String hrFormatSemSegundo = "HH:mm";
 	private static final String dtHrFormat = "dd MMM yyyy hh:mm:ss";
 	
     public static String trimNull(String field) {
@@ -164,6 +165,15 @@ public class Auxiliar {
     	Date date = new Date();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat(hrFormat);
+	
+		sdf.setTimeZone(TimeZone.getTimeZone(timezone));
+		return sdf.format(date);
+    }
+	
+	public static String getHrFormatedSemSegundo() {
+    	Date date = new Date();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(hrFormatSemSegundo);
 	
 		sdf.setTimeZone(TimeZone.getTimeZone(timezone));
 		return sdf.format(date);
