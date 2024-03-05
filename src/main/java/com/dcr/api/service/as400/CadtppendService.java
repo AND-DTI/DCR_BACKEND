@@ -24,12 +24,12 @@ public class CadtppendService {
 	
 	public List<Cadtppend> getAll() {
 		
-		return repository.findAll();
+		return repository.findPendenciasAndResponsaveis();
 	}
 	
 	public Optional<Cadtppend> getByID(String id) {
 		
-		return repository.findById(id);
+		return repository.findPendenciasAndResponsaveisByCdPend(id);
 	}
 	
 	public Cadtppend create(CadtppendDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {

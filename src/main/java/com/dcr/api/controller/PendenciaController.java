@@ -17,15 +17,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Cadtppend;
-import com.dcr.api.model.as400.Dcroriprd;
 import com.dcr.api.model.as400.Pendastec;
 import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.CadtppendDTO;
-import com.dcr.api.model.dto.DcroriprdDTO;
-import com.dcr.api.model.keys.PendprodKey;
 import com.dcr.api.service.as400.CadtppendService;
 import com.dcr.api.service.as400.PendastecService;
 import com.dcr.api.service.as400.PendprodService;
+import com.dcr.api.service.as400.PendrespService;
 import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +41,9 @@ public class PendenciaController {
 	
 	@Autowired
 	PendprodService pendprod;
+	
+	@Autowired
+	PendrespService pendresp;
 	
 	@Autowired
 	PendastecService pendastec;
@@ -65,6 +66,7 @@ public class PendenciaController {
 	                    .body("Nenhuma pendência encontrado!");
 	        }
 	        Auxiliar.formatResponse(lista);
+	     
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -86,14 +88,15 @@ public class PendenciaController {
 	public ResponseEntity<Object> getByID(@RequestParam String id) {
 	
 		try {
+			
 			Optional<Cadtppend> lista = service.getByID(id);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência encontrado!");
 	        }
-	        Auxiliar.formatResponse(lista);
-		
+	        Auxiliar.formatResponse(lista.get());
+	        Auxiliar.formatResponse(lista.get().getResponsaveis());
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
