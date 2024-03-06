@@ -136,7 +136,7 @@ public class MatrizProdutoController {
 	public ResponseEntity<Object> createComCor(@RequestBody MatriprdComCorDTO dto, HttpServletRequest request) {
 	
 		try {
-			for (MatriitmDTO cor : dto.cores()) {
+			for (MatriitmDTO cor : dto.itens()) {
 				corService.create(cor, request);
 			}
 			
@@ -162,7 +162,7 @@ public class MatrizProdutoController {
 	public ResponseEntity<Object> updateComCor(@RequestBody MatriprdComCorDTO dto, HttpServletRequest request) {
 	
 		try {
-			for (MatriitmDTO cor : dto.cores()) {
+			for (MatriitmDTO cor : dto.itens()) {
 				Optional<Matriitm> corOg = corService.getByID(cor.idmatriz());
 				if(!corOg.isEmpty()) {
 					corService.update(corOg.get(), cor, request);
