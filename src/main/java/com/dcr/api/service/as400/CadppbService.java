@@ -98,7 +98,7 @@ public class CadppbService {
 	            nvl1.setModelo((obj.getModelo() != null) ? obj.getModelo().trim() : "");
 	            nvl1.setAnoMdl((obj.getAnoMdl() != null) ? obj.getAnoMdl() : "");
 	            nvl1.setTpPrd((obj.getTpPrd() != null) ? obj.getTpPrd().trim() : "");
-	            nvl1.setCores(new ArrayList());
+	            nvl1.setItens(new ArrayList());
 				for (ProdsProjection result : entry.getValue()) {
 		            Nivel2Projection nvl2 = new Nivel2Projection();
 		            nvl2.setPartnumPd((result.getPartnumPd() != null) ? result.getPartnumPd().trim() : "");
@@ -108,13 +108,13 @@ public class CadppbService {
 		            nvl2.setCodCor((result.getCodCor() != null) ? result.getCodCor().trim() : "");
 		            nvl2.setCorPt((result.getCorPt() != null) ? result.getCorPt().trim() : "");
 		            Boolean existeCor = Boolean.FALSE;
-		            for (Nivel2Projection prod : nvl1.getCores()) {
+		            for (Nivel2Projection prod : nvl1.getItens()) {
 		            	if(prod.getCodCor().toString().trim().equals(result.getCodCor().trim())) {
 		            		existeCor = Boolean.TRUE;
 		            	}
 		            }
 		            if(!existeCor) {
-		            	nvl1.getCores().add(nvl2);
+		            	nvl1.getItens().add(nvl2);
 		            }
 		            
 		            
