@@ -186,6 +186,24 @@ public class UserController {
 
     }
     
+    @GetMapping(value = "/getAtivos", produces = "application/json")
+    @Operation(summary = "Listar usuários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!"),
+            @ApiResponse(responseCode = "200", description = "Ok!")
+    })
+    public ResponseEntity<Object> ativos(
+            @PageableDefault(page = 0, size = 10, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        List<Accuser> users = userService.listarAtivos();
+        if (users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Auxiliar.formatResponse(users);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+
+    }
+    
     @GetMapping(value = "/getUser", produces = "application/json")
     @Operation(summary = "Listar usuário por username")
     @ApiResponses(value = {

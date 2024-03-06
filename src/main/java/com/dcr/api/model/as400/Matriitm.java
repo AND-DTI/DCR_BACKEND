@@ -6,9 +6,12 @@ import com.dcr.api.validator.TamanhoMinimo;
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -44,6 +47,11 @@ public class Matriitm {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(3)")
 	private String unmed;
+	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "int")
+	private Integer priocor;
 	
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;	
@@ -146,5 +154,13 @@ public class Matriitm {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public Integer getPriocor() {
+		return priocor;
+	}
+
+	public void setPriocor(Integer priocor) {
+		this.priocor = priocor;
 	}
 }

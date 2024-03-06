@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.model.as400.Cadcor;
+import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
@@ -140,6 +142,42 @@ public class MatrizProdutoController {
 			
 	        service.createComCor(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
+		        	.header("Accept", "application/json")
+		            .body("OK");
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@PutMapping(value = "/updateComCor", produces = "application/json")
+	@Operation(summary = "Altera uma Matriz de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Matriz de produto não encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> updateComCor(@RequestBody MatriprdComCorDTO dto, HttpServletRequest request) {
+	
+		try {
+			for (MatriitmDTO cor : dto.cores()) {
+				Optional<Matriitm> corOg = corService.getByID(cor.idmatriz());
+				if(!corOg.isEmpty()) {
+					corService.update(corOg.get(), cor, request);
+				}
+				
+			}
+			Optional<Matriprd> lista = service.getByID(dto.idmatriz());
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz de produto não encontrada!");
+	        }
+		
+	        service.updateComCor(lista.get(), dto,  request);
+	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");
 		} catch (Exception ae) {

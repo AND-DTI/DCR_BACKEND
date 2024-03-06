@@ -1,14 +1,19 @@
 package com.dcr.api.model.as400;
 
+import java.util.List;
+
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -293,5 +298,6 @@ public class Matriprd {
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
 	}
+
 	
 }

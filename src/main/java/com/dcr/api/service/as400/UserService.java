@@ -68,6 +68,12 @@ public class UserService {
 
     }
 
+    public List<Accuser> listarAtivos() {
+
+        return userRepository.findDistinctByAtivo("S");
+
+    }
+    
     public void updatePassword(String username, String password) {
 
       userRepository.setPassword(username, password);

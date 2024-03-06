@@ -327,4 +327,27 @@ public class MatriprdService {
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
+	
+public Matriprd updateComCor(Matriprd matriz,  MatriprdComCorDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+		
+		matriz.setAnomdl(dto.anomdl());
+		matriz.setDesccom(dto.desccom());
+		matriz.setDescrfb(dto.descrfb());
+		matriz.setDtneci(dto.dtneci());
+		matriz.setModelo(dto.modelo());
+		matriz.setOrigprd(dto.origprd());
+		matriz.setPrevfat(dto.prevfat());
+		matriz.setPriodtmnt(Auxiliar.getDtFormated());
+		matriz.setPriohrmnt(Auxiliar.getHrFormatedSemSegundo());
+		matriz.setPrioresp(Auxiliar.getUser(request));
+		matriz.setPriourgen(dto.priourgen());
+		matriz.setProduto(dto.produto());
+		matriz.setProtot(dto.protot());
+		matriz.setSpecial(dto.special());
+		matriz.setTpdcre(dto.tpdcre());
+		matriz.setTpprd(dto.tpprd());
+		
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+	}
 }

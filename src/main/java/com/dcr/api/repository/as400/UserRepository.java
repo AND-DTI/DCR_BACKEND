@@ -21,6 +21,8 @@ public interface UserRepository extends JpaRepository<Accuser, String> {
 
     List<Accuser> findDistinctByUserid(Integer userid);
     
+    List<Accuser> findDistinctByAtivo(String ativo);
+    
     @Modifying
     @Query("update Accuser c set c.password = :password WHERE c.username = :username")
     void setPassword(String username, String password);

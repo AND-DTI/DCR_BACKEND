@@ -46,6 +46,7 @@ public class MatriitmService {
 		matriz.setPartdesc(dto.partdesc());
 		matriz.setPartnumpd(dto.partnumpd());
 		matriz.setUnmed(dto.unmed());
+		matriz.setPriocor(dto.priocor());
 		
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
@@ -58,7 +59,7 @@ public class MatriitmService {
 		matriz.setPartdesc(dto.partdesc());
 		matriz.setPartnumpd(dto.partnumpd());
 		matriz.setUnmed(dto.unmed());
-		
+		matriz.setPriocor(dto.priocor());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}

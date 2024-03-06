@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import com.dcr.api.model.as400.Cadtppend;
 
 public interface CadtppendRepository extends JpaRepository<Cadtppend, String>{	
-		@Query("SELECT p FROM Cadtppend p JOIN FETCH p.responsaveis r")
+		@Query("SELECT p FROM Cadtppend p LEFT JOIN FETCH p.responsaveis r")
 		List<Cadtppend> findPendenciasAndResponsaveis();
 		
-		@Query("SELECT p FROM Cadtppend p JOIN FETCH p.responsaveis r where p.cdpend = :cdpend")
+		@Query("SELECT p FROM Cadtppend p LEFT JOIN FETCH p.responsaveis r where p.cdpend = :cdpend")
 		Optional<Cadtppend> findPendenciasAndResponsaveisByCdPend(String cdpend);
 }
