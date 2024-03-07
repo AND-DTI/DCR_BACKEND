@@ -13,12 +13,15 @@ import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.repository.as400.MatriprdRepository;
+import com.dcr.api.response.CoresResponse;
+import com.dcr.api.response.DocumentosResponse;
 import com.dcr.api.response.InsumosProdResponse;
 import com.dcr.api.response.InsumosResponse;
 import com.dcr.api.response.MatriprdByTpprdResponse;
 import com.dcr.api.response.MatriprdByTpprdResponseList;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.MatriprdResponseList;
+import com.dcr.api.response.PendenciaResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.response.ProdutoPendenciaResponseList;
 import com.dcr.api.utils.Auxiliar;
@@ -203,9 +206,15 @@ public class MatriprdService {
 		
 		List<ProdutoPendenciaResponse> produtos = new ArrayList<>();
 		ProdutoPendenciaResponse resp = new ProdutoPendenciaResponse();
-		List<ProdutoPendenciaResponseList> lista = new ArrayList();
+		List<ProdutoPendenciaResponseList> listaItem = new ArrayList();
+		List<PendenciaResponse> listaPend = new ArrayList();
+		List<DocumentosResponse> listaDoc = new ArrayList();
+		List<CoresResponse> listaCor = new ArrayList();
         for (Object[] resultado : resultados) {
         	ProdutoPendenciaResponseList item = new ProdutoPendenciaResponseList();
+        	PendenciaResponse pend = new PendenciaResponse();
+        	DocumentosResponse doc = new DocumentosResponse();
+        	CoresResponse cor = new CoresResponse();
         	resp.setIdMatriz( (resultado[0] != null) ? resultado[0].toString().trim() : "" );
         	resp.setProduto(  (resultado[1] != null) ? resultado[1].toString().trim() : "");
         	resp.setModelo(  (resultado[2] != null) ? resultado[2].toString().trim() : "");
@@ -223,12 +232,12 @@ public class MatriprdService {
         	resp.setPrioresp(  (resultado[14] != null) ? resultado[14].toString().trim() : "");
         	resp.setPriodtmnt(  (resultado[15] != null) ? resultado[15].toString().trim() : "");
         	resp.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "");
-        	resp.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "");
+        	cor.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "");
         	resp.setModelo((resultado[18] != null) ? resultado[18].toString().trim() : "");
-        	resp.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "");
-        	resp.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "");
-        	resp.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "");
-        	resp.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "");
+        	cor.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "");
+        	cor.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "");
+        	cor.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "");
+        	cor.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "");
         	item.setPartnum( (resultado[23] != null) ? resultado[23].toString().trim() : "");
         	item.setItmorg((resultado[24] != null) ? resultado[24].toString().trim() : "");
         	item.setIttyp( (resultado[25] != null) ? resultado[25].toString().trim() : "");
@@ -241,14 +250,44 @@ public class MatriprdService {
         	item.setPartsugdsc((resultado[32] != null) ? resultado[32].toString().trim() : "");
         	item.setPartnew( (resultado[33] != null) ? resultado[33].toString().trim() : "");
         	item.setPartnewdsc( (resultado[34] != null) ? resultado[34].toString().trim() : "");
-        	item.setNumpend( (resultado[35] != null) ? resultado[35].toString().trim() : "");
-        	item.setCdpend( (resultado[36] != null) ? resultado[36].toString().trim() : "");
-        	item.setObspend( (resultado[37] != null) ? resultado[37].toString().trim() : "");
-        	item.setStatus( (resultado[38] != null) ? resultado[38].toString().trim() : "");
-        	lista.add(item);
+        	
+        	pend.setNumpend( (resultado[35] != null) ? resultado[35].toString().trim() : "");
+        	pend.setCdpend( (resultado[36] != null) ? resultado[36].toString().trim() : "");
+        	pend.setObspend( (resultado[37] != null) ? resultado[37].toString().trim() : "");
+        	pend.setStatus( (resultado[38] != null) ? resultado[38].toString().trim() : "");
+        	
+        	doc.setTpdoc((resultado[39] != null) ? resultado[39].toString().trim() : "");
+        	doc.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
+        	doc.setSerdoc((resultado[41] != null) ? resultado[41].toString().trim() : "");
+        	doc.setEmidoc((resultado[42] != null) ? resultado[42].toString().trim() : "");
+        	doc.setNumdoc2((resultado[43] != null) ? resultado[43].toString().trim() : "");
+        	doc.setSerdoc2((resultado[44] != null) ? resultado[44].toString().trim() : "");
+        	doc.setEmidoc2((resultado[45] != null) ? resultado[45].toString().trim() : "");
+        	doc.setNumdocnew((resultado[46] != null) ? resultado[46].toString().trim() : "");
+        	doc.setSerdocnew((resultado[47] != null) ? resultado[47].toString().trim() : "");
+        	doc.setEmidocnew((resultado[48] != null) ? resultado[48].toString().trim() : "");
+        	listaItem.add(item);
+        	
+        	if(!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getObspend().equals("") && pend.getStatus().equals(""))) {
+        		listaPend.add(pend);
+        	}
+        	
+        	if(!(doc.getTpdoc().equals("") && doc.getSerdoc().equals("") && doc.getNumdoc().equals("") && doc.getEmidoc().equals("") 
+        			&& doc.getSerdoc2().equals("") && doc.getNumdoc2().equals("") && doc.getEmidoc2().equals("") 
+        			&& doc.getSerdocnew().equals("") && doc.getNumdocnew().equals("") && doc.getEmidocnew().equals(""))) {
+        		listaDoc.add(doc);
+        	}
+        	
+        	if(!(cor.getCodcor().equals("") && cor.getPartdesc().equals("") && cor.getPartnumpd().equals("") && cor.getPriocor().equals("") && cor.getUnmed().equals(""))) {
+        		listaCor.add(cor);
+        	}
+        	
             produtos.add(resp);
         }
-        resp.setItens(lista);
+        resp.setItens(listaItem);
+        resp.setPendencias(listaPend);
+        resp.setDocumentos(listaDoc);
+        resp.setCores(listaCor);
 		return resp;
 	}
 	

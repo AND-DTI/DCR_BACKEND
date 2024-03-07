@@ -1,0 +1,39 @@
+package com.dcr.api.response;
+
+public class CoresResponse {
+	 private Object partnumpd;
+	    private Object codcor;
+	    private Object partdesc;
+	    private Object unmed;
+	    private Object priocor;
+		public Object getPartnumpd() {
+			return partnumpd;
+		}
+		public void setPartnumpd(Object partnumpd) {
+			this.partnumpd = partnumpd;
+		}
+		public Object getCodcor() {
+			return codcor;
+		}
+		public void setCodcor(Object codcor) {
+			this.codcor = codcor;
+		}
+		public Object getPartdesc() {
+			return partdesc;
+		}
+		public void setPartdesc(Object partdesc) {
+			this.partdesc = partdesc;
+		}
+		public Object getUnmed() {
+			return unmed;
+		}
+		public void setUnmed(Object unmed) {
+			this.unmed = unmed;
+		}
+		public Object getPriocor() {
+			return priocor;
+		}
+		public void setPriocor(Object priocor) {
+			this.priocor = priocor;
+		}
+}

@@ -22,13 +22,12 @@ public class ProdutoPendenciaResponse {
     private Object prioresp;
     private Object priodtmnt;
     private Object prioHRmnt;
-    private Object partnumpd;
-    private Object codcor;
-    private Object partdesc;
-    private Object unmed;
-    private Object priocor;
+   
     
+    private List<CoresResponse> cores;
     private List<ProdutoPendenciaResponseList> itens;
+    private List<PendenciaResponse> pendencias;
+    private List<DocumentosResponse> documentos;
     
 	public Object getIdMatriz() {
 		return idMatriz;
@@ -132,41 +131,30 @@ public class ProdutoPendenciaResponse {
 	public void setPrioHRmnt(Object prioHRmnt) {
 		this.prioHRmnt = prioHRmnt;
 	}
-	public Object getPartnumpd() {
-		return partnumpd;
-	}
-	public void setPartnumpd(Object partnumpd) {
-		this.partnumpd = partnumpd;
-	}
-	public Object getCodcor() {
-		return codcor;
-	}
-	public void setCodcor(Object codcor) {
-		this.codcor = codcor;
-	}
-	public Object getPartdesc() {
-		return partdesc;
-	}
-	public void setPartdesc(Object partdesc) {
-		this.partdesc = partdesc;
-	}
-	public Object getUnmed() {
-		return unmed;
-	}
-	public void setUnmed(Object unmed) {
-		this.unmed = unmed;
-	}
-	public Object getPriocor() {
-		return priocor;
-	}
-	public void setPriocor(Object priocor) {
-		this.priocor = priocor;
-	}
+	
 	public List<ProdutoPendenciaResponseList> getItens() {
 		return itens;
 	}
 	public void setItens(List<ProdutoPendenciaResponseList> itens) {
 		this.itens = itens;
+	}
+	public List<PendenciaResponse> getPendencias() {
+		return pendencias;
+	}
+	public void setPendencias(List<PendenciaResponse> pendencias) {
+		this.pendencias = pendencias;
+	}
+	public List<DocumentosResponse> getDocumentos() {
+		return documentos;
+	}
+	public void setDocumentos(List<DocumentosResponse> documentos) {
+		this.documentos = documentos;
+	}
+	public List<CoresResponse> getCores() {
+		return cores;
+	}
+	public void setCores(List<CoresResponse> cores) {
+		this.cores = cores;
 	}
 	
 }
