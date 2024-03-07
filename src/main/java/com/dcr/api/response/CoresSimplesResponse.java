@@ -1,15 +1,12 @@
 package com.dcr.api.response;
 
-public class CoresResponse {
+public class CoresSimplesResponse {
 	 private Object partnumpd;
 	    private Object codcor;
 	    private Object partdesc;
 	    private Object unmed;
 	    private Object priocor;
-	    private Object cdbej;
-	    private Object corpt;
-	    private Object coreng;
-	    private Object tppin;
+	 
 		public Object getPartnumpd() {
 			return partnumpd;
 		}
@@ -40,28 +37,5 @@ public class CoresResponse {
 		public void setPriocor(Object priocor) {
 			this.priocor = priocor;
 		}
-		public Object getCdbej() {
-			return cdbej;
-		}
-		public void setCdbej(Object cdbej) {
-			this.cdbej = cdbej;
-		}
-		public Object getCorpt() {
-			return corpt;
-		}
-		public void setCorpt(Object corpt) {
-			this.corpt = corpt;
-		}
-		public Object getCoreng() {
-			return coreng;
-		}
-		public void setCoreng(Object coreng) {
-			this.coreng = coreng;
-		}
-		public Object getTppin() {
-			return tppin;
-		}
-		public void setTppin(Object tppin) {
-			this.tppin = tppin;
-		}
+		
 }

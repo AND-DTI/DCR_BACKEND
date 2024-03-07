@@ -50,4 +50,22 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 	  		+ "LEFT JOIN HD4DCDHH.MATRIDOC AS DOC ON PRD.IDMATRIZ = DOC.IDMATRIZ " +
 	              "WHERE prd.IDMATRIZ = :idmatriz", nativeQuery = true)
 		  List<Object[]> consultaProdutoPendencia(Integer idmatriz);
+		  
+		  @Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
+			  		+ "					 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"
+			  		+ "		itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,\r\n"
+			  		+ "		ins.PARTNUM, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC,\r\n"
+			  		+ "		pend.NUMPEND, pend.CDPEND, pend.OBSPEND, pend.STATUS, \r\n"
+			  		+ "		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.NUMDOCNEW, doc.SERDOCNEW, doc.EMIDOCNEW, proc.status, \r\n"
+			  		+ "		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN \r\n"
+			  		+ "FROM HD4DCDHH.MATRIPRD AS PRD\r\n"
+			  		+ "LEFT JOIN HD4DCDHH.MATRIITM AS ITM ON PRD.IDMATRIZ = ITM.IDMATRIZ \r\n"
+			  		+ "LEFT JOIN HD4DCDHH.MATRIINS AS INS ON ITM.IDMATRIZ = INS.IDMATRIZ \r\n"
+			  		+ "LEFT JOIN HD4DCDHH.PENDPROD AS PEND ON PRD.IDMATRIZ = PEND.IDMATRIZ  \r\n" 
+			  		+ "LEFT JOIN HD4DCDHH.MATRIDOC AS DOC ON PRD.IDMATRIZ = DOC.IDMATRIZ \r\n" 
+			  		+ "LEFT JOIN HD4DCDHH.CADCOR AS cor ON ITM.CODCOR = cor.CODCOR \r\n"
+			  		+ "LEFT JOIN HD4DCDHH.DCRPROCC AS PROC ON PRD.IDMATRIZ = PROC.IDMATRIZ " +
+			              "WHERE PROC.STATUS IN :status", nativeQuery = true)
+		  List<Object[]> consultaTodasAsPendencias(List<Integer> status);
+		  
 }

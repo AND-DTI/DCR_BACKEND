@@ -2,7 +2,7 @@ package com.dcr.api.response;
 
 import java.util.List;
 
-public class ProdutoPendenciaResponse {
+public class ProdutoPendenciaSimplesResponse {
 	private Object idMatriz;
     private Object produto;
     private Object modelo;
@@ -23,9 +23,7 @@ public class ProdutoPendenciaResponse {
     private Object priodtmnt;
     private Object prioHRmnt;
    
-    private Object status;
-    
-    private List<CoresResponse> cores;
+    private List<CoresSimplesResponse> cores;
     private List<ProdutoPendenciaResponseList> itens;
     private List<PendenciaResponse> pendencias;
     private List<DocumentosResponse> documentos;
@@ -151,17 +149,12 @@ public class ProdutoPendenciaResponse {
 	public void setDocumentos(List<DocumentosResponse> documentos) {
 		this.documentos = documentos;
 	}
-	public List<CoresResponse> getCores() {
+	public List<CoresSimplesResponse> getCores() {
 		return cores;
 	}
-	public void setCores(List<CoresResponse> cores) {
+	public void setCores(List<CoresSimplesResponse> cores) {
 		this.cores = cores;
 	}
-	public Object getStatus() {
-		return status;
-	}
-	public void setStatus(Object status) {
-		this.status = status;
-	}
+
 	
 }
