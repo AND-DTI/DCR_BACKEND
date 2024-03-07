@@ -129,11 +129,7 @@ public class UserController {
 	        acc.setIdarea(user.idArea());
 			acc.setTimevrfy(new Date(0L));
 	        acc.setCdvrfy("");
-	        acc.setFlex1flw(new BigInteger("0"));
-	        acc.setFlex2flw(Double.valueOf(0));
-	        acc.setFlex3flw("");
-	        acc.setFlex4flw("");
-	        acc.setFlex5flw("");
+	  
 	        acc.setToken("");
 	        acc.setTpfunc(user.tpfunc());
 	        

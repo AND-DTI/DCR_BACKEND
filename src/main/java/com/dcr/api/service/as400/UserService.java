@@ -172,6 +172,7 @@ public class UserService {
 
     public Accuser save(Accuser user, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
     	Auxiliar.preencheAuditoria(user, request);
+    	Auxiliar.preencheAuditoria(user.getRoles().get(0), request);
         return userRepository.save(user);
 
     }
