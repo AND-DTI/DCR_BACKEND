@@ -1,10 +1,12 @@
 package com.dcr.api.response;
 
 public class PendenciaResponse {
+	private Object partnum;
 	private Object numpend;
     private Object cdpend;
     private Object obspend;
     private Object status;
+    
 	public Object getNumpend() {
 		return numpend;
 	}
@@ -28,5 +30,11 @@ public class PendenciaResponse {
 	}
 	public void setStatus(Object status) {
 		this.status = status;
+	}
+	public Object getPartnum() {
+		return partnum;
+	}
+	public void setPartnum(Object partnum) {
+		this.partnum = partnum;
 	}
 }
