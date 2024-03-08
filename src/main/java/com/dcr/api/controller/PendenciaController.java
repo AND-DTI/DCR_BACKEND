@@ -115,26 +115,29 @@ public class PendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam String id) {
+	public ResponseEntity<Object> delete(@RequestParam List<String> id) {
 	
 		try {
-
-			List<Pendprod> pendprods = pendprod.getByCdPend(id);
-			List<Pendastec> pendastecs = pendastec.getByCdPend(id);
-			
-			if(!pendastecs.isEmpty() && !pendprods.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Não é possivel deletar essa pendência, pois ela já esta em uma matriz!");
+			for (String string : id) {
+				List<Pendprod> pendprods = pendprod.getByCdPend(string);
+				List<Pendastec> pendastecs = pendastec.getByCdPend(string);
+				
+				if(!pendastecs.isEmpty() && !pendprods.isEmpty()) {
+					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .header("Accept", "application/json")
+		                    .body("Não é possivel deletar essa pendência, pois ela já esta em uma matriz!");
+				}
+				
+				Optional<Cadtppend> pend = service.getByID(string);
+		        if (pend.isEmpty()) {
+		            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .header("Accept", "application/json")
+		                    .body("Nenhuma pendência encontrado!");
+		        }
+		        service.delete(pend.get());
 			}
 			
-			Optional<Cadtppend> pend = service.getByID(id);
-	        if (pend.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Nenhuma pendência encontrado!");
-	        }
-	        service.delete(pend.get());
+	       
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("Pendência apagada");
@@ -154,19 +157,21 @@ public class PendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> createPendencia(@RequestBody CadtppendDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> createPendencia(@RequestBody List<CadtppendDTO> dto, HttpServletRequest request) {
 	
 		try {
+			for (CadtppendDTO cadtppendDTO : dto) {
+				Optional<Cadtppend> dcr = service.getByID(cadtppendDTO.cdpend());
+				
+				if (!dcr.isEmpty()) {
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					        .header("Accept", "application/json")
+					        .body("Tipo de Pendência já existe");
+			    }
+				
+				Cadtppend pendNew = service.create(cadtppendDTO, request);
+			}
 			
-			Optional<Cadtppend> dcr = service.getByID(dto.cdpend());
-			
-			if (!dcr.isEmpty()) {
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				        .header("Accept", "application/json")
-				        .body("Tipo de Pendência já existe");
-		    }
-			
-			Cadtppend pendNew = service.create(dto, request);
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
 			            .body("OK");
