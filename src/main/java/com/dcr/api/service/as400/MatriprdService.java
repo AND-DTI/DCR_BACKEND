@@ -423,7 +423,9 @@ public class MatriprdService {
            
         }
         
-        
+        for (ProdutoPendenciaResponse produto : produtos) {
+			produto.setQtdePendencias(repository.countPendencias(produto.getIdMatriz().toString()));
+		}
 		return produtos;
 	}
 	

@@ -68,4 +68,8 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 			              "WHERE PROC.STATUS IN :status", nativeQuery = true)
 		  List<Object[]> consultaTodasAsPendencias(List<Integer> status);
 		  
+		  
+		  @Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDPROD WHERE IDMATRIZ = :idmatriz AND STATUS = 0", nativeQuery = true)
+		  Integer countPendencias(String idmatriz);
+		  
 }

@@ -25,6 +25,8 @@ public class ProdutoPendenciaResponse {
    
     private Object status;
     
+    private Object qtdePendencias;
+    
     private List<CoresResponse> cores;
     private List<ProdutoPendenciaResponseList> itens;
     private List<PendenciaResponse> pendencias;
@@ -162,6 +164,12 @@ public class ProdutoPendenciaResponse {
 	}
 	public void setStatus(Object status) {
 		this.status = status;
+	}
+	public Object getQtdePendencias() {
+		return qtdePendencias;
+	}
+	public void setQtdePendencias(Object qtdePendencias) {
+		this.qtdePendencias = qtdePendencias;
 	}
 	
 }
