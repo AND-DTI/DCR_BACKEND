@@ -57,7 +57,7 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 			  		+ "		ins.PARTNUM, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC,\r\n"
 			  		+ "		pend.NUMPEND, pend.CDPEND, pend.OBSPEND, pend.STATUS, \r\n"
 			  		+ "		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.NUMDOCNEW, doc.SERDOCNEW, doc.EMIDOCNEW, proc.status, \r\n"
-			  		+ "		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, pend.PARTNUM  \r\n"
+			  		+ "		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, pend.PARTNUM, pend.IDMATRIZ  \r\n"
 			  		+ "FROM HD4DCDHH.MATRIPRD AS PRD\r\n"
 			  		+ "LEFT JOIN HD4DCDHH.MATRIITM AS ITM ON PRD.IDMATRIZ = ITM.IDMATRIZ \r\n"
 			  		+ "LEFT JOIN HD4DCDHH.MATRIINS AS INS ON ITM.IDMATRIZ = INS.IDMATRIZ \r\n"

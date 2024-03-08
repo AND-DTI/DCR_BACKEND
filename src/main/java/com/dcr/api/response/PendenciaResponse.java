@@ -6,7 +6,7 @@ public class PendenciaResponse {
     private Object cdpend;
     private Object obspend;
     private Object status;
-    
+    private Object idmatriz;
 	public Object getNumpend() {
 		return numpend;
 	}
@@ -36,5 +36,11 @@ public class PendenciaResponse {
 	}
 	public void setPartnum(Object partnum) {
 		this.partnum = partnum;
+	}
+	public Object getIdmatriz() {
+		return idmatriz;
+	}
+	public void setIdmatriz(Object idmatriz) {
+		this.idmatriz = idmatriz;
 	}
 }
