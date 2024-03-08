@@ -1,6 +1,7 @@
 package com.dcr.api.response;
 
 public class DocumentosResponse {
+	private Object partnum;
 	private Object tpdoc;
     private Object numdoc;
     private Object serdoc;
@@ -70,5 +71,11 @@ public class DocumentosResponse {
 	}
 	public void setEmidocnew(Object emidocnew) {
 		this.emidocnew = emidocnew;
+	}
+	public Object getPartnum() {
+		return partnum;
+	}
+	public void setPartnum(Object partnum) {
+		this.partnum = partnum;
 	}
 }

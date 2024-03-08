@@ -3,6 +3,7 @@ package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -345,7 +346,7 @@ public class MatriprdService {
         	cor.setCorpt((resultado[51] != null) ? resultado[51].toString().trim() : "");
         	cor.setCoreng((resultado[52] != null) ? resultado[52].toString().trim() : "");
         	cor.setTppin((resultado[53] != null) ? resultado[53].toString().trim() : "");
-        	
+        	cor.setIdmatriz((resultado[56] != null) ? resultado[56].toString().trim() : "");
         	item.setPartnum( (resultado[23] != null) ? resultado[23].toString().trim() : "");
         	item.setItmorg((resultado[24] != null) ? resultado[24].toString().trim() : "");
         	item.setIttyp( (resultado[25] != null) ? resultado[25].toString().trim() : "");
@@ -376,7 +377,7 @@ public class MatriprdService {
         	doc.setNumdocnew((resultado[46] != null) ? resultado[46].toString().trim() : "");
         	doc.setSerdocnew((resultado[47] != null) ? resultado[47].toString().trim() : "");
         	doc.setEmidocnew((resultado[48] != null) ? resultado[48].toString().trim() : "");
-        	
+        	doc.setPartnum((resultado[57] != null) ? resultado[57].toString().trim() : "");
         	
         	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getObspend().equals("") && pend.getStatus().equals(""))) {
                 listaPendSet.add(pend); // Adiciona à lista apenas se não estiver duplicado
@@ -388,10 +389,12 @@ public class MatriprdService {
                 listaDocSet.add(doc); // Adiciona à lista apenas se não estiver duplicado
             }
         	
-        	if (!(cor.getCodcor().equals("") && cor.getPartdesc().equals("") && cor.getPartnumpd().equals("") && cor.getPriocor().equals("") && cor.getUnmed().equals(""))) {
-                coresSet.add(cor); // Adiciona ao conjunto apenas se não estiver duplicado
-            }
-        	
+        	//if (!(cor.getCodcor().equals("") && cor.getPartdesc().equals("") && cor.getPartnumpd().equals("") && cor.getPriocor().equals("") && cor.getUnmed().equals(""))) {
+                // Adiciona ao conjunto apenas se não estiver duplicado
+            //}
+        	//if(cor.getIdmatriz().equals(resp.getIdMatriz())) {
+        		 coresSet.add(cor);
+        	//}
         	Boolean existeItem = false;
             for (ProdutoPendenciaResponseList it : listaItemSet) {
                 if (it.getPartnum().equals(item.getPartnum())) {
@@ -412,22 +415,64 @@ public class MatriprdService {
 			}
             
             List<CoresResponse> listaCor = new ArrayList<>(coresSet);
-            List<ProdutoPendenciaResponseList> listaItem = new ArrayList<>(listaItemSet);
+            List<ProdutoPendenciaResponseList> listaItem = new ArrayList<>();
             List<PendenciaResponse> listaPend = new ArrayList<>(listaPendSet);
             List<DocumentosResponse> listaDoc = new ArrayList<>(listaDocSet);
-            listaCor = removerDuplicatas(listaCor);
-            listaItem = removerDuplicatas(listaItem);
-            listaPend = removerDuplicatas(listaPend);
-            listaDoc = removerDuplicatas(listaDoc);
-            resp.setCores(listaCor);
+
             resp.setItens(listaItem);
             resp.setPendencias(listaPend);
             resp.setDocumentos(listaDoc);
+            resp.setCores(listaCor);
             if(!existe) {
             	produtos.add(resp);
+            }else {
+            	Boolean existeCor = Boolean.FALSE;
+            	for (ProdutoPendenciaResponse prod : produtos) {
+					for (CoresResponse corAtual : prod.getCores()) {
+						for (CoresResponse coresAdd : listaCor) {
+							if(corAtual.getPartnumpd().equals(coresAdd.getPartnumpd())) {
+								existeCor = Boolean.TRUE;
+							}
+						}
+					}
+					if(!existeCor && cor.getIdmatriz().equals(prod.getIdMatriz())) {
+						prod.getCores().add(cor);
+					}
+				}
+            	
+            	Boolean existePendencias = Boolean.FALSE;
+            	for (ProdutoPendenciaResponse prod : produtos) {
+					for (PendenciaResponse pendAtual : prod.getPendencias()) {
+						for (PendenciaResponse coresAdd : listaPend) {
+							if(pendAtual.getCdpend().equals(coresAdd.getCdpend())) {
+								existePendencias = Boolean.TRUE;
+							}
+						}
+					}
+					if(!existePendencias && pend.getIdmatriz().equals(prod.getIdMatriz())) {
+						prod.getPendencias().add(pend);
+					}
+				}
+            	
+            	Boolean existeDoc = Boolean.FALSE;
+            	for (ProdutoPendenciaResponse prod : produtos) {
+					for (DocumentosResponse docAtual : prod.getDocumentos()) {
+						for (DocumentosResponse coresAdd : listaDoc) {
+							if(docAtual.getTpdoc().equals(coresAdd.getTpdoc())) {
+								existeDoc = Boolean.TRUE;
+							}
+						}
+					}
+					if(!existeDoc && pend.getIdmatriz().equals(prod.getIdMatriz())) {
+						prod.getDocumentos().add(doc);
+					}
+				}
             }
-            
-           
+            resp.setCores(removerDuplicatas(listaCor));                                                                                                        
+            coresSet = new HashSet<>();
+            listaItemSet = new HashSet<>();
+            listaPendSet = new HashSet<>();
+            listaDocSet = new HashSet<>();
         }
         
         for (ProdutoPendenciaResponse produto : produtos) {

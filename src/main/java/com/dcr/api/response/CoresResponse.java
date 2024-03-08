@@ -1,7 +1,8 @@
 package com.dcr.api.response;
 
 public class CoresResponse {
-	 private Object partnumpd;
+		private Object idmatriz;
+		private Object partnumpd;
 	    private Object codcor;
 	    private Object partdesc;
 	    private Object unmed;
@@ -63,5 +64,11 @@ public class CoresResponse {
 		}
 		public void setTppin(Object tppin) {
 			this.tppin = tppin;
+		}
+		public Object getIdmatriz() {
+			return idmatriz;
+		}
+		public void setIdmatriz(Object idmatriz) {
+			this.idmatriz = idmatriz;
 		}
 }
