@@ -205,12 +205,20 @@ public class MatriprdService {
 	}
 	
 	public PendenciaResponse complementaPendencia(PendenciaResponse pend) {
-		List<Object[]> resultadosDoc = repository.complementaPendenciaDoc(pend.getIdmatriz().toString(), pend.getPartnum().toString(), pend.getCdpend().toString());
-		pend.setNumdoc(resultadosDoc.get(0)[0]);
-		pend.setSerdoc(resultadosDoc.get(0)[1]);
+		try {
+			List<Object[]> resultadosDoc = repository.complementaPendenciaDoc(pend.getIdmatriz().toString(), pend.getPartnum().toString(), pend.getCdpend().toString());
+			pend.setNumdoc(resultadosDoc.get(0)[0]);
+			pend.setSerdoc(resultadosDoc.get(0)[1]);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		
 		List<Object[]> resultadosDesc = repository.complementaPendenciaDesc(pend.getCdpend().toString());
-		pend.setDescpend(resultadosDesc.get(0)[0]);
+		if(resultadosDesc.size() > 0) {
+			pend.setDescpend(resultadosDesc.get(0)[0]);
+		}
+		
 		
 		return pend;
 	}
