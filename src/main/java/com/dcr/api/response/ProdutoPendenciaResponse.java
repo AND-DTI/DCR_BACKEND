@@ -133,9 +133,9 @@ public class ProdutoPendenciaResponse {
 		this.prioHRmnt = prioHRmnt;
 	}
 	
-	public List<ProdutoPendenciaResponseList> getItens() {
-		return itens;
-	}
+//	public List<ProdutoPendenciaResponseList> getItens() {
+//		return itens;
+//	}
 	public void setItens(List<ProdutoPendenciaResponseList> itens) {
 		this.itens = itens;
 	}

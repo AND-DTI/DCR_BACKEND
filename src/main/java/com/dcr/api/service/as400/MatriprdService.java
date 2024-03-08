@@ -363,7 +363,7 @@ public class MatriprdService {
         	pend.setCdpend( (resultado[36] != null) ? resultado[36].toString().trim() : "");
         	pend.setObspend( (resultado[37] != null) ? resultado[37].toString().trim() : "");
         	pend.setStatus( (resultado[38] != null) ? resultado[38].toString().trim() : "");
-        	
+        	pend.setPartnum((resultado[54] != null) ? resultado[54].toString().trim() : "");
         	doc.setTpdoc((resultado[39] != null) ? resultado[39].toString().trim() : "");
         	doc.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
         	doc.setSerdoc((resultado[41] != null) ? resultado[41].toString().trim() : "");
