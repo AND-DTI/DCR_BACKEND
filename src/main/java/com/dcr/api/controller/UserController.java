@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.CreateUserDTO;
+import com.dcr.api.model.dto.UpdateUserDTO;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
@@ -227,9 +228,9 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro!"),
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> update(@RequestBody Accuser user, HttpServletRequest request) throws ParseException {
+    public ResponseEntity<Object> update(@RequestBody UpdateUserDTO user, HttpServletRequest request) throws ParseException {
 
-        List<Accuser> users = userService.listByUsername(user.getUsername());
+        List<Accuser> users = userService.listByUsername(user.username());
         Accuser userALT = null;
 
         if (users.isEmpty()) {
@@ -246,21 +247,26 @@ public class UserController {
 //    			}
 //			}
 //        	user.setRoles(roles);
-        	
-            //user.setPassword(encoder.encode(user.getPassword()));
+        	if(user.changePassword().toLowerCase().trim().equals("s")) {
+        		users.get(0).setPassword(encoder.encode(user.password()));
+        	}
+            
             try {
-            	user.setUsername(users.get(0).getUsernameForUpdate());
-            	userALT = userService.save(user, request);
+            	users.get(0).setAtivo(user.ativo());
+            	users.get(0).setEmail(user.email());
+            	users.get(0).setName(user.name());
+            	users.get(0).setTpfunc(user.tpfunc());
+            	users.get(0).setIdarea(user.idarea());
+            	userALT = userService.save(users.get(0), request);
             } catch (Exception e) {
             		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");
             }
-            
-        }
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Accept", "application/json")
-                .body(userALT);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .header("Accept", "application/json")
+                    .body(userALT);
+        }
     }
 }
