@@ -7,6 +7,9 @@ public class PendenciaResponse {
     private Object obspend;
     private Object status;
     private Object idmatriz;
+    private Object numdoc;
+    private Object serdoc;
+    private Object descpend;
 	public Object getNumpend() {
 		return numpend;
 	}
@@ -42,5 +45,23 @@ public class PendenciaResponse {
 	}
 	public void setIdmatriz(Object idmatriz) {
 		this.idmatriz = idmatriz;
+	}
+	public Object getNumdoc() {
+		return numdoc;
+	}
+	public void setNumdoc(Object numdoc) {
+		this.numdoc = numdoc;
+	}
+	public Object getSerdoc() {
+		return serdoc;
+	}
+	public void setSerdoc(Object serdoc) {
+		this.serdoc = serdoc;
+	}
+	public Object getDescpend() {
+		return descpend;
+	}
+	public void setDescpend(Object descpend) {
+		this.descpend = descpend;
 	}
 }

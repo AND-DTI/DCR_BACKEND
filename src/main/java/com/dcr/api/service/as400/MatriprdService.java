@@ -204,20 +204,33 @@ public class MatriprdService {
 		return listaResponse;
 	}
 	
+	public PendenciaResponse complementaPendencia(PendenciaResponse pend) {
+		List<Object[]> resultadosDoc = repository.complementaPendenciaDoc(pend.getIdmatriz().toString(), pend.getPartnum().toString(), pend.getCdpend().toString());
+		pend.setNumdoc(resultadosDoc.get(0)[0]);
+		pend.setSerdoc(resultadosDoc.get(0)[1]);
+		
+		List<Object[]> resultadosDesc = repository.complementaPendenciaDesc(pend.getCdpend().toString());
+		pend.setDescpend(resultadosDesc.get(0)[0]);
+		
+		return pend;
+	}
+	
 	public ProdutoPendenciaSimplesResponse getProdutoPendencia(Integer id) {
 		List<Object[]> resultados = repository.consultaProdutoPendencia(id);
 		
 		List<ProdutoPendenciaSimplesResponse> produtos = new ArrayList<>();
 		ProdutoPendenciaSimplesResponse resp = new ProdutoPendenciaSimplesResponse();
-		List<ProdutoPendenciaResponseList> listaItem = new ArrayList();
-		List<PendenciaResponse> listaPend = new ArrayList();
-		List<DocumentosResponse> listaDoc = new ArrayList();
-		List<CoresSimplesResponse> listaCor = new ArrayList();
+		Set<ProdutoPendenciaResponseList> listaItemSet = new HashSet<>();
+		Set<PendenciaResponse> listaPendSet = new HashSet<>();
+		Set<DocumentosResponse> listaDocSet = new HashSet<>();
+		Set<CoresSimplesResponse> coresSet = new HashSet<>();
+		PendenciaResponse pend = new PendenciaResponse();
+		
         for (Object[] resultado : resultados) {
         	ProdutoPendenciaResponseList item = new ProdutoPendenciaResponseList();
-        	PendenciaResponse pend = new PendenciaResponse();
         	DocumentosResponse doc = new DocumentosResponse();
         	CoresSimplesResponse cor = new CoresSimplesResponse();
+        	
         	resp.setIdMatriz( (resultado[0] != null) ? resultado[0].toString().trim() : "" );
         	resp.setProduto(  (resultado[1] != null) ? resultado[1].toString().trim() : "");
         	resp.setModelo(  (resultado[2] != null) ? resultado[2].toString().trim() : "");
@@ -235,12 +248,15 @@ public class MatriprdService {
         	resp.setPrioresp(  (resultado[14] != null) ? resultado[14].toString().trim() : "");
         	resp.setPriodtmnt(  (resultado[15] != null) ? resultado[15].toString().trim() : "");
         	resp.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "");
-        	cor.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "");
         	resp.setModelo((resultado[18] != null) ? resultado[18].toString().trim() : "");
+        	
+        	cor.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "");
         	cor.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "");
         	cor.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "");
         	cor.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "");
         	cor.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "");
+        	cor.setIdmatriz((resultado[49] != null) ? resultado[49].toString().trim() : "");
+        	
         	item.setPartnum( (resultado[23] != null) ? resultado[23].toString().trim() : "");
         	item.setItmorg((resultado[24] != null) ? resultado[24].toString().trim() : "");
         	item.setIttyp( (resultado[25] != null) ? resultado[25].toString().trim() : "");
@@ -258,6 +274,8 @@ public class MatriprdService {
         	pend.setCdpend( (resultado[36] != null) ? resultado[36].toString().trim() : "");
         	pend.setObspend( (resultado[37] != null) ? resultado[37].toString().trim() : "");
         	pend.setStatus( (resultado[38] != null) ? resultado[38].toString().trim() : "");
+        	pend.setPartnum((resultado[50] != null) ? resultado[50].toString().trim() : "");
+        	pend.setIdmatriz((resultado[51] != null) ? resultado[51].toString().trim() : "");
         	
         	doc.setTpdoc((resultado[39] != null) ? resultado[39].toString().trim() : "");
         	doc.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
@@ -269,36 +287,62 @@ public class MatriprdService {
         	doc.setNumdocnew((resultado[46] != null) ? resultado[46].toString().trim() : "");
         	doc.setSerdocnew((resultado[47] != null) ? resultado[47].toString().trim() : "");
         	doc.setEmidocnew((resultado[48] != null) ? resultado[48].toString().trim() : "");
-        	listaItem.add(item);
+        	doc.setPartnum((resultado[52] != null) ? resultado[52].toString().trim() : "");
         	
-        	if(!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getObspend().equals("") && pend.getStatus().equals(""))) {
-        		listaPend.add(pend);
+        	Boolean existeItem = Boolean.FALSE;
+        	for (ProdutoPendenciaResponseList coresSimplesResponse : listaItemSet) {
+				if(coresSimplesResponse.getPartnum().equals(item.getPartnum())) {
+					existeItem = Boolean.TRUE;
+				}
+			}
+        	if(!existeItem) {
+        		listaItemSet.add(item);
         	}
         	
-        	if(!(doc.getTpdoc().equals("") && doc.getSerdoc().equals("") && doc.getNumdoc().equals("") && doc.getEmidoc().equals("") 
-        			&& doc.getSerdoc2().equals("") && doc.getNumdoc2().equals("") && doc.getEmidoc2().equals("") 
-        			&& doc.getSerdocnew().equals("") && doc.getNumdocnew().equals("") && doc.getEmidocnew().equals(""))) {
-        		listaDoc.add(doc);
+        	
+        	Boolean existeCor = Boolean.FALSE;
+        	for (CoresSimplesResponse coresSimplesResponse : coresSet) {
+				if(coresSimplesResponse.getPartnumpd().equals(cor.getPartnumpd())) {
+					existeCor = Boolean.TRUE;
+				}
+			}
+        	if(!existeCor) {
+        		coresSet.add(cor);
         	}
         	
-        	if(!(cor.getCodcor().equals("") && cor.getPartdesc().equals("") && cor.getPartnumpd().equals("") && cor.getPriocor().equals("") && cor.getUnmed().equals(""))) {
-        		listaCor.add(cor);
+        	
+        	Boolean existePend = Boolean.FALSE;
+        	for (PendenciaResponse coresSimplesResponse : listaPendSet) {
+				if(coresSimplesResponse.getPartnum().equals(pend.getPartnum())) {
+					existeCor = Boolean.TRUE;
+				}
+			}
+        	if(!existePend) {
+        		listaPendSet.add(pend);
         	}
         	
-            produtos.add(resp);
+        	Boolean existeDoc = Boolean.FALSE;
+        	for (DocumentosResponse coresSimplesResponse : listaDocSet) {
+				if(coresSimplesResponse.getPartnum().equals(doc.getPartnum())) {
+					existeDoc = Boolean.TRUE;
+				}
+			}
+        	if(!existeDoc) {
+        		listaDocSet.add(doc);
+        	}
         }
-        
-        listaCor = removerDuplicatas(listaCor);
-        listaItem = removerDuplicatas(listaItem);
-        listaPend = removerDuplicatas(listaPend);
-        listaDoc = removerDuplicatas(listaDoc);
-  
-        
-        resp.setItens(listaItem);
-        resp.setPendencias(listaPend);
-        resp.setDocumentos(listaDoc);
-        resp.setCores(listaCor);
-        
+        List<CoresSimplesResponse> listaCor = new ArrayList<>(coresSet);
+        List<ProdutoPendenciaResponseList> listaItem = new ArrayList<>(listaItemSet);
+        List<PendenciaResponse> listaPend = new ArrayList<>(listaPendSet);
+        List<DocumentosResponse> listaDoc = new ArrayList<>(listaDocSet);
+        resp.setItens(removerDuplicatas(listaItem));
+        resp.setPendencias(removerDuplicatas(listaPend));
+        resp.setDocumentos(removerDuplicatas(listaDoc));
+        resp.setCores(removerDuplicatas(listaCor));
+       
+        for (PendenciaResponse pendencia : resp.getPendencias()) {
+			pendencia = complementaPendencia(pendencia);
+		}
 		return resp;
 	}
 	

@@ -1,7 +1,8 @@
 package com.dcr.api.response;
 
 public class CoresSimplesResponse {
-	 private Object partnumpd;
+		private Object idmatriz;
+	 	private Object partnumpd;
 	    private Object codcor;
 	    private Object partdesc;
 	    private Object unmed;
@@ -37,5 +38,12 @@ public class CoresSimplesResponse {
 		public void setPriocor(Object priocor) {
 			this.priocor = priocor;
 		}
+		public Object getIdmatriz() {
+			return idmatriz;
+		}
+		public void setIdmatriz(Object idmatriz) {
+			this.idmatriz = idmatriz;
+		}
+		
 		
 }

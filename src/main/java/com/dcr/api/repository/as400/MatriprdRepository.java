@@ -42,7 +42,7 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 	  		+ "		itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,\r\n"
 	  		+ "		ins.PARTNUM, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC,\r\n"
 	  		+ "		pend.NUMPEND, pend.CDPEND, pend.OBSPEND, pend.STATUS, \r\n"
-	  		+ "		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.NUMDOCNEW, doc.SERDOCNEW, doc.EMIDOCNEW \r\n"
+	  		+ "		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.NUMDOCNEW, doc.SERDOCNEW, doc.EMIDOCNEW, itm.IDMATRIZ, pend.PARTNUM, pend.IDMATRIZ, DOC.PARTNUM  \r\n"
 	  		+ "FROM HD4DCDHH.MATRIPRD AS PRD\r\n"
 	  		+ "LEFT JOIN HD4DCDHH.MATRIITM AS ITM ON PRD.IDMATRIZ = ITM.IDMATRIZ \r\n"
 	  		+ "LEFT JOIN HD4DCDHH.MATRIINS AS INS ON ITM.IDMATRIZ = INS.IDMATRIZ \r\n"
@@ -72,4 +72,9 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		  @Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDPROD WHERE IDMATRIZ = :idmatriz AND STATUS = 0", nativeQuery = true)
 		  Integer countPendencias(String idmatriz);
 		  
+		  @Query(value = "SELECT NUMDOC, SERDOC FROM HD4DCDHH.MATRIDOC WHERE IDMATRIZ = :idmatriz AND PARTNUM = :partnum AND TPDOC = :tpdoc", nativeQuery = true)
+		  List<Object[]> complementaPendenciaDoc(String idmatriz, String partnum, String tpdoc);
+		  
+		  @Query(value = "SELECT DESCPEND FROM HD4DCDHH.CADTPPEND WHERE CDPEND = :cdpend", nativeQuery = true)
+		  List<Object[]> complementaPendenciaDesc(String cdpend);
 }
