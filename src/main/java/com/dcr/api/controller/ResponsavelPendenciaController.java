@@ -1,5 +1,6 @@
 package com.dcr.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -165,21 +166,27 @@ public class ResponsavelPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody PendrespDTO dto, HttpServletRequest request) {
-	
+	public ResponseEntity<Object> create(@RequestBody List<PendrespDTO> listaDto, HttpServletRequest request) {
+		List<PendrespDTO> listaErro = new ArrayList<>();
 		try {
-			PendenciaKey key = new PendenciaKey();
-			key.setCdpend(dto.cdpend());
-			key.setCdresp(dto.cdresp());
-			
-			Optional<Pendresp> lista = service.getByID(key);
-	        if (!lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			for (PendrespDTO dto : listaDto) {
+				PendenciaKey key = new PendenciaKey();
+				key.setCdpend(dto.cdpend());
+				key.setCdresp(dto.cdresp());
+				
+				Optional<Pendresp> lista = service.getByID(key);
+		        if (!lista.isEmpty()) {
+		            listaErro.add(dto);
+		        }else {
+		        	service.create(dto, request);
+		        }
+			}
+			if(listaErro.size() > 0) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Essa associação de Responsável e pendência já existe!");
-	        }
-		
-	        service.create(dto, request);
+	                    .body(listaErro);
+			}
+			
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
 		            .body("OK");
