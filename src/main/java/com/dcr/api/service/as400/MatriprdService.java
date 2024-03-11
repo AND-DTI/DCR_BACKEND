@@ -229,16 +229,16 @@ public class MatriprdService {
 		List<ProdutoPendenciaSimplesResponse> produtos = new ArrayList<>();
 		ProdutoPendenciaSimplesResponse resp = new ProdutoPendenciaSimplesResponse();
 		Set<ProdutoPendenciaResponseList> listaItemSet = new HashSet<>();
-		Set<PendenciaResponse> listaPendSet = new HashSet<>();
+		List<PendenciaResponse> listaPendSet = new ArrayList();
 		Set<DocumentosResponse> listaDocSet = new HashSet<>();
 		Set<CoresSimplesResponse> coresSet = new HashSet<>();
-		PendenciaResponse pend = new PendenciaResponse();
+		//PendenciaResponse pend = new PendenciaResponse();
 		
         for (Object[] resultado : resultados) {
         	ProdutoPendenciaResponseList item = new ProdutoPendenciaResponseList();
         	DocumentosResponse doc = new DocumentosResponse();
         	CoresSimplesResponse cor = new CoresSimplesResponse();
-        	
+        	PendenciaResponse pend = new PendenciaResponse();
         	resp.setIdMatriz( (resultado[0] != null) ? resultado[0].toString().trim() : "" );
         	resp.setProduto(  (resultado[1] != null) ? resultado[1].toString().trim() : "");
         	resp.setModelo(  (resultado[2] != null) ? resultado[2].toString().trim() : "");
@@ -321,8 +321,8 @@ public class MatriprdService {
         	
         	Boolean existePend = Boolean.FALSE;
         	for (PendenciaResponse coresSimplesResponse : listaPendSet) {
-				if(coresSimplesResponse.getPartnum().equals(pend.getPartnum())) {
-					existeCor = Boolean.TRUE;
+				if(coresSimplesResponse.getNumpend().equals(pend.getNumpend())) {
+					existePend = Boolean.TRUE;
 				}
 			}
         	if(!existePend) {
@@ -344,7 +344,7 @@ public class MatriprdService {
         List<PendenciaResponse> listaPend = new ArrayList<>(listaPendSet);
         List<DocumentosResponse> listaDoc = new ArrayList<>(listaDocSet);
         resp.setItens(removerDuplicatas(listaItem));
-        resp.setPendencias(removerDuplicatas(listaPend));
+        resp.setPendencias(listaPend);
         resp.setDocumentos(removerDuplicatas(listaDoc));
         resp.setCores(removerDuplicatas(listaCor));
        
