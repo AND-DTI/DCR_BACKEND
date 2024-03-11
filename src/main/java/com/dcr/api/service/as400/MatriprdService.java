@@ -209,15 +209,15 @@ public class MatriprdService {
 		if(!pend.getPartnum().toString().startsWith("00000")) {
 			for (ProdutoPendenciaResponseList item : resp.getItens()) {
 				if(item.getPartnum().equals(pend.getPartnum())) {
-					pend.setPartsugest(item.getPartsugest());
-					pend.setPartsugdsc(item.getPartsugdsc());
+					pend.setPartsugest(item.getPartsugest().toString().trim());
+					pend.setPartsugdsc(item.getPartsugdsc().toString().trim());
 					break;
 				}
 			}
 			
 			for (DocumentosResponse doc : resp.getDocumentos()) {
 				if(doc.getPartnum().equals(pend.getPartnum())) {
-					pend.setNumdoc2(doc.getNumdoc2());
+					pend.setNumdoc2(doc.getNumdoc2().toString().trim());
 					break;
 				}
 			}
@@ -226,8 +226,8 @@ public class MatriprdService {
 		
 		try {
 			List<Object[]> resultadosDoc = repository.complementaPendenciaDoc(pend.getIdmatriz().toString(), pend.getPartnum().toString(), pend.getCdpend().toString());
-			pend.setNumdoc(resultadosDoc.get(0)[0]);
-			pend.setSerdoc(resultadosDoc.get(0)[1]);
+			pend.setNumdoc(resultadosDoc.get(0)[0].toString().trim());
+			pend.setSerdoc(resultadosDoc.get(0)[1].toString().trim());
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -235,7 +235,7 @@ public class MatriprdService {
 		
 		List<Object[]> resultadosDesc = repository.complementaPendenciaDesc(pend.getCdpend().toString());
 		if(resultadosDesc.size() > 0) {
-			pend.setDescpend(resultadosDesc.get(0)[0]);
+			pend.setDescpend(resultadosDesc.get(0)[0].toString().trim());
 		}
 		
 		
