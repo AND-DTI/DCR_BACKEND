@@ -1,10 +1,12 @@
 package com.dcr.api.model.as400;
 
+import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,19 +21,8 @@ import jakarta.persistence.Table;
 @ApiModel
 public class Matriitm {
 
-	@Column(columnDefinition = "int", unique = true)
-	@Id
-	private Integer idmatriz;
-	
-	@TamanhoMaximo(25)
-	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(25)")
-	private String partnumpd;
-	
-	@TamanhoMaximo(10)
-	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(10)")
-	private String modelo;
+	@EmbeddedId
+	private MatriitmKey key;
 	
 	@TamanhoMaximo(4)
 	@TamanhoMinimo(1)
@@ -67,30 +58,6 @@ public class Matriitm {
 	
 	@Column(columnDefinition = "char(8)")
     private String itaudhr;
-
-	public Integer getIdmatriz() {
-		return idmatriz;
-	}
-
-	public void setIdmatriz(Integer idmatriz) {
-		this.idmatriz = idmatriz;
-	}
-
-	public String getPartnumpd() {
-		return partnumpd;
-	}
-
-	public void setPartnumpd(String partnumpd) {
-		this.partnumpd = partnumpd;
-	}
-
-	public String getModelo() {
-		return modelo;
-	}
-
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
-	}
 
 	public String getCodcor() {
 		return codcor;
@@ -162,5 +129,13 @@ public class Matriitm {
 
 	public void setPriocor(Integer priocor) {
 		this.priocor = priocor;
+	}
+
+	public MatriitmKey getKey() {
+		return key;
+	}
+
+	public void setKey(MatriitmKey key) {
+		this.key = key;
 	}
 }

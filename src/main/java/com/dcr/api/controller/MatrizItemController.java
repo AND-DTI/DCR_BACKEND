@@ -20,6 +20,7 @@ import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
+import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.service.as400.MatriitmService;
 import com.dcr.api.service.as400.MatriprdService;
 import com.dcr.api.utils.Auxiliar;
@@ -73,11 +74,14 @@ public class MatrizItemController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz) {
+	public ResponseEntity<Object> getById(@RequestBody MatriitmDTO dto) {
 	
 		try {
-
-			Optional<Matriitm> lista = service.getByID(idmatriz);
+			MatriitmKey key = new MatriitmKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setModelo(dto.modelo());
+			key.setPartnumpd(dto.partnumpd());
+			Optional<Matriitm> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -127,8 +131,11 @@ public class MatrizItemController {
 	public ResponseEntity<Object> update(@RequestBody MatriitmDTO dto, HttpServletRequest request) {
 	
 		try {
-	
-			Optional<Matriitm> lista = service.getByID(dto.idmatriz());
+			MatriitmKey key = new MatriitmKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setModelo(dto.modelo());
+			key.setPartnumpd(dto.partnumpd());
+			Optional<Matriitm> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -154,10 +161,13 @@ public class MatrizItemController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz) {
+	public ResponseEntity<Object> delete(@RequestBody MatriitmDTO dto) {
 		try {
-			
-			Optional<Matriitm> lista = service.getByID(idmatriz);
+			MatriitmKey key = new MatriitmKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setModelo(dto.modelo());
+			key.setPartnumpd(dto.partnumpd());
+			Optional<Matriitm> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")

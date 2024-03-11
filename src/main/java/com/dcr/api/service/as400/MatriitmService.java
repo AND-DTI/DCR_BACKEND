@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.dto.MatriitmDTO;
+import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.repository.as400.MatriitmRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,7 +28,7 @@ public class MatriitmService {
 		return repository.findAll();
 	}
 	
-	public Optional<Matriitm> getByID(Integer id) {
+	public Optional<Matriitm> getByID(MatriitmKey id) {
 		
 		return repository.findById(id);
 	}
@@ -39,12 +40,14 @@ public class MatriitmService {
 	
 	public Matriitm create(MatriitmDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		Matriitm matriz = new Matriitm();
+		MatriitmKey key = new MatriitmKey();
+		key.setIdmatriz(dto.idmatriz());
+		key.setModelo(dto.modelo());
+		key.setPartnumpd(dto.partnumpd());
 		
-		matriz.setIdmatriz(dto.idmatriz());
+		matriz.setKey(key);
 		matriz.setCodcor(dto.codcor());
-		matriz.setModelo(dto.modelo());
 		matriz.setPartdesc(dto.partdesc());
-		matriz.setPartnumpd(dto.partnumpd());
 		matriz.setUnmed(dto.unmed());
 		matriz.setPriocor(dto.priocor());
 		
@@ -55,9 +58,7 @@ public class MatriitmService {
 	public Matriitm update(Matriitm matriz,  MatriitmDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		matriz.setCodcor(dto.codcor());
-		matriz.setModelo(dto.modelo());
 		matriz.setPartdesc(dto.partdesc());
-		matriz.setPartnumpd(dto.partnumpd());
 		matriz.setUnmed(dto.unmed());
 		matriz.setPriocor(dto.priocor());
 		Auxiliar.preencheAuditoria(matriz, request);

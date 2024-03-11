@@ -22,6 +22,7 @@ import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
+import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.service.as400.MatriitmService;
@@ -163,7 +164,12 @@ public class MatrizProdutoController {
 	
 		try {
 			for (MatriitmDTO cor : dto.itens()) {
-				Optional<Matriitm> corOg = corService.getByID(cor.idmatriz());
+				MatriitmKey key = new MatriitmKey();
+				key.setIdmatriz(cor.idmatriz());
+				key.setModelo(cor.modelo());
+				key.setPartnumpd(cor.partnumpd());
+				
+				Optional<Matriitm> corOg = corService.getByID(key);
 				if(!corOg.isEmpty()) {
 					corService.update(corOg.get(), cor, request);
 				}
