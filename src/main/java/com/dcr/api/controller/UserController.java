@@ -238,15 +238,7 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body(null);
         } else {
-//        	List<User_Role> roles = new ArrayList();
-//        	for (User_Role role : users.get(0).getRoles()) {
-//        		for (User_Role roleNew : user.getRoles()) {
-//    				if(!role.getKey().getRoleid().equals(role.getKey().getRoleid())) {
-//    					roles.add(roleNew);
-//    				}
-//    			}
-//			}
-//        	user.setRoles(roles);
+
         	if(user.changePassword().toLowerCase().trim().equals("s")) {
         		users.get(0).setPassword(encoder.encode(user.password()));
         	}
@@ -258,6 +250,7 @@ public class UserController {
             	users.get(0).setTpfunc(user.tpfunc());
             	users.get(0).setIdarea(user.idarea());
             	userALT = userService.save(users.get(0), request);
+            	userRoleService.update(user.roles(), user.username(), request);
             } catch (Exception e) {
             		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")

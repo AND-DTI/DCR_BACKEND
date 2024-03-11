@@ -43,4 +43,34 @@ public class UserRoleService {
 		        }
 		    }
 	}
+	
+	public void update(List<String> roles, String user, HttpServletRequest request) throws Exception {
+		List<User_Role> rolesUser = repository.findByUsername(user);
+		
+		for (User_Role user_Role : rolesUser) {
+			if(!roles.contains(user_Role.getRolename().toString())) {
+				repository.delete(user_Role);
+			}
+			
+		}
+		for (String role : roles) {
+		        Accroles accrole = roleRepository.consultaByRoleName(role);
+		        
+		        try {
+		            User_Role userRole = new User_Role();
+		            User_RoleKey key = new User_RoleKey();
+		            key.setRoleid(accrole.getKey().getRoleid());
+		            key.setUsername(user);
+		            userRole.setKey(key);
+		            userRole.setRolename(accrole.getRolename().trim());
+
+		            Auxiliar.preencheAuditoria(userRole, request);
+		            userRole.setDtacad(Auxiliar.getDtFormated());
+		            
+		            repository.save(userRole);
+		        } catch (Exception e) {
+		            throw new Exception();
+		        }
+		    }
+	}
 }

@@ -64,7 +64,7 @@ public class User_Role implements GrantedAuthority {
     }
 
 	public String getRolename() {
-		return rolename;
+		return trimNull(this.rolename);
 	}
 
 	public void setRolename(String rolename) {
