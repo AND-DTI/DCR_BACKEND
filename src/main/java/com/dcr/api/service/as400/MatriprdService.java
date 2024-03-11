@@ -204,7 +204,26 @@ public class MatriprdService {
 		return listaResponse;
 	}
 	
-	public PendenciaResponse complementaPendencia(PendenciaResponse pend) {
+	public PendenciaResponse complementaPendencia(PendenciaResponse pend, ProdutoPendenciaSimplesResponse resp) {
+		
+		if(!pend.getPartnum().toString().startsWith("00000")) {
+			for (ProdutoPendenciaResponseList item : resp.getItens()) {
+				if(item.getPartnum().equals(pend.getPartnum())) {
+					pend.setPartsugest(item.getPartsugest());
+					pend.setPartsugdsc(item.getPartsugdsc());
+					break;
+				}
+			}
+			
+			for (DocumentosResponse doc : resp.getDocumentos()) {
+				if(doc.getPartnum().equals(pend.getPartnum())) {
+					pend.setNumdoc2(doc.getNumdoc2());
+					break;
+				}
+			}
+		}
+		
+		
 		try {
 			List<Object[]> resultadosDoc = repository.complementaPendenciaDoc(pend.getIdmatriz().toString(), pend.getPartnum().toString(), pend.getCdpend().toString());
 			pend.setNumdoc(resultadosDoc.get(0)[0]);
@@ -349,7 +368,7 @@ public class MatriprdService {
         resp.setCores(removerDuplicatas(listaCor));
        
         for (PendenciaResponse pendencia : resp.getPendencias()) {
-			pendencia = complementaPendencia(pendencia);
+			pendencia = complementaPendencia(pendencia, resp);
 		}
 		return resp;
 	}

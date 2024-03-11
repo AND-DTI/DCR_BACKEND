@@ -10,6 +10,11 @@ public class PendenciaResponse {
     private Object numdoc;
     private Object serdoc;
     private Object descpend;
+    
+    private Object partsugest;
+    private Object partsugdsc;
+    
+    private Object numdoc2;
 	public Object getNumpend() {
 		return numpend;
 	}
@@ -63,5 +68,23 @@ public class PendenciaResponse {
 	}
 	public void setDescpend(Object descpend) {
 		this.descpend = descpend;
+	}
+	public Object getPartsugest() {
+		return partsugest;
+	}
+	public void setPartsugest(Object partsugest) {
+		this.partsugest = partsugest;
+	}
+	public Object getPartsugdsc() {
+		return partsugdsc;
+	}
+	public void setPartsugdsc(Object partsugdsc) {
+		this.partsugdsc = partsugdsc;
+	}
+	public Object getNumdoc2() {
+		return numdoc2;
+	}
+	public void setNumdoc2(Object numdoc2) {
+		this.numdoc2 = numdoc2;
 	}
 }
