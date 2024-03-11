@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
+import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.repository.as400.MatriprdRepository;
 import com.dcr.api.response.CoresResponse;
@@ -569,7 +570,6 @@ public class MatriprdService {
 		matriz.setDesccom(dto.desccom());
 		matriz.setDescrfb(dto.descrfb());
 		matriz.setDtneci(dto.dtneci());
-		matriz.setIdmatriz(dto.idmatriz());
 		matriz.setModelo(dto.modelo());
 		matriz.setOrigprd(dto.origprd());
 		matriz.setPrevfat(dto.prevfat());
@@ -633,7 +633,7 @@ public class MatriprdService {
 		return repository.save(matriz);
 	}
 	
-public Matriprd updateComCor(Matriprd matriz,  MatriprdComCorDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+public Matriprd updateComCor(Matriprd matriz,  MatriprdComCorIdDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		matriz.setAnomdl(dto.anomdl());
 		matriz.setDesccom(dto.desccom());

@@ -21,6 +21,7 @@ import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
+import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.response.MatriprdResponse;
@@ -160,7 +161,7 @@ public class MatrizProdutoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> updateComCor(@RequestBody MatriprdComCorDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> updateComCor(@RequestBody MatriprdComCorIdDTO dto, HttpServletRequest request) {
 	
 		try {
 			for (MatriitmDTO cor : dto.itens()) {
