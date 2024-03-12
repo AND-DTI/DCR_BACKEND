@@ -312,10 +312,25 @@ public class MatriprdService {
         	doc.setNumdoc2((resultado[43] != null) ? resultado[43].toString().trim() : "");
         	doc.setSerdoc2((resultado[44] != null) ? resultado[44].toString().trim() : "");
         	doc.setEmidoc2((resultado[45] != null) ? resultado[45].toString().trim() : "");
-        	doc.setNumdocnew((resultado[46] != null) ? resultado[46].toString().trim() : "");
-        	doc.setSerdocnew((resultado[47] != null) ? resultado[47].toString().trim() : "");
-        	doc.setEmidocnew((resultado[48] != null) ? resultado[48].toString().trim() : "");
+        	doc.setNumdoc3((resultado[46] != null) ? resultado[46].toString().trim() : "");
+        	doc.setSerdoc3((resultado[47] != null) ? resultado[47].toString().trim() : "");
+        	doc.setEmidoc3((resultado[48] != null) ? resultado[48].toString().trim() : "");
         	doc.setPartnum((resultado[52] != null) ? resultado[52].toString().trim() : "");
+        	
+        	doc.setCnpjfor((resultado[53] != null) ? resultado[53].toString().trim() : "");
+        	doc.setIe((resultado[54] != null) ? resultado[54].toString().trim() : "");
+        	doc.setAdicao((resultado[55] != null) ? resultado[55].toString().trim() : "");
+        	doc.setItadicao((resultado[56] != null) ? resultado[56].toString().trim() : "");
+        	
+         	doc.setCnpjfor2((resultado[57] != null) ? resultado[57].toString().trim() : "");
+        	doc.setIe2((resultado[58] != null) ? resultado[58].toString().trim() : "");
+        	doc.setAdicao2((resultado[59] != null) ? resultado[59].toString().trim() : "");
+        	doc.setItadicao2((resultado[60] != null) ? resultado[60].toString().trim() : "");
+        	
+         	doc.setCnpjfor3((resultado[61] != null) ? resultado[61].toString().trim() : "");
+        	doc.setIe3((resultado[62] != null) ? resultado[62].toString().trim() : "");
+        	doc.setAdicao3((resultado[63] != null) ? resultado[63].toString().trim() : "");
+        	doc.setItadicao3((resultado[64] != null) ? resultado[64].toString().trim() : "");
         	
         	Boolean existeItem = Boolean.FALSE;
         	for (ProdutoPendenciaResponseList coresSimplesResponse : listaItemSet) {
@@ -446,18 +461,33 @@ public class MatriprdService {
         	doc.setNumdoc2((resultado[43] != null) ? resultado[43].toString().trim() : "");
         	doc.setSerdoc2((resultado[44] != null) ? resultado[44].toString().trim() : "");
         	doc.setEmidoc2((resultado[45] != null) ? resultado[45].toString().trim() : "");
-        	doc.setNumdocnew((resultado[46] != null) ? resultado[46].toString().trim() : "");
-        	doc.setSerdocnew((resultado[47] != null) ? resultado[47].toString().trim() : "");
-        	doc.setEmidocnew((resultado[48] != null) ? resultado[48].toString().trim() : "");
+        	doc.setNumdoc3((resultado[46] != null) ? resultado[46].toString().trim() : "");
+        	doc.setSerdoc3((resultado[47] != null) ? resultado[47].toString().trim() : "");
+        	doc.setEmidoc3((resultado[48] != null) ? resultado[48].toString().trim() : "");
         	doc.setPartnum((resultado[57] != null) ? resultado[57].toString().trim() : "");
         	
+        	
+        	doc.setCnpjfor((resultado[58] != null) ? resultado[58].toString().trim() : "");
+        	doc.setIe((resultado[59] != null) ? resultado[59].toString().trim() : "");
+        	doc.setAdicao((resultado[60] != null) ? resultado[60].toString().trim() : "");
+        	doc.setItadicao((resultado[61] != null) ? resultado[61].toString().trim() : "");
+        	
+         	doc.setCnpjfor2((resultado[62] != null) ? resultado[62].toString().trim() : "");
+        	doc.setIe2((resultado[63] != null) ? resultado[63].toString().trim() : "");
+        	doc.setAdicao2((resultado[64] != null) ? resultado[64].toString().trim() : "");
+        	doc.setItadicao2((resultado[65] != null) ? resultado[65].toString().trim() : "");
+        	
+         	doc.setCnpjfor3((resultado[66] != null) ? resultado[66].toString().trim() : "");
+        	doc.setIe3((resultado[67] != null) ? resultado[67].toString().trim() : "");
+        	doc.setAdicao3((resultado[68] != null) ? resultado[68].toString().trim() : "");
+        	doc.setItadicao3((resultado[69] != null) ? resultado[69].toString().trim() : "");
         	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getObspend().equals("") && pend.getStatus().equals(""))) {
                 listaPendSet.add(pend); // Adiciona à lista apenas se não estiver duplicado
             }
         	
         	if (!(doc.getTpdoc().equals("") && doc.getSerdoc().equals("") && doc.getNumdoc().equals("") && doc.getEmidoc().equals("") 
                     && doc.getSerdoc2().equals("") && doc.getNumdoc2().equals("") && doc.getEmidoc2().equals("") 
-                    && doc.getSerdocnew().equals("") && doc.getNumdocnew().equals("") && doc.getEmidocnew().equals(""))) {
+                    && doc.getSerdoc3().equals("") && doc.getNumdoc3().equals("") && doc.getEmidoc3().equals(""))) {
                 listaDocSet.add(doc); // Adiciona à lista apenas se não estiver duplicado
             }
         	
