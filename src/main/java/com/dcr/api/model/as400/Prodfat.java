@@ -33,15 +33,20 @@ public class Prodfat {
 	@Column(columnDefinition = "int")
 	private Integer anomdl;
 	
-	@TamanhoMaximo(150)
-	@TamanhoMinimo(4)
-	@Column(columnDefinition = "int")
-	private Integer frstanofa;
+	@TamanhoMaximo(3)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(3)")
+	private String uncome;
 	
 	@TamanhoMaximo(150)
 	@TamanhoMinimo(4)
 	@Column(columnDefinition = "int")
-	private Integer lastanofa;
+	private Integer frstanofab;
+	
+	@TamanhoMaximo(150)
+	@TamanhoMinimo(4)
+	@Column(columnDefinition = "int")
+	private Integer lastanofab;
 	
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;
@@ -90,22 +95,6 @@ public class Prodfat {
 		this.anomdl = anomdl;
 	}
 
-	public Integer getFrstanofa() {
-		return frstanofa;
-	}
-
-	public void setFrstanofa(Integer frstanofa) {
-		this.frstanofa = frstanofa;
-	}
-
-	public Integer getLastanofa() {
-		return lastanofa;
-	}
-
-	public void setLastanofa(Integer lastanofa) {
-		this.lastanofa = lastanofa;
-	}
-
 	public String getItaudsys() {
 		return itaudsys;
 	}
@@ -144,5 +133,29 @@ public class Prodfat {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public String getUncome() {
+		return uncome;
+	}
+
+	public void setUncome(String uncome) {
+		this.uncome = uncome;
+	}
+
+	public Integer getFrstanofab() {
+		return frstanofab;
+	}
+
+	public void setFrstanofab(Integer frstanofab) {
+		this.frstanofab = frstanofab;
+	}
+
+	public Integer getLastanofab() {
+		return lastanofab;
+	}
+
+	public void setLastanofab(Integer lastanofab) {
+		this.lastanofab = lastanofab;
 	}
 }

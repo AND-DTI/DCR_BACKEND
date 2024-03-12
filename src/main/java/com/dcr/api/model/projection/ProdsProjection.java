@@ -16,5 +16,5 @@ public interface ProdsProjection {
     String getuEngNo();
     String getCodCor();
     String getCorPt();
-	
+	String getUncome();
 }

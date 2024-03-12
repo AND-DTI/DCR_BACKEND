@@ -7,6 +7,7 @@ public class Nivel2Projection {
 	private Object uEngNo;
 	private Object codCor;
 	private Object corPt;
+	private Object uncome;
 	public Object getPartnumPd() {
 		return partnumPd;
 	}
@@ -42,6 +43,12 @@ public class Nivel2Projection {
 	}
 	public void setCorPt(Object corPt) {
 		this.corPt = corPt;
+	}
+	public Object getUncome() {
+		return uncome;
+	}
+	public void setUncome(Object uncome) {
+		this.uncome = uncome;
 	}
 	
 	

@@ -107,9 +107,10 @@ public class CadppbService {
 		            nvl2.setuEngNo((result.getuEngNo() != null) ? result.getuEngNo().trim() : "");
 		            nvl2.setCodCor((result.getCodCor() != null) ? result.getCodCor().trim() : "");
 		            nvl2.setCorPt((result.getCorPt() != null) ? result.getCorPt().trim() : "");
+		            nvl2.setUncome((result.getUncome() != null) ? result.getUncome().trim() : "");
 		            Boolean existeCor = Boolean.FALSE;
 		            for (Nivel2Projection prod : nvl1.getItens()) {
-		            	if(prod.getCodCor().toString().trim().equals(result.getCodCor().trim())) {
+		            	if(prod.getCodCor().equals(result.getCodCor())) {
 		            		existeCor = Boolean.TRUE;
 		            	}
 		            }
