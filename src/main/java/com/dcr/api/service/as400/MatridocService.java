@@ -44,18 +44,33 @@ public class MatridocService {
 		MatridocKey key = new MatridocKey();
 		key.setIdmatriz(dto.idmatriz());
 		key.setPartnum(dto.partnum());
+		key.setPartnumpd(dto.partnumpd());
 		key.setTpdoc(dto.tpdoc());
 		matriz.setKey(key);
 
 		matriz.setEmidoc(dto.emidoc());
-		matriz.setEmidoc2(dto.emidoc2());
-		matriz.setEmidocnew(dto.emidocnew());
 		matriz.setNumdoc(dto.numdoc());
-		matriz.setNumdoc2(dto.numdoc2());
-		matriz.setNumdocnew(dto.numdocnew());
 		matriz.setSerdoc(dto.serdoc());
+		matriz.setCnpjfor(dto.cnpjfor());
+		matriz.setIe(dto.ie());
+		matriz.setAdicao(dto.adicao());
+		matriz.setItadicao(dto.itadicao());
+		
+		matriz.setEmidoc2(dto.emidoc2());
+		matriz.setNumdoc2(dto.numdoc2());
 		matriz.setSerdoc2(dto.serdoc2());
-		matriz.setSerdocnew(dto.serdocnew());
+		matriz.setCnpjfor2(dto.cnpjfor2());
+		matriz.setIe2(dto.ie2());
+		matriz.setAdicao2(dto.adicao2());
+		matriz.setItadicao2(dto.itadicao2());
+		
+		matriz.setEmidoc3(dto.emidoc3());
+		matriz.setNumdoc3(dto.numdoc3());
+		matriz.setSerdoc3(dto.serdoc3());
+		matriz.setCnpjfor3(dto.cnpjfor3());
+		matriz.setIe3(dto.ie3());
+		matriz.setAdicao3(dto.adicao3());
+		matriz.setItadicao3(dto.itadicao3());
 		
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
@@ -64,15 +79,28 @@ public class MatridocService {
 	public Matridoc update(Matridoc matriz,  MatridocDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		matriz.setEmidoc(dto.emidoc());
-		matriz.setEmidoc2(dto.emidoc2());
-		matriz.setEmidocnew(dto.emidocnew());
 		matriz.setNumdoc(dto.numdoc());
-		matriz.setNumdoc2(dto.numdoc2());
-		matriz.setNumdocnew(dto.numdocnew());
 		matriz.setSerdoc(dto.serdoc());
-		matriz.setSerdoc2(dto.serdoc2());
-		matriz.setSerdocnew(dto.serdocnew());
+		matriz.setCnpjfor(dto.cnpjfor());
+		matriz.setIe(dto.ie());
+		matriz.setAdicao(dto.adicao());
+		matriz.setItadicao(dto.itadicao());
 		
+		matriz.setEmidoc2(dto.emidoc2());
+		matriz.setNumdoc2(dto.numdoc2());
+		matriz.setSerdoc2(dto.serdoc2());
+		matriz.setCnpjfor2(dto.cnpjfor2());
+		matriz.setIe2(dto.ie2());
+		matriz.setAdicao2(dto.adicao2());
+		matriz.setItadicao2(dto.itadicao2());
+		
+		matriz.setEmidoc3(dto.emidoc3());
+		matriz.setNumdoc3(dto.numdoc3());
+		matriz.setSerdoc3(dto.serdoc3());
+		matriz.setCnpjfor3(dto.cnpjfor3());
+		matriz.setIe3(dto.ie3());
+		matriz.setAdicao3(dto.adicao3());
+		matriz.setItadicao3(dto.itadicao3());
 		
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);

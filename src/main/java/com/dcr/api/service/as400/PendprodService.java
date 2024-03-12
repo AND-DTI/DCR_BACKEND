@@ -51,10 +51,11 @@ public class PendprodService {
 		key.setIdmatriz(dto.idmatriz());
 		key.setPartnum(dto.partnum());
 		key.setNumpend(dto.numpend());
+		key.setPartnumpd(dto.partnumpd());
 		pend.setKey(key);
 
 		pend.setCdpend(dto.cdpend());
-		pend.setObspend(dto.obspend());
+		pend.setObsresol(dto.obsresol());
 		pend.setStatus(dto.status());
 		
 		Auxiliar.preencheAuditoria(pend, request);
@@ -64,7 +65,7 @@ public class PendprodService {
 	public Pendprod update(Pendprod pend,  PendprodDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		pend.setCdpend(dto.cdpend());
-		pend.setObspend(dto.obspend());
+		pend.setObsresol(dto.obsresol());
 		pend.setStatus(dto.status());
 		
 		

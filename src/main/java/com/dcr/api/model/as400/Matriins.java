@@ -57,6 +57,25 @@ public class Matriins {
 	@Column(columnDefinition = "char(20)")
 	private String emcomp;
 	
+	@TamanhoMaximo(80)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(80)")
+	private String espec;
+	
+	@TamanhoMaximo(80)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(80)")
+	private String undcom;
+	
+	@TamanhoMaximo(8)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(8)")
+	private String ncm;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(15,6)")
+	private Double vlrunit;
+	
 	@TamanhoMaximo(25)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(25)")
@@ -234,5 +253,37 @@ public class Matriins {
 
 	public void setWeght(Double weght) {
 		this.weght = weght;
+	}
+
+	public String getEspec() {
+		return espec;
+	}
+
+	public void setEspec(String espec) {
+		this.espec = espec;
+	}
+
+	public String getUndcom() {
+		return undcom;
+	}
+
+	public void setUndcom(String undcom) {
+		this.undcom = undcom;
+	}
+
+	public String getNcm() {
+		return ncm;
+	}
+
+	public void setNcm(String ncm) {
+		this.ncm = ncm;
+	}
+
+	public Double getVlrunit() {
+		return vlrunit;
+	}
+
+	public void setVlrunit(Double vlrunit) {
+		this.vlrunit = vlrunit;
 	}
 }

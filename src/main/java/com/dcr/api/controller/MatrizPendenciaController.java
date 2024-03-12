@@ -74,12 +74,13 @@ public class MatrizPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam Integer numpend) {
+	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd, @RequestParam Integer numpend) {
 	
 		try {
 			PendprodKey key = new PendprodKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
+			key.setPartnumpd(partnumpd);
 			key.setNumpend(numpend);
 			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
@@ -109,6 +110,18 @@ public class MatrizPendenciaController {
 	public ResponseEntity<Object> create(@RequestBody PendprodDTO dto, HttpServletRequest request) {
 	
 		try {
+			PendprodKey key = new PendprodKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setPartnum(dto.partnum());
+			key.setPartnumpd(dto.partnumpd());
+			key.setNumpend(dto.numpend());
+			Optional<Pendprod> pend = service.getByID(key);
+			
+			if(pend.isPresent()) {
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        	.header("Accept", "application/json")
+				            .body("Matriz já existe!");
+			}
 	        service.create(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
@@ -135,7 +148,7 @@ public class MatrizPendenciaController {
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnum(dto.partnum());
 			key.setNumpend(dto.numpend());
-			
+			key.setPartnumpd(dto.partnumpd());
 			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -162,13 +175,14 @@ public class MatrizPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam Integer numpend) {
+	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd, @RequestParam Integer numpend) {
 		try {
 			
 			PendprodKey key = new PendprodKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
 			key.setNumpend(numpend);
+			key.setPartnumpd(partnumpd);
 			
 			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) { 

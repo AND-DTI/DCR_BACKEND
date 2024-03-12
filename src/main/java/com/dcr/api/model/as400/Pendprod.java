@@ -26,7 +26,7 @@ public class Pendprod {
 	@TamanhoMaximo(250)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(250)")
-    private String obspend;	
+    private String obsresol;	
 	
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
@@ -64,13 +64,6 @@ public class Pendprod {
 		this.cdpend = cdpend;
 	}
 
-	public String getObspend() {
-		return obspend;
-	}
-
-	public void setObspend(String obspend) {
-		this.obspend = obspend;
-	}
  
 	public String getItaudsys() {
 		return itaudsys;
@@ -118,5 +111,13 @@ public class Pendprod {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getObsresol() {
+		return obsresol;
+	}
+
+	public void setObsresol(String obsresol) {
+		this.obsresol = obsresol;
 	}
 }

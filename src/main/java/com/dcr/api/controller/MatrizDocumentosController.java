@@ -73,13 +73,14 @@ public class MatrizDocumentosController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String tpdoc) {
+	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd, @RequestParam String tpdoc) {
 	
 		try {
 			MatridocKey key = new MatridocKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
 			key.setTpdoc(tpdoc);
+			key.setPartnumpd(partnumpd);
 			Optional<Matridoc> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -108,6 +109,17 @@ public class MatrizDocumentosController {
 	public ResponseEntity<Object> create(@RequestBody MatridocDTO dto, HttpServletRequest request) {
 	
 		try {
+			MatridocKey key = new MatridocKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setPartnum(dto.partnum());
+			key.setTpdoc(dto.tpdoc());
+			key.setPartnumpd(dto.partnumpd());
+			Optional<Matridoc> lista = service.getByID(key);
+	        if (lista.isPresent()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz já existe!");
+	        }
 	        service.create(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
@@ -134,7 +146,7 @@ public class MatrizDocumentosController {
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnum(dto.partnum());
 			key.setTpdoc(dto.tpdoc());
-			
+			key.setPartnumpd(dto.partnumpd());
 			Optional<Matridoc> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -161,14 +173,14 @@ public class MatrizDocumentosController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String tpdoc) {
+	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd, @RequestParam String tpdoc) {
 		try {
 			
 			MatridocKey key = new MatridocKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
 			key.setTpdoc(tpdoc);
-			
+			key.setPartnumpd(partnumpd);
 			Optional<Matridoc> lista = service.getByID(key);
 	        if (lista.isEmpty()) { 
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
