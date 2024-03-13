@@ -44,22 +44,18 @@ public class Matriprd {
 	private String anomdl;
 	
 	@TamanhoMaximo(150)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(150)")
 	private String desccom;
 	
 	@TamanhoMaximo(80)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(80)")
 	private String descrfb;
 	
 	@TamanhoMaximo(2)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(2)")
 	private String tpprd;
 	
 	@TamanhoMaximo(1)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private Integer protot;
 	
@@ -74,7 +70,6 @@ public class Matriprd {
 	private String tpdcre;
 
 	@TamanhoMaximo(7)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(7)")
 	private String origprd;
 	

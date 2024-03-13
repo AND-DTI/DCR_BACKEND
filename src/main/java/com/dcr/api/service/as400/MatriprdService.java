@@ -599,7 +599,12 @@ public class MatriprdService {
 		matriz.setAnomdl(dto.anomdl());
 		matriz.setDesccom(dto.desccom());
 		matriz.setDescrfb(dto.descrfb());
-		matriz.setDtneci(dto.dtneci());
+		if(dto.dtneci() == null) {
+			matriz.setDtneci("");
+		}else {
+			matriz.setDtneci(dto.dtneci());
+		}
+		
 		matriz.setModelo(dto.modelo());
 		matriz.setOrigprd(dto.origprd());
 		matriz.setPrevfat(dto.prevfat());

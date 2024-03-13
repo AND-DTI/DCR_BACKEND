@@ -55,6 +55,23 @@ public class MatriitmService {
 		return repository.save(matriz);
 	}
 	
+	public Matriitm createComCor(MatriitmDTO dto, HttpServletRequest request, Integer idMatriz) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+		Matriitm matriz = new Matriitm();
+		MatriitmKey key = new MatriitmKey();
+		key.setIdmatriz(idMatriz);
+		key.setModelo(dto.modelo());
+		key.setPartnumpd(dto.partnumpd());
+		
+		matriz.setKey(key);
+		matriz.setCodcor(dto.codcor());
+		matriz.setPartdesc(dto.partdesc());
+		matriz.setUnmed(dto.unmed());
+		matriz.setPriocor(dto.priocor());
+		
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+	}
+	
 	public Matriitm update(Matriitm matriz,  MatriitmDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		matriz.setCodcor(dto.codcor());
