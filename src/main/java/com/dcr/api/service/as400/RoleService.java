@@ -15,6 +15,7 @@ import com.dcr.api.model.dto.Role;
 import com.dcr.api.model.keys.AccrolesKey;
 import com.dcr.api.repository.as400.RoleRepository;
 import com.dcr.api.repository.as400.UserRepository;
+import com.dcr.api.repository.as400.UserRoleRepository;
 import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.utils.Auxiliar;
@@ -29,16 +30,17 @@ public class RoleService {
 	@Autowired
 	RoleRepository roleRepository;
 
+	@Autowired
+	UserRoleRepository repository;
+	
 	 public List<RoleResponse> listByUsername(List<User_Role> userRoles) {
 		 
 		 	List<RoleResponse> roles = new ArrayList<>();
 	        for (User_Role user_Role : userRoles) {
 				RoleResponse response = new RoleResponse();
 				
-				AccrolesKey key = new AccrolesKey();
-				key.setRoleid(user_Role.getKey().getRoleid());
-				key.setCdsys("NEW_DCR");
-				Optional<Accroles> user = roleRepository.findById(key);
+			
+				Optional<Accroles> user = roleRepository.findById(user_Role.getKey().getRoleid());
 				response.setRoleDesc(user.get().getRoledesc().trim());
 				response.setRoleName(user.get().getRolename().trim());
 				roles.add(response);
@@ -54,11 +56,10 @@ public class RoleService {
 	        for (Accroles user_Role : roles) {
 				RoleResponse response = new RoleResponse();
 				
-				AccrolesKey key = new AccrolesKey();
-				key.setRoleid(user_Role.getKey().getRoleid());
-				key.setCdsys("NEW_DCR");
 				
-				Optional<Accroles> user = roleRepository.findById(key);
+				user_Role.setCdsys("NEW_DCR");
+				
+				Optional<Accroles> user = roleRepository.findById(user_Role.getRoleid());
 				response.setRoleDesc(user.get().getRoledesc().trim());
 				response.setRoleName(user.get().getRolename().trim());
 				rolesResponse.add(response);
@@ -69,11 +70,29 @@ public class RoleService {
 	 
 	 public Accroles createRole(Role role, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		 Accroles newRole = new Accroles();
+		
+		 newRole.setCdsys("NEW_DCR"); 
 		 newRole.setRolename(role.roleName());
 		 newRole.setRoledesc(role.roleDesc());
 		 newRole.setRolecad(Auxiliar.getDtFormated());
 		 Auxiliar.preencheAuditoria(newRole, request);
 		 return roleRepository.save(newRole);
+	 }
+	 
+	 public Accroles update(Role role, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		 Accroles newRole = new Accroles();
+		
+		 newRole.setCdsys("NEW_DCR"); 
+		 newRole.setRolename(role.roleName());
+		 newRole.setRoledesc(role.roleDesc());
+		 newRole.setRolecad(Auxiliar.getDtFormated());
+		 Auxiliar.preencheAuditoria(newRole, request);
+		 return roleRepository.save(newRole);
+	 }
+	 
+	 public List<User_Role> findByRolename(String rolename) {
+		List<User_Role> roles = repository.findByRolename(rolename);
+		return roles;
 	 }
 	 
 	 public ErrorResponse validateRole(Role role) {

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,6 +106,37 @@ public class RoleController {
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> createRole(@RequestBody Role role, HttpServletRequest request) {
+	
+		try {
+			
+			ErrorResponse response = roleService.validateRole(role);
+			if(!response.getIsValid()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body(response.getMsg());
+			}
+			
+			Accroles roleNew =  roleService.createRole(role, request);
+			
+			return ResponseEntity.status(HttpStatus.CREATED)
+			        .header("Accept", "application/json")
+			            .body("OK");
+		
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@PostMapping(value = "/update", produces = "application/json")
+	@Operation(summary = "Criação de role")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	@ApiResponse(responseCode = "500", description = "Error"),
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> update(@RequestBody Role role, HttpServletRequest request) {
 	
 		try {
 			
