@@ -18,8 +18,9 @@ import jakarta.persistence.Table;
 @ApiModel
 public class Accroles {
 
-	@EmbeddedId
-    private AccrolesKey key;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer roleid;
 	
 	@TamanhoMaximo(25)
 	@TamanhoMinimo(1)
@@ -30,6 +31,11 @@ public class Accroles {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(200)")
     private String roledesc;
+	
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(10)")
+	private String cdsys;
 	
 	@TamanhoMaximo(8)
 	@TamanhoMinimo(1)
@@ -115,12 +121,22 @@ public class Accroles {
 		this.itaudhr = itaudhr;
 	}
 
-	public AccrolesKey getKey() {
-		return key;
+	
+
+	public String getCdsys() {
+		return cdsys;
 	}
 
-	public void setKey(AccrolesKey key) {
-		this.key = key;
+	public void setCdsys(String cdsys) {
+		this.cdsys = cdsys;
+	}
+
+	public Integer getRoleid() {
+		return roleid;
+	}
+
+	public void setRoleid(Integer roleid) {
+		this.roleid = roleid;
 	}
 
 }

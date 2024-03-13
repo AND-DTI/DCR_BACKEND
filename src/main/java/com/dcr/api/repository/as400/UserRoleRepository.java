@@ -16,4 +16,6 @@ public interface UserRoleRepository extends JpaRepository<User_Role, User_RoleKe
 	  @Query(value = "SELECT * FROM HD4DCDHH.ACCUSERRL AS RL WHERE RL.USERNAME = :username", nativeQuery = true)
 	   List<User_Role> findByUsername(String username);
 	
+	   @Query(value = "SELECT * FROM HD4DCDHH.ACCUSERRL AS RL WHERE RL.ROLENAME = :rolename", nativeQuery = true)
+	   List<User_Role> findByRolename(String rolename);
 }
