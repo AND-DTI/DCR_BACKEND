@@ -138,11 +138,13 @@ public class MatrizProdutoController {
 	public ResponseEntity<Object> createComCor(@RequestBody MatriprdComCorDTO dto, HttpServletRequest request) {
 	
 		try {
-			for (MatriitmDTO cor : dto.itens()) {
-				corService.create(cor, request);
+	        Matriprd matriz = service.createComCor(dto, request);
+	        
+	        for (MatriitmDTO cor : dto.itens()) {
+	        	
+				corService.createComCor(cor, request, matriz.getIdmatriz());
 			}
-			
-	        service.createComCor(dto, request);
+	        
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
 		            .body("OK");
