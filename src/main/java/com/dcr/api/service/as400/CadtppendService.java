@@ -38,6 +38,7 @@ public class CadtppendService {
 		pend.setCdpend(dto.cdpend());
 		pend.setDescpend(dto.descpend());
 		pend.setObspend(dto.obspend());
+		pend.setTpreg(dto.tpreg());
 		
 		Auxiliar.preencheAuditoria(pend, request);
 		
@@ -47,7 +48,7 @@ public class CadtppendService {
 	public Cadtppend update(Cadtppend pend, CadtppendDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		pend.setDescpend(dto.descpend());
 		pend.setObspend(dto.obspend());
-		
+		pend.setTpreg(dto.tpreg());
 		Auxiliar.preencheAuditoria(pend, request);
 		
 		return repository.save(pend);

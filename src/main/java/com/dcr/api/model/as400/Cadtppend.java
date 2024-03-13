@@ -37,6 +37,11 @@ public class Cadtppend {
 	@Column(columnDefinition = "char(256)")
     private String obspend;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(1)")
+    private String tpreg;
+	
 	@OneToMany(mappedBy = "cadtppend", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pendresp> responsaveis;
 	
@@ -105,5 +110,13 @@ public class Cadtppend {
 
 	public String getObspend() {
 		return trimNull(obspend);
+	}
+
+	public String getTpreg() {
+		return tpreg;
+	}
+
+	public void setTpreg(String tpreg) {
+		this.tpreg = tpreg;
 	}
 }

@@ -16,6 +16,7 @@ import com.dcr.api.response.MatriprdByTpprdResponse;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
+import com.dcr.api.response.ProdutoSemListaResponse;
 import com.dcr.api.service.as400.MatriprdService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -132,6 +133,35 @@ public class DetalheProdutoController {
 		try {
 
 			List<ProdutoPendenciaResponse> lista = service.getTodasAsPendencias(status);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma pendência de produto encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getPendentesSemLista", produces = "application/json")
+	@Operation(summary = "Busca um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência de produto encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getPendentesSemLista(@RequestParam List<Integer> status) {
+	
+		try {
+
+			List<ProdutoSemListaResponse> lista = service.getPendenciasSemLista(status);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
