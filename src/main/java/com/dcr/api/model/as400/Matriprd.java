@@ -74,7 +74,6 @@ public class Matriprd {
 	private String origprd;
 	
 	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(8)")
 	private String dtneci;
 	

@@ -7,7 +7,14 @@ public class CoresSimplesResponse {
 	    private Object partdesc;
 	    private Object unmed;
 	    private Object priocor;
-	 
+	    private Object corpt;
+	    
+		public Object getCorpt() {
+			return corpt;
+		}
+		public void setCorpt(Object corpt) {
+			this.corpt = corpt;
+		}
 		public Object getPartnumpd() {
 			return partnumpd;
 		}

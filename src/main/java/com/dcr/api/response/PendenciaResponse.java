@@ -10,8 +10,21 @@ public class PendenciaResponse {
     private Object numdoc;
     private Object serdoc;
     private Object descpend;
-    
-    private Object partsugest;
+    private Object tpreg;
+    private Object obsresol;
+    public Object getObsresol() {
+		return obsresol;
+	}
+	public void setObsresol(Object obsresol) {
+		this.obsresol = obsresol;
+	}
+	public Object getTpreg() {
+		return tpreg;
+	}
+	public void setTpreg(Object tpreg) {
+		this.tpreg = tpreg;
+	}
+	private Object partsugest;
     private Object partsugdsc;
     
     private Object numdoc2;

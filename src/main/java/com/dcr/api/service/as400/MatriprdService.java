@@ -238,6 +238,7 @@ public class MatriprdService {
 		List<Object[]> resultadosDesc = repository.complementaPendenciaDesc(pend.getCdpend().toString());
 		if(resultadosDesc.size() > 0) {
 			pend.setDescpend(resultadosDesc.get(0)[0].toString().trim());
+			pend.setTpreg(resultadosDesc.get(0)[1].toString().trim());
 		}
 		
 		
@@ -285,6 +286,7 @@ public class MatriprdService {
         	cor.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "");
         	cor.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "");
         	cor.setIdmatriz((resultado[49] != null) ? resultado[49].toString().trim() : "");
+        	cor.setCorpt((resultado[67] != null) ? resultado[67].toString().trim() : "");
         	
         	item.setPartnum( (resultado[23] != null) ? resultado[23].toString().trim() : "");
         	item.setItmorg((resultado[24] != null) ? resultado[24].toString().trim() : "");
@@ -302,11 +304,12 @@ public class MatriprdService {
         	
         	pend.setNumpend( (resultado[35] != null) ? resultado[35].toString().trim() : "");
         	pend.setCdpend( (resultado[36] != null) ? resultado[36].toString().trim() : "");
-        	pend.setObspend( (resultado[37] != null) ? resultado[37].toString().trim() : "");
+        	pend.setObspend( (resultado[68] != null) ? resultado[68].toString().trim() : "");
         	pend.setStatus( (resultado[38] != null) ? resultado[38].toString().trim() : "");
         	pend.setPartnum((resultado[50] != null) ? resultado[50].toString().trim() : "");
         	pend.setIdmatriz((resultado[51] != null) ? resultado[51].toString().trim() : "");
         	pend.setPartnumpd((resultado[66] != null) ? resultado[66].toString().trim() : "");
+        	pend.setObsresol((resultado[69] != null) ? resultado[69].toString().trim() : "");
         	
         	doc.setTpdoc((resultado[39] != null) ? resultado[39].toString().trim() : "");
         	doc.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
