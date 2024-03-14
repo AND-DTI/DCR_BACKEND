@@ -25,15 +25,15 @@ public class UserRoleService {
 	RoleRepository roleRepository;
 	public void createRoleUser(List<String> roles, String user, HttpServletRequest request) throws Exception {
 		 for (String role : roles) {
-		        Accroles accrole = roleRepository.consultaByRoleName(role);
+		        Optional<Accroles> accrole = roleRepository.consultaByRoleName(role);
 
 		        try {
 		            User_Role userRole = new User_Role();
 		            User_RoleKey key = new User_RoleKey();
-		            key.setRoleid(accrole.getRoleid());
+		            key.setRoleid(accrole.get().getRoleid());
 		            key.setUsername(user);
 		            userRole.setKey(key);
-		            userRole.setRolename(accrole.getRolename().trim());
+		            userRole.setRolename(accrole.get().getRolename().trim());
 
 		            Auxiliar.preencheAuditoria(userRole, request);
 		            userRole.setDtacad(Auxiliar.getDtFormated());
@@ -54,15 +54,15 @@ public class UserRoleService {
 			
 		}
 		for (String role : roles) {
-		        Accroles accrole = roleRepository.consultaByRoleName(role);
+		        Optional<Accroles> accrole = roleRepository.consultaByRoleName(role);
 		        
 		        try {
 		            User_Role userRole = new User_Role();
 		            User_RoleKey key = new User_RoleKey();
-		            key.setRoleid(accrole.getRoleid());
+		            key.setRoleid(accrole.get().getRoleid());
 		            key.setUsername(user);
 		            userRole.setKey(key);
-		            userRole.setRolename(accrole.getRolename().trim());
+		            userRole.setRolename(accrole.get().getRolename().trim());
 
 		            Auxiliar.preencheAuditoria(userRole, request);
 		            userRole.setDtacad(Auxiliar.getDtFormated());

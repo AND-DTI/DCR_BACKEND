@@ -50,6 +50,11 @@ public class RoleService {
 
 	 }
 	 
+	 public Optional<Accroles> findByName(String rolename) {
+		 Optional<Accroles> lista = roleRepository.consultaByRoleName(rolename);
+		return lista;
+	 }
+	 
 	 public List<RoleResponse> listAllRoles() {
 		 List<RoleResponse> rolesResponse =  new ArrayList<>();
 		 List<Accroles> roles = roleRepository.findAll();
@@ -79,15 +84,16 @@ public class RoleService {
 		 return roleRepository.save(newRole);
 	 }
 	 
-	 public Accroles update(Role role, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		 Accroles newRole = new Accroles();
+	 public Accroles update(Accroles accrole, Role role,  HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
-		 newRole.setCdsys("NEW_DCR"); 
-		 newRole.setRolename(role.roleName());
-		 newRole.setRoledesc(role.roleDesc());
-		 newRole.setRolecad(Auxiliar.getDtFormated());
-		 Auxiliar.preencheAuditoria(newRole, request);
-		 return roleRepository.save(newRole);
+		 accrole.setRoledesc(role.roleDesc());
+		 accrole.setRolecad(Auxiliar.getDtFormated());
+		 Auxiliar.preencheAuditoria(accrole, request);
+		 return roleRepository.save(accrole);
+	 }
+	 
+	 public void delete(Accroles accrole,  HttpServletRequest request) {
+		 roleRepository.delete(accrole);
 	 }
 	 
 	 public List<User_Role> findByRolename(String rolename) {

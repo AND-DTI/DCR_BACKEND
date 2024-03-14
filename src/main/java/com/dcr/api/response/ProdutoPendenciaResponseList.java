@@ -13,7 +13,7 @@ public class ProdutoPendenciaResponseList {
     private Object partsugdsc;
     private Object partnew;
     private Object partnewdsc;
-	
+	private Object partnumpd;
 	public Object getPartnum() {
 		return partnum;
 	}
@@ -85,5 +85,11 @@ public class ProdutoPendenciaResponseList {
 	}
 	public void setPartnewdsc(Object partnewdsc) {
 		this.partnewdsc = partnewdsc;
+	}
+	public Object getPartnumpd() {
+		return partnumpd;
+	}
+	public void setPartnumpd(Object partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 }

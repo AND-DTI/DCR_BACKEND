@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accroles;
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.Role;
 import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
@@ -108,7 +110,13 @@ public class RoleController {
 	public ResponseEntity<Object> createRole(@RequestBody Role role, HttpServletRequest request) {
 	
 		try {
+			Optional<Accroles> roles = roleService.findByName(role.roleName());
 			
+			if(!roles.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body("Role já existe!");
+			}
 			ErrorResponse response = roleService.validateRole(role);
 			if(!response.getIsValid()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -139,6 +147,20 @@ public class RoleController {
 	public ResponseEntity<Object> update(@RequestBody Role role, HttpServletRequest request) {
 	
 		try {
+			Optional<Accroles> roles = roleService.findByName(role.roleName());
+			
+			if(roles.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body("Role não existe!");
+			}
+			
+			List<User_Role> lista = roleService.findByRolename(role.roleName());
+			if(!lista.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body("Essa role já tem amarrações!");
+			}
 			
 			ErrorResponse response = roleService.validateRole(role);
 			if(!response.getIsValid()) {
@@ -147,9 +169,54 @@ public class RoleController {
 				            .body(response.getMsg());
 			}
 			
-			Accroles roleNew =  roleService.createRole(role, request);
+			roleService.update(roles.get(), role, request);
 			
-			return ResponseEntity.status(HttpStatus.CREATED)
+			return ResponseEntity.status(HttpStatus.OK)
+			        .header("Accept", "application/json")
+			            .body("OK");
+		
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@PostMapping(value = "/delete", produces = "application/json")
+	@Operation(summary = "Criação de role")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	@ApiResponse(responseCode = "500", description = "Error"),
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> Delete(@RequestBody Role role, HttpServletRequest request) {
+	
+		try {
+			Optional<Accroles> roles = roleService.findByName(role.roleName());
+			
+			if(roles.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body("Role não existe!");
+			}
+			
+			List<User_Role> lista = roleService.findByRolename(role.roleName());
+			if(!lista.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body("Essa role já tem amarrações!");
+			}
+			
+			ErrorResponse response = roleService.validateRole(role);
+			if(!response.getIsValid()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        .header("Accept", "application/json")
+				            .body(response.getMsg());
+			}
+			
+			roleService.delete(roles.get(), request);
+			
+			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body("OK");
 		

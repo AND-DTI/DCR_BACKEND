@@ -15,6 +15,8 @@ public class PendenciaResponse {
     private Object partsugdsc;
     
     private Object numdoc2;
+    
+    private Object partnumpd;
 	public Object getNumpend() {
 		return numpend;
 	}
@@ -86,5 +88,11 @@ public class PendenciaResponse {
 	}
 	public void setNumdoc2(Object numdoc2) {
 		this.numdoc2 = numdoc2;
+	}
+	public Object getPartnumpd() {
+		return partnumpd;
+	}
+	public void setPartnumpd(Object partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 }
