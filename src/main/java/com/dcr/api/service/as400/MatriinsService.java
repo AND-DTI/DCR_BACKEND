@@ -123,4 +123,10 @@ public class MatriinsService {
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
+	
+public Matriins resolverPendencia(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+	}
 }

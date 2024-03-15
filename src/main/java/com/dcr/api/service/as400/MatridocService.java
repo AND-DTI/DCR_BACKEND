@@ -105,4 +105,10 @@ public class MatridocService {
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
+	
+public Matridoc resolverPendencia(Matridoc matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+		
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+	}
 }

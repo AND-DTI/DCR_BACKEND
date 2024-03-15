@@ -7,11 +7,17 @@ public class PendenciaResponse {
     private Object obspend;
     private Object status;
     private Object idmatriz;
+    
     private Object numdoc;
     private Object serdoc;
+    private Object serdoc2;
+    private Object emidoc;
+    private Object emidoc2;
+    
     private Object descpend;
     private Object tpreg;
     private Object obsresol;
+ 
     public Object getObsresol() {
 		return obsresol;
 	}
@@ -107,5 +113,23 @@ public class PendenciaResponse {
 	}
 	public void setPartnumpd(Object partnumpd) {
 		this.partnumpd = partnumpd;
+	}
+	public Object getSerdoc2() {
+		return serdoc2;
+	}
+	public void setSerdoc2(Object serdoc2) {
+		this.serdoc2 = serdoc2;
+	}
+	public Object getEmidoc() {
+		return emidoc;
+	}
+	public void setEmidoc(Object emidoc) {
+		this.emidoc = emidoc;
+	}
+	public Object getEmidoc2() {
+		return emidoc2;
+	}
+	public void setEmidoc2(Object emidoc2) {
+		this.emidoc2 = emidoc2;
 	}
 }

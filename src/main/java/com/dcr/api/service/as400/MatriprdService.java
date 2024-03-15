@@ -311,6 +311,13 @@ public class MatriprdService {
         	pend.setPartnumpd((resultado[66] != null) ? resultado[66].toString().trim() : "");
         	pend.setObsresol((resultado[69] != null) ? resultado[69].toString().trim() : "");
         	
+        	pend.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
+        	pend.setNumdoc2((resultado[43] != null) ? resultado[43].toString().trim() : "");
+        	pend.setSerdoc((resultado[41] != null) ? resultado[41].toString().trim() : "");
+        	pend.setSerdoc2((resultado[44] != null) ? resultado[44].toString().trim() : "");
+        	pend.setEmidoc((resultado[42] != null) ? resultado[42].toString().trim() : "");
+        	pend.setEmidoc2((resultado[45] != null) ? resultado[45].toString().trim() : "");
+        	
         	doc.setTpdoc((resultado[39] != null) ? resultado[39].toString().trim() : "");
         	doc.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
         	doc.setSerdoc((resultado[41] != null) ? resultado[41].toString().trim() : "");
@@ -372,7 +379,7 @@ public class MatriprdService {
         	
         	Boolean existeDoc = Boolean.FALSE;
         	for (DocumentosResponse coresSimplesResponse : listaDocSet) {
-				if(coresSimplesResponse.getPartnum().equals(doc.getPartnum())) {
+				if(coresSimplesResponse.getNumdoc().equals(doc.getNumdoc())) {
 					existeDoc = Boolean.TRUE;
 				}
 			}
