@@ -188,7 +188,7 @@ public class MatriprdService {
         	
         	Boolean contemItem = Boolean.FALSE;
         	for (MatriprdByTpprdResponse item : listaResponse) {
-				if(item.getProduto().equals(res.getProduto())) {
+				if(item.getIdMatriz().equals(res.getIdMatriz())) {
 					contemItem = Boolean.TRUE;
 					lista = new ArrayList();
 				}

@@ -238,16 +238,26 @@ public class MatrizProdutoController {
 		try {
 			
 			Optional<Matriprd> lista = service.getByID(idmatriz);
+			
+			
+			
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma Matriz de produto encontrada!");
 	        }
+	        if(lista.get().getOrigprd().trim().toUpperCase().equals("MANUAL")) {
+				 service.delete(lista.get());
+			        return ResponseEntity.status(HttpStatus.OK)
+				        	.header("Accept", "application/json")
+				            .body("Matriz de produto deletada com sucesso!");
+			} else {
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .header("Accept", "application/json")
+		                    .body("Produto não pode ser excluido pois foi gerado automaticamente pelo plano de produção!");
+			}
 		
-	        service.delete(lista.get());
-	        return ResponseEntity.status(HttpStatus.OK)
-		        	.header("Accept", "application/json")
-		            .body("Matriz de produto deletada com sucesso!");
+	       
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
