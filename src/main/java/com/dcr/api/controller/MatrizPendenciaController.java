@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -214,7 +215,7 @@ public class MatrizPendenciaController {
 	}
 	
 
-	@PutMapping(value = "/resolverPendencia", produces = "application/json")
+	@PostMapping(value = "/resolverPendencia", produces = "application/json")
 	@Operation(summary = "Altera uma Matriz de pendencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
@@ -237,19 +238,25 @@ public class MatrizPendenciaController {
 	                    .body("Matriz de pendencia não encontrada!");
 	        }
 		
-	        service.resolverPendencia(lista.get(), dto,  request);
+	        
 	        
 	        MatridocKey matridocKey = new MatridocKey();
 	        matridocKey.setIdmatriz(dto.idmatriz());
 	        matridocKey.setPartnum(dto.partnum());
 	        matridocKey.setPartnumpd(dto.partnumpd());
+	        matridocKey.setTpdoc(dto.tpdoc());
 	        Optional<Matridoc> matridoc = matridocService.getByID(matridocKey);
+	        if (matridoc.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Documento não encontrado!");
+	        }
 	        
 	        matridoc.get().setNumdoc3(dto.numdoc3());
 	        matridoc.get().setEmidoc3(dto.emidoc3());
 	        matridoc.get().setSerdoc3(dto.serdoc3());
 	        
-	        matridocService.resolverPendencia(matridoc.get(), request);
+	        
 	        
 	        MatriinsKey matriinskey = new MatriinsKey();
 	        matriinskey.setIdmatriz(dto.idmatriz());
@@ -257,10 +264,17 @@ public class MatrizPendenciaController {
 	        matriinskey.setPartnumpd(dto.partnumpd());
 	        
 	        Optional<Matriins> matriins = matriinsService.getByID(matriinskey);
+	        if (matriins.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Insumo não encontrado!");
+	        }
 	        
 	        matriins.get().setPartnew(dto.partnew());
 	        
+	        service.resolverPendencia(lista.get(), dto,  request);
 	        matriinsService.resolverPendencia(matriins.get(), request);
+	        matridocService.resolverPendencia(matridoc.get(), request);
 	        
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")

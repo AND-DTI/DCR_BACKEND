@@ -33,6 +33,12 @@ public class MatridocService {
 		return repository.findById(id);
 	}
 	
+	public Optional<Matridoc> buscaDoc(Integer idmatriz, String partnum, String partnumpd) {
+		
+		return repository.buscaDoc(idmatriz, partnum, partnumpd);
+	}
+
+	
 	public void delete(Matridoc matriz) {
 		
 		repository.delete(matriz);
