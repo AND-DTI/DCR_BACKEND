@@ -379,7 +379,7 @@ public class MatriprdService {
         	
         	Boolean existeDoc = Boolean.FALSE;
         	for (DocumentosResponse coresSimplesResponse : listaDocSet) {
-				if(coresSimplesResponse.getNumdoc().equals(doc.getNumdoc())) {
+				if(coresSimplesResponse.getNumdoc().equals(doc.getNumdoc()) && coresSimplesResponse.getPartnumpd().equals(doc.getPartnumpd())) {
 					existeDoc = Boolean.TRUE;
 				}
 			}
