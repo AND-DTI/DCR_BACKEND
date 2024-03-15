@@ -20,9 +20,9 @@ public class Cadcor {
 	@Column(columnDefinition = "char(4)")
     private String codcor;
 	
-	@TamanhoMaximo(4)
+	@TamanhoMaximo(10)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(4)")
+	@Column(columnDefinition = "char(10)")
     private String cdbej;
 	
 	@TamanhoMaximo(10)

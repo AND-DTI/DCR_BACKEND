@@ -2,6 +2,7 @@ package com.dcr.api.response;
 
 public class DocumentosResponse {
 	private Object partnum;
+	private Object partnumpd;
 	private Object tpdoc;
     private Object numdoc;
     private Object serdoc;
@@ -27,6 +28,7 @@ public class DocumentosResponse {
     private Object ie3;
     private Object adicao3;
     private Object itadicao3;
+    
 	public Object getTpdoc() {
 		return tpdoc;
 	}
@@ -165,5 +167,11 @@ public class DocumentosResponse {
 	}
 	public void setItadicao3(Object itadicao3) {
 		this.itadicao3 = itadicao3;
+	}
+	public Object getPartnumpd() {
+		return partnumpd;
+	}
+	public void setPartnumpd(Object partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 }

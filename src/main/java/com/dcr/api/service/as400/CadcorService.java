@@ -42,7 +42,7 @@ public class CadcorService {
 		
 		cor.setCdbej(dto.cdbej());
 		cor.setCodcor(dto.codcor());
-		cor.setCoreng(dto.codeng());
+		cor.setCoreng(dto.coreng());
 		cor.setCorpt(dto.corpt());
 		cor.setTppin(dto.tppin());
 		
@@ -53,7 +53,7 @@ public class CadcorService {
 	public Cadcor update(Cadcor cor,  CadcorDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		cor.setCdbej(dto.cdbej());
 		cor.setCodcor(dto.codcor());
-		cor.setCoreng(dto.codeng());
+		cor.setCoreng(dto.coreng());
 		cor.setCorpt(dto.corpt());
 		cor.setTppin(dto.tppin());
 		Auxiliar.preencheAuditoria(cor, request);

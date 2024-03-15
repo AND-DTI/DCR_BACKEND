@@ -337,7 +337,7 @@ public class MatriprdService {
         	doc.setIe3((resultado[62] != null) ? resultado[62].toString().trim() : "");
         	doc.setAdicao3((resultado[63] != null) ? resultado[63].toString().trim() : "");
         	doc.setItadicao3((resultado[64] != null) ? resultado[64].toString().trim() : "");
-        	
+        	doc.setPartnumpd((resultado[70] != null) ? resultado[70].toString().trim() : "");
         	Boolean existeItem = Boolean.FALSE;
         	for (ProdutoPendenciaResponseList coresSimplesResponse : listaItemSet) {
 				if(coresSimplesResponse.getPartnum().equals(item.getPartnum())) {
