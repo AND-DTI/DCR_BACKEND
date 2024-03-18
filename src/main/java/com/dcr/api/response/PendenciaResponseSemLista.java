@@ -12,12 +12,62 @@ public class PendenciaResponseSemLista {
     private Object serdoc2;
     private Object emidoc;
     private Object emidoc2;
-   
+    
+    
     private Object obsresol;
     private Object numdoc2;
     private Object partnumpd;
     
-    public Object getObsresol() {
+    private Object cdbej;
+    private Object corpt;
+    private Object coreng;
+    private Object tppin;
+    private Object numdoc3;
+    private Object serdoc3;
+    private Object emidoc3;
+    public Object getCdbej() {
+		return cdbej;
+	}
+	public void setCdbej(Object cdbej) {
+		this.cdbej = cdbej;
+	}
+	public Object getCorpt() {
+		return corpt;
+	}
+	public void setCorpt(Object corpt) {
+		this.corpt = corpt;
+	}
+	public Object getCoreng() {
+		return coreng;
+	}
+	public void setCoreng(Object coreng) {
+		this.coreng = coreng;
+	}
+	public Object getTppin() {
+		return tppin;
+	}
+	public void setTppin(Object tppin) {
+		this.tppin = tppin;
+	}
+	public Object getNumdoc3() {
+		return numdoc3;
+	}
+	public void setNumdoc3(Object numdoc3) {
+		this.numdoc3 = numdoc3;
+	}
+	public Object getSerdoc3() {
+		return serdoc3;
+	}
+	public void setSerdoc3(Object serdoc3) {
+		this.serdoc3 = serdoc3;
+	}
+	public Object getEmidoc3() {
+		return emidoc3;
+	}
+	public void setEmidoc3(Object emidoc3) {
+		this.emidoc3 = emidoc3;
+	}
+	public Object getObsresol() {
 		return obsresol;
 	}
 	public void setObsresol(Object obsresol) {

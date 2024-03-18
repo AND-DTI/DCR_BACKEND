@@ -601,17 +601,11 @@ public class MatriprdService {
 		List<Object[]> resultados = repository.consultaTodasAsPendenciasSemLista(status);
 		
 		List<ProdutoSemListaResponse> produtos = new ArrayList<>();
-		Set<ProdutoPendenciaResponseList> listaItemSet = new HashSet<>();
 		Set<PendenciaResponseSemLista> listaPendSet = new HashSet<>();
-		Set<DocumentosResponse> listaDocSet = new HashSet<>();
-		Set<CoresResponse> coresSet = new HashSet<>();
         for (Object[] resultado : resultados) {
         	ProdutoSemListaResponse resp = new ProdutoSemListaResponse();
     		
-        	ProdutoPendenciaResponseList item = new ProdutoPendenciaResponseList();
         	PendenciaResponseSemLista pend = new PendenciaResponseSemLista();
-        	DocumentosResponse doc = new DocumentosResponse();
-        	CoresResponse cor = new CoresResponse();
         	
         	resp.setIdMatriz((resultado[0] != null) ? resultado[0].toString().trim() : "");
         	resp.setProduto((resultado[1] != null) ? resultado[1].toString().trim() : "");
@@ -623,6 +617,7 @@ public class MatriprdService {
         	resp.setProtot((resultado[7] != null) ? resultado[7].toString().trim() : "");
         	resp.setSpecial((resultado[8] != null) ? resultado[8].toString().trim() : "");
         	resp.setTpdcre((resultado[9] != null) ? resultado[9].toString().trim() : "");
+        	
         	resp.setOrig((resultado[10] != null) ? resultado[10].toString().trim() : "");
         	resp.setDtneci((resultado[11] != null) ? resultado[11].toString().trim() : "");
         	resp.setPriourgen((resultado[12] != null) ? resultado[12].toString().trim() : "");
@@ -632,51 +627,42 @@ public class MatriprdService {
         	resp.setPrioHRmnt((resultado[16] != null) ? resultado[16].toString().trim() : "");
 
         	resp.setPartnumpd((resultado[17] != null) ? resultado[17].toString().trim() : "");
-        	resp.setStatus((resultado[18] != null) ? resultado[18].toString().trim() : "");
-        	resp.setModelo((resultado[19] != null) ? resultado[19].toString().trim() : "");
-        	resp.setCodcor((resultado[20] != null) ? resultado[20].toString().trim() : "");
-        	resp.setPartdesc((resultado[21] != null) ? resultado[21].toString().trim() : "");
-        	resp.setUnmed((resultado[22] != null) ? resultado[22].toString().trim() : "");
-        	resp.setPriocor((resultado[23] != null) ? resultado[23].toString().trim() : "");
-        	resp.setCdbej((resultado[24] != null) ? resultado[24].toString().trim() : "");
-        	resp.setCorpt((resultado[25] != null) ? resultado[25].toString().trim() : "");
-        	resp.setCoreng((resultado[26] != null) ? resultado[26].toString().trim() : "");
-        	resp.setTppin((resultado[27] != null) ? resultado[27].toString().trim() : "");
-        	cor.setIdmatriz((resultado[28] != null) ? resultado[28].toString().trim() : "");
+        	resp.setModelo((resultado[18] != null) ? resultado[18].toString().trim() : "");
+        	resp.setCodcor((resultado[19] != null) ? resultado[19].toString().trim() : "");
+        	resp.setPartdesc((resultado[20] != null) ? resultado[20].toString().trim() : "");
+        	resp.setUnmed((resultado[21] != null) ? resultado[21].toString().trim() : "");
+        	resp.setPriocor((resultado[22] != null) ? resultado[22].toString().trim() : "");
+        	
 
-        	pend.setNumpend((resultado[29] != null) ? resultado[29].toString().trim() : "");
-        	pend.setCdpend((resultado[30] != null) ? resultado[30].toString().trim() : "");
-        	pend.setObsresol((resultado[31] != null) ? resultado[31].toString().trim() : "");
-        	pend.setStatus((resultado[32] != null) ? resultado[32].toString().trim() : "");
-        	pend.setPartnum((resultado[33] != null) ? resultado[33].toString().trim() : "");
-        	pend.setIdmatriz((resultado[34] != null) ? resultado[34].toString().trim() : "");
-        	pend.setPartnumpd((resultado[17] != null) ? resultado[17].toString().trim() : "");
-        	doc.setTpdoc((resultado[35] != null) ? resultado[35].toString().trim() : "");
-        	pend.setNumdoc((resultado[36] != null) ? resultado[36].toString().trim() : "");
-        	pend.setSerdoc((resultado[37] != null) ? resultado[37].toString().trim() : "");
-        	pend.setEmidoc((resultado[38] != null) ? resultado[38].toString().trim() : "");
-        	pend.setNumdoc2((resultado[39] != null) ? resultado[39].toString().trim() : "");
-        	pend.setSerdoc2((resultado[40] != null) ? resultado[40].toString().trim() : "");
-        	pend.setEmidoc2((resultado[41] != null) ? resultado[41].toString().trim() : "");
-        	doc.setNumdoc3((resultado[42] != null) ? resultado[42].toString().trim() : "");
-        	doc.setSerdoc3((resultado[43] != null) ? resultado[43].toString().trim() : "");
-        	doc.setEmidoc3((resultado[44] != null) ? resultado[44].toString().trim() : "");
-        	doc.setPartnum((resultado[45] != null) ? resultado[45].toString().trim() : "");
-
-        	doc.setCnpjfor((resultado[46] != null) ? resultado[46].toString().trim() : "");
-        	doc.setIe((resultado[47] != null) ? resultado[47].toString().trim() : "");
-        	doc.setAdicao((resultado[48] != null) ? resultado[48].toString().trim() : "");
-        	doc.setItadicao((resultado[49] != null) ? resultado[49].toString().trim() : "");
-
-        	doc.setCnpjfor2((resultado[50] != null) ? resultado[50].toString().trim() : "");
-        	doc.setIe2((resultado[51] != null) ? resultado[51].toString().trim() : "");
-        	doc.setAdicao2((resultado[52] != null) ? resultado[52].toString().trim() : "");
-        	doc.setItadicao2((resultado[53] != null) ? resultado[53].toString().trim() : "");
-
-        	doc.setCnpjfor3((resultado[54] != null) ? resultado[54].toString().trim() : "");
-        	doc.setIe3((resultado[55] != null) ? resultado[55].toString().trim() : "");
-        	doc.setAdicao3((resultado[56] != null) ? resultado[56].toString().trim() : "");
-        	doc.setItadicao3((resultado[57] != null) ? resultado[57].toString().trim() : "");
+        	pend.setNumpend((resultado[23] != null) ? resultado[23].toString().trim() : "");
+        	pend.setCdpend((resultado[24] != null) ? resultado[24].toString().trim() : "");
+        	pend.setObsresol((resultado[25] != null) ? resultado[25].toString().trim() : "");
+        	pend.setStatus((resultado[26] != null) ? resultado[26].toString().trim() : "");
+        	pend.setPartnum((resultado[42] != null) ? resultado[42].toString().trim() : "");
+        	pend.setIdmatriz((resultado[43] != null) ? resultado[43].toString().trim() : "");
+        	pend.setPartnumpd((resultado[57] != null) ? resultado[57].toString().trim() : "");
+        	
+        	pend.setNumdoc((resultado[28] != null) ? resultado[28].toString().trim() : "");
+        	pend.setSerdoc((resultado[29] != null) ? resultado[29].toString().trim() : "");
+        	pend.setEmidoc((resultado[30] != null) ? resultado[30].toString().trim() : "");
+        	pend.setNumdoc2((resultado[31] != null) ? resultado[31].toString().trim() : "");
+        	pend.setSerdoc2((resultado[32] != null) ? resultado[32].toString().trim() : "");
+        	pend.setEmidoc2((resultado[33] != null) ? resultado[33].toString().trim() : "");
+        	pend.setNumdoc3((resultado[34] != null) ? resultado[34].toString().trim() : "");
+        	pend.setSerdoc3((resultado[35] != null) ? resultado[35].toString().trim() : "");
+        	pend.setEmidoc3((resultado[36] != null) ? resultado[36].toString().trim() : "");
+        	
+        	
+        	pend.setCdbej((resultado[38] != null) ? resultado[38].toString().trim() : "");
+        	pend.setCorpt((resultado[39] != null) ? resultado[39].toString().trim() : "");
+        	pend.setCoreng((resultado[40] != null) ? resultado[40].toString().trim() : "");
+        	pend.setTppin((resultado[41] != null) ? resultado[41].toString().trim() : "");
+        	
+        	
+        	resp.setCdbej((resultado[23] != null) ? resultado[23].toString().trim() : "");
+        	resp.setCorpt((resultado[24] != null) ? resultado[24].toString().trim() : "");
+        	resp.setCoreng((resultado[25] != null) ? resultado[25].toString().trim() : "");
+        	resp.setTppin((resultado[26] != null) ? resultado[26].toString().trim() : "");
         	
         	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getStatus().equals(""))) {
                 listaPendSet.add(pend); // Adiciona à lista apenas se não estiver duplicado

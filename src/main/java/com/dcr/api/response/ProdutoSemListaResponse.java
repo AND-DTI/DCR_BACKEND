@@ -139,15 +139,11 @@ public class ProdutoSemListaResponse {
 	public void setPrioHRmnt(Object prioHRmnt) {
 		this.prioHRmnt = prioHRmnt;
 	}
-	public Object getStatus() {
-		return status;
-	}
+	
 	public void setStatus(Object status) {
 		this.status = status;
 	}
-	public Object getQtdependencias() {
-		return qtdependencias;
-	}
+	
 	public void setQtdependencias(Object qtdependencias) {
 		this.qtdependencias = qtdependencias;
 	}
