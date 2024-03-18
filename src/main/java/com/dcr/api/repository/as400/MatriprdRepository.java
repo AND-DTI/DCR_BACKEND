@@ -73,6 +73,24 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		  List<Object[]> consultaTodasAsPendencias(List<Integer> status);
 		  
 		  
+		  @Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
+			  		+ "					 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"
+			  		+ "		itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,\r\n"
+			  	
+			  		+ "		pend.NUMPEND, pend.CDPEND, pend.OBSRESOL, pend.STATUS, \r\n"
+			  		+ "		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.NUMDOC3, doc.SERDOC3, doc.EMIDOC3, proc.status, \r\n"
+			  		+ "		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, pend.PARTNUM, pend.IDMATRIZ, ITM.IDMATRIZ, DOC.PARTNUM,  \r\n"
+			  		+ "		DOC.CNPJFOR, DOC.IE, DOC.ADICAO, DOC.ITADICAO, DOC.CNPJFOR2, DOC.IE2, DOC.ADICAO2, DOC.ITADICAO2, DOC.CNPJFOR3, DOC.IE3, DOC.ADICAO3, DOC.ITADICAO3 \r\n"
+			  		+ "     FROM HD4DCDHH.MATRIPRD AS PRD\r\n"
+			  		+ "LEFT JOIN HD4DCDHH.MATRIITM AS ITM ON PRD.IDMATRIZ = ITM.IDMATRIZ \r\n"
+			  		
+			  		+ "LEFT JOIN HD4DCDHH.PENDPROD AS PEND ON PRD.IDMATRIZ = PEND.IDMATRIZ  AND ITM.PARTNUMPD = PEND.PARTNUMPD  \r\n" 
+			  		+ "LEFT JOIN HD4DCDHH.MATRIDOC AS DOC ON PRD.IDMATRIZ = DOC.IDMATRIZ AND ITM.PARTNUMPD = DOC.PARTNUMPD  \r\n" 
+			  		+ "LEFT JOIN HD4DCDHH.CADCOR AS cor ON ITM.CODCOR = cor.CODCOR \r\n"
+			  		+ "LEFT JOIN HD4DCDHH.DCRPROCC AS PROC ON PRD.IDMATRIZ = PROC.IDMATRIZ AND ITM.PARTNUMPD = PROC.PARTNUMPD " +
+			              "WHERE PROC.STATUS IN :status", nativeQuery = true)
+		  List<Object[]> consultaTodasAsPendenciasSemLista(List<Integer> status);
+		  
 		  @Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDPROD WHERE IDMATRIZ = :idmatriz AND STATUS = 0", nativeQuery = true)
 		  Integer countPendencias(String idmatriz);
 		  

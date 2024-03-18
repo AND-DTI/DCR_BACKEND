@@ -192,7 +192,7 @@ public class ProcessoController {
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
-					
+			
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.header("Accept", "application/json")

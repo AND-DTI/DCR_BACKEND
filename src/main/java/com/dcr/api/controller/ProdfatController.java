@@ -1,11 +1,13 @@
 package com.dcr.api.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +59,35 @@ public class ProdfatController {
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
 			            .body("OK");
+	       
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getAll", produces = "application/json")
+	@Operation(summary = "Cria um Processo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Processo criado!"),
+	        @ApiResponse(responseCode = "400", description = "Processo com essa data já existe!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getAll() {
+	
+		try {
+			List<Prodfat> dcr = service.getAll();
+			
+			if(dcr.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				        .header("Accept", "application/json")
+				            .body("Nenhum dado encontrado!");
+			}
+			return ResponseEntity.status(HttpStatus.OK)
+			        .header("Accept", "application/json")
+			            .body(dcr);
 	       
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 

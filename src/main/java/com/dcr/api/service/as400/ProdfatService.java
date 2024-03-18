@@ -47,8 +47,8 @@ public class ProdfatService {
 		prod.setKey(key);
 		prod.setAnomdl(dto.anomdl());
 		prod.setDesccom(dto.desccom());
-		prod.setFrstanofab(dto.frstanofa());
-		prod.setLastanofab(dto.lastanofa());
+		prod.setFrstanofab(dto.frstanofab());
+		prod.setLastanofab(dto.lastanofab());
 		prod.setTpprd(dto.tpprd());
 		prod.setUncome(dto.uncome());
 		Auxiliar.preencheAuditoria(prod, request);
@@ -60,8 +60,8 @@ public class ProdfatService {
 		
 		prod.setAnomdl(dto.anomdl());
 		prod.setDesccom(dto.desccom());
-		prod.setFrstanofab(dto.frstanofa());
-		prod.setLastanofab(dto.lastanofa());
+		prod.setFrstanofab(dto.frstanofab());
+		prod.setLastanofab(dto.lastanofab());
 		prod.setTpprd(dto.tpprd());
 
 		Auxiliar.preencheAuditoria(prod, request);

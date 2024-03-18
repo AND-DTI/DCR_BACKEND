@@ -1,5 +1,7 @@
 package com.dcr.api.response;
 
+import java.util.List;
+
 public class ProdutoSemListaResponse {
 	private Object idMatriz;
     private Object produto;
@@ -33,6 +35,8 @@ public class ProdutoSemListaResponse {
     private Object corpt;
     private Object coreng;
     private Object tppin;
+    
+    private List<PendenciaResponseSemLista> pendencias;
 	public Object getIdMatriz() {
 		return idMatriz;
 	}
@@ -201,4 +205,11 @@ public class ProdutoSemListaResponse {
 	public void setTppin(Object tppin) {
 		this.tppin = tppin;
 	}
+	public List<PendenciaResponseSemLista> getPendencias() {
+		return pendencias;
+	}
+	public void setPendencias(List<PendenciaResponseSemLista> pendencias) {
+		this.pendencias = pendencias;
+	}
+
 }

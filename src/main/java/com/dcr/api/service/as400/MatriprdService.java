@@ -25,6 +25,7 @@ import com.dcr.api.response.MatriprdByTpprdResponseList;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.MatriprdResponseList;
 import com.dcr.api.response.PendenciaResponse;
+import com.dcr.api.response.PendenciaResponseSemLista;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.response.ProdutoPendenciaResponseList;
 import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
@@ -597,144 +598,115 @@ public class MatriprdService {
 	}
 	
 	public List<ProdutoSemListaResponse> getPendenciasSemLista(List<Integer> status) {
-		List<Object[]> resultados = repository.consultaTodasAsPendencias(status);
+		List<Object[]> resultados = repository.consultaTodasAsPendenciasSemLista(status);
 		
 		List<ProdutoSemListaResponse> produtos = new ArrayList<>();
 		Set<ProdutoPendenciaResponseList> listaItemSet = new HashSet<>();
-		Set<PendenciaResponse> listaPendSet = new HashSet<>();
+		Set<PendenciaResponseSemLista> listaPendSet = new HashSet<>();
 		Set<DocumentosResponse> listaDocSet = new HashSet<>();
 		Set<CoresResponse> coresSet = new HashSet<>();
         for (Object[] resultado : resultados) {
         	ProdutoSemListaResponse resp = new ProdutoSemListaResponse();
     		
         	ProdutoPendenciaResponseList item = new ProdutoPendenciaResponseList();
-        	PendenciaResponse pend = new PendenciaResponse();
+        	PendenciaResponseSemLista pend = new PendenciaResponseSemLista();
         	DocumentosResponse doc = new DocumentosResponse();
         	CoresResponse cor = new CoresResponse();
-        	resp.setIdMatriz( (resultado[0] != null) ? resultado[0].toString().trim() : "" );
-        	resp.setProduto(  (resultado[1] != null) ? resultado[1].toString().trim() : "");
-        	resp.setModelo(  (resultado[2] != null) ? resultado[2].toString().trim() : "");
-        	resp.setAnomdl(  (resultado[3] != null) ? resultado[3].toString().trim() : "");
-        	resp.setDesccom(  (resultado[4] != null) ? resultado[4].toString().trim() : "");
-        	resp.setDescrfb(  (resultado[5] != null) ? resultado[5].toString().trim() : "");
-        	resp.setTpprd( (resultado[6] != null) ? resultado[6].toString().trim() : "");
-        	resp.setProtot(  (resultado[7] != null) ? resultado[7].toString().trim() : "");
-        	resp.setSpecial(  (resultado[8] != null) ? resultado[8].toString().trim() : "");
+        	
+        	resp.setIdMatriz((resultado[0] != null) ? resultado[0].toString().trim() : "");
+        	resp.setProduto((resultado[1] != null) ? resultado[1].toString().trim() : "");
+        	resp.setModelo((resultado[2] != null) ? resultado[2].toString().trim() : "");
+        	resp.setAnomdl((resultado[3] != null) ? resultado[3].toString().trim() : "");
+        	resp.setDesccom((resultado[4] != null) ? resultado[4].toString().trim() : "");
+        	resp.setDescrfb((resultado[5] != null) ? resultado[5].toString().trim() : "");
+        	resp.setTpprd((resultado[6] != null) ? resultado[6].toString().trim() : "");
+        	resp.setProtot((resultado[7] != null) ? resultado[7].toString().trim() : "");
+        	resp.setSpecial((resultado[8] != null) ? resultado[8].toString().trim() : "");
         	resp.setTpdcre((resultado[9] != null) ? resultado[9].toString().trim() : "");
         	resp.setOrig((resultado[10] != null) ? resultado[10].toString().trim() : "");
-        	resp.setDtneci(  (resultado[11] != null) ? resultado[11].toString().trim() : "");
-        	resp.setPriourgen(  (resultado[12] != null) ? resultado[12].toString().trim() : "");
-        	resp.setPrevfat(  (resultado[13] != null) ? resultado[13].toString().trim() : "");
-        	resp.setPrioresp(  (resultado[14] != null) ? resultado[14].toString().trim() : "");
-        	resp.setPriodtmnt(  (resultado[15] != null) ? resultado[15].toString().trim() : "");
-        	resp.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "");
-        	resp.setStatus(  (resultado[49] != null) ? resultado[49].toString().trim() : "");
-        	resp.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "");
-        	resp.setModelo((resultado[18] != null) ? resultado[18].toString().trim() : "");
-        	resp.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "");
-        	resp.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "");
-        	resp.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "");
-        	resp.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "");
-        	resp.setCdbej( (resultado[50] != null) ? resultado[50].toString().trim() : "");
-        	resp.setCorpt((resultado[51] != null) ? resultado[51].toString().trim() : "");
-        	resp.setCoreng((resultado[52] != null) ? resultado[52].toString().trim() : "");
-        	resp.setTppin((resultado[53] != null) ? resultado[53].toString().trim() : "");
-        	cor.setIdmatriz((resultado[56] != null) ? resultado[56].toString().trim() : "");
-        	item.setPartnum( (resultado[23] != null) ? resultado[23].toString().trim() : "");
-        	item.setItmorg((resultado[24] != null) ? resultado[24].toString().trim() : "");
-        	item.setIttyp( (resultado[25] != null) ? resultado[25].toString().trim() : "");
-        	item.setUnmsr( (resultado[26] != null) ? resultado[26].toString().trim() : "");
-        	item.setNecfil( (resultado[27] != null) ? resultado[27].toString().trim() : "");
-        	item.setCdspn( (resultado[28] != null) ? resultado[28].toString().trim() : "");
-        	item.setWeght( (resultado[29] != null) ? resultado[29].toString().trim() : "");
-        	item.setEmcomp( (resultado[30] != null) ? resultado[30].toString().trim() : "");
-        	item.setPartsugest( (resultado[31] != null) ? resultado[31].toString().trim() : "");
-        	item.setPartsugdsc((resultado[32] != null) ? resultado[32].toString().trim() : "");
-        	item.setPartnew( (resultado[33] != null) ? resultado[33].toString().trim() : "");
-        	item.setPartnewdsc( (resultado[34] != null) ? resultado[34].toString().trim() : "");
+        	resp.setDtneci((resultado[11] != null) ? resultado[11].toString().trim() : "");
+        	resp.setPriourgen((resultado[12] != null) ? resultado[12].toString().trim() : "");
+        	resp.setPrevfat((resultado[13] != null) ? resultado[13].toString().trim() : "");
+        	resp.setPrioresp((resultado[14] != null) ? resultado[14].toString().trim() : "");
+        	resp.setPriodtmnt((resultado[15] != null) ? resultado[15].toString().trim() : "");
+        	resp.setPrioHRmnt((resultado[16] != null) ? resultado[16].toString().trim() : "");
+
+        	resp.setPartnumpd((resultado[17] != null) ? resultado[17].toString().trim() : "");
+        	resp.setStatus((resultado[18] != null) ? resultado[18].toString().trim() : "");
+        	resp.setModelo((resultado[19] != null) ? resultado[19].toString().trim() : "");
+        	resp.setCodcor((resultado[20] != null) ? resultado[20].toString().trim() : "");
+        	resp.setPartdesc((resultado[21] != null) ? resultado[21].toString().trim() : "");
+        	resp.setUnmed((resultado[22] != null) ? resultado[22].toString().trim() : "");
+        	resp.setPriocor((resultado[23] != null) ? resultado[23].toString().trim() : "");
+        	resp.setCdbej((resultado[24] != null) ? resultado[24].toString().trim() : "");
+        	resp.setCorpt((resultado[25] != null) ? resultado[25].toString().trim() : "");
+        	resp.setCoreng((resultado[26] != null) ? resultado[26].toString().trim() : "");
+        	resp.setTppin((resultado[27] != null) ? resultado[27].toString().trim() : "");
+        	cor.setIdmatriz((resultado[28] != null) ? resultado[28].toString().trim() : "");
+
+        	pend.setNumpend((resultado[29] != null) ? resultado[29].toString().trim() : "");
+        	pend.setCdpend((resultado[30] != null) ? resultado[30].toString().trim() : "");
+        	pend.setObsresol((resultado[31] != null) ? resultado[31].toString().trim() : "");
+        	pend.setStatus((resultado[32] != null) ? resultado[32].toString().trim() : "");
+        	pend.setPartnum((resultado[33] != null) ? resultado[33].toString().trim() : "");
+        	pend.setIdmatriz((resultado[34] != null) ? resultado[34].toString().trim() : "");
+        	pend.setPartnumpd((resultado[17] != null) ? resultado[17].toString().trim() : "");
+        	doc.setTpdoc((resultado[35] != null) ? resultado[35].toString().trim() : "");
+        	pend.setNumdoc((resultado[36] != null) ? resultado[36].toString().trim() : "");
+        	pend.setSerdoc((resultado[37] != null) ? resultado[37].toString().trim() : "");
+        	pend.setEmidoc((resultado[38] != null) ? resultado[38].toString().trim() : "");
+        	pend.setNumdoc2((resultado[39] != null) ? resultado[39].toString().trim() : "");
+        	pend.setSerdoc2((resultado[40] != null) ? resultado[40].toString().trim() : "");
+        	pend.setEmidoc2((resultado[41] != null) ? resultado[41].toString().trim() : "");
+        	doc.setNumdoc3((resultado[42] != null) ? resultado[42].toString().trim() : "");
+        	doc.setSerdoc3((resultado[43] != null) ? resultado[43].toString().trim() : "");
+        	doc.setEmidoc3((resultado[44] != null) ? resultado[44].toString().trim() : "");
+        	doc.setPartnum((resultado[45] != null) ? resultado[45].toString().trim() : "");
+
+        	doc.setCnpjfor((resultado[46] != null) ? resultado[46].toString().trim() : "");
+        	doc.setIe((resultado[47] != null) ? resultado[47].toString().trim() : "");
+        	doc.setAdicao((resultado[48] != null) ? resultado[48].toString().trim() : "");
+        	doc.setItadicao((resultado[49] != null) ? resultado[49].toString().trim() : "");
+
+        	doc.setCnpjfor2((resultado[50] != null) ? resultado[50].toString().trim() : "");
+        	doc.setIe2((resultado[51] != null) ? resultado[51].toString().trim() : "");
+        	doc.setAdicao2((resultado[52] != null) ? resultado[52].toString().trim() : "");
+        	doc.setItadicao2((resultado[53] != null) ? resultado[53].toString().trim() : "");
+
+        	doc.setCnpjfor3((resultado[54] != null) ? resultado[54].toString().trim() : "");
+        	doc.setIe3((resultado[55] != null) ? resultado[55].toString().trim() : "");
+        	doc.setAdicao3((resultado[56] != null) ? resultado[56].toString().trim() : "");
+        	doc.setItadicao3((resultado[57] != null) ? resultado[57].toString().trim() : "");
         	
-        	pend.setNumpend( (resultado[35] != null) ? resultado[35].toString().trim() : "");
-        	pend.setCdpend( (resultado[36] != null) ? resultado[36].toString().trim() : "");
-        	pend.setObspend( (resultado[37] != null) ? resultado[37].toString().trim() : "");
-        	pend.setStatus( (resultado[38] != null) ? resultado[38].toString().trim() : "");
-        	pend.setPartnum((resultado[54] != null) ? resultado[54].toString().trim() : "");
-        	pend.setIdmatriz((resultado[55] != null) ? resultado[55].toString().trim() : "");
-        	
-        	doc.setTpdoc((resultado[39] != null) ? resultado[39].toString().trim() : "");
-        	doc.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
-        	doc.setSerdoc((resultado[41] != null) ? resultado[41].toString().trim() : "");
-        	doc.setEmidoc((resultado[42] != null) ? resultado[42].toString().trim() : "");
-        	doc.setNumdoc2((resultado[43] != null) ? resultado[43].toString().trim() : "");
-        	doc.setSerdoc2((resultado[44] != null) ? resultado[44].toString().trim() : "");
-        	doc.setEmidoc2((resultado[45] != null) ? resultado[45].toString().trim() : "");
-        	doc.setNumdoc3((resultado[46] != null) ? resultado[46].toString().trim() : "");
-        	doc.setSerdoc3((resultado[47] != null) ? resultado[47].toString().trim() : "");
-        	doc.setEmidoc3((resultado[48] != null) ? resultado[48].toString().trim() : "");
-        	doc.setPartnum((resultado[57] != null) ? resultado[57].toString().trim() : "");
-        	
-        	
-        	doc.setCnpjfor((resultado[58] != null) ? resultado[58].toString().trim() : "");
-        	doc.setIe((resultado[59] != null) ? resultado[59].toString().trim() : "");
-        	doc.setAdicao((resultado[60] != null) ? resultado[60].toString().trim() : "");
-        	doc.setItadicao((resultado[61] != null) ? resultado[61].toString().trim() : "");
-        	
-         	doc.setCnpjfor2((resultado[62] != null) ? resultado[62].toString().trim() : "");
-        	doc.setIe2((resultado[63] != null) ? resultado[63].toString().trim() : "");
-        	doc.setAdicao2((resultado[64] != null) ? resultado[64].toString().trim() : "");
-        	doc.setItadicao2((resultado[65] != null) ? resultado[65].toString().trim() : "");
-        	
-         	doc.setCnpjfor3((resultado[66] != null) ? resultado[66].toString().trim() : "");
-        	doc.setIe3((resultado[67] != null) ? resultado[67].toString().trim() : "");
-        	doc.setAdicao3((resultado[68] != null) ? resultado[68].toString().trim() : "");
-        	doc.setItadicao3((resultado[69] != null) ? resultado[69].toString().trim() : "");
-        	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getObspend().equals("") && pend.getStatus().equals(""))) {
+        	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getStatus().equals(""))) {
                 listaPendSet.add(pend); // Adiciona à lista apenas se não estiver duplicado
             }
         	
-        	if (!(doc.getTpdoc().equals("") && doc.getSerdoc().equals("") && doc.getNumdoc().equals("") && doc.getEmidoc().equals("") 
-                    && doc.getSerdoc2().equals("") && doc.getNumdoc2().equals("") && doc.getEmidoc2().equals("") 
-                    && doc.getSerdoc3().equals("") && doc.getNumdoc3().equals("") && doc.getEmidoc3().equals(""))) {
-                listaDocSet.add(doc); // Adiciona à lista apenas se não estiver duplicado
-            }
-        	
-        	//if (!(cor.getCodcor().equals("") && cor.getPartdesc().equals("") && cor.getPartnumpd().equals("") && cor.getPriocor().equals("") && cor.getUnmed().equals(""))) {
-                // Adiciona ao conjunto apenas se não estiver duplicado
-            //}
-        	//if(cor.getIdmatriz().equals(resp.getIdMatriz())) {
-        		 coresSet.add(cor);
-        	//}
-        	Boolean existeItem = false;
-            for (ProdutoPendenciaResponseList it : listaItemSet) {
-                if (it.getPartnum().equals(item.getPartnum())) {
-                    existeItem = true;
-                    break;
-                }
-            }
-
-            if (!existeItem) {
-                listaItemSet.add(item);
-            }
-            
         	Boolean existe = Boolean.FALSE;
             for (ProdutoSemListaResponse prd : produtos) {
-				if(prd.getIdMatriz().equals(resp.getIdMatriz())) {
+				if(prd.getIdMatriz().equals(resp.getIdMatriz()) && prd.getPartnumpd().equals(resp.getPartnumpd())) {
 					existe = Boolean.TRUE;
 				}
 			}
             
-            List<CoresResponse> listaCor = new ArrayList<>(coresSet);
-            List<ProdutoPendenciaResponseList> listaItem = new ArrayList<>();
-            List<PendenciaResponse> listaPend = new ArrayList<>(listaPendSet);
-            List<DocumentosResponse> listaDoc = new ArrayList<>(listaDocSet);
+            if(listaPendSet.size() < 1 && !pend.getNumpend().equals("")) {
+            	listaPendSet.add(pend);
+            }
+            for (PendenciaResponseSemLista pendencia : listaPendSet) {
+            	if(!pendencia.getCdpend().equals(pend.getCdpend()) && !pend.getNumpend().equals("")) {
+    				listaPendSet.add(pend);
+    			}
+			}
+            
+            List<PendenciaResponseSemLista> listaPend = new ArrayList<>(listaPendSet);
 
-            //resp.setItens(listaItem);
-            //resp.setPendencias(listaPend);
-           // resp.setDocumentos(listaDoc);
-           // resp.setCores(listaCor);
-           resp.setQtdependencias(repository.countPendencias(resp.getIdMatriz().toString()));
-           if(resp.getQtdependencias().equals(0)) {
-        	   produtos.add(resp);
-           }
+            resp.setPendencias(listaPend);
+            resp.setQtdependencias(repository.countPendencias(resp.getIdMatriz().toString()));
+            
+            if(!existe) {
+            	produtos.add(resp);
+            }
+        	
            
         }
         
