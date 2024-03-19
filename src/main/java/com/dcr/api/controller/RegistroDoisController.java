@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.model.as400.Dcrreg1;
 import com.dcr.api.model.as400.Dcrreg2;
 import com.dcr.api.model.dto.Dcrreg2DTO;
 import com.dcr.api.model.keys.Dcrreg2Key;
@@ -143,16 +145,11 @@ public class RegistroDoisController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getByKey(@RequestBody Dcrreg2DTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> getByKey(@RequestParam Integer idmatriz, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
 	
 		try {
-			Dcrreg2Key key = new Dcrreg2Key();
-			key.setIdmatriz(dto.idmatriz());
-			key.setPartnumpd(dto.partnumpd());
-			key.setNumcomp(dto.numcomp());
-			key.setTpprd(dto.tpprd());
 			
-			Optional<Dcrreg2> dcr = service.getByKey(key);
+			List<Dcrreg2> dcr = service.getByIds(idmatriz, partnumpd, tpprd);
 					
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
