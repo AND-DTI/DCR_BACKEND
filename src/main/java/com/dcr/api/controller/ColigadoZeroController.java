@@ -77,7 +77,7 @@ public class ColigadoZeroController {
 			key.setDenom(dto.denom());
 			key.setDcre(dto.dcre());
 			
-			Optional<Dcrcoli0> dcr = service.getByKey(dto.dcre());
+			Optional<Dcrcoli0> dcr = service.getByKey(key);
 			
 			if (!dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -112,7 +112,7 @@ public class ColigadoZeroController {
 			key.setDenom(dto.denom());
 			key.setDcre(dto.dcre());
 			
-			Optional<Dcrcoli0> dcr = service.getByKey(dto.dcre());
+			Optional<Dcrcoli0> dcr = service.getByKey(key);
 			
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -147,7 +147,7 @@ public class ColigadoZeroController {
 			key.setDenom(dto.denom());
 			key.setDcre(dto.dcre());
 			
-			Optional<Dcrcoli0> dcr = service.getByKey(dto.dcre());
+			Optional<Dcrcoli0> dcr = service.getByKey(key);
 					
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)

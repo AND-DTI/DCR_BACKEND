@@ -82,6 +82,7 @@ public class Dcrcoli0Service {
 		return repository.findAll();
 	}
 	
+	
 	public Optional<Dcrcoli0> getByKey(Dcrcoli0Key dto) {
 
 		return repository.findById(dto);
