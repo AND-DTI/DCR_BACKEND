@@ -1,27 +1,52 @@
 package com.dcr.api.model.as400;
 
-import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "DCRPROCC", schema = "HD4DCDHH")
+@Table(name = "DCRPROCCH", schema = "HD4DCDHH")
 @ApiModel
-public class Dcrprocc {
+public class Dcrprocch {
 
-	@EmbeddedId
-	private DcrproccKey key;
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "int", unique = true)
+	@Id
+	private Long idhist;
+	
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "int(10)")
+	private Long idmatriz;
+	
+	@TamanhoMaximo(25)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(25)")
+	private String partnumpd;
+	
+	@TamanhoMaximo(4)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(4)")
+	private String tpprd;
 	
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "int(5)")
-	private Integer status;
+	@Column(columnDefinition = "int")
+	private Integer stsold;
+	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "int")
+	private Integer stsnew;
 	
 	@TamanhoMaximo(8)
 	@TamanhoMinimo(1)
@@ -53,12 +78,52 @@ public class Dcrprocc {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public DcrproccKey getKey() {
-		return key;
+	public Long getIdhist() {
+		return idhist;
 	}
 
-	public void setKey(DcrproccKey key) {
-		this.key = key;
+	public void setIdhist(Long idhist) {
+		this.idhist = idhist;
+	}
+
+	public Long getIdmatriz() {
+		return idmatriz;
+	}
+
+	public void setIdmatriz(Long idmatriz) {
+		this.idmatriz = idmatriz;
+	}
+
+	public String getPartnumpd() {
+		return partnumpd;
+	}
+
+	public void setPartnumpd(String partnumpd) {
+		this.partnumpd = partnumpd;
+	}
+
+	public String getTpprd() {
+		return tpprd;
+	}
+
+	public void setTpprd(String tpprd) {
+		this.tpprd = tpprd;
+	}
+
+	public Integer getStsold() {
+		return stsold;
+	}
+
+	public void setStsold(Integer stsold) {
+		this.stsold = stsold;
+	}
+
+	public Integer getStsnew() {
+		return stsnew;
+	}
+
+	public void setStsnew(Integer stsnew) {
+		this.stsnew = stsnew;
 	}
 
 	public String getDtstatus() {
@@ -77,6 +142,13 @@ public class Dcrprocc {
 		this.hrstatus = hrstatus;
 	}
 
+	public String getRespstatus() {
+		return respstaus;
+	}
+
+	public void setRespstatus(String respstatus) {
+		this.respstaus = respstatus;
+	}
 
 	public String getItaudsys() {
 		return itaudsys;
@@ -116,21 +188,5 @@ public class Dcrprocc {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
-	}
-
-	public String getRespstaus() {
-		return respstaus;
-	}
-
-	public void setRespstaus(String respstaus) {
-		this.respstaus = respstaus;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
 	}
 }

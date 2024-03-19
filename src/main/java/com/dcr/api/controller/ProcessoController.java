@@ -78,7 +78,6 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.status());
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
@@ -115,7 +114,6 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.status());
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
@@ -152,7 +150,6 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.status());
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
@@ -188,7 +185,7 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.statusOld());
+			
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
@@ -198,8 +195,8 @@ public class ProcessoController {
 						.header("Accept", "application/json")
 						.body("Nenhum Processo encontrado!");
 		    }
-			dcr.get().getKey().setStatus(dto.statusNew());
-			service.setStatus(dcr.get(), request);
+			
+			service.setStatus(dcr.get(), dto.status(), request);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body("Status atualizado!");
