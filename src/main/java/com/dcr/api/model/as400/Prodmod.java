@@ -25,7 +25,7 @@ public class Prodmod {
 	@Column(columnDefinition = "char(30)")
     private String descpor;
 	
-	@TamanhoMaximo(30)
+	@TamanhoMaximo(60)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
     private String descing;
@@ -40,7 +40,7 @@ public class Prodmod {
 	@Column(columnDefinition = "char(10)")
     private String modelo;
 	
-	@TamanhoMaximo(4)
+	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
     private String anomdl;
@@ -54,6 +54,16 @@ public class Prodmod {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(10)")
     private String mdsugest;
+	
+	@TamanhoMaximo(7)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "int")
+    private Long psliq;
+	
+	@TamanhoMaximo(7)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "int")
+    private Long psbrt;
 	
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;
@@ -172,5 +182,21 @@ public class Prodmod {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public Long getPsliq() {
+		return psliq;
+	}
+
+	public void setPsliq(Long psliq) {
+		this.psliq = psliq;
+	}
+
+	public Long getPsbrt() {
+		return psbrt;
+	}
+
+	public void setPsbrt(Long psbrt) {
+		this.psbrt = psbrt;
 	}
 }

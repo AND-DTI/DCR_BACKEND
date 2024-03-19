@@ -63,7 +63,7 @@ public class ProdfatService {
 		prod.setFrstanofab(dto.frstanofab());
 		prod.setLastanofab(dto.lastanofab());
 		prod.setTpprd(dto.tpprd());
-
+		prod.setUncome(dto.uncome());
 		Auxiliar.preencheAuditoria(prod, request);
 		
 		return repository.save(prod);

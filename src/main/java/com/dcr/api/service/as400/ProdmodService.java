@@ -51,7 +51,8 @@ public class ProdmodService {
 		prod.setModelo(dto.modelo());
 		prod.setPartnumpd(dto.partnumpd());
 		prod.setUengno(dto.uengno());
-		
+		prod.setPsliq(dto.psliq());
+		prod.setPsbrt(dto.psbrt());
 		Auxiliar.preencheAuditoria(prod, request);
 		return repository.save(prod);
 	}

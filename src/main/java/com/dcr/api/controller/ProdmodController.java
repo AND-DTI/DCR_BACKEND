@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dcr.api.model.as400.Prodfat;
-import com.dcr.api.model.dto.ProdfatDTO;
-import com.dcr.api.model.keys.ProdfatKey;
-import com.dcr.api.service.as400.ProdfatService;
+import com.dcr.api.model.as400.Prodmod;
+import com.dcr.api.model.dto.ProdmodDTO;
+import com.dcr.api.service.as400.ProdmodService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,11 +27,11 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/prodfat")
-public class ProdfatController {
-	
+@RequestMapping("/api/prodmod")
+public class ProdmodController {
+
 	@Autowired
-	ProdfatService service;
+	ProdmodService service;
 	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um Processo")
@@ -42,14 +41,11 @@ public class ProdfatController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> createProcesso(@RequestBody ProdfatDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> createProcesso(@RequestBody ProdmodDTO dto, HttpServletRequest request) {
 	
 		try {
-			ProdfatKey key = new ProdfatKey();
-			key.setCdprd(dto.cdprd());
-			key.setPartnumpd(dto.partnumpd());
 			
-			Optional<Prodfat> dcr = service.getByID(key);
+			Optional<Prodmod> dcr = service.getByID(dto.partnumpd());
 			
 			if (!dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -80,7 +76,7 @@ public class ProdfatController {
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Prodfat> dcr = service.getAll();
+			List<Prodmod> dcr = service.getAll();
 			
 			if(dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -106,14 +102,11 @@ public class ProdfatController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> update(@RequestBody ProdfatDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody ProdmodDTO dto, HttpServletRequest request) {
 	
 		try {
-			ProdfatKey key = new ProdfatKey();
-			key.setCdprd(dto.cdprd());
-			key.setPartnumpd(dto.partnumpd());
-			
-			Optional<Prodfat> dcr = service.getByID(key);
+
+			Optional<Prodmod> dcr = service.getByID(dto.partnumpd());
 			
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -141,14 +134,11 @@ public class ProdfatController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> delete(@RequestParam String cdprd, @RequestParam String partnumpd, HttpServletRequest request) {
+	public ResponseEntity<Object> delete(@RequestParam String partnumpd, HttpServletRequest request) {
 	
 		try {
-			ProdfatKey key = new ProdfatKey();
-			key.setCdprd(cdprd);
-			key.setPartnumpd(partnumpd);
 			
-			Optional<Prodfat> dcr = service.getByID(key);
+			Optional<Prodmod> dcr = service.getByID(partnumpd);
 			
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
