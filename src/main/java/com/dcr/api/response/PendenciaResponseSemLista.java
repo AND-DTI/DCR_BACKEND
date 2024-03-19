@@ -25,7 +25,8 @@ public class PendenciaResponseSemLista {
     private Object numdoc3;
     private Object serdoc3;
     private Object emidoc3;
-    public Object getCdbej() {
+    
+	public Object getCdbej() {
 		return cdbej;
 	}
 	public void setCdbej(Object cdbej) {
@@ -148,4 +149,5 @@ public class PendenciaResponseSemLista {
 	public void setEmidoc2(Object emidoc2) {
 		this.emidoc2 = emidoc2;
 	}
+	
 }

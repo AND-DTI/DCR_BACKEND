@@ -246,8 +246,8 @@ public class MatriprdService {
 		return pend;
 	}
 	
-	public ProdutoPendenciaSimplesResponse getProdutoPendencia(Integer id) {
-		List<Object[]> resultados = repository.consultaProdutoPendencia(id);
+	public ProdutoPendenciaSimplesResponse getProdutoPendencia(Integer id, String partnumpd) {
+		List<Object[]> resultados = repository.consultaProdutoPendencia(id, partnumpd);
 		
 		List<ProdutoPendenciaSimplesResponse> produtos = new ArrayList<>();
 		ProdutoPendenciaSimplesResponse resp = new ProdutoPendenciaSimplesResponse();
@@ -592,7 +592,7 @@ public class MatriprdService {
         }
         
         for (ProdutoPendenciaResponse produto : produtos) {
-			produto.setQtdependencias(repository.countPendencias(produto.getIdMatriz().toString()));
+			produto.setQtdependencias(repository.countPendencias(produto.getIdMatriz().toString(), ""));
 		}
 		return produtos;
 	}
@@ -687,10 +687,14 @@ public class MatriprdService {
             List<PendenciaResponseSemLista> listaPend = new ArrayList<>(listaPendSet);
 
             resp.setPendencias(listaPend);
-            resp.setQtdependencias(repository.countPendencias(resp.getIdMatriz().toString()));
+            
             
             if(!existe) {
-            	produtos.add(resp);
+                resp.setQtdependencias(repository.countPendencias(resp.getIdMatriz().toString(), resp.getPartnumpd().toString()));
+            	if((repository.countPendencias(resp.getIdMatriz().toString(), resp.getPartnumpd().toString())) < 1) {
+            		produtos.add(resp);
+            	}
+                
             }
         	
            

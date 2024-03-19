@@ -147,6 +147,9 @@ public class ProdutoSemListaResponse {
 	public void setQtdependencias(Object qtdependencias) {
 		this.qtdependencias = qtdependencias;
 	}
+	public Object getQtdependencias() {
+		return qtdependencias;
+	}
 	public Object getPartnumpd() {
 		return partnumpd;
 	}

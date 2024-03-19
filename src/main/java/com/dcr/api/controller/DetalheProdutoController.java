@@ -99,11 +99,11 @@ public class DetalheProdutoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getProdutoPendencia(@RequestParam Integer idmatriz) {
+	public ResponseEntity<Object> getProdutoPendencia(@RequestParam Integer idmatriz, @RequestParam String partnumpd) {
 	
 		try {
 
-			ProdutoPendenciaSimplesResponse lista = service.getProdutoPendencia(idmatriz);
+			ProdutoPendenciaSimplesResponse lista = service.getProdutoPendencia(idmatriz, partnumpd);
 	        if (lista.getIdMatriz() == null) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
