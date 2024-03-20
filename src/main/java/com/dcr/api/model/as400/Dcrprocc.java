@@ -38,6 +38,44 @@ public class Dcrprocc {
 	@Column(columnDefinition = "char(10)")
 	private String respstaus;
 	
+	@TamanhoMaximo(8)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(8)")
+	private String dtregistro;
+	
+	@TamanhoMaximo(8)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(8)")
+	private String hrregistro;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(8,6)")
+	private Double taxausd;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(15,6)")
+	private Double totalnac;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(15,6)")
+	private Double totalimp;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(15,6)")
+	private Double custotal;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(4,2)")
+	private Double coefred;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(15,6)")
+	private Double iitotal;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(15,6)")
+	private Double iireduzido;
+	
 	@Column(columnDefinition = "char(40)")
 	private String itaudsys;
 
