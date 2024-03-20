@@ -64,4 +64,10 @@ public class Dcrreg1Service {
 
 		return repository.findById(dto);
 	}
+	
+	public List<Dcrreg1> getByIds(Integer idmatriz, String partnumpd, String tpprd) {
+
+		return repository.consultaByIds(idmatriz, partnumpd, tpprd);
+	}
+	
 }

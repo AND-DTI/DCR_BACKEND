@@ -7,8 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.PendprodDTO;
+import com.dcr.api.model.dto.resolverPendenciaDTO;
 import com.dcr.api.model.keys.PendprodKey;
 import com.dcr.api.repository.as400.PendprodRepository;
 import com.dcr.api.utils.Auxiliar;
@@ -33,6 +35,11 @@ public class PendprodService {
 		return repository.findById(id);
 	}
 	
+	public List<Pendprod> getByCdPend(String cdpend) {
+		
+		return repository.findByCdPend(cdpend);
+	}
+
 	public void delete(Pendprod matriz) {
 		
 		repository.delete(matriz);
@@ -45,10 +52,11 @@ public class PendprodService {
 		key.setIdmatriz(dto.idmatriz());
 		key.setPartnum(dto.partnum());
 		key.setNumpend(dto.numpend());
+		key.setPartnumpd(dto.partnumpd());
 		pend.setKey(key);
 
 		pend.setCdpend(dto.cdpend());
-		pend.setObspend(dto.obspend());
+		pend.setObsresol(dto.obsresol());
 		pend.setStatus(dto.status());
 		
 		Auxiliar.preencheAuditoria(pend, request);
@@ -58,9 +66,18 @@ public class PendprodService {
 	public Pendprod update(Pendprod pend,  PendprodDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		pend.setCdpend(dto.cdpend());
-		pend.setObspend(dto.obspend());
+		pend.setObsresol(dto.obsresol());
 		pend.setStatus(dto.status());
 		
+		Auxiliar.preencheAuditoria(pend, request);
+		return repository.save(pend);
+	}
+	
+public Pendprod resolverPendencia(Pendprod pend,  resolverPendenciaDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+		
+		pend.setCdpend(dto.cdpend());
+		pend.setObsresol(dto.obsresol());
+		pend.setStatus(dto.status());
 		
 		Auxiliar.preencheAuditoria(pend, request);
 		return repository.save(pend);

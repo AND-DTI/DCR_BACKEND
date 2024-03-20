@@ -14,6 +14,9 @@ public class AccoperolKey {
 	@TamanhoMinimo(1)
 	private Integer idoper;
 
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	private String cdsys;
 	public Integer getIdoper() {
 		return idoper;
 	}
@@ -49,4 +52,14 @@ public class AccoperolKey {
 		AccoperolKey other = (AccoperolKey) obj;
 		return Objects.equals(idoper, other.idoper) && Objects.equals(roleid, other.roleid);
 	}
+
+	public String getCdsys() {
+		return cdsys;
+	}
+
+	public void setCdsys(String cdsys) {
+		this.cdsys = cdsys;
+	}
+
+	
 }

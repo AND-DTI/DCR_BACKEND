@@ -1,10 +1,12 @@
 package com.dcr.api.model.as400;
 
+import com.dcr.api.model.keys.AccModuleKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,11 +16,8 @@ import jakarta.persistence.Table;
 @ApiModel
 public class Accmodule {
 
-	@Id
-	@Column(columnDefinition = "char(5)")
-	@TamanhoMaximo(5)
-	@TamanhoMinimo(1)
-	private String cdmodule;
+	@EmbeddedId
+	private AccModuleKey key;
 	
 	@Column(columnDefinition = "char(100)")
 	@TamanhoMaximo(100)
@@ -39,14 +38,6 @@ public class Accmodule {
 
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
-
-	public String getCdmodule() {
-		return cdmodule;
-	}
-
-	public void setCdmodule(String cdmodule) {
-		this.cdmodule = cdmodule;
-	}
 
 	public String getNamemodule() {
 		return namemodule;
@@ -94,6 +85,14 @@ public class Accmodule {
 
 	public void setItaudsys(String itaudsys) {
 		this.itaudsys = itaudsys;
+	}
+
+	public AccModuleKey getKey() {
+		return key;
+	}
+
+	public void setKey(AccModuleKey key) {
+		this.key = key;
 	}
 
 }

@@ -78,6 +78,7 @@ public class OperacoesRoleController {
 			AccoperolKey key = new AccoperolKey();
 			key.setIdoper(dto.idoper());
 			key.setRoleid(dto.roleid());
+			key.setCdsys("NEW_DCR");
 			Optional<Accoperol> dcr = service.getByID(key);
 			
 			if (!dcr.isEmpty()) {
@@ -113,6 +114,7 @@ public class OperacoesRoleController {
 			AccoperolKey key = new AccoperolKey();
 			key.setIdoper(idoper);
 			key.setRoleid(roleid);
+			key.setCdsys("NEW_DCR");
 			Optional<Accoperol> dcr = service.getByID(key);
 			
 			if (dcr.isEmpty()) {
@@ -146,7 +148,7 @@ public class OperacoesRoleController {
 			AccoperolKey key = new AccoperolKey();
 			key.setIdoper(dto.idoper());
 			key.setRoleid(dto.roleid());
-	
+			key.setCdsys("NEW_DCR");
 			Optional<Accoperol> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -179,7 +181,7 @@ public class OperacoesRoleController {
 			AccoperolKey key = new AccoperolKey();
 			key.setIdoper(idoper);
 			key.setRoleid(roleid);
-			
+			key.setCdsys("NEW_DCR");
 			Optional<Accoperol> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)

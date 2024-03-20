@@ -24,7 +24,6 @@ public class Cadppb {
 	private String desccom;
 	
 	@TamanhoMaximo(80)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(80)")
 	private String descrfb;
 	

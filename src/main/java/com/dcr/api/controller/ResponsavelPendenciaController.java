@@ -1,5 +1,6 @@
 package com.dcr.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Pendresp;
 import com.dcr.api.model.dto.PendrespDTO;
+import com.dcr.api.model.dto.PendrespDeleteDTO;
 import com.dcr.api.model.keys.PendenciaKey;
+import com.dcr.api.response.PendrespDeleteResponse;
+import com.dcr.api.response.PendrespResponse;
 import com.dcr.api.service.as400.PendrespService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -95,6 +99,35 @@ public class ResponsavelPendenciaController {
 		}   
 	}
 	
+	@GetMapping(value = "/getResponsaveis", produces = "application/json")
+	@Operation(summary = "Busca todos as responsáveis")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByPendencia(@RequestParam String cdpend) {
+	
+		try {
+	
+			List<Pendresp> lista = service.getByCdPend(cdpend);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhum responsável encontrado!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
@@ -103,21 +136,32 @@ public class ResponsavelPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam String cdpend, @RequestParam String cdresp) {
-	
+	public ResponseEntity<Object> delete(@RequestBody List<PendrespDeleteDTO> listaDto, HttpServletRequest request) {
+		List<PendrespDeleteDTO> listaErro = new ArrayList<>();
 		try {
-			PendenciaKey key = new PendenciaKey();
-			key.setCdpend(cdpend);
-			key.setCdresp(cdresp);
+			for (PendrespDeleteDTO dto : listaDto) {
+				PendenciaKey key = new PendenciaKey();
+				key.setCdpend(dto.cdpend());
+				key.setCdresp(dto.cdresp());
+				
+				Optional<Pendresp> lista = service.getByID(key);
+		        if (lista.isEmpty()) {
+		            listaErro.add(dto);
+		        }else {
+		        	service.delete(lista.get());
+		        }
 			
-			Optional<Pendresp> lista = service.getByID(key);
-	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Nenhum responsável encontrado!");
-	        }
-		
-	        service.delete(lista.get());
+		        
+		       
+			}
+			if(listaErro.size() > 0) {
+				PendrespDeleteResponse resp = new PendrespDeleteResponse();
+				resp.setErros(listaErro);
+				resp.setMsgErro("Associações não encontradas!");
+				return ResponseEntity.status(HttpStatus.OK)
+			        	.header("Accept", "application/json")
+			            .body(resp);
+			}
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("Associação deletada com sucesso!");
@@ -136,21 +180,30 @@ public class ResponsavelPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody PendrespDTO dto, HttpServletRequest request) {
-	
+	public ResponseEntity<Object> create(@RequestBody List<PendrespDTO> listaDto, HttpServletRequest request) {
+		List<PendrespDTO> listaErro = new ArrayList<>();
 		try {
-			PendenciaKey key = new PendenciaKey();
-			key.setCdpend(dto.cdpend());
-			key.setCdresp(dto.cdresp());
-			
-			Optional<Pendresp> lista = service.getByID(key);
-	        if (!lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			for (PendrespDTO dto : listaDto) {
+				PendenciaKey key = new PendenciaKey();
+				key.setCdpend(dto.cdpend());
+				key.setCdresp(dto.cdresp());
+				
+				Optional<Pendresp> lista = service.getByID(key);
+		        if (!lista.isEmpty()) {
+		            listaErro.add(dto);
+		        }else {
+		        	service.create(dto, request);
+		        }
+			}
+			if(listaErro.size() > 0) {
+				PendrespResponse resp = new PendrespResponse();
+				resp.setErros(listaErro);
+				resp.setMsgErro("Esses responsáveis já existem!");
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Essa associação de Responsável e pendência já existe!");
-	        }
-		
-	        service.create(dto, request);
+	                    .body(resp); 
+			}
+			
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
 		            .body("OK");
@@ -169,27 +222,35 @@ public class ResponsavelPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> update(@RequestBody PendrespDTO dto, HttpServletRequest request) {
-	
+	public ResponseEntity<Object> update(@RequestBody List<PendrespDTO> listaDto, HttpServletRequest request) {
+		List<PendrespDTO> listaErro = new ArrayList<>();
 		try {
-			PendenciaKey key = new PendenciaKey();
-			key.setCdpend(dto.cdpend());
-			key.setCdresp(dto.cdresp());
-			
-			Optional<Pendresp> lista = service.getByID(key);
-	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			for (PendrespDTO dto : listaDto) {
+				PendenciaKey key = new PendenciaKey();
+				key.setCdpend(dto.cdpend());
+				key.setCdresp(dto.cdresp());
+				
+				Optional<Pendresp> lista = service.getByID(key);
+		        if (lista.isEmpty()) {
+		        	listaErro.add(dto);
+		        }else if (dto.nmresp().equals(lista.get().getNmresp().trim())) {
+		        	listaErro.add(dto);
+		            
+		        }else {
+		        	service.update(lista.get(), dto,  request);
+		        }
+		        
+			}
+		    if(listaErro.size() > 0) {
+	        	PendrespResponse resp = new PendrespResponse();
+				resp.setErros(listaErro);
+				resp.setMsgErro("Associações não encontradas ou sem alteração!");
+	        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Associação não encontrada!");
-	        }
-		
-	        if (dto.nmresp().equals(lista.get().getNmresp().trim())) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Associação não tem alteração!");
+	                    .body(resp);
 	        }
 	        
-	        service.update(lista.get(), dto,  request);
+		    
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");

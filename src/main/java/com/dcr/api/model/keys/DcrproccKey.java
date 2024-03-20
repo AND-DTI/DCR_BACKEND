@@ -19,10 +19,6 @@ public class DcrproccKey {
 	@TamanhoMaximo(4)
 	@TamanhoMinimo(1)
 	private String tpprd;
-	
-	@TamanhoMaximo(1)
-	@TamanhoMinimo(1)
-	private Integer status;
 
 	public Long getIdmatriz() {
 		return idmatriz;
@@ -48,11 +44,4 @@ public class DcrproccKey {
 		this.tpprd = tpprd;
 	}
 
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
 }

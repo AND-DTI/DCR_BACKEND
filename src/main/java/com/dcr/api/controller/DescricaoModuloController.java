@@ -78,7 +78,7 @@ public class DescricaoModuloController {
 			AccdscmodKey key = new AccdscmodKey();
 			key.setCdmodule(cdmodule);
 			key.setCodidioma(codidioma);
-			
+			key.setCdsys("NEW_DCR");
 			Optional<Accdscmod> lista = service.getByID(key);
 			
 	        if (lista.isEmpty()) {
@@ -112,7 +112,7 @@ public class DescricaoModuloController {
 			AccdscmodKey key = new AccdscmodKey();
 			key.setCdmodule(dto.cdmodule());
 			key.setCodidioma(dto.codidioma());
-			
+			key.setCdsys("NEW_DCR");
 			Optional<Accdscmod> lista = service.getByID(key);
 	        if (!lista.isEmpty()) {
 	        	return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -146,7 +146,7 @@ public class DescricaoModuloController {
 			AccdscmodKey key = new AccdscmodKey();
 			key.setCdmodule(dto.cdmodule());
 			key.setCodidioma(dto.codidioma());
-	
+			key.setCdsys("NEW_DCR");
 			Optional<Accdscmod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -180,7 +180,7 @@ public class DescricaoModuloController {
 			AccdscmodKey key = new AccdscmodKey();
 			key.setCdmodule(cdmodule);
 			key.setCodidioma(codidioma);
-			
+			key.setCdsys("NEW_DCR");
 			Optional<Accdscmod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -5,6 +5,7 @@ import java.util.Objects;
 public class MatridocKey {
 	private Integer idmatriz;
 	private String partnum;
+	private String partnumpd;
 	private String tpdoc;
 	public Integer getIdmatriz() {
 		return idmatriz;
@@ -39,5 +40,11 @@ public class MatridocKey {
 		MatridocKey other = (MatridocKey) obj;
 		return Objects.equals(idmatriz, other.idmatriz) && Objects.equals(partnum, other.partnum)
 				&& Objects.equals(tpdoc, other.tpdoc);
+	}
+	public String getPartnumpd() {
+		return partnumpd;
+	}
+	public void setPartnumpd(String partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 }

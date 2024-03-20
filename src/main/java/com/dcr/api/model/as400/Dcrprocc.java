@@ -18,6 +18,11 @@ public class Dcrprocc {
 	@EmbeddedId
 	private DcrproccKey key;
 	
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "int(5)")
+	private Integer status;
+	
 	@TamanhoMaximo(8)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(8)")
@@ -119,5 +124,13 @@ public class Dcrprocc {
 
 	public void setRespstaus(String respstaus) {
 		this.respstaus = respstaus;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 }

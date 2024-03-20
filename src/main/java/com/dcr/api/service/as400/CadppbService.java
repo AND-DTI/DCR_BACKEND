@@ -60,47 +60,72 @@ public class CadppbService {
 		tpprdProjection.setProdutos(new ArrayList());
 		tpprdProjection.setTipos(new ArrayList());
 		for (Map.Entry<Object, List<ProdsProjection>> entry : map.entrySet()) {
+			for (ProdsProjection obj : entry.getValue()) {
+				
 			
-			TipoProjection tp = new TipoProjection();
-			tp.setTpPrd(entry.getValue().get(0).getTpPrd());
-			tp.setDescPor(entry.getValue().get(0).getDescPor());
-			
-			
-			
-			Boolean existe = Boolean.FALSE;
-			for (TipoProjection tipo : tpprdProjection.getTipos()) {
-				if(tipo.getTpPrd().equals(entry.getValue().get(0).getTpPrd())) {
-					existe = Boolean.TRUE;
+				TipoProjection tp = new TipoProjection();
+				tp.setTpPrd(obj.getTpPrd());
+				tp.setDscPor(obj.getDscPor().trim());
+				
+				
+				
+				Boolean existeTp = Boolean.FALSE;
+				for (TipoProjection tipo : tpprdProjection.getTipos()) {
+					if(tipo.getTpPrd().equals(obj.getTpPrd())) {
+						existeTp = Boolean.TRUE;
+					}
 				}
-			}
-			if(!existe) {
-				tpprdProjection.getTipos().add(tp);
+				if(!existeTp) {
+					tpprdProjection.getTipos().add(tp);
+				}
+				
+				
+				Boolean existePr = Boolean.FALSE;
+				for (Nivel1Projection prod : tpprdProjection.getProdutos()) {
+					String tpprd = prod.getTpPrd().toString().trim();
+					String cdprd = prod.getCdPrd().toString().trim();
+					if(cdprd.equals(obj.getCdPrd().trim()) && tpprd.equals(obj.getTpPrd().trim())) {
+						existePr = Boolean.TRUE;
+					}
+				}
+				
+				Nivel1Projection nvl1 = new Nivel1Projection();
+				nvl1.setCdPrd((obj.getCdPrd() != null) ? obj.getCdPrd().trim() : "");
+	            nvl1.setDescCom((obj.getDescCom() != null) ? obj.getDescCom().trim() : "");
+	            nvl1.setDescRfb((obj.getDescRfb() != null) ? obj.getDescRfb().trim() : "");
+	            nvl1.setPrdDest((obj.getPrdDest() != null) ? obj.getPrdDest().trim() : "");
+	            nvl1.setPpbPrd((obj.getPpbPrd() != null) ? obj.getPpbPrd().trim() : "");
+	            nvl1.setModelo((obj.getModelo() != null) ? obj.getModelo().trim() : "");
+	            nvl1.setAnoMdl((obj.getAnoMdl() != null) ? obj.getAnoMdl() : "");
+	            nvl1.setTpPrd((obj.getTpPrd() != null) ? obj.getTpPrd().trim() : "");
+	            nvl1.setItens(new ArrayList());
+				for (ProdsProjection result : entry.getValue()) {
+		            Nivel2Projection nvl2 = new Nivel2Projection();
+		            nvl2.setPartnumPd((result.getPartnumPd() != null) ? result.getPartnumPd().trim() : "");
+		            nvl2.setDescPor((result.getDescPor() != null) ? result.getDescPor().trim() : "");
+		            nvl2.setDescIng((result.getDescIng() != null) ? result.getDescIng().trim() : "");
+		            nvl2.setuEngNo((result.getuEngNo() != null) ? result.getuEngNo().trim() : "");
+		            nvl2.setCodCor((result.getCodCor() != null) ? result.getCodCor().trim() : "");
+		            nvl2.setCorPt((result.getCorPt() != null) ? result.getCorPt().trim() : "");
+		            nvl2.setUncome((result.getUncome() != null) ? result.getUncome().trim() : "");
+		            Boolean existeCor = Boolean.FALSE;
+		            for (Nivel2Projection prod : nvl1.getItens()) {
+		            	if(prod.getCodCor().equals(result.getCodCor())) {
+		            		existeCor = Boolean.TRUE;
+		            	}
+		            }
+		            if(!existeCor) {
+		            	nvl1.getItens().add(nvl2);
+		            }
+		            
+		            
+				}
+				if(!existePr) {
+					tpprdProjection.getProdutos().add(nvl1);
+				}
+				
 			}
 			
-			Nivel1Projection nvl1 = new Nivel1Projection();
-			nvl1.setCdPrd(entry.getValue().get(0).getCdPrd());
-            nvl1.setDescCom(entry.getValue().get(0).getDescCom());
-            nvl1.setDescRfb(entry.getValue().get(0).getDescRfb());
-            nvl1.setPrdDest(entry.getValue().get(0).getPrdDest());
-            nvl1.setPpbPrd(entry.getValue().get(0).getPpbPrd());
-            nvl1.setModelo(entry.getValue().get(0).getModelo());
-            nvl1.setAnoMdl(entry.getValue().get(0).getAnoMdl());
-            nvl1.setTpPrd(entry.getValue().get(0).getTpPrd());
-            nvl1.setCores(new ArrayList());
-			for (ProdsProjection result : entry.getValue()) {
-	            Nivel2Projection nvl2 = new Nivel2Projection();
-	            nvl2.setPartnumPd(result.getPartnumPd());
-	            nvl2.setDescPor(result.getDescPor());
-	            nvl2.setDescIng(result.getDescIng());
-	            nvl2.setuEngNo(result.getuEngNo());
-	            nvl2.setCodCor(result.getCodCor());
-	            nvl2.setCorPt(result.getCorPt());
-	            
-	            
-	            nvl1.getCores().add(nvl2);
-	            
-			}
-			tpprdProjection.getProdutos().add(nvl1);
            
 		}
         

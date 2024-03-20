@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.repository.as400.UserRepository;
 import com.dcr.api.response.ErrorResponse;
@@ -68,6 +69,12 @@ public class UserService {
 
     }
 
+    public List<Accuser> listarAtivos() {
+
+        return userRepository.findDistinctByAtivo("S");
+
+    }
+    
     public void updatePassword(String username, String password) {
 
       userRepository.setPassword(username, password);
@@ -166,6 +173,10 @@ public class UserService {
 
     public Accuser save(Accuser user, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
     	Auxiliar.preencheAuditoria(user, request);
+    	for (User_Role role : user.getRoles()) {
+    		Auxiliar.preencheAuditoria(role, request);
+		}
+    	
         return userRepository.save(user);
 
     }

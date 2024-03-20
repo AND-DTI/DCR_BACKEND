@@ -4,6 +4,7 @@ import java.io.Serial;
 import java.math.BigInteger;
 import java.net.UnknownHostException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accuser;
+import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.CreateUserDTO;
+import com.dcr.api.model.dto.UpdateUserDTO;
 import com.dcr.api.model.dto.User;
 import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
@@ -127,11 +130,7 @@ public class UserController {
 	        acc.setIdarea(user.idArea());
 			acc.setTimevrfy(new Date(0L));
 	        acc.setCdvrfy("");
-	        acc.setFlex1flw(new BigInteger("0"));
-	        acc.setFlex2flw(Double.valueOf(0));
-	        acc.setFlex3flw("");
-	        acc.setFlex4flw("");
-	        acc.setFlex5flw("");
+	  
 	        acc.setToken("");
 	        acc.setTpfunc(user.tpfunc());
 	        
@@ -184,6 +183,24 @@ public class UserController {
 
     }
     
+    @GetMapping(value = "/getAtivos", produces = "application/json")
+    @Operation(summary = "Listar usuários")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Nenhum usuário cadastrado!"),
+            @ApiResponse(responseCode = "200", description = "Ok!")
+    })
+    public ResponseEntity<Object> ativos(
+            @PageableDefault(page = 0, size = 10, sort = "username", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        List<Accuser> users = userService.listarAtivos();
+        if (users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        Auxiliar.formatResponse(users);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+
+    }
+    
     @GetMapping(value = "/getUser", produces = "application/json")
     @Operation(summary = "Listar usuário por username")
     @ApiResponses(value = {
@@ -211,9 +228,9 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Erro!"),
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> update(@RequestBody Accuser user, HttpServletRequest request) throws ParseException {
+    public ResponseEntity<Object> update(@RequestBody UpdateUserDTO user, HttpServletRequest request) throws ParseException {
 
-        List<Accuser> users = userService.listByUsername(user.getUsername());
+        List<Accuser> users = userService.listByUsername(user.username());
         Accuser userALT = null;
 
         if (users.isEmpty()) {
@@ -221,19 +238,28 @@ public class UserController {
                     .header("Accept", "application/json")
                     .body(null);
         } else {
-            user.setPassword(encoder.encode(user.getPassword()));
+
+        	if(user.changePassword().toLowerCase().trim().equals("s")) {
+        		users.get(0).setPassword(encoder.encode(user.password()));
+        	}
+            
             try {
-            	userALT = userService.save(user, request);
+            	users.get(0).setAtivo(user.ativo());
+            	users.get(0).setEmail(user.email());
+            	users.get(0).setName(user.name());
+            	users.get(0).setTpfunc(user.tpfunc());
+            	users.get(0).setIdarea(user.idarea());
+            	userALT = userService.save(users.get(0), request);
+            	userRoleService.update(user.roles(), user.username(), request);
             } catch (Exception e) {
             		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 		                .header("Accept", "application/json")
 		                .body("Erro!");
             }
-            
-        }
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .header("Accept", "application/json")
-                .body(userALT);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .header("Accept", "application/json")
+                    .body(userALT);
+        }
     }
 }

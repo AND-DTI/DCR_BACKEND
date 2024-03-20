@@ -1,5 +1,7 @@
 package com.dcr.api.model.keys;
 
+import static com.dcr.api.utils.Auxiliar.trimNull;
+
 import java.util.Objects;
 
 import com.dcr.api.validator.TamanhoMaximo;
@@ -12,13 +14,13 @@ public class PendenciaKey {
 	private String cdresp;
 	
 	public String getCdpend() {
-		return cdpend;
+		return trimNull(cdpend);
 	}
 	public void setCdpend(String cdpend) {
 		this.cdpend = cdpend;
 	}
 	public String getCdresp() {
-		return cdresp;
+		return trimNull(cdresp);
 	}
 	public void setCdresp(String cdresp) {
 		this.cdresp = cdresp;

@@ -11,7 +11,7 @@ public class Nivel1Projection {
     private Object ppbPrd;
     private Object modelo;
     private Object anoMdl;
-    List<Nivel2Projection> cores;
+    List<Nivel2Projection> itens;
 	public Object getCdPrd() {
 		return cdPrd;
 	}
@@ -60,10 +60,11 @@ public class Nivel1Projection {
 	public void setAnoMdl(Object anoMdl) {
 		this.anoMdl = anoMdl;
 	}
-	public List<Nivel2Projection> getCores() {
-		return cores;
+	public List<Nivel2Projection> getItens() {
+		return itens;
 	}
-	public void setCores(List<Nivel2Projection> cores) {
-		this.cores = cores;
+	public void setItens(List<Nivel2Projection> itens) {
+		this.itens = itens;
 	}
+
 }

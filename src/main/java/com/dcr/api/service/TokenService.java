@@ -17,7 +17,7 @@ import com.dcr.api.model.as400.Accuser;
 @Component
 public class TokenService {
 
-    @Value("${data.token_expire:1800000}")
+    @Value("${data.token_expire:280000000}")
     int TOKEN_EXPIRATION;
 
     @Value("${data.token_pass:SUPER_SECRET_WORD}")

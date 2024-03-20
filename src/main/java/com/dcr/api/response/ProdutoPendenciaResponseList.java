@@ -13,34 +13,7 @@ public class ProdutoPendenciaResponseList {
     private Object partsugdsc;
     private Object partnew;
     private Object partnewdsc;
-	private Object numpend;
-    private Object cdpend;
-    private Object obspend;
-    private Object status;
-	public Object getNumpend() {
-		return numpend;
-	}
-	public void setNumpend(Object numpend) {
-		this.numpend = numpend;
-	}
-	public Object getCdpend() {
-		return cdpend;
-	}
-	public void setCdpend(Object cdpend) {
-		this.cdpend = cdpend;
-	}
-	public Object getObspend() {
-		return obspend;
-	}
-	public void setObspend(Object obspend) {
-		this.obspend = obspend;
-	}
-	public Object getStatus() {
-		return status;
-	}
-	public void setStatus(Object status) {
-		this.status = status;
-	}
+	private Object partnumpd;
 	public Object getPartnum() {
 		return partnum;
 	}
@@ -112,5 +85,11 @@ public class ProdutoPendenciaResponseList {
 	}
 	public void setPartnewdsc(Object partnewdsc) {
 		this.partnewdsc = partnewdsc;
+	}
+	public Object getPartnumpd() {
+		return partnumpd;
+	}
+	public void setPartnumpd(Object partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 }

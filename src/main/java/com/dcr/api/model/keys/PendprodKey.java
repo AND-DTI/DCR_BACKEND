@@ -15,6 +15,10 @@ public class PendprodKey {
 	@TamanhoMinimo(1)
 	private String partnum;
 	
+	@TamanhoMaximo(25)
+	@TamanhoMinimo(1)
+	private String partnumpd;
+	
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
 	private Integer numpend;
@@ -53,6 +57,12 @@ public class PendprodKey {
 	}
 	public void setNumpend(Integer numpend) {
 		this.numpend = numpend;
+	}
+	public String getPartnumpd() {
+		return partnumpd;
+	}
+	public void setPartnumpd(String partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 	
 }

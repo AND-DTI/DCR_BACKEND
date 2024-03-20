@@ -64,47 +64,29 @@ public class User_Role implements GrantedAuthority {
     }
 
 	public String getRolename() {
-		return rolename;
+		return trimNull(this.rolename);
 	}
 
 	public void setRolename(String rolename) {
 		this.rolename = rolename;
 	}
 
-	public String getItaudsys() {
-		return itaudsys;
-	}
 
 	public void setItaudsys(String itaudsys) {
 		this.itaudsys = itaudsys;
-	}
-
-	public String getItaudusr() {
-		return itaudusr;
 	}
 
 	public void setItaudusr(String itaudusr) {
 		this.itaudusr = itaudusr;
 	}
 
-	public String getItaudhst() {
-		return itaudhst;
-	}
 
 	public void setItaudhst(String itaudhst) {
 		this.itaudhst = itaudhst;
 	}
 
-	public String getItauddt() {
-		return itauddt;
-	}
-
 	public void setItauddt(String itauddt) {
 		this.itauddt = itauddt;
-	}
-
-	public String getItaudhr() {
-		return itaudhr;
 	}
 
 	public void setItaudhr(String itaudhr) {

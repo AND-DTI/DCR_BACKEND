@@ -44,7 +44,7 @@ public class AccdscopeService {
 		AccdscopeKey key = new AccdscopeKey();
 		key.setCodidioma(dto.codidioma());
 		key.setIdoper(dto.idoper());
-		
+		key.setCdsys("NEW_DCR");
 		oper.setKey(key);
 		oper.setDescoper(dto.descoper());
 		oper.setShorttitle(dto.shorttitle());

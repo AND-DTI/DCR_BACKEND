@@ -65,13 +65,13 @@ public class Dcrreg2 {
 	
 	@TamanhoMaximo(15)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "int")
-	private Long qtde;
+	@Column(columnDefinition = "decimal(15,7)")
+	private Double qtde;
 	
 	@TamanhoMaximo(15)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "int")
-	private Long vlrunit;
+	@Column(columnDefinition = "decimal(15,6)")
+	private Double vlrunit;
 	
 	@Column(columnDefinition = "char(40)")
 	private String itaudsys;
@@ -161,21 +161,6 @@ public class Dcrreg2 {
 		this.ncm = ncm;
 	}
 
-	public Long getQtde() {
-		return qtde;
-	}
-
-	public void setQtde(Long qtde) {
-		this.qtde = qtde;
-	}
-
-	public Long getVlrunit() {
-		return vlrunit;
-	}
-
-	public void setVlrunit(Long vlrunit) {
-		this.vlrunit = vlrunit;
-	}
 
 	public String getItaudsys() {
 		return itaudsys;
@@ -223,5 +208,21 @@ public class Dcrreg2 {
 
 	public void setNumnf(Long numnf) {
 		this.numnf = numnf;
+	}
+
+	public Double getQtde() {
+		return qtde;
+	}
+
+	public void setQtde(Double qtde) {
+		this.qtde = qtde;
+	}
+
+	public Double getVlrunit() {
+		return vlrunit;
+	}
+
+	public void setVlrunit(Double vlrunit) {
+		this.vlrunit = vlrunit;
 	}
 }

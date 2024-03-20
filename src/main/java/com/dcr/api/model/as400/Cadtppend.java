@@ -1,12 +1,19 @@
 package com.dcr.api.model.as400;
 
+import static com.dcr.api.utils.Auxiliar.trimNull;
+
+import java.util.List;
+
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,6 +37,14 @@ public class Cadtppend {
 	@Column(columnDefinition = "char(256)")
     private String obspend;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(1)")
+    private String tpreg;
+	
+	@OneToMany(mappedBy = "cadtppend", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pendresp> responsaveis;
+	
     @Column(columnDefinition = "char(40)")
     private String itaudsys;
 
@@ -44,68 +59,64 @@ public class Cadtppend {
 
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
-
+    
 	public String getCdpend() {
-		return cdpend;
+		return trimNull(cdpend);
 	}
 
 	public void setCdpend(String cdpend) {
 		this.cdpend = cdpend;
 	}
 
-	public String getDescpend() {
-		return descpend;
-	}
-
 	public void setDescpend(String descpend) {
 		this.descpend = descpend;
-	}
-
-	public String getObspend() {
-		return obspend;
 	}
 
 	public void setObspend(String obspend) {
 		this.obspend = obspend;
 	}
-
-	public String getItaudsys() {
-		return itaudsys;
-	}
-
+	
 	public void setItaudsys(String itaudsys) {
 		this.itaudsys = itaudsys;
-	}
-
-	public String getItaudusr() {
-		return itaudusr;
 	}
 
 	public void setItaudusr(String itaudusr) {
 		this.itaudusr = itaudusr;
 	}
 
-	public String getItaudhst() {
-		return itaudhst;
-	}
-
 	public void setItaudhst(String itaudhst) {
 		this.itaudhst = itaudhst;
-	}
-
-	public String getItauddt() {
-		return itauddt;
 	}
 
 	public void setItauddt(String itauddt) {
 		this.itauddt = itauddt;
 	}
 
-	public String getItaudhr() {
-		return itaudhr;
-	}
-
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public List<Pendresp> getResponsaveis() {
+		return responsaveis;
+	}
+
+	public void setResponsaveis(List<Pendresp> responsaveis) {
+		this.responsaveis = responsaveis;
+	}
+
+	public String getDescpend() {
+		return trimNull(descpend);
+	}
+
+	public String getObspend() {
+		return trimNull(obspend);
+	}
+
+	public String getTpreg() {
+		return tpreg;
+	}
+
+	public void setTpreg(String tpreg) {
+		this.tpreg = tpreg;
 	}
 }

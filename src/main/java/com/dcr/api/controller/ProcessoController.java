@@ -1,6 +1,5 @@
 package com.dcr.api.controller;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,9 +20,7 @@ import com.dcr.api.model.dto.DcrproccDTO;
 import com.dcr.api.model.dto.DcrproccKeyDTO;
 import com.dcr.api.model.dto.DcrproccStatusNew;
 import com.dcr.api.model.keys.DcrproccKey;
-import com.dcr.api.service.as400.DcrlayoutService;
 import com.dcr.api.service.as400.DcrproccService;
-import com.dcr.api.service.txt.GenerateTxtService;
 import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,9 +32,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/api/processo/dcr")
 public class ProcessoController {
-
-	@Autowired
-	DcrlayoutService txtService;
 	
 	@Autowired
 	DcrproccService service;
@@ -71,28 +64,6 @@ public class ProcessoController {
 		}   
 	}
 	
-	
-	@GetMapping(value = "/generate", produces = "application/json")
-	@Operation(summary = "Gera txt")
-	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "500", description = "Error!")
-	})
-	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> generate(@RequestParam Integer idmatriz,@RequestParam String partnumpd,@RequestParam String tpprd ) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		try {
-			txtService.gerarArquivoTXT(idmatriz, partnumpd, tpprd);
-			return ResponseEntity.status(HttpStatus.OK)
-		        	.header("Accept", "application/json")
-		            .body("Arquivo de texto gerado com sucesso!");
-		} catch (IOException e) {
-			return ResponseEntity.status(HttpStatus.OK)
-		        	.header("Accept", "application/json")
-		            .body("Erro na geração do arquivo!");
-		}
-		
-	}
-	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um Processo")
 	@ApiResponses(value = {
@@ -107,7 +78,6 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.status());
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
@@ -144,7 +114,6 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.status());
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
@@ -181,7 +150,6 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.status());
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
@@ -217,18 +185,18 @@ public class ProcessoController {
 			DcrproccKey key = new DcrproccKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnumpd(dto.partnumpd());
-			key.setStatus(dto.statusOld());
+			
 			key.setTpprd(dto.tpprd());
 			
 			Optional<Dcrprocc> dcr = service.getByKey(key);
-					
+			
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.header("Accept", "application/json")
 						.body("Nenhum Processo encontrado!");
 		    }
-			dcr.get().getKey().setStatus(dto.statusNew());
-			service.setStatus(dcr.get(), request);
+			
+			service.setStatus(dcr.get(), dto.status(), request);
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body("Status atualizado!");

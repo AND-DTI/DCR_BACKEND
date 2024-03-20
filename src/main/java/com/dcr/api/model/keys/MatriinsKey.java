@@ -11,6 +11,9 @@ public class MatriinsKey {
 	@TamanhoMaximo(25)
 	private String partnum;
 
+	@TamanhoMaximo(25)
+	private String partnumpd;
+	
 	public Integer getIdmatriz() {
 		return idmatriz;
 	}
@@ -42,5 +45,13 @@ public class MatriinsKey {
 			return false;
 		MatriinsKey other = (MatriinsKey) obj;
 		return Objects.equals(idmatriz, other.idmatriz) && Objects.equals(partnum, other.partnum);
+	}
+
+	public String getPartnumpd() {
+		return partnumpd;
+	}
+
+	public void setPartnumpd(String partnumpd) {
+		this.partnumpd = partnumpd;
 	}
 }

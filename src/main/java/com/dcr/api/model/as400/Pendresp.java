@@ -1,5 +1,7 @@
 package com.dcr.api.model.as400;
 
+import static com.dcr.api.utils.Auxiliar.trimNull;
+
 import com.dcr.api.model.keys.PendenciaKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
@@ -8,6 +10,9 @@ import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -22,6 +27,10 @@ public class Pendresp {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(150)")
     private String nmresp;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cdpend", referencedColumnName = "cdpend", insertable = false, updatable = false)
+    private Cadtppend cadtppend;
 	
     @Column(columnDefinition = "char(40)")
     private String itaudsys;
@@ -47,47 +56,27 @@ public class Pendresp {
 	}
 
 	public String getNmresp() {
-		return nmresp;
+		return trimNull(nmresp);
 	}
 
 	public void setNmresp(String nmresp) {
 		this.nmresp = nmresp;
 	}
 
-	public String getItaudsys() {
-		return itaudsys;
-	}
-
 	public void setItaudsys(String itaudsys) {
 		this.itaudsys = itaudsys;
 	}
-
-	public String getItaudusr() {
-		return itaudusr;
-	}
-
+	
 	public void setItaudusr(String itaudusr) {
 		this.itaudusr = itaudusr;
-	}
-
-	public String getItaudhst() {
-		return itaudhst;
 	}
 
 	public void setItaudhst(String itaudhst) {
 		this.itaudhst = itaudhst;
 	}
 
-	public String getItauddt() {
-		return itauddt;
-	}
-
 	public void setItauddt(String itauddt) {
 		this.itauddt = itauddt;
-	}
-
-	public String getItaudhr() {
-		return itaudhr;
 	}
 
 	public void setItaudhr(String itaudhr) {

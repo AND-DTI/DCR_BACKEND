@@ -19,7 +19,7 @@ public interface CadppbRepository extends JpaRepository<Cadppb, ProdutoKey>{
 			+ "    else c.MODELO\r\n"
 			+ "  end as modelo,\r\n"
 			+ "  b.ANOMDL,\r\n"
-			+ "  b.PARTNUMPD, c.DESCPOR, c.DESCING, c.UENGNO, c.CODCOR, cor.CORPT\r\n"
+			+ "  b.PARTNUMPD, c.DESCPOR, c.DESCING, c.UENGNO, c.CODCOR, cor.CORPT, b.UNCOME\r\n"
 			+ " from\r\n"
 			+ "  HD4DCDHH.CADPPB a join\r\n"
 			+ "  HD4DCDHH.CADTPPRD tp on tp.TPPRD=a.TPPRD left join \r\n"

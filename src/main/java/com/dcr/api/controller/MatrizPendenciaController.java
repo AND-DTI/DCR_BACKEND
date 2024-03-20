@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +18,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Matridoc;
+import com.dcr.api.model.as400.Matriins;
 import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MatridocDTO;
 import com.dcr.api.model.dto.PendprodDTO;
+import com.dcr.api.model.dto.resolverPendenciaDTO;
 import com.dcr.api.model.keys.MatridocKey;
+import com.dcr.api.model.keys.MatriinsKey;
 import com.dcr.api.model.keys.PendprodKey;
+import com.dcr.api.service.as400.MatridocService;
+import com.dcr.api.service.as400.MatriinsService;
 import com.dcr.api.service.as400.PendprodService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -37,6 +43,12 @@ public class MatrizPendenciaController {
 
 	@Autowired
 	PendprodService service;
+	
+	@Autowired
+	MatridocService matridocService;
+	
+	@Autowired
+	MatriinsService matriinsService;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de pendencia")
@@ -74,12 +86,13 @@ public class MatrizPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam Integer numpend) {
+	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd, @RequestParam Integer numpend) {
 	
 		try {
 			PendprodKey key = new PendprodKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
+			key.setPartnumpd(partnumpd);
 			key.setNumpend(numpend);
 			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
@@ -109,6 +122,18 @@ public class MatrizPendenciaController {
 	public ResponseEntity<Object> create(@RequestBody PendprodDTO dto, HttpServletRequest request) {
 	
 		try {
+			PendprodKey key = new PendprodKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setPartnum(dto.partnum());
+			key.setPartnumpd(dto.partnumpd());
+			key.setNumpend(dto.numpend());
+			Optional<Pendprod> pend = service.getByID(key);
+			
+			if(pend.isPresent()) {
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        	.header("Accept", "application/json")
+				            .body("Matriz já existe!");
+			}
 	        service.create(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
@@ -135,7 +160,7 @@ public class MatrizPendenciaController {
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnum(dto.partnum());
 			key.setNumpend(dto.numpend());
-			
+			key.setPartnumpd(dto.partnumpd());
 			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -162,13 +187,14 @@ public class MatrizPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam Integer numpend) {
+	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd, @RequestParam Integer numpend) {
 		try {
 			
 			PendprodKey key = new PendprodKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
 			key.setNumpend(numpend);
+			key.setPartnumpd(partnumpd);
 			
 			Optional<Pendprod> lista = service.getByID(key);
 	        if (lista.isEmpty()) { 
@@ -181,6 +207,78 @@ public class MatrizPendenciaController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("Matriz de pendencia deletada com sucesso!");
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+
+	@PostMapping(value = "/resolverPendencia", produces = "application/json")
+	@Operation(summary = "Altera uma Matriz de pendencia")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Matriz de pendencia não encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> resolverPendencia(@RequestBody resolverPendenciaDTO dto, HttpServletRequest request) {
+	
+		try {
+			PendprodKey key = new PendprodKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setPartnum(dto.partnum());
+			key.setNumpend(dto.numpend());
+			key.setPartnumpd(dto.partnumpd());
+			Optional<Pendprod> lista = service.getByID(key);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz de pendencia não encontrada!");
+	        }
+		
+	        
+	        
+	        MatridocKey matridocKey = new MatridocKey();
+	        matridocKey.setIdmatriz(dto.idmatriz());
+	        matridocKey.setPartnum(dto.partnum());
+	        matridocKey.setPartnumpd(dto.partnumpd());
+	        matridocKey.setTpdoc(dto.tpdoc());
+	        Optional<Matridoc> matridoc = matridocService.getByID(matridocKey);
+	        if (matridoc.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Documento não encontrado!");
+	        }
+	        
+	        matridoc.get().setNumdoc3(dto.numdoc3());
+	        matridoc.get().setEmidoc3(dto.emidoc3());
+	        matridoc.get().setSerdoc3(dto.serdoc3());
+	        
+	        
+	        
+	        MatriinsKey matriinskey = new MatriinsKey();
+	        matriinskey.setIdmatriz(dto.idmatriz());
+	        matriinskey.setPartnum(dto.partnum());
+	        matriinskey.setPartnumpd(dto.partnumpd());
+	        
+	        Optional<Matriins> matriins = matriinsService.getByID(matriinskey);
+	        if (matriins.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Insumo não encontrado!");
+	        }
+	        
+	        matriins.get().setPartnew(dto.partnew());
+	        
+	        service.resolverPendencia(lista.get(), dto,  request);
+	        matriinsService.resolverPendencia(matriins.get(), request);
+	        matridocService.resolverPendencia(matridoc.get(), request);
+	        
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("OK");
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")

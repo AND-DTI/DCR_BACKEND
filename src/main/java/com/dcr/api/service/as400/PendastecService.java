@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.as400.Pendastec;
 import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.PendastecDTO;
@@ -34,6 +35,11 @@ public class PendastecService {
 	public Optional<Pendastec> getByID(PendastecKey id) {
 		
 		return repository.findById(id);
+	}
+	
+	public List<Pendastec> getByCdPend(String cdpend) {
+		
+		return repository.findByCdPend(cdpend);
 	}
 	
 	public void delete(Pendastec matriz) {

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dcr.api.model.as400.Dcrreg1;
 import com.dcr.api.model.as400.Dcrreg2;
 import com.dcr.api.model.dto.Dcrreg2DTO;
 import com.dcr.api.model.keys.Dcrreg2Key;
@@ -77,5 +78,10 @@ public class Dcrreg2Service {
 	public Optional<Dcrreg2> getByKey(Dcrreg2Key dto) {
 
 		return repository.findById(dto);
+	}
+	
+	public List<Dcrreg2> getByIds(Integer idmatriz, String partnumpd, String tpprd) {
+
+		return repository.consultaByIds(idmatriz, partnumpd, tpprd);
 	}
 }

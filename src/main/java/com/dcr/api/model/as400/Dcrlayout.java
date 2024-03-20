@@ -48,6 +48,26 @@ public class Dcrlayout {
 	@Column(columnDefinition = "char(30)")
 	private String regra;
 	
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(10)")
+	private String condfield;
+	
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(10)")
+	private String condvalue;
+	
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(10)")
+	private String fillzero;
+	
+	@TamanhoMaximo(10)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(10)")
+	private String fillblank;
+	
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
@@ -170,5 +190,37 @@ public class Dcrlayout {
 
 	public void setObrig(String obrig) {
 		this.obrig = obrig;
+	}
+
+	public String getCondfield() {
+		return condfield;
+	}
+
+	public void setCondfield(String condfield) {
+		this.condfield = condfield;
+	}
+
+	public String getCondvalue() {
+		return condvalue;
+	}
+
+	public void setCondvalue(String condvalue) {
+		this.condvalue = condvalue;
+	}
+
+	public String getFillzero() {
+		return fillzero;
+	}
+
+	public void setFillzero(String fillzero) {
+		this.fillzero = fillzero;
+	}
+
+	public String getFillblank() {
+		return fillblank;
+	}
+
+	public void setFillblank(String fillblank) {
+		this.fillblank = fillblank;
 	}
 }

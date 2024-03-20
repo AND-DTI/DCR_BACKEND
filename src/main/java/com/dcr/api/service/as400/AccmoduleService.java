@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Accmodule;
 import com.dcr.api.model.dto.AccmoduleDTO;
+import com.dcr.api.model.keys.AccModuleKey;
 import com.dcr.api.repository.as400.AccmoduleRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -27,9 +28,9 @@ public class AccmoduleService {
 		return repository.findAll();
 	}
 	
-	public Optional<Accmodule> getByID(String id) {
+	public Optional<Accmodule> getByID(AccModuleKey key) {
 		
-		return repository.findById(id);
+		return repository.findById(key);
 	}
 	
 	public void delete(Accmodule ppb) {
@@ -39,8 +40,11 @@ public class AccmoduleService {
 	
 	public Accmodule create(AccmoduleDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		Accmodule oper = new Accmodule();
+		AccModuleKey key = new AccModuleKey();
+		key.setCdsys("NEW_DCR");
+		key.setCdmodule(dto.cdmodule());
 		
-		oper.setCdmodule(dto.cdmodule());
+		oper.setKey(key);
 		oper.setNamemodule(dto.namemodule());
 		Auxiliar.preencheAuditoria(oper, request);
 		return repository.save(oper);

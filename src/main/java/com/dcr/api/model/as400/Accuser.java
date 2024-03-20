@@ -81,23 +81,8 @@ public class Accuser implements UserDetails {
     @Column(name = "timevrfy")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timevrfy;
-    
-    @Column(columnDefinition = "bigint(19)")
-    private BigInteger flex1flw;
-    
-    @Column(columnDefinition = "decimal(15,5)")
-    private Double flex2flw;
-    
-    @Column(columnDefinition = "char(8)")
-    private String flex3flw;
-    
-    @Column(columnDefinition = "char(40)")
-    private String flex4flw;
-    
-    @Column(columnDefinition = "char(1000)")
-    private String flex5flw;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumns({
         @JoinColumn(name = "username", referencedColumnName = "username")
     })
@@ -137,6 +122,10 @@ public class Accuser implements UserDetails {
 
     public String getUsername() {
         return trimNull(username);
+    }
+    
+    public String getUsernameForUpdate() {
+        return username;
     }
 
     public void setUsername(String username) {
@@ -191,40 +180,20 @@ public class Accuser implements UserDetails {
         this.token = token;
     }
 
-    public String getItaudsys() {
-        return trimNull(itaudsys);
-    }
-
     public void setItaudsys(String itaudsys) {
         this.itaudsys = itaudsys;
-    }
-
-    public String getItaudusr() {
-        return itaudusr;
     }
 
     public void setItaudusr(String itaudusr) {
         this.itaudusr = itaudusr;
     }
 
-    public String getItaudhst() {
-        return trimNull(itaudhst);
-    }
-
     public void setItaudhst(String itaudhst) {
         this.itaudhst = itaudhst;
     }
 
-    public String getItauddt() {
-        return itauddt;
-    }
-
     public void setItauddt(String itauddt) {
         this.itauddt = itauddt;
-    }
-
-    public String getItaudhr() {
-        return itaudhr;
     }
 
     public void setItaudhr(String itaudhr) {
@@ -275,46 +244,6 @@ public class Accuser implements UserDetails {
 
 	public void setCdvrfy(String cdvrfy) {
 		this.cdvrfy = cdvrfy;
-	}
-
-	public BigInteger getFlex1flw() {
-		return flex1flw;
-	}
-
-	public void setFlex1flw(BigInteger flex1flw) {
-		this.flex1flw = flex1flw;
-	}
-
-	public Double getFlex2flw() {
-		return flex2flw;
-	}
-
-	public void setFlex2flw(Double flex2flw) {
-		this.flex2flw = flex2flw;
-	}
-
-	public String getFlex3flw() {
-		return flex3flw;
-	}
-
-	public void setFlex3flw(String flex3flw) {
-		this.flex3flw = flex3flw;
-	}
-
-	public String getFlex4flw() {
-		return flex4flw;
-	}
-
-	public void setFlex4flw(String flex4flw) {
-		this.flex4flw = flex4flw;
-	}
-
-	public String getFlex5flw() {
-		return flex5flw;
-	}
-
-	public void setFlex5flw(String flex5flw) {
-		this.flex5flw = flex5flw;
 	}
 
 	public void setTimevrfy(Date timevrfy) {

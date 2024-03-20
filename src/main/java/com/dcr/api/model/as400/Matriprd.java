@@ -1,14 +1,19 @@
 package com.dcr.api.model.as400;
 
+import java.util.List;
+
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
 
 import io.swagger.annotations.ApiModel;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -39,22 +44,18 @@ public class Matriprd {
 	private String anomdl;
 	
 	@TamanhoMaximo(150)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(150)")
 	private String desccom;
 	
 	@TamanhoMaximo(80)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(80)")
 	private String descrfb;
 	
 	@TamanhoMaximo(2)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(2)")
 	private String tpprd;
 	
 	@TamanhoMaximo(1)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private Integer protot;
 	
@@ -69,12 +70,10 @@ public class Matriprd {
 	private String tpdcre;
 
 	@TamanhoMaximo(7)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(7)")
 	private String origprd;
 	
 	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(8)")
 	private String dtneci;
 	
@@ -293,5 +292,6 @@ public class Matriprd {
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
 	}
+
 	
 }

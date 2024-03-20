@@ -71,12 +71,13 @@ public class MatrizInsumoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum) {
+	public ResponseEntity<Object> getById(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd) {
 	
 		try {
 			MatriinsKey key = new MatriinsKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum);
+			key.setPartnumpd(partnumpd);
 
 			Optional<Matriins> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
@@ -106,6 +107,17 @@ public class MatrizInsumoController {
 	public ResponseEntity<Object> create(@RequestBody MatriinsDTO dto, HttpServletRequest request) {
 	
 		try {
+			MatriinsKey key = new MatriinsKey();
+			key.setIdmatriz(dto.idmatriz());
+			key.setPartnum(dto.partnum());
+			key.setPartnumpd(dto.partnumpd());
+			Optional<Matriins> lista = service.getByID(key);
+			
+			if(lista.isPresent()) {
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				        	.header("Accept", "application/json")
+				            .body("Matriz já existe!");
+			}
 	        service.create(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
@@ -131,7 +143,7 @@ public class MatrizInsumoController {
 			MatriinsKey key = new MatriinsKey();
 			key.setIdmatriz(dto.idmatriz());
 			key.setPartnum(dto.partnum());
-			
+			key.setPartnumpd(dto.partnumpd());
 			Optional<Matriins> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -158,13 +170,13 @@ public class MatrizInsumoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum) {
+	public ResponseEntity<Object> delete(@RequestParam Integer idmatriz, @RequestParam String partnum, @RequestParam String partnumpd) {
 		try {
 			
 			MatriinsKey key = new MatriinsKey();
 			key.setIdmatriz(idmatriz);
 			key.setPartnum(partnum	);
-			
+			key.setPartnumpd(partnumpd);
 			Optional<Matriins> lista = service.getByID(key);
 	        if (lista.isEmpty()) { 
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)

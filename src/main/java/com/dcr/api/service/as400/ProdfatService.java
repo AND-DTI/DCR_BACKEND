@@ -47,10 +47,10 @@ public class ProdfatService {
 		prod.setKey(key);
 		prod.setAnomdl(dto.anomdl());
 		prod.setDesccom(dto.desccom());
-		prod.setFrstanofa(dto.frstanofa());
-		prod.setLastanofa(dto.lastanofa());
+		prod.setFrstanofab(dto.frstanofab());
+		prod.setLastanofab(dto.lastanofab());
 		prod.setTpprd(dto.tpprd());
-		
+		prod.setUncome(dto.uncome());
 		Auxiliar.preencheAuditoria(prod, request);
 		
 		return repository.save(prod);
@@ -60,10 +60,10 @@ public class ProdfatService {
 		
 		prod.setAnomdl(dto.anomdl());
 		prod.setDesccom(dto.desccom());
-		prod.setFrstanofa(dto.frstanofa());
-		prod.setLastanofa(dto.lastanofa());
+		prod.setFrstanofab(dto.frstanofab());
+		prod.setLastanofab(dto.lastanofab());
 		prod.setTpprd(dto.tpprd());
-
+		prod.setUncome(dto.uncome());
 		Auxiliar.preencheAuditoria(prod, request);
 		
 		return repository.save(prod);

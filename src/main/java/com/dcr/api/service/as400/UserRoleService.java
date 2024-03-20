@@ -25,18 +25,48 @@ public class UserRoleService {
 	RoleRepository roleRepository;
 	public void createRoleUser(List<String> roles, String user, HttpServletRequest request) throws Exception {
 		 for (String role : roles) {
-		        Accroles accrole = roleRepository.consultaByRoleName(role);
+		        Optional<Accroles> accrole = roleRepository.consultaByRoleName(role);
 
 		        try {
 		            User_Role userRole = new User_Role();
 		            User_RoleKey key = new User_RoleKey();
-		            key.setRoleid(accrole.getRoleid());
+		            key.setRoleid(accrole.get().getRoleid());
 		            key.setUsername(user);
 		            userRole.setKey(key);
-		            userRole.setRolename(accrole.getRolename().trim());
+		            userRole.setRolename(accrole.get().getRolename().trim());
 
 		            Auxiliar.preencheAuditoria(userRole, request);
 		            userRole.setDtacad(Auxiliar.getDtFormated());
+		            repository.save(userRole);
+		        } catch (Exception e) {
+		            throw new Exception();
+		        }
+		    }
+	}
+	
+	public void update(List<String> roles, String user, HttpServletRequest request) throws Exception {
+		List<User_Role> rolesUser = repository.findByUsername(user);
+		
+		for (User_Role user_Role : rolesUser) {
+			if(!roles.contains(user_Role.getRolename().toString())) {
+				repository.delete(user_Role);
+			}
+			
+		}
+		for (String role : roles) {
+		        Optional<Accroles> accrole = roleRepository.consultaByRoleName(role);
+		        
+		        try {
+		            User_Role userRole = new User_Role();
+		            User_RoleKey key = new User_RoleKey();
+		            key.setRoleid(accrole.get().getRoleid());
+		            key.setUsername(user);
+		            userRole.setKey(key);
+		            userRole.setRolename(accrole.get().getRolename().trim());
+
+		            Auxiliar.preencheAuditoria(userRole, request);
+		            userRole.setDtacad(Auxiliar.getDtFormated());
+		            
 		            repository.save(userRole);
 		        } catch (Exception e) {
 		            throw new Exception();

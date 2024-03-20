@@ -77,6 +77,7 @@ public class MatriinsService {
 		MatriinsKey key = new MatriinsKey();
 		key.setIdmatriz(dto.idmatriz());
 		key.setPartnum(dto.partnum());
+		key.setPartnumpd(dto.partnumpd());
 		
 		matriz.setKey(key);
 		matriz.setCdspn(dto.cdspn());
@@ -91,6 +92,11 @@ public class MatriinsService {
 		matriz.setPartsugest(dto.partsugest());
 		matriz.setUnmsr(dto.unmsr());
 		matriz.setWeght(dto.weght());
+		
+		matriz.setEspec(dto.espec());
+		matriz.setUndcom(dto.undcom());
+		matriz.setNcm(dto.ncm());
+		matriz.setVlrunit(dto.vlrunit());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
@@ -110,6 +116,16 @@ public class MatriinsService {
 		matriz.setUnmsr(dto.unmsr());
 		matriz.setWeght(dto.weght());
 		
+		matriz.setEspec(dto.espec());
+		matriz.setUndcom(dto.undcom());
+		matriz.setNcm(dto.ncm());
+		matriz.setVlrunit(dto.vlrunit());
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+	}
+	
+public Matriins resolverPendencia(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}

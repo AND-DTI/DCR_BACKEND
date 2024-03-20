@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Accmodule;
 import com.dcr.api.model.dto.AccmoduleDTO;
+import com.dcr.api.model.keys.AccModuleKey;
 import com.dcr.api.service.as400.AccmoduleService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -74,8 +75,10 @@ public class ModuleController {
 	public ResponseEntity<Object> createProcessamento(@RequestBody AccmoduleDTO dto, HttpServletRequest request) {
 	
 		try {
-			
-			Optional<Accmodule> dcr = service.getByID(dto.cdmodule());
+			AccModuleKey key = new AccModuleKey();
+			key.setCdsys("NEW_DCR");
+			key.setCdmodule(dto.cdmodule());
+			Optional<Accmodule> dcr = service.getByID(key);
 			
 			if (!dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -106,7 +109,10 @@ public class ModuleController {
 	public ResponseEntity<Object> getById(@RequestParam String cdmodule, HttpServletRequest request) {
 	
 		try {
-			Optional<Accmodule> dcr = service.getByID(cdmodule);
+			AccModuleKey key = new AccModuleKey();
+			key.setCdsys("NEW_DCR");
+			key.setCdmodule(cdmodule);
+			Optional<Accmodule> dcr = service.getByID(key);
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.header("Accept", "application/json")
@@ -136,7 +142,10 @@ public class ModuleController {
 	
 		try {
 	
-			Optional<Accmodule> lista = service.getByID(dto.cdmodule());
+			AccModuleKey key = new AccModuleKey();
+			key.setCdsys("NEW_DCR");
+			key.setCdmodule(dto.cdmodule());
+			Optional<Accmodule> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -166,7 +175,10 @@ public class ModuleController {
 	
 		try {
 			
-			Optional<Accmodule> lista = service.getByID(cdmodule);
+			AccModuleKey key = new AccModuleKey();
+			key.setCdsys("NEW_DCR");
+			key.setCdmodule(cdmodule);
+			Optional<Accmodule> lista = service.getByID(key);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
