@@ -72,31 +72,31 @@ public class Dcrvigen {
 	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(8,6)")
-	private String taxausd;
+	private Double taxausd;
 	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,6)")
-	private String totalnac;
+	private Double totalnac;
 	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,6)")
-	private String totalimp;
+	private Double totalimp;
 
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,6)")
-	private String custotal;
+	private Double custotal;
 	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(4,2)")
-	private String coefred;
+	private Double coefred;
 	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,6)")
-	private String iitotal;
+	private Double iitotal;
 	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,6)")
-	private String iireduzido;
+	private Double iireduzido;
 	
     @Column(columnDefinition = "char(40)")
     private String itaudsys;
@@ -201,59 +201,61 @@ public class Dcrvigen {
 		this.hrvigfim = hrvigfim;
 	}
 
-	public String getTaxausd() {
+	public Double getTaxausd() {
 		return taxausd;
 	}
 
-	public void setTaxausd(String taxausd) {
+	public void setTaxausd(Double taxausd) {
 		this.taxausd = taxausd;
 	}
 
-	public String getTotalnac() {
+	public Double getTotalnac() {
 		return totalnac;
 	}
 
-	public void setTotalnac(String totalnac) {
+	public void setTotalnac(Double totalnac) {
 		this.totalnac = totalnac;
 	}
 
-	public String getTotalimp() {
+	public Double getTotalimp() {
 		return totalimp;
 	}
 
-	public void setTotalimp(String totalimp) {
+	public void setTotalimp(Double totalimp) {
 		this.totalimp = totalimp;
 	}
 
-	public String getCustotal() {
+	public Double getCustotal() {
 		return custotal;
 	}
 
-	public void setCustotal(String custotal) {
+	public void setCustotal(Double custotal) {
 		this.custotal = custotal;
 	}
 
-	public String getCoefred() {
+	public Double getCoefred() {
 		return coefred;
 	}
 
-	public void setCoefred(String coefred) {
+	public void setCoefred(Double coefred) {
 		this.coefred = coefred;
 	}
 
-	public String getIitotal() {
+	public Double getIitotal() {
 		return iitotal;
 	}
 
-	public void setIitotal(String iitotal) {
+	public void setIitotal(Double iitotal) {
 		this.iitotal = iitotal;
 	}
 
-	public String getIireduzido() {
+	public Double getIireduzido() {
 		return iireduzido;
 	}
 
-	public void setIireduzido(String iireduzido) {
+	public void setIireduzido(Double iireduzido) {
 		this.iireduzido = iireduzido;
 	}
+
+	
 }

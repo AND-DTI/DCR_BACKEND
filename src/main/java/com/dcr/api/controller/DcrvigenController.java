@@ -69,11 +69,11 @@ public class DcrvigenController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getById(@RequestParam String protdcre) {
+	public ResponseEntity<Object> getById(@RequestParam String dcre) {
 	
 		try {
 
-			Optional<Dcrvigen> lista = service.getByKey(protdcre);
+			Optional<Dcrvigen> lista = service.getByKey(dcre);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -158,11 +158,11 @@ public class DcrvigenController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestParam String protdcre) {
+	public ResponseEntity<Object> delete(@RequestParam String dcre) {
 	
 		try {
 			
-			Optional<Dcrvigen> lista = service.getByKey(protdcre);
+			Optional<Dcrvigen> lista = service.getByKey(dcre);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")

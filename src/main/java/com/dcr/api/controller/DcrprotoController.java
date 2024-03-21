@@ -72,7 +72,11 @@ public class DcrprotoController {
 	public ResponseEntity<Object> getById(@RequestParam String protdcre) {
 	
 		try {
-
+			if(protdcre.length() > 10) {
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		                    .header("Accept", "application/json")
+		                    .body("Protdcre não pode ser maior que 10 caracteres!");
+			}
 			Optional<Dcrproto> lista = service.getByKey(protdcre);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
