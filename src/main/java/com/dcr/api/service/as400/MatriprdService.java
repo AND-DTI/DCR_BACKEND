@@ -3,7 +3,6 @@ package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -664,6 +663,7 @@ public class MatriprdService {
         	resp.setCoreng((resultado[25] != null) ? resultado[25].toString().trim() : "");
         	resp.setTppin((resultado[26] != null) ? resultado[26].toString().trim() : "");
         	
+        	resp.setStatus((resultado[58] != null) ? resultado[58].toString().trim() : "");
         	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getStatus().equals(""))) {
                 listaPendSet.add(pend); // Adiciona à lista apenas se não estiver duplicado
             }
@@ -679,7 +679,7 @@ public class MatriprdService {
             	listaPendSet.add(pend);
             }
             for (PendenciaResponseSemLista pendencia : listaPendSet) {
-            	if(!pendencia.getCdpend().equals(pend.getCdpend()) && !pend.getNumpend().equals("")) {
+            	if(!pendencia.getCdpend().equals(pend.getCdpend()) && !pend.getNumpend().equals("") && pend.getIdmatriz().equals(resp.getIdMatriz())) {
     				listaPendSet.add(pend);
     			}
 			}
@@ -693,6 +693,9 @@ public class MatriprdService {
                 resp.setQtdependencias(repository.countPendencias(resp.getIdMatriz().toString(), resp.getPartnumpd().toString()));
             	if((repository.countPendencias(resp.getIdMatriz().toString(), resp.getPartnumpd().toString())) < 1) {
             		produtos.add(resp);
+            	} else {
+            		listaPend = new ArrayList<>();
+            		listaPendSet = new HashSet<>();
             	}
                 
             }

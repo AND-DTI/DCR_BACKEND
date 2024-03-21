@@ -26,7 +26,10 @@ public class ProdutoSemListaResponse {
     private Object status;
     
     private Object qtdependencias;
-    private Object partnumpd;
+    public Object getStatus() {
+		return status;
+	}
+	private Object partnumpd;
     private Object codcor;
     private Object partdesc;
     private Object unmed;
