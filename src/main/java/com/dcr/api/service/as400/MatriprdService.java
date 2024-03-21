@@ -658,10 +658,10 @@ public class MatriprdService {
         	pend.setTppin((resultado[41] != null) ? resultado[41].toString().trim() : "");
         	
         	
-        	resp.setCdbej((resultado[23] != null) ? resultado[23].toString().trim() : "");
-        	resp.setCorpt((resultado[24] != null) ? resultado[24].toString().trim() : "");
-        	resp.setCoreng((resultado[25] != null) ? resultado[25].toString().trim() : "");
-        	resp.setTppin((resultado[26] != null) ? resultado[26].toString().trim() : "");
+        	resp.setCdbej((resultado[38] != null) ? resultado[38].toString().trim() : "");
+        	resp.setCorpt((resultado[39] != null) ? resultado[39].toString().trim() : "");
+        	resp.setCoreng((resultado[40] != null) ? resultado[40].toString().trim() : "");
+        	resp.setTppin((resultado[41] != null) ? resultado[41].toString().trim() : "");
         	
         	resp.setStatus((resultado[58] != null) ? resultado[58].toString().trim() : "");
         	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getStatus().equals(""))) {

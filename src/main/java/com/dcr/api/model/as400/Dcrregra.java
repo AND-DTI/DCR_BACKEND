@@ -22,7 +22,17 @@ public class Dcrregra {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(5)")
 	private Integer stsconfig;
-	 
+	  
+	@TamanhoMaximo(14)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(14)")
+	private String cnpjemi;
+	
+	@TamanhoMaximo(600)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(600)")
+	private String razsoc;
+	
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
     @Column(columnDefinition = "int")
@@ -261,6 +271,22 @@ public class Dcrregra {
 
 	public void setStsconfig(Integer stsconfig) {
 		this.stsconfig = stsconfig;
+	}
+
+	public String getCnpjemi() {
+		return cnpjemi;
+	}
+
+	public void setCnpjemi(String cnpjemi) {
+		this.cnpjemi = cnpjemi;
+	}
+
+	public String getRazsoc() {
+		return razsoc;
+	}
+
+	public void setRazsoc(String razsoc) {
+		this.razsoc = razsoc;
 	}
     
 }

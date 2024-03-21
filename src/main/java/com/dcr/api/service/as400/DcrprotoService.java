@@ -7,10 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Dcrproto;
-import com.dcr.api.model.dto.DcrproccDTO;
-import com.dcr.api.model.keys.DcrproccKey;
+import com.dcr.api.model.dto.DcrprotoDTO;
 import com.dcr.api.repository.as400.DcrprotoRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,18 +22,32 @@ public class DcrprotoService {
 	@Autowired
 	DcrprotoRepository repository;
 	
-	public Dcrproto create( HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public Dcrproto create(DcrprotoDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Dcrproto dcr = new Dcrproto();
 		
+		dcr.setDtenvio(dto.dtenvio());
+		dcr.setHrenvio(dto.hrenvio());
+		dcr.setIdmatriz(dto.idmatriz());
+		dcr.setPartnumpd(dto.partnumpd());
+		dcr.setProtdcre(dto.protdcre());
+		dcr.setRepreenvio(dto.repreenvio());
+		dcr.setTpenvio(dto.tpenvio());
+		dcr.setTpprd(dto.tpprd());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
 	}
 	
-	public Dcrproto update(HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+	public Dcrproto update(Dcrproto dcr, DcrprotoDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
-		Dcrproto dcr = new Dcrproto();
-			
+		dcr.setDtenvio(dto.dtenvio());
+		dcr.setHrenvio(dto.hrenvio());
+		dcr.setIdmatriz(dto.idmatriz());
+		dcr.setPartnumpd(dto.partnumpd());
+		dcr.setRepreenvio(dto.repreenvio());
+		dcr.setTpenvio(dto.tpenvio());
+		dcr.setTpprd(dto.tpprd());
+	
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
@@ -47,5 +59,9 @@ public class DcrprotoService {
 	
 	public Optional<Dcrproto> getByKey(String id) {
 		return repository.findById(id);
+	}
+	
+	public void delete(Dcrproto dcr) {
+		repository.delete(dcr);
 	}
 }
