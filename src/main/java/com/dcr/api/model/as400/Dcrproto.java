@@ -133,5 +133,25 @@ public class Dcrproto {
 	public void setRepreenvio(String repreenvio) {
 		this.repreenvio = repreenvio;
 	}
+
+	public void setItaudsys(String itaudsys) {
+		this.itaudsys = itaudsys;
+	}
+
+	public void setItaudusr(String itaudusr) {
+		this.itaudusr = itaudusr;
+	}
+
+	public void setItaudhst(String itaudhst) {
+		this.itaudhst = itaudhst;
+	}
+
+	public void setItauddt(String itauddt) {
+		this.itauddt = itauddt;
+	}
+
+	public void setItaudhr(String itaudhr) {
+		this.itaudhr = itaudhr;
+	}
 	
 }

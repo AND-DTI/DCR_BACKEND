@@ -94,6 +94,35 @@ public class DcrprotoController {
 		}   
 	}
 	
+	@GetMapping(value = "/getByProduto", produces = "application/json")
+	@Operation(summary = "Busca um protocolo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum protocolo encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByProduto(@RequestParam Long idmatriz, @RequestParam String tpprd, @RequestParam String partnumpd) {
+	
+		try {
+			
+			Optional<Dcrproto> lista = service.getByProduto(idmatriz, tpprd, partnumpd);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhum protocolo encontrado!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um protocolo")
 	@ApiResponses(value = {

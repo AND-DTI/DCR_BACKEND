@@ -61,6 +61,10 @@ public class DcrprotoService {
 		return repository.findById(id);
 	}
 	
+	public Optional<Dcrproto> getByProduto(Long idmatriz, String tpprd, String partnumpd) {
+		return repository.consultaByProduto(idmatriz, tpprd, partnumpd);
+	}
+	
 	public void delete(Dcrproto dcr) {
 		repository.delete(dcr);
 	}
