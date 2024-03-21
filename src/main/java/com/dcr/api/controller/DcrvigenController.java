@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dcr.api.model.as400.Dcrproto;
-import com.dcr.api.model.dto.DcrprotoDTO;
-import com.dcr.api.service.as400.DcrprotoService;
+import com.dcr.api.model.as400.Dcrvigen;
+import com.dcr.api.model.dto.DcrvigenDTO;
+import com.dcr.api.service.as400.DcrvigenService;
 import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,27 +28,27 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/protocolo")
-public class DcrprotoController {
+@RequestMapping("/api/vigencia")
+public class DcrvigenController {
 	@Autowired
-	DcrprotoService service;
+	DcrvigenService service;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Busca todos as protocolos")
+	@Operation(summary = "Busca todas as Vigenciaes")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma protocolo encontrado!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Vigencia encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Dcrproto> lista = service.getAll();
+			List<Dcrvigen> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhum protocolo encontrado!");
+	                    .body("Nenhuma Vigencia encontrada!");
 	        }
 	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -62,10 +62,10 @@ public class DcrprotoController {
 	}
 	
 	@GetMapping(value = "/getByKey", produces = "application/json")
-	@Operation(summary = "Busca um protocolo")
+	@Operation(summary = "Busca uma Vigencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhum protocolo encontrado!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Vigencia encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
@@ -73,11 +73,11 @@ public class DcrprotoController {
 	
 		try {
 
-			Optional<Dcrproto> lista = service.getByKey(protdcre);
+			Optional<Dcrvigen> lista = service.getByKey(protdcre);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhum protocolo encontrado!");
+	                    .body("Nenhuma Vigencia encontrada!");
 	        }
 	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -91,22 +91,22 @@ public class DcrprotoController {
 	}
 	
 	@PutMapping(value = "/create", produces = "application/json")
-	@Operation(summary = "Cria um protocolo")
+	@Operation(summary = "Cria uma Vigencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Esse protocolo já existe!"),
+	        @ApiResponse(responseCode = "400", description = "Essa Vigencia já existe!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody DcrprotoDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> create(@RequestBody DcrvigenDTO dto, HttpServletRequest request) {
 	
 		try {
 			
-			Optional<Dcrproto> lista = service.getByKey(dto.protdcre());
+			Optional<Dcrvigen> lista = service.getByKey(dto.dcre());
 	        if (!lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Esse protocolo já existe!");
+	                    .body("Essa Vigencia já existe!");
 	        }
 		
 	        service.create(dto, request);
@@ -121,22 +121,22 @@ public class DcrprotoController {
 	}
 	
 	@PutMapping(value = "/update", produces = "application/json")
-	@Operation(summary = "Altera um protocolo")
+	@Operation(summary = "Altera uma Vigencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "protocolo não encontrado!"),
+	        @ApiResponse(responseCode = "400", description = "Vigencia não encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> update(@RequestBody DcrprotoDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody DcrvigenDTO dto, HttpServletRequest request) {
 	
 		try {
 	
-			Optional<Dcrproto> lista = service.getByKey(dto.protdcre());
+			Optional<Dcrvigen> lista = service.getByKey(dto.dcre());
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Protocolo não encontrado!");
+	                    .body("Vigencia não encontrada!");
 	        }
 		
 	        service.update(lista.get(), dto,  request);
@@ -151,10 +151,10 @@ public class DcrprotoController {
 	}
 	
 	@DeleteMapping(value = "/delete", produces = "application/json")
-	@Operation(summary = "Deleta um protocolo")
+	@Operation(summary = "Deleta uma Vigencia")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhum protocolo encontrado!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Vigencia encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
@@ -162,17 +162,17 @@ public class DcrprotoController {
 	
 		try {
 			
-			Optional<Dcrproto> lista = service.getByKey(protdcre);
+			Optional<Dcrvigen> lista = service.getByKey(protdcre);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
-	                    .body("Nenhum protocolo encontrado!");
+	                    .body("Nenhuma Vigencia encontrada!");
 	        }
 		
 	        service.delete(lista.get());
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
-		            .body("Protocolo deletado com sucesso!");
+		            .body("Vigencia deletada com sucesso!");
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")

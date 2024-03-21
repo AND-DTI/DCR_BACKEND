@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.dto.DcrproccDTO;
 import com.dcr.api.model.keys.DcrproccKey;
+import com.dcr.api.model.projection.ResumoProjection;
 import com.dcr.api.repository.as400.DcrproccRepository;
-import com.dcr.api.repository.as400.DcrprocchRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -73,5 +73,10 @@ public class DcrproccService {
 	public Optional<Dcrprocc> getByKey(DcrproccKey dto) {
 
 		return repository.findById(dto);
+	}
+	
+	public Optional<ResumoProjection> getResumo(Long idmatriz, String partnumpd) {
+
+		return repository.getResumo(idmatriz, partnumpd);
 	}
 }

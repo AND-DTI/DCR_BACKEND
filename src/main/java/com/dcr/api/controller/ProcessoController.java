@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,7 @@ import com.dcr.api.model.dto.DcrproccDTO;
 import com.dcr.api.model.dto.DcrproccKeyDTO;
 import com.dcr.api.model.dto.DcrproccStatusNew;
 import com.dcr.api.model.keys.DcrproccKey;
+import com.dcr.api.model.projection.ResumoProjection;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -200,6 +202,37 @@ public class ProcessoController {
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body("Status atualizado!");
+	       
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getResumo", produces = "application/json")
+	@Operation(summary = "Busca o Processo ativo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Processo criado!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum Processo encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getResumo(@RequestParam Long idmatriz,@RequestParam String partnumpd, HttpServletRequest request) {
+	
+		try {
+		
+			Optional<ResumoProjection> dcr = service.getResumo(idmatriz, partnumpd);
+					
+			if (dcr.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.header("Accept", "application/json")
+						.body("Nenhum Processo encontrado!");
+		    }
+			Auxiliar.formatResponse(dcr.get());
+			return ResponseEntity.status(HttpStatus.OK)
+			        .header("Accept", "application/json")
+			            .body(dcr);
 	       
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
