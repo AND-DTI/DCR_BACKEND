@@ -39,7 +39,7 @@ public class DcrproccService {
 		dcr.setStatus(dto.status());
 		dcr.setDtstatus(dto.dtstatus());
 		dcr.setHrstatus(dto.hrstatus());
-		dcr.setRespstaus(dto.respstatus());
+		dcr.setRespstaus(dto.respstaus());
 		
 		Auxiliar.preencheAuditoria(dcr, request);
 		
@@ -50,7 +50,7 @@ public class DcrproccService {
 
 		dcr.setDtstatus(dto.dtstatus());
 		dcr.setHrstatus(dto.hrstatus());
-		dcr.setRespstaus(dto.respstatus());
+		dcr.setRespstaus(dto.respstaus());
 			
 		Auxiliar.preencheAuditoria(dcr, request);
 		
