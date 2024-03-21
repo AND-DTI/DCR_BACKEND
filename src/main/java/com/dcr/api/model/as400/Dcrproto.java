@@ -55,6 +55,11 @@ public class Dcrproto {
 	@Column(columnDefinition = "char(14)")
 	private String repreenvio;
 	
+	@TamanhoMaximo(2)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(2)")
+	private String status;
+	
 	@Column(columnDefinition = "char(40)")
 	private String itaudsys;
 
@@ -152,6 +157,14 @@ public class Dcrproto {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

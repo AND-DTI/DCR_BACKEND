@@ -33,6 +33,7 @@ public class DcrprotoService {
 		dcr.setRepreenvio(dto.repreenvio());
 		dcr.setTpenvio(dto.tpenvio());
 		dcr.setTpprd(dto.tpprd());
+		dcr.setStatus(dto.status());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
@@ -47,7 +48,7 @@ public class DcrprotoService {
 		dcr.setRepreenvio(dto.repreenvio());
 		dcr.setTpenvio(dto.tpenvio());
 		dcr.setTpprd(dto.tpprd());
-	
+		dcr.setStatus(dto.status());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
