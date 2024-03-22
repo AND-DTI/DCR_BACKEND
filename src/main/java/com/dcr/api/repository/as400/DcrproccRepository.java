@@ -34,6 +34,7 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 			+ "    reg0.SALARIOS, \r\n"
 			+ "    reg0.UNDCOM, \r\n"
 			+ "    reg0.TPDCRE, \r\n" 
+			+ "    reg0.NCM, \r\n" 
 			+ "    reg0.ENCARGOS, \r\n"
 			+ "    dcr.status as protostatus\r\n"
 			+ "FROM \r\n"

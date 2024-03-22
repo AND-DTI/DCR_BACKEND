@@ -25,4 +25,5 @@ public interface ResumoProjection {
     String getUndcom();
     String getTpdcre();
     Double getEncargos();
+    String getNcm();
 }
