@@ -14,4 +14,10 @@ public interface ResumoProjection {
     Double getCoefred();
     Double getIitotal();
     Double getIireduzido();
+    String getProtdcre();
+    String getTpenvio();
+    String getDtenvio();
+    String getHrenvio();
+    String getRepreenvio();
+    String getProtostatus();
 }
