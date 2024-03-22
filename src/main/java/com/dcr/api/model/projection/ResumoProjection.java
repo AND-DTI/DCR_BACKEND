@@ -20,4 +20,9 @@ public interface ResumoProjection {
     String getHrenvio();
     String getRepreenvio();
     String getProtostatus();
+    Double getPeso();
+    Double getSalarios();
+    String getUndcom();
+    String getTpdcre();
+    Double getEncargos();
 }
