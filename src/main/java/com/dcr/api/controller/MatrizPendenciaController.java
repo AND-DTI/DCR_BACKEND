@@ -2,6 +2,8 @@ package com.dcr.api.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,15 +19,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Matridoc;
 import com.dcr.api.model.as400.Matriins;
 import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MatridocDTO;
 import com.dcr.api.model.dto.PendprodDTO;
 import com.dcr.api.model.dto.resolverPendenciaDTO;
+import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.model.keys.MatriinsKey;
 import com.dcr.api.model.keys.PendprodKey;
+import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MatridocService;
 import com.dcr.api.service.as400.MatriinsService;
 import com.dcr.api.service.as400.PendprodService;
@@ -40,7 +45,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/api/matriz/pendencia")
 public class MatrizPendenciaController {
-
 	@Autowired
 	PendprodService service;
 	
@@ -49,6 +53,9 @@ public class MatrizPendenciaController {
 	
 	@Autowired
 	MatriinsService matriinsService;
+	
+	@Autowired
+	DcrproccService processoservice;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de pendencia")
@@ -276,6 +283,18 @@ public class MatrizPendenciaController {
 	        matriinsService.resolverPendencia(matriins.get(), request);
 	        matridocService.resolverPendencia(matridoc.get(), request);
 	        
+	        List<Pendprod> pendencias = service.findPendenciasZero(Long.valueOf(dto.idmatriz()), dto.partnumpd());
+	        
+	        if(pendencias.isEmpty()) {
+	        	DcrproccKey dcrproccKey = new DcrproccKey();
+	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setPartnumpd(dto.partnumpd());
+				
+	        	dcrproccKey.setTpprd(dto.tpprd());
+				
+				Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+	        	processoservice.setStatus(dcr.get(), 3, request);
+	        }
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");

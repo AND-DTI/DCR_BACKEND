@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Cadtaxa;
 import com.dcr.api.model.dto.CadtaxaDTO;
 import com.dcr.api.repository.as400.CadtaxaRepository;
+import com.dcr.api.response.TaxaResponse;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -32,6 +33,20 @@ public class CadtaxaService {
 		return repository.findById(cmoed);
 	}
 	
+	public TaxaResponse getVigente() {
+		TaxaResponse response = new TaxaResponse();
+		
+		Optional<Cadtaxa> taxa = repository.getVigente();
+		Optional<Integer> taxaManual = repository.getTaxaManual();
+		
+		response.setCdmoed(taxa.get().getCdmoed());
+		response.setTaxa(taxa.get().getTaxa());
+		response.setVigfim(taxa.get().getVigfim());
+		response.setVigini(taxa.get().getVigini());
+		response.setTaxamanual(taxaManual.get());
+		return response;
+	}
+
 	public void delete(Cadtaxa ppb) {
 		
 		repository.delete(ppb);

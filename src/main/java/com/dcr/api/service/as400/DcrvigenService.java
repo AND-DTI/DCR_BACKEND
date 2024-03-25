@@ -49,6 +49,13 @@ public class DcrvigenService {
 		return repository.save(dcr);
 	}
 	
+	public Dcrvigen create(Dcrvigen dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
 	public Dcrvigen update(Dcrvigen dcr, DcrvigenDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
 		dcr.setCoefred(dto.coefred());
@@ -69,6 +76,13 @@ public class DcrvigenService {
 		dcr.setTotalnac(dto.totalnac());
 		dcr.setTpprd(dto.tpprd());
 	
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
+	public Dcrvigen update(Dcrvigen dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);

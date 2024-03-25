@@ -57,6 +57,13 @@ public class DcrproccService {
 		return repository.save(dcr);
 	}
 	
+	public Dcrprocc update(Dcrprocc dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
 	public Dcrprocc setStatus(Dcrprocc dcr, Integer statusNew, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {				
 	
 		historicoService.setStatus(dcr, dcr.getStatus(), statusNew, request);

@@ -77,4 +77,6 @@ public class DcrregraService {
 		key.setConfvigfim(dto.confvigfim());
 		return repository.findById(key);
 	}
+	
+	
 }

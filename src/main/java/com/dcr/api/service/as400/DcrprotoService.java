@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Dcrproto;
 import com.dcr.api.model.dto.DcrprotoDTO;
+import com.dcr.api.model.dto.GeraDiagnosticoDTO;
+import com.dcr.api.model.dto.GeraRegistroDTO;
 import com.dcr.api.repository.as400.DcrprotoRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,6 +25,40 @@ public class DcrprotoService {
 	DcrprotoRepository repository;
 	
 	public Dcrproto create(DcrprotoDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Dcrproto dcr = new Dcrproto();
+		
+		dcr.setDtenvio(dto.dtenvio());
+		dcr.setHrenvio(dto.hrenvio());
+		dcr.setIdmatriz(dto.idmatriz());
+		dcr.setPartnumpd(dto.partnumpd());
+		dcr.setProtdcre(dto.protdcre());
+		dcr.setRepreenvio(dto.repreenvio());
+		dcr.setTpenvio(dto.tpenvio());
+		dcr.setTpprd(dto.tpprd());
+		dcr.setStatus(dto.status());
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
+	public Dcrproto create(GeraDiagnosticoDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Dcrproto dcr = new Dcrproto();
+		
+		dcr.setDtenvio(dto.dtenvio());
+		dcr.setHrenvio(dto.hrenvio());
+		dcr.setIdmatriz(dto.idmatriz());
+		dcr.setPartnumpd(dto.partnumpd());
+		dcr.setProtdcre(dto.protdcre());
+		dcr.setRepreenvio(dto.repreenvio());
+		dcr.setTpenvio(dto.tpenvio());
+		dcr.setTpprd(dto.tpprd());
+		dcr.setStatus(dto.status());
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
+	public Dcrproto create(GeraRegistroDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Dcrproto dcr = new Dcrproto();
 		
 		dcr.setDtenvio(dto.dtenvio());

@@ -21,6 +21,7 @@ import com.dcr.api.model.as400.Cadtpprd;
 import com.dcr.api.model.dto.CadtaxaDTO;
 import com.dcr.api.model.dto.CadtpprdDTO;
 import com.dcr.api.repository.as400.CadtaxaRepository;
+import com.dcr.api.response.TaxaResponse;
 import com.dcr.api.service.as400.CadtaxaService;
 import com.dcr.api.utils.Auxiliar;
 
@@ -87,6 +88,31 @@ public class TaxaController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+
+	@GetMapping(value = "/getTaxa", produces = "application/json")
+	@Operation(summary = "Busca um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum tipo encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getTaxa() {
+	
+		try {
+
+			TaxaResponse taxa = service.getVigente();
+	        
+	        Auxiliar.formatResponse(taxa);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(taxa);
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")

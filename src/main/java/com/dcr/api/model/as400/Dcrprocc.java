@@ -171,4 +171,76 @@ public class Dcrprocc {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
+
+	public String getDtregistro() {
+		return dtregistro;
+	}
+
+	public void setDtregistro(String dtregistro) {
+		this.dtregistro = dtregistro;
+	}
+
+	public String getHrregistro() {
+		return hrregistro;
+	}
+
+	public void setHrregistro(String hrregistro) {
+		this.hrregistro = hrregistro;
+	}
+
+	public Double getTaxausd() {
+		return taxausd;
+	}
+
+	public void setTaxausd(Double taxausd) {
+		this.taxausd = taxausd;
+	}
+
+	public Double getTotalnac() {
+		return totalnac;
+	}
+
+	public void setTotalnac(Double totalnac) {
+		this.totalnac = totalnac;
+	}
+
+	public Double getTotalimp() {
+		return totalimp;
+	}
+
+	public void setTotalimp(Double totalimp) {
+		this.totalimp = totalimp;
+	}
+
+	public Double getCustotal() {
+		return custotal;
+	}
+
+	public void setCustotal(Double custotal) {
+		this.custotal = custotal;
+	}
+
+	public Double getCoefred() {
+		return coefred;
+	}
+
+	public void setCoefred(Double coefred) {
+		this.coefred = coefred;
+	}
+
+	public Double getIitotal() {
+		return iitotal;
+	}
+
+	public void setIitotal(Double iitotal) {
+		this.iitotal = iitotal;
+	}
+
+	public Double getIireduzido() {
+		return iireduzido;
+	}
+
+	public void setIireduzido(Double iireduzido) {
+		this.iireduzido = iireduzido;
+	}
 }
