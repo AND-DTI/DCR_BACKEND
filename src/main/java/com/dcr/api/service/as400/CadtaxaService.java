@@ -33,10 +33,10 @@ public class CadtaxaService {
 		return repository.findById(cmoed);
 	}
 	
-	public TaxaResponse getVigente() {
+	public TaxaResponse getVigente(String cdmoed) {
 		TaxaResponse response = new TaxaResponse();
 		
-		Optional<Cadtaxa> taxa = repository.getVigente();
+		Optional<Cadtaxa> taxa = repository.getVigente(cdmoed);
 		Optional<Integer> taxaManual = repository.getTaxaManual();
 		
 		response.setCdmoed(taxa.get().getCdmoed());

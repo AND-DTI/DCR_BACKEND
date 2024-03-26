@@ -103,17 +103,22 @@ public class TaxaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getTaxa() {
+	public ResponseEntity<Object> getTaxa(@RequestParam String cdmoed) {
 	
 		try {
-
-			TaxaResponse taxa = service.getVigente();
+			
+			TaxaResponse taxa = service.getVigente(cdmoed);
 	        
 	        Auxiliar.formatResponse(taxa);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(taxa);
 		} catch (Exception ae) {
+			if(ae.getMessage().equals("No value present")) {
+				 return ResponseEntity.status(HttpStatus.BAD_REQUEST) 
+			    			.header("Accept", "application/json")
+			        		.body("Taxa não encontrada!");      
+			}
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                

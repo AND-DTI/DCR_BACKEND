@@ -13,6 +13,6 @@ public interface PendprodRepository extends JpaRepository<Pendprod, PendprodKey>
 		@Query(value = "SELECT * FROM HD4DCDHH.PENDPROD a WHERE a.cdpend = :cdpend", nativeQuery = true)
 	    List<Pendprod> findByCdPend(String cdpend);
 		
-		@Query(value = "SELECT * FROM HD4DCDHH.PENDPROD a WHERE a.idmatriz = :idmatriz and WHERE a.partnumpd = :partnumpd and WHERE a.status = 0", nativeQuery = true)
+		@Query(value = "SELECT * FROM HD4DCDHH.PENDPROD a WHERE a.idmatriz = :idmatriz and a.partnumpd = :partnumpd and a.status = 0", nativeQuery = true)
 	    List<Pendprod> findPendenciasZero(Long idmatriz, String partnumpd);
 }
