@@ -103,8 +103,8 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		  @Query(value = "SELECT DESCPEND, TPREG FROM HD4DCDHH.CADTPPEND WHERE CDPEND = :cdpend", nativeQuery = true)
 		  List<Object[]> complementaPendenciaDesc(String cdpend);
 		  
-		  @Query(value = "SELECT * FROM HD4DCDHH.MATRIPRD AS prd \r\n"
+		  @Query(value = "SELECT prd.* FROM HD4DCDHH.MATRIPRD AS prd \r\n"
 		  		+ "    LEFT JOIN  HD4DCDHH.DCRPROCC AS procc ON prd.IDMATRIZ = procc.IDMATRIZ \r\n"
-		  		+ "    WHERE prd.ORIGPRD = 'MANUAL' AND procc.IDMATRIZ IS NULL;", nativeQuery = true)
-		  List<Matriprd> getMatriprdWithNotInDcrprocc();
+		  		+ "    WHERE prd.ORIGPRD = 'MANUAL' AND procc.IDMATRIZ IS NULL", nativeQuery = true)
+		  List<Object[]> getMatriprdWithNotInDcrprocc();
 }
