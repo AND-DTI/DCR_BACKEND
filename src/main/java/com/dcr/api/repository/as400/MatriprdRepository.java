@@ -94,6 +94,9 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		  @Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDPROD WHERE IDMATRIZ = :idmatriz AND STATUS = 0 AND PARTNUMPD = :partnumpd", nativeQuery = true)
 		  Integer countPendencias(String idmatriz, String partnumpd);
 		  
+		  @Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDPROD WHERE IDMATRIZ = :idmatriz AND STATUS = 0", nativeQuery = true)
+		  Integer countPendenciasNoPartnum(String idmatriz);
+		  
 		  @Query(value = "SELECT NUMDOC, SERDOC FROM HD4DCDHH.MATRIDOC WHERE IDMATRIZ = :idmatriz AND PARTNUM = :partnum AND TPDOC = :tpdoc", nativeQuery = true)
 		  List<Object[]> complementaPendenciaDoc(String idmatriz, String partnum, String tpdoc);
 		  
