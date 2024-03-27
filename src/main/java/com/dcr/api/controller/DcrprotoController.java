@@ -419,7 +419,15 @@ public class DcrprotoController {
 	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);
 	       
 	        if(procc.isPresent()) {
-	        	dcrProccservice.delete(procc.get());
+	        	procc.get().setTaxausd(new Double(0));
+	        	procc.get().setTotalnac(new Double(0));
+	        	procc.get().setTotalimp(new Double(0));
+	        	procc.get().setCustotal(new Double(0));
+	        	procc.get().setCoefred(new Double(0));
+	        	procc.get().setIitotal(new Double(0));
+	        	procc.get().setIireduzido(new Double(0));
+	        	
+	        	dcrProccservice.update(procc.get(), request);
 	        }
 	        
 	        return ResponseEntity.status(HttpStatus.OK)
