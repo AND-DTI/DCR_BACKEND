@@ -90,6 +90,21 @@ public class DcrprotoService {
 		return repository.save(dcr);
 	}
 	
+	public Dcrproto update(Dcrproto dcr, GeraDiagnosticoDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+
+		dcr.setDtenvio(dto.dtenvio());
+		dcr.setHrenvio(dto.hrenvio());
+		dcr.setIdmatriz(dto.idmatriz());
+		dcr.setPartnumpd(dto.partnumpd());
+		dcr.setRepreenvio(dto.repreenvio());
+		dcr.setTpenvio(dto.tpenvio());
+		dcr.setTpprd(dto.tpprd());
+		dcr.setStatus(dto.status());
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
 	public List<Dcrproto> getAll() {
 		return repository.findAll();
 	}
