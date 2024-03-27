@@ -28,14 +28,49 @@ public class ScheduleController {
 	public void startSchedule() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(this::gerarArquivo, 0, 30, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::verificarPendencias, 0, 30, TimeUnit.MINUTES);
 	}
-	 
+	public void verificarPendencias() {
+		try {
+			List<Object[]> lista = service.getPendenciasCadastro();
+			FileWriter fws;
+			 
+			fws = new FileWriter("logs/pendencias.txt");
+			
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+	        sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+	        sbs.append("\n Quantidade de registros: " + lista.size() );
+	        for (Object[] objects : lista) {
+	        	sbs.append("\n####################################################################");
+	        	sbs.append("\n IDMATRIZ: " + objects[0]);
+	        	sbs.append("\n PARTNUMPD: " + objects[1]);
+	        	sbs.append("\n PARTNUM: " + objects[2]);
+	        	sbs.append("\n NUMPEND: " + objects[3]);
+	        	sbs.append("\n CDPEND: " + objects[4]);
+	        	sbs.append("\n OBSRESOL: " + objects[5]);
+	        	sbs.append("\n STATUS: " + objects[6]);
+	        	sbs.append("\n ITAUDSYS: " + objects[12]);
+	        	sbs.append("\n ITAUDUSR: " + objects[13]);
+	        	sbs.append("\n ITAUDHST: " + objects[14]);
+	        	sbs.append("\n ITAUDDT: " + objects[15]);
+	        	sbs.append("\n ITAUDHR: " + objects[16]);
+	        	sbs.append("\n####################################################################");					
+			}
+	        
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Arquivo Pendencias gerado com sucesso!");
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 	public void gerarArquivo() {
 		try {
 				List<Object[]> lista = service.getMatriprdWithNotInDcrprocc();
 				FileWriter fw;
 				 
-				fw = new FileWriter("schedule.txt");
+				fw = new FileWriter("logs/schedule.txt");
 				
 		        BufferedWriter bw = new BufferedWriter(fw); 
 		        StringBuffer sb = new StringBuffer();

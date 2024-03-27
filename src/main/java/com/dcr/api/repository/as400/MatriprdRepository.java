@@ -107,4 +107,9 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		  		+ "    LEFT JOIN  HD4DCDHH.DCRPROCC AS procc ON prd.IDMATRIZ = procc.IDMATRIZ \r\n"
 		  		+ "    WHERE prd.ORIGPRD = 'MANUAL' AND procc.IDMATRIZ IS NULL", nativeQuery = true)
 		  List<Object[]> getMatriprdWithNotInDcrprocc();
+		  
+		  @Query(value = "SELECT pend.* FROM HD4DCDHH.PENDPROD as pend\r\n"
+		  		+ "    LEFT JOIN HD4DCDHH.CADTPPEND AS cad ON pend.CDPEND = cad.CDPEND \r\n"
+		  		+ "    WHERE pend.status = 0 AND cad.TPREG = 'C'", nativeQuery = true)
+			  List<Object[]> getPendenciasCadastro();
 }

@@ -64,6 +64,9 @@ public class DcrproccService {
 		return repository.save(dcr);
 	}
 	
+	public void delete(Dcrprocc dcr) {
+		repository.delete(dcr);
+	}
 	public Dcrprocc setStatus(Dcrprocc dcr, Integer statusNew, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {				
 	
 		historicoService.setStatus(dcr, dcr.getStatus(), statusNew, request);

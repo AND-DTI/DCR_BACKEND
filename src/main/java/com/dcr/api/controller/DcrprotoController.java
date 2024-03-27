@@ -390,6 +390,48 @@ public class DcrprotoController {
 		}   
 	}
 	
+	@DeleteMapping(value = "/deletaDiagnostico", produces = "application/json")
+	@Operation(summary = "Altera um protocolo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "protocolo não encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> deletaDiagnostico(@RequestBody GeraDiagnosticoDTO dto, HttpServletRequest request) {
+	
+		try {
+	
+			Optional<Dcrproto> lista = service.getByKey(dto.protdcre());
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Esse protocolo não existe!");
+	        }
+		
+	        service.delete(lista.get());
+	        
+	        DcrproccKey key = new DcrproccKey();
+	        key.setIdmatriz(dto.idmatriz());
+	        key.setPartnumpd(dto.partnumpd());
+	        key.setTpprd(dto.tpprd());
+	        
+	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);
+	       
+	        if(procc.isPresent()) {
+	        	dcrProccservice.delete(procc.get());
+	        }
+	        
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("OK");
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta um protocolo")
 	@ApiResponses(value = {

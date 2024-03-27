@@ -17,4 +17,8 @@ public class ScheduleService {
 		return repository.getMatriprdWithNotInDcrprocc();
 	}
 	
+	public List<Object[]> getPendenciasCadastro() {
+		return repository.getPendenciasCadastro();
+	}
+	
 }
