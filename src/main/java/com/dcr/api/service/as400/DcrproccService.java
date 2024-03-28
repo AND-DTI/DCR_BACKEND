@@ -41,6 +41,15 @@ public class DcrproccService {
 		dcr.setHrstatus(dto.hrstatus());
 		dcr.setRespstaus(dto.respstaus());
 		
+		dcr.setCoefred(dto.coefred());
+		dcr.setCustotal(dto.custotal());
+		dcr.setDtregistro(dto.dtregistro());
+		dcr.setHrregistro(dto.hrregistro());
+		dcr.setIireduzido(dto.iireduzido());
+		dcr.setIitotal(dto.iitotal());
+		dcr.setTaxausd(dto.taxausd());
+		dcr.setTotalimp(dto.totalimp());
+		dcr.setTotalnac(dto.totalnac());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
@@ -51,7 +60,16 @@ public class DcrproccService {
 		dcr.setDtstatus(dto.dtstatus());
 		dcr.setHrstatus(dto.hrstatus());
 		dcr.setRespstaus(dto.respstaus());
-			
+	
+		dcr.setCoefred(dto.coefred());
+		dcr.setCustotal(dto.custotal());
+		dcr.setDtregistro(dto.dtregistro());
+		dcr.setHrregistro(dto.hrregistro());
+		dcr.setIireduzido(dto.iireduzido());
+		dcr.setIitotal(dto.iitotal());
+		dcr.setTaxausd(dto.taxausd());
+		dcr.setTotalimp(dto.totalimp());
+		dcr.setTotalnac(dto.totalnac());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
