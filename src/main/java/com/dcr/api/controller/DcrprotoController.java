@@ -398,11 +398,11 @@ public class DcrprotoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> deletaDiagnostico(@RequestBody GeraDiagnosticoDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> deletaDiagnostico(@RequestParam Long idmatriz, @RequestParam String protdcre, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
 	
 		try {
 	
-			Optional<Dcrproto> lista = service.getByKey(dto.protdcre());
+			Optional<Dcrproto> lista = service.getByKey(protdcre);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -412,9 +412,9 @@ public class DcrprotoController {
 	        service.delete(lista.get());
 	        
 	        DcrproccKey key = new DcrproccKey();
-	        key.setIdmatriz(dto.idmatriz());
-	        key.setPartnumpd(dto.partnumpd());
-	        key.setTpprd(dto.tpprd());
+	        key.setIdmatriz(idmatriz);
+	        key.setPartnumpd(partnumpd);
+	        key.setTpprd(tpprd);
 	        
 	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);
 	       
