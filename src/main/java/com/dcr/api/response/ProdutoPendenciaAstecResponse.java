@@ -17,7 +17,8 @@ public class ProdutoPendenciaAstecResponse {
     private Object prioHRmnt;
    
     private Object status;
-    
+    private Object ppbprd;
+    private Object prddest;
     private Object qtdependencias;
     
     private List<PendenciaAstecResponse> pendencias;
@@ -117,5 +118,17 @@ public class ProdutoPendenciaAstecResponse {
 	}
 	public void setDocumentos(List<DocumentosAstecResponse> documentos) {
 		this.documentos = documentos;
+	}
+	public Object getPpbprd() {
+		return ppbprd;
+	}
+	public void setPpbprd(Object ppbprd) {
+		this.ppbprd = ppbprd;
+	}
+	public Object getPrddest() {
+		return prddest;
+	}
+	public void setPrddest(Object prddest) {
+		this.prddest = prddest;
 	}
 }
