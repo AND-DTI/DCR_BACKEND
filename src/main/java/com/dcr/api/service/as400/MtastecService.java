@@ -214,6 +214,8 @@ public class MtastecService {
         	resp.setPrioresp(  (resultado[9] != null) ? resultado[9].toString().trim() : "");
         	resp.setPriodtmnt(  (resultado[10] != null) ? resultado[10].toString().trim() : "");
         	resp.setPrioHRmnt(  (resultado[11] != null) ? resultado[11].toString().trim() : "");
+        	resp.setPpbprd((resultado[57] != null) ? resultado[57].toString().trim() : "");
+        	resp.setPrddest((resultado[58] != null) ? resultado[58].toString().trim() : "");
         	
         	pend.setPartnum((resultado[12] != null) ? resultado[12].toString().trim() : "");
         	pend.setNumpend( (resultado[13] != null) ? resultado[13].toString().trim() : "");

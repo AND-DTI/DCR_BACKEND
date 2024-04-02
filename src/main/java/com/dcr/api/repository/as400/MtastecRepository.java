@@ -53,11 +53,12 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 	  		+ "	        	pend.PARTNUM, pend.NUMPEND, pend.CDPEND, pend.OBSRESOL, pend.STATUS,\r\n"
 	  		+ "	        	ins.PARTNUM, ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.NCM, ins.VLRUNIT, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC,\r\n"
 	  		+ "	        	doc.PARTNUM, doc.ADICAO, doc.ADICAO2, doc.ADICAO3, doc.CNPJFOR, doc.CNPJFOR2, doc.CNPJFOR3, doc.EMIDOC, doc.EMIDOC2, doc.EMIDOC3, doc.IE, doc.IE2, doc.IE3, doc.ITADICAO, doc.ITADICAO2, doc.ITADICAO3,\r\n"
-	  		+ "	        	doc.NUMDOC, doc.NUMDOC2, doc.NUMDOC3, doc.PARTNUM, doc.SERDOC, doc.SERDOC2, doc.SERDOC3, doc.TPDOC, pend.idmatriz \r\n"
+	  		+ "	        	doc.NUMDOC, doc.NUMDOC2, doc.NUMDOC3, doc.PARTNUM, doc.SERDOC, doc.SERDOC2, doc.SERDOC3, doc.TPDOC, pend.idmatriz, PPB.PPBPRD, PPB.PRDDEST  \r\n"
 	  		+ "	  		FROM HD4DCDHH.MTASTEC AS PRD \r\n"
 	  		+ "	  		LEFT JOIN HD4DCDHH.PENDASTEC AS PEND ON PRD.IDMATRIZ = PEND.IDMATRIZ   \r\n"
 	  		+ "	  		LEFT JOIN HD4DCDHH.MTASTEINS AS INS ON PRD.IDMATRIZ = INS.IDMATRIZ AND PEND.PARTNUM = INS.PARTNUM  \r\n"
-	  		+ "	  		LEFT JOIN HD4DCDHH.MTASTEDOC AS DOC ON PRD.IDMATRIZ = DOC.IDMATRIZ AND PEND.PARTNUM = DOC.PARTNUM" +
+	  		+ "	  		LEFT JOIN HD4DCDHH.MTASTEDOC AS DOC ON PRD.IDMATRIZ = DOC.IDMATRIZ AND PEND.PARTNUM = DOC.PARTNUM" 
+	  		+ "	  		LEFT JOIN HD4DCDHH.CADPPB AS PPB ON PPB.CDPRD = PRD.PARTNUMPD AND PPB.TPPRD = 'PC' " +
 		              " WHERE prd.IDMATRIZ = :idmatriz AND ( :partnum = '' OR PEND.PARTNUM = :partnum)", nativeQuery = true)
 			  List<Object[]> consultaProdutoPendencia(Integer idmatriz, String partnum);
 			  
