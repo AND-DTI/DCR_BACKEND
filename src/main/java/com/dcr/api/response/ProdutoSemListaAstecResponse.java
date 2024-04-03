@@ -18,7 +18,7 @@ public class ProdutoSemListaAstecResponse {
     private Object ppbprd;
     private Object prddest;
     private Object status;
-    
+    private Object tpdcre;
     private Object qtdependencias;
     
     private List<PendenciaSemListaAstecResponse> pendencias;
@@ -141,6 +141,14 @@ public class ProdutoSemListaAstecResponse {
 
 	public void setPrddest(Object prddest) {
 		this.prddest = prddest;
+	}
+
+	public Object getTpdcre() {
+		return tpdcre;
+	}
+
+	public void setTpdcre(Object tpdcre) {
+		this.tpdcre = tpdcre;
 	}
 
 	

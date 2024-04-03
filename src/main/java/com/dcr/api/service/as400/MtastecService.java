@@ -145,6 +145,7 @@ public class MtastecService {
         	resp.setNumpend((Object) resultado[25]);
         	resp.setCdpend((Object) resultado[26]);
         	resp.setStatus((Object) resultado[27]);
+        	resp.setTpdcre((Object) resultado[28]);
             produtos.add(resp);
         }
         
@@ -166,7 +167,7 @@ public class MtastecService {
 		astec.setPrioresp(dto.prioresp());
 		astec.setPriourgen(dto.priourgen());
 		astec.setUnmed(dto.unmed());
-		
+		astec.setTpdcre(dto.tpdcre());
 		Auxiliar.preencheAuditoria(astec, request);
 		return repository.save(astec);
 	}
@@ -183,7 +184,7 @@ public class MtastecService {
 		astec.setPrioresp(dto.prioresp());
 		astec.setPriourgen(dto.priourgen());
 		astec.setUnmed(dto.unmed());
-		
+		astec.setTpdcre(dto.tpdcre());
 		Auxiliar.preencheAuditoria(astec, request);
 		return repository.save(astec);
 	}
@@ -216,6 +217,7 @@ public class MtastecService {
         	resp.setPrioHRmnt(  (resultado[11] != null) ? resultado[11].toString().trim() : "");
         	resp.setPpbprd((resultado[57] != null) ? resultado[57].toString().trim() : "");
         	resp.setPrddest((resultado[58] != null) ? resultado[58].toString().trim() : "");
+        	resp.setTpdcre((resultado[59] != null) ? resultado[59].toString().trim() : "");
         	
         	pend.setPartnum((resultado[12] != null) ? resultado[12].toString().trim() : "");
         	pend.setNumpend( (resultado[13] != null) ? resultado[13].toString().trim() : "");
@@ -334,6 +336,7 @@ public class MtastecService {
         	resp.setStatus((resultado[57] != null) ? resultado[57].toString().trim() : "");
         	resp.setPpbprd((resultado[58] != null) ? resultado[58].toString().trim() : "");
         	resp.setPrddest((resultado[59] != null) ? resultado[59].toString().trim() : "");
+        	resp.setTpdcre((resultado[60] != null) ? resultado[60].toString().trim() : "");
         	
         	pend.setPartnum((resultado[12] != null) ? resultado[12].toString().trim() : "");
         	pend.setNumpend( (resultado[13] != null) ? resultado[13].toString().trim() : "");
@@ -464,6 +467,7 @@ public class MtastecService {
         	resp.setStatus((resultado[57] != null) ? resultado[57].toString().trim() : "");
         	resp.setPpbprd((resultado[58] != null) ? resultado[58].toString().trim() : "");
         	resp.setPpbprd((resultado[59] != null) ? resultado[59].toString().trim() : "");
+        	resp.setTpdcre((resultado[60] != null) ? resultado[60].toString().trim() : "");
         	
         	pend.setPartnum((resultado[12] != null) ? resultado[12].toString().trim() : "");
         	pend.setNumpend( (resultado[13] != null) ? resultado[13].toString().trim() : "");

@@ -17,7 +17,7 @@ public class ProdutoPendenciaSimplesAstecResponse {
     private Object prioHRmnt;
     private Object ppbprd;
     private Object prddest;
-    
+    private Object tpdcre;
     private List<PendenciaAstecResponse> pendencias;
     private List<DocumentosAstecResponse> documentos;
     private List<InsumosAstecResponse> insumos;
@@ -123,5 +123,11 @@ public class ProdutoPendenciaSimplesAstecResponse {
 	}
 	public void setPrddest(Object prddest) {
 		this.prddest = prddest;
+	}
+	public Object getTpdcre() {
+		return tpdcre;
+	}
+	public void setTpdcre(Object tpdcre) {
+		this.tpdcre = tpdcre;
 	}
 }
