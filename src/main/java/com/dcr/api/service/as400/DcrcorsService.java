@@ -36,6 +36,9 @@ public class DcrcorsService {
 		dcr.setCnpjext(dto.cnpjext());
 		dcr.setRazsoc(dto.razsoc());
 		dcr.setAccobj(dto.accobj());
+		dcr.setAccemail(dto.accemail());
+		dcr.setAccresp(dto.accresp());
+		dcr.setAccfone(dto.accfone());
 		
 		Auxiliar.preencheAuditoria(dcr, request);
 		return repository.save(dcr);
@@ -44,6 +47,9 @@ public class DcrcorsService {
 	public Dcrcors update(Dcrcors dcr, DcrcorsDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException{
 		dcr.setRazsoc(dto.razsoc());
 		dcr.setAccobj(dto.accobj());
+		dcr.setAccemail(dto.accemail());
+		dcr.setAccresp(dto.accresp());
+		dcr.setAccfone(dto.accfone());
 		
 		Auxiliar.preencheAuditoria(dcr, request);
 		return repository.save(dcr);

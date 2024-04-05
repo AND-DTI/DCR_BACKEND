@@ -29,6 +29,21 @@ public class Dcrcors {
 	@Column(columnDefinition = "char(200)")
 	private String accobj;
 	
+	@TamanhoMaximo(100)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(100)")
+	private String accresp;
+	
+	@TamanhoMaximo(100)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(100)")
+	private String accemail;
+	
+	@TamanhoMaximo(100)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(100)")
+	private String accfone;
+	
     @Column(columnDefinition = "char(40)")
     private String itaudsys;
 
@@ -86,5 +101,29 @@ public class Dcrcors {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public String getAccresp() {
+		return accresp;
+	}
+
+	public void setAccresp(String accresp) {
+		this.accresp = accresp;
+	}
+
+	public String getAccemail() {
+		return accemail;
+	}
+
+	public void setAccemail(String accemail) {
+		this.accemail = accemail;
+	}
+
+	public String getAccfone() {
+		return accfone;
+	}
+
+	public void setAccfone(String accfone) {
+		this.accfone = accfone;
 	}
 }
