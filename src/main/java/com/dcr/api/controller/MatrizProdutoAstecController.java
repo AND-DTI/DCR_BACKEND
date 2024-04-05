@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Mtastec;
+import com.dcr.api.model.as400.Pendastec;
+import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MtastecDTO;
+import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MtastecKey;
 import com.dcr.api.response.AstecDetailResponse;
 import com.dcr.api.response.ProdutoPendenciaAstecResponse;
@@ -26,6 +30,7 @@ import com.dcr.api.response.ProdutoPendenciaSimplesAstecResponse;
 import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
 import com.dcr.api.response.ProdutoSemListaAstecResponse;
 import com.dcr.api.response.ProdutoSemListaResponse;
+import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MtastecService;
 import com.dcr.api.utils.Auxiliar;
 import com.dcr.api.service.as400.MtastecService;
@@ -42,6 +47,9 @@ public class MatrizProdutoAstecController {
 
 	@Autowired
 	MtastecService service;
+	
+	@Autowired
+	DcrproccService processoservice;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto ASTEC")
@@ -169,6 +177,29 @@ public class MatrizProdutoAstecController {
 	        }
 		
 	        service.update(lista.get(), dto,  request);
+	        
+	        List<Pendastec> pendencias = service.findPendenciasZero(Long.valueOf(dto.idmatriz()), dto.partnumpd());
+	        
+	        if(pendencias.isEmpty()) {
+	        	DcrproccKey dcrproccKey = new DcrproccKey();
+	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setPartnumpd(dto.partnumpd());
+				
+	        	dcrproccKey.setTpprd("PC");
+				
+				Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+	        	processoservice.setStatus(dcr.get(), 3, request);
+	        }else {
+	           	DcrproccKey dcrproccKey = new DcrproccKey();
+	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setPartnumpd(dto.partnumpd());
+				
+	        	dcrproccKey.setTpprd("PC");
+				
+				Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+	        	processoservice.setStatus(dcr.get(), 1, request);
+	        }
+	       
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Mtastec;
+import com.dcr.api.model.as400.Pendastec;
 import com.dcr.api.model.dto.MtastecDTO;
 import com.dcr.api.model.keys.MtastecKey;
 import com.dcr.api.repository.as400.MtastecRepository;
@@ -55,7 +56,9 @@ public class MtastecService {
 		
 		return repository.findAll();
 	}
-	
+	public List<Pendastec> findPendenciasZero(Long idmatriz, String partnumpd) {
+		return repository.findPendenciasZero(idmatriz, partnumpd);
+	}
 	public Optional<Mtastec> getByID(Integer idmatriz, String partnumpd) {
 		try {
 			return Optional.of(repository.findByIdmatrizAndPartnumpd(idmatriz, partnumpd));

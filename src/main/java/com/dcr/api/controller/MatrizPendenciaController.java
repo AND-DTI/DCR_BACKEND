@@ -2,8 +2,6 @@ package com.dcr.api.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +21,6 @@ import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Matridoc;
 import com.dcr.api.model.as400.Matriins;
 import com.dcr.api.model.as400.Pendprod;
-import com.dcr.api.model.dto.MatridocDTO;
 import com.dcr.api.model.dto.PendprodDTO;
 import com.dcr.api.model.dto.resolverPendenciaDTO;
 import com.dcr.api.model.keys.DcrproccKey;

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.dcr.api.model.as400.Mtastec;
+import com.dcr.api.model.as400.Pendastec;
+import com.dcr.api.model.as400.Pendprod;
 
 public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 
@@ -97,4 +99,8 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 	  		+ "	  		    LEFT JOIN HD4DCDHH.CADPPB AS PPB ON PPB.CDPRD = PRD.PARTNUMPD AND PPB.TPPRD = 'PC' " +
 		              " WHERE PROC.STATUS IN :status", nativeQuery = true)
 	  List<Object[]> consultaTodasAsPendenciasSemLista(List<Integer> status);
+	  
+	  
+	  @Query(value = "SELECT * FROM HD4DCDHH.PENDASTEC a WHERE a.idmatriz = :idmatriz and a.partnumpd = :partnumpd and a.status = 0", nativeQuery = true)
+	    List<Pendastec> findPendenciasZero(Long idmatriz, String partnumpd);
 }
