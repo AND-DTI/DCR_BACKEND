@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Dcrcors;
+import com.dcr.api.model.as400.Dcrcorsip;
 import com.dcr.api.model.as400.Dcrcorsrq;
 import com.dcr.api.model.dto.DcrcorsDTO;
 import com.dcr.api.model.dto.DcrcorsrqDTO;
@@ -26,6 +27,14 @@ public class DcrcorsrqService {
 	
 	public List<Dcrcorsrq> getAll(){
 		return repository.findAll();
+	}
+	
+	public List<Dcrcorsrq> getIpsByRota(String rota, String ip){
+		return repository.getByRota(rota, ip);
+	}
+	
+	public List<Dcrcorsrq> getByCnpj(String cnpjext){
+		return repository.getByCnpj(cnpjext);
 	}
 	
 	public Optional<Dcrcorsrq> getByID(Long idreg){

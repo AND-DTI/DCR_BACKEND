@@ -1,6 +1,7 @@
 package com.dcr.api.configs.security;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,7 +11,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.dcr.api.model.as400.Dcrcorsrq;
 import com.dcr.api.service.TokenService;
+import com.dcr.api.service.as400.DcrcorsrqService;
+import com.dcr.api.utils.Auxiliar;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,6 +27,9 @@ public class FilterToken extends OncePerRequestFilter {
     @Autowired
     TokenService tokenService;
 
+    @Autowired 
+    DcrcorsrqService corsService;
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
@@ -47,11 +54,37 @@ public class FilterToken extends OncePerRequestFilter {
         String token = atributo.replace("Bearer ", "");
 
         try {
-
-            UsernamePasswordAuthenticationToken authenticationToken = tokenService.getAuthenticationToken(token);
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            chain.doFilter(request, response);
-
+        	
+            String clientIp = Auxiliar.getClientIP(request);
+            String rota = request.getRequestURI();
+            String tpreq = request.getMethod();
+            List<Dcrcorsrq> perm = corsService.getIpsByRota(rota, clientIp);
+            Boolean haveAcess = false;
+            
+//            if(perm.isEmpty()) {
+//            	response.setStatus(401);
+//                response.getOutputStream()
+//                        .println("Sem acesso a rota!");
+//                return;
+//            }else {
+//            	for (Dcrcorsrq dcrcorsrq : perm) {
+//					if(dcrcorsrq.getTpreq().toUpperCase().trim().equals(tpreq)) {
+//						haveAcess = Boolean.TRUE;
+//					}
+//				}
+//            }
+//            
+//            if(!haveAcess) {
+//            	response.setStatus(401);
+//                response.getOutputStream()
+//                        .println("Sem acesso a rota!");
+//                return;
+//            }else {
+            	UsernamePasswordAuthenticationToken authenticationToken = tokenService.getAuthenticationToken(token);
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                chain.doFilter(request, response);
+            //}
+            
         } catch (TokenExpiredException e) {
 
             response.setStatus(401);

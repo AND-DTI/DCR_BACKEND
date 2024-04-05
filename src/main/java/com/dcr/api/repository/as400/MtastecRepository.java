@@ -95,6 +95,6 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 	  		+ "		  		LEFT JOIN HD4DCDHH.MTASTEDOC AS DOC ON PRD.IDMATRIZ = DOC.IDMATRIZ AND INS.PARTNUM = DOC.PARTNUM \r\n"
 	  		+ "		  		LEFT JOIN HD4DCDHH.DCRPROCC AS PROC ON PRD.IDMATRIZ = PROC.IDMATRIZ AND PRD.PARTNUMPD = PROC.PARTNUMPD" 
 	  		+ "	  		    LEFT JOIN HD4DCDHH.CADPPB AS PPB ON PPB.CDPRD = PRD.PARTNUMPD AND PPB.TPPRD = 'PC' " +
-		              " WHERE PROC.STATUS IN :status", nativeQuery = true)
+		              " WHERE PROC.STATUS IN :status  AND EXISTS (SELECT pprod.* FROM HD4DCDHH.PENDPROD AS pprod WHERE PPROD.IDMATRIZ = prd.idmatriz AND PPROD.STATUS = 0 )", nativeQuery = true)
 	  List<Object[]> consultaTodasAsPendenciasSemLista(List<Integer> status);
 }

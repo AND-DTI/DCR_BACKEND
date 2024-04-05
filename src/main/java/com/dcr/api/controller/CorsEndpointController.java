@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.model.as400.Dcrcorsip;
 import com.dcr.api.model.as400.Dcrcorsrq;
 import com.dcr.api.model.dto.DcrcorsrqDTO;
 import com.dcr.api.service.as400.DcrcorsrqService;
@@ -90,6 +91,34 @@ public class CorsEndpointController {
 		}   
 	}
 	
+	@GetMapping(value = "/getByCnpj", produces = "application/json")
+	@Operation(summary = "Busca uma permissão")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma permissão encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByCnpj(@RequestParam String cnpjext) {
+	
+		try {
+			List<Dcrcorsrq> lista = service.getByCnpj(cnpjext);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma permissão encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma permissão")
 	@ApiResponses(value = {
@@ -102,13 +131,6 @@ public class CorsEndpointController {
 	
 		try {
 			
-			Optional<Dcrcorsrq> lista = service.getByID(dto.idreg());
-	        if (!lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Essa permissão já existe!");
-	        }
-		
 	        service.create(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")

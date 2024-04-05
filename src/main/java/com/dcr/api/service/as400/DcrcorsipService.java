@@ -26,11 +26,24 @@ public class DcrcorsipService {
 		return repository.findAll();
 	}
 	
+	public List<Dcrcorsip> getByCnpj(String cnpjext){
+		return repository.getByCnpj(cnpjext);
+	}
+	
 	public Optional<Dcrcorsip> getByID(DcrcorsipKey key){
 		return repository.findById(key);
 	}
 	
 	public Dcrcorsip create(DcrcorsipKey key, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException{
+		Dcrcorsip dcr = new Dcrcorsip();
+		
+		dcr.setKey(key);
+		
+		Auxiliar.preencheAuditoria(dcr, request);
+		return repository.save(dcr);
+	}
+	
+	public Dcrcorsip update(DcrcorsipKey key, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException{
 		Dcrcorsip dcr = new Dcrcorsip();
 		
 		dcr.setKey(key);

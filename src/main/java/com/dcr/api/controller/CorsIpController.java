@@ -93,6 +93,35 @@ public class CorsIpController {
 		}   
 	}
 	
+	
+	@GetMapping(value = "/getByCnpj", produces = "application/json")
+	@Operation(summary = "Busca uma permissão")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma permissão encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByCnpj(@RequestParam String cnpjext) {
+	
+		try {
+			List<Dcrcorsip> lista = service.getByCnpj(cnpjext);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma permissão encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma permissão")
 	@ApiResponses(value = {
@@ -113,6 +142,36 @@ public class CorsIpController {
 	        }
 		
 	        service.create(dto, request);
+	        return ResponseEntity.status(HttpStatus.CREATED)
+		        	.header("Accept", "application/json")
+		            .body("OK");
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@PutMapping(value = "/update", produces = "application/json")
+	@Operation(summary = "Cria uma permissão")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Essa permissão já existe!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Object> update(@RequestBody DcrcorsipKey dto, HttpServletRequest request) {
+	
+		try {
+			
+			Optional<Dcrcorsip> lista = service.getByID(dto);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Essa permissão não existe!");
+	        }
+		
+	        service.update(dto, request);
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
 		            .body("OK");
