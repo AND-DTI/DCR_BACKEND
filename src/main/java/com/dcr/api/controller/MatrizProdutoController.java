@@ -17,17 +17,22 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dcr.api.model.as400.Cadcor;
+import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
+import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
+import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
+import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MatriitmService;
 import com.dcr.api.service.as400.MatriprdService;
+import com.dcr.api.service.as400.PendprodService;
 import com.dcr.api.utils.Auxiliar;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,6 +50,12 @@ public class MatrizProdutoController {
 	
 	@Autowired
 	MatriitmService corService;
+	
+	@Autowired
+	PendprodService pendservice;
+	
+	@Autowired
+	DcrproccService processoservice;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto")
@@ -177,6 +188,28 @@ public class MatrizProdutoController {
 					corService.update(corOg.get(), cor, request);
 				}
 				
+				List<Pendprod> pendencias = pendservice.findPendenciasZero(Long.valueOf(cor.idmatriz()), cor.partnumpd());
+		        
+		        if(pendencias.isEmpty() && cor.priocor() == 1) {
+		        	DcrproccKey dcrproccKey = new DcrproccKey();
+		        	dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
+		        	dcrproccKey.setPartnumpd(cor.partnumpd());
+					
+		        	dcrproccKey.setTpprd(dto.tpprd());
+					
+					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+		        	processoservice.setStatus(dcr.get(), 3, request);
+		        }else {
+		        	DcrproccKey dcrproccKey = new DcrproccKey();
+		        	dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
+		        	dcrproccKey.setPartnumpd(cor.partnumpd());
+					
+		        	dcrproccKey.setTpprd(dto.tpprd());
+					
+					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+		        	processoservice.setStatus(dcr.get(), 1, request);
+		        }
+				
 			}
 			Optional<Matriprd> lista = service.getByID(dto.idmatriz());
 	        if (lista.isEmpty()) {
@@ -184,7 +217,8 @@ public class MatrizProdutoController {
 	                    .header("Accept", "application/json")
 	                    .body("Matriz de produto não encontrada!");
 	        }
-		
+	        
+	        
 	        service.updateComCor(lista.get(), dto,  request);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
