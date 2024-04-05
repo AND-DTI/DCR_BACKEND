@@ -161,6 +161,15 @@ public class Auxiliar {
 		return sdf.format(date);
     }
     
+    public static String getDtHrFormated() {
+    	Date date = new Date();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat(dtHrFormat);
+	
+		sdf.setTimeZone(TimeZone.getTimeZone(timezone));
+		return sdf.format(date);
+    }
+    
 	public static String getHrFormated() {
     	Date date = new Date();
 		

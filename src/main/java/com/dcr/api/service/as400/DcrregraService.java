@@ -37,6 +37,8 @@ public class DcrregraService {
 		key.setConfvigini(Auxiliar.getDtFormated());
 		regra.setDcrregraKey(key);
 		
+		regra.setCnpjemi(dto.cnpjemi());
+		regra.setRazsoc(dto.razsoc());
 		regra.setAlertaprev(dto.alertaprev());
 		regra.setCarencia(dto.carencia());
 		regra.setDiasprevia(dto.diasprevia());
@@ -75,4 +77,6 @@ public class DcrregraService {
 		key.setConfvigfim(dto.confvigfim());
 		return repository.findById(key);
 	}
+	
+	
 }

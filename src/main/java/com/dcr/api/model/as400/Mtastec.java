@@ -73,6 +73,11 @@ public class Mtastec {
 	@Column(columnDefinition = "char(5)")
     private String priohrmnt;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(1)")
+    private String tpdcre;
+	
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;	
 	
@@ -222,5 +227,13 @@ public class Mtastec {
 
 	public void setPartnumpd(String partnumpd) {
 		this.partnumpd = partnumpd;
+	}
+
+	public String getTpdcre() {
+		return tpdcre;
+	}
+
+	public void setTpdcre(String tpdcre) {
+		this.tpdcre = tpdcre;
 	}
 }

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.dto.DcrproccDTO;
 import com.dcr.api.model.keys.DcrproccKey;
+import com.dcr.api.model.projection.ResumoProjection;
 import com.dcr.api.repository.as400.DcrproccRepository;
-import com.dcr.api.repository.as400.DcrprocchRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -39,8 +39,17 @@ public class DcrproccService {
 		dcr.setStatus(dto.status());
 		dcr.setDtstatus(dto.dtstatus());
 		dcr.setHrstatus(dto.hrstatus());
-		dcr.setRespstaus(dto.respstatus());
+		dcr.setRespstaus(dto.respstaus());
 		
+		dcr.setCoefred(dto.coefred());
+		dcr.setCustotal(dto.custotal());
+		dcr.setDtregistro(dto.dtregistro());
+		dcr.setHrregistro(dto.hrregistro());
+		dcr.setIireduzido(dto.iireduzido());
+		dcr.setIitotal(dto.iitotal());
+		dcr.setTaxausd(dto.taxausd());
+		dcr.setTotalimp(dto.totalimp());
+		dcr.setTotalnac(dto.totalnac());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
@@ -50,13 +59,32 @@ public class DcrproccService {
 
 		dcr.setDtstatus(dto.dtstatus());
 		dcr.setHrstatus(dto.hrstatus());
-		dcr.setRespstaus(dto.respstatus());
-			
+		dcr.setRespstaus(dto.respstaus());
+	
+		dcr.setCoefred(dto.coefred());
+		dcr.setCustotal(dto.custotal());
+		dcr.setDtregistro(dto.dtregistro());
+		dcr.setHrregistro(dto.hrregistro());
+		dcr.setIireduzido(dto.iireduzido());
+		dcr.setIitotal(dto.iitotal());
+		dcr.setTaxausd(dto.taxausd());
+		dcr.setTotalimp(dto.totalimp());
+		dcr.setTotalnac(dto.totalnac());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
 	}
 	
+	public Dcrprocc update(Dcrprocc dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
+
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
+	public void delete(Dcrprocc dcr) {
+		repository.delete(dcr);
+	}
 	public Dcrprocc setStatus(Dcrprocc dcr, Integer statusNew, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {				
 	
 		historicoService.setStatus(dcr, dcr.getStatus(), statusNew, request);
@@ -73,5 +101,10 @@ public class DcrproccService {
 	public Optional<Dcrprocc> getByKey(DcrproccKey dto) {
 
 		return repository.findById(dto);
+	}
+	
+	public Optional<ResumoProjection> getResumo(Long idmatriz, String partnumpd) {
+
+		return repository.getResumo(idmatriz, partnumpd);
 	}
 }

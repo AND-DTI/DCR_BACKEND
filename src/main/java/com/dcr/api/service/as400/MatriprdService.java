@@ -3,7 +3,6 @@ package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -592,7 +591,7 @@ public class MatriprdService {
         }
         
         for (ProdutoPendenciaResponse produto : produtos) {
-			produto.setQtdependencias(repository.countPendencias(produto.getIdMatriz().toString(), ""));
+			produto.setQtdependencias(repository.countPendenciasNoPartnum(produto.getIdMatriz().toString()));
 		}
 		return produtos;
 	}
@@ -659,11 +658,12 @@ public class MatriprdService {
         	pend.setTppin((resultado[41] != null) ? resultado[41].toString().trim() : "");
         	
         	
-        	resp.setCdbej((resultado[23] != null) ? resultado[23].toString().trim() : "");
-        	resp.setCorpt((resultado[24] != null) ? resultado[24].toString().trim() : "");
-        	resp.setCoreng((resultado[25] != null) ? resultado[25].toString().trim() : "");
-        	resp.setTppin((resultado[26] != null) ? resultado[26].toString().trim() : "");
+        	resp.setCdbej((resultado[38] != null) ? resultado[38].toString().trim() : "");
+        	resp.setCorpt((resultado[39] != null) ? resultado[39].toString().trim() : "");
+        	resp.setCoreng((resultado[40] != null) ? resultado[40].toString().trim() : "");
+        	resp.setTppin((resultado[41] != null) ? resultado[41].toString().trim() : "");
         	
+        	resp.setStatus((resultado[58] != null) ? resultado[58].toString().trim() : "");
         	if (!(pend.getCdpend().equals("") && pend.getNumpend().equals("") && pend.getStatus().equals(""))) {
                 listaPendSet.add(pend); // Adiciona à lista apenas se não estiver duplicado
             }
@@ -679,7 +679,7 @@ public class MatriprdService {
             	listaPendSet.add(pend);
             }
             for (PendenciaResponseSemLista pendencia : listaPendSet) {
-            	if(!pendencia.getCdpend().equals(pend.getCdpend()) && !pend.getNumpend().equals("")) {
+            	if(!pendencia.getCdpend().equals(pend.getCdpend()) && !pend.getNumpend().equals("") && pend.getIdmatriz().equals(resp.getIdMatriz())) {
     				listaPendSet.add(pend);
     			}
 			}
@@ -693,6 +693,9 @@ public class MatriprdService {
                 resp.setQtdependencias(repository.countPendencias(resp.getIdMatriz().toString(), resp.getPartnumpd().toString()));
             	if((repository.countPendencias(resp.getIdMatriz().toString(), resp.getPartnumpd().toString())) < 1) {
             		produtos.add(resp);
+            	} else {
+            		listaPend = new ArrayList<>();
+            		listaPendSet = new HashSet<>();
             	}
                 
             }

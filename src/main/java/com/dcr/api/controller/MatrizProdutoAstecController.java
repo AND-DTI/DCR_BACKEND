@@ -16,10 +16,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Mtastec;
+import com.dcr.api.model.as400.Pendastec;
+import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MtastecDTO;
+import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MtastecKey;
 import com.dcr.api.response.AstecDetailResponse;
+import com.dcr.api.response.ProdutoPendenciaAstecResponse;
+import com.dcr.api.response.ProdutoPendenciaResponse;
+import com.dcr.api.response.ProdutoPendenciaSimplesAstecResponse;
+import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
+import com.dcr.api.response.ProdutoSemListaAstecResponse;
+import com.dcr.api.response.ProdutoSemListaResponse;
+import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MtastecService;
 import com.dcr.api.utils.Auxiliar;
 import com.dcr.api.service.as400.MtastecService;
@@ -36,6 +47,9 @@ public class MatrizProdutoAstecController {
 
 	@Autowired
 	MtastecService service;
+	
+	@Autowired
+	DcrproccService processoservice;
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto ASTEC")
@@ -163,6 +177,29 @@ public class MatrizProdutoAstecController {
 	        }
 		
 	        service.update(lista.get(), dto,  request);
+	        
+	        List<Pendastec> pendencias = service.findPendenciasZero(Long.valueOf(dto.idmatriz()), dto.partnumpd());
+	        
+	        if(pendencias.isEmpty()) {
+	        	DcrproccKey dcrproccKey = new DcrproccKey();
+	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setPartnumpd(dto.partnumpd());
+				
+	        	dcrproccKey.setTpprd("PC");
+				
+				Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+	        	processoservice.setStatus(dcr.get(), 3, request);
+	        }else {
+	           	DcrproccKey dcrproccKey = new DcrproccKey();
+	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setPartnumpd(dto.partnumpd());
+				
+	        	dcrproccKey.setTpprd("PC");
+				
+				Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+	        	processoservice.setStatus(dcr.get(), 1, request);
+	        }
+	       
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");
@@ -195,6 +232,93 @@ public class MatrizProdutoAstecController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("Matriz de produto ASTEC deletada com sucesso!");
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getProdutoPendencia", produces = "application/json")
+	@Operation(summary = "Busca um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência de produto encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getProdutoPendencia(@RequestParam Integer idmatriz, @RequestParam String partnum) {
+	
+		try {
+
+			ProdutoPendenciaSimplesAstecResponse lista = service.getProdutoPendencia(idmatriz, partnum);
+	        if (lista.getIdMatriz() == null) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma pendência de produto encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getPendentes", produces = "application/json")
+	@Operation(summary = "Busca um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência de produto encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getPendentes(@RequestParam List<Integer> status) {
+	
+		try {
+
+			List<ProdutoPendenciaAstecResponse> lista = service.getTodasAsPendencias(status);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma pendência de produto encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+	@GetMapping(value = "/getPendentesSemLista", produces = "application/json")
+	@Operation(summary = "Busca um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência de produto encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getPendentesSemLista(@RequestParam List<Integer> status) {
+	
+		try {
+
+			List<ProdutoSemListaAstecResponse> lista = service.getPendenciasSemLista(status);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma pendência de produto encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")

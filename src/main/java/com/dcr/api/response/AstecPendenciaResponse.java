@@ -30,6 +30,7 @@ public class AstecPendenciaResponse {
 	private Object numpend;
 	private Object cdpend;
 	private Object status;
+	private Object tpdcre;
 	public Object getIdMatriz() {
 		return idMatriz;
 	}
@@ -197,5 +198,11 @@ public class AstecPendenciaResponse {
 	}
 	public void setStatus(Object status) {
 		this.status = status;
+	}
+	public Object getTpdcre() {
+		return tpdcre;
+	}
+	public void setTpdcre(Object tpdcre) {
+		this.tpdcre = tpdcre;
 	}
 }

@@ -80,7 +80,7 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 			  		+ "		pend.NUMPEND, pend.CDPEND, pend.OBSRESOL, pend.STATUS, \r\n"
 			  		+ "		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.NUMDOC3, doc.SERDOC3, doc.EMIDOC3, proc.status, \r\n"
 			  		+ "		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, pend.PARTNUM, pend.IDMATRIZ, ITM.IDMATRIZ, DOC.PARTNUM,  \r\n"
-			  		+ "		DOC.CNPJFOR, DOC.IE, DOC.ADICAO, DOC.ITADICAO, DOC.CNPJFOR2, DOC.IE2, DOC.ADICAO2, DOC.ITADICAO2, DOC.CNPJFOR3, DOC.IE3, DOC.ADICAO3, DOC.ITADICAO3 \r\n"
+			  		+ "		DOC.CNPJFOR, DOC.IE, DOC.ADICAO, DOC.ITADICAO, DOC.CNPJFOR2, DOC.IE2, DOC.ADICAO2, DOC.ITADICAO2, DOC.CNPJFOR3, DOC.IE3, DOC.ADICAO3, DOC.ITADICAO3, PROC.STATUS \r\n"
 			  		+ "     FROM HD4DCDHH.MATRIPRD AS PRD\r\n"
 			  		+ "LEFT JOIN HD4DCDHH.MATRIITM AS ITM ON PRD.IDMATRIZ = ITM.IDMATRIZ \r\n"
 			  		
@@ -94,9 +94,22 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		  @Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDPROD WHERE IDMATRIZ = :idmatriz AND STATUS = 0 AND PARTNUMPD = :partnumpd", nativeQuery = true)
 		  Integer countPendencias(String idmatriz, String partnumpd);
 		  
+		  @Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDPROD WHERE IDMATRIZ = :idmatriz AND STATUS = 0", nativeQuery = true)
+		  Integer countPendenciasNoPartnum(String idmatriz);
+		  
 		  @Query(value = "SELECT NUMDOC, SERDOC FROM HD4DCDHH.MATRIDOC WHERE IDMATRIZ = :idmatriz AND PARTNUM = :partnum AND TPDOC = :tpdoc", nativeQuery = true)
 		  List<Object[]> complementaPendenciaDoc(String idmatriz, String partnum, String tpdoc);
 		  
 		  @Query(value = "SELECT DESCPEND, TPREG FROM HD4DCDHH.CADTPPEND WHERE CDPEND = :cdpend", nativeQuery = true)
 		  List<Object[]> complementaPendenciaDesc(String cdpend);
+		  
+		  @Query(value = "SELECT prd.* FROM HD4DCDHH.MATRIPRD AS prd \r\n"
+		  		+ "    LEFT JOIN  HD4DCDHH.DCRPROCC AS procc ON prd.IDMATRIZ = procc.IDMATRIZ \r\n"
+		  		+ "    WHERE prd.ORIGPRD = 'MANUAL' AND procc.IDMATRIZ IS NULL", nativeQuery = true)
+		  List<Object[]> getMatriprdWithNotInDcrprocc();
+		  
+		  @Query(value = "SELECT pend.* FROM HD4DCDHH.PENDPROD as pend\r\n"
+		  		+ "    LEFT JOIN HD4DCDHH.CADTPPEND AS cad ON pend.CDPEND = cad.CDPEND \r\n"
+		  		+ "    WHERE pend.status = 0 AND cad.TPREG = 'C'", nativeQuery = true)
+			  List<Object[]> getPendenciasCadastro();
 }

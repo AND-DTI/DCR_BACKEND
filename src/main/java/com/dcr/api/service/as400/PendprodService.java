@@ -35,6 +35,11 @@ public class PendprodService {
 		return repository.findById(id);
 	}
 	
+	public List<Pendprod> findPendenciasZero(Long idmatriz, String partnumpd) {
+		
+		return repository.findPendenciasZero(idmatriz, partnumpd);
+	}
+
 	public List<Pendprod> getByCdPend(String cdpend) {
 		
 		return repository.findByCdPend(cdpend);
