@@ -50,6 +50,8 @@ public class Dcrreg4Service {
 		dcr.setAdicao(dto.adicao());
 		dcr.setItemadicao(dto.itemadicao());
 		dcr.setIndreducii(dto.indreducii());
+		dcr.setImpdireta(dto.impdireta());
+		dcr.setSuspens(dto.suspens());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
@@ -72,7 +74,9 @@ public class Dcrreg4Service {
 		dcr.setAdicao(dto.adicao());
 		dcr.setItemadicao(dto.itemadicao());
 		dcr.setIndreducii(dto.indreducii());
-			
+		dcr.setImpdireta(dto.impdireta());
+		dcr.setSuspens(dto.suspens());
+		
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);

@@ -50,6 +50,7 @@ public class DcroriprdService {
 		dcr.setAstecpedn1(dto.astecpedn1());
 		dcr.setAstecppan0(dto.astecppan0());
 		dcr.setAstecppan1(dto.astecppan1());
+		dcr.setReprocstru(dto.reprocstru());
 		
 		Auxiliar.preencheAuditoria(dcr, request);
 		

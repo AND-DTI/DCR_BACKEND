@@ -94,6 +94,10 @@ public class MtasteinsService {
 		matriz.setPartsugest(dto.partsugest());
 		matriz.setUnmsr(dto.unmsr());
 		matriz.setWeght(dto.weght());
+		matriz.setEspec(dto.espec());
+		matriz.setUndcom(dto.undcom());
+		matriz.setNcm(dto.ncm());
+		matriz.setVlrunit(dto.vlrunit());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
@@ -112,7 +116,10 @@ public class MtasteinsService {
 		matriz.setPartsugest(dto.partsugest());
 		matriz.setUnmsr(dto.unmsr());
 		matriz.setWeght(dto.weght());
-		
+		matriz.setEspec(dto.espec());
+		matriz.setUndcom(dto.undcom());
+		matriz.setNcm(dto.ncm());
+		matriz.setVlrunit(dto.vlrunit());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}

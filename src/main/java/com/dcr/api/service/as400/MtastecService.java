@@ -171,6 +171,8 @@ public class MtastecService {
 		astec.setPriourgen(dto.priourgen());
 		astec.setUnmed(dto.unmed());
 		astec.setTpdcre(dto.tpdcre());
+		astec.setItgarantia(dto.itgarantia());
+		astec.setObsprio(dto.obsprio());
 		Auxiliar.preencheAuditoria(astec, request);
 		return repository.save(astec);
 	}
@@ -188,6 +190,8 @@ public class MtastecService {
 		astec.setPriourgen(dto.priourgen());
 		astec.setUnmed(dto.unmed());
 		astec.setTpdcre(dto.tpdcre());
+		astec.setItgarantia(dto.itgarantia());
+		astec.setObsprio(dto.obsprio());
 		Auxiliar.preencheAuditoria(astec, request);
 		return repository.save(astec);
 	}

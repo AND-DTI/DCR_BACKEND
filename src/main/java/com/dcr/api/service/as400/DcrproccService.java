@@ -41,6 +41,7 @@ public class DcrproccService {
 		dcr.setHrstatus(dto.hrstatus());
 		dcr.setRespstaus(dto.respstaus());
 		
+		dcr.setTpdcre(dto.tpdcre());
 		dcr.setCoefred(dto.coefred());
 		dcr.setCustotal(dto.custotal());
 		dcr.setDtregistro(dto.dtregistro());
@@ -61,6 +62,7 @@ public class DcrproccService {
 		dcr.setHrstatus(dto.hrstatus());
 		dcr.setRespstaus(dto.respstaus());
 	
+		dcr.setTpdcre(dto.tpdcre());
 		dcr.setCoefred(dto.coefred());
 		dcr.setCustotal(dto.custotal());
 		dcr.setDtregistro(dto.dtregistro());

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Dcrcoli0;
+import com.dcr.api.model.dto.ColigadoLoteDTO;
 import com.dcr.api.model.dto.Dcrcoli0DTO;
 import com.dcr.api.model.keys.Dcrcoli0Key;
 import com.dcr.api.repository.as400.Dcrcoli0Repository;
@@ -48,6 +49,42 @@ public class Dcrcoli0Service {
 		dcr.setTpdcre(dto.tpdcre());
 		dcr.setUndcom(dto.undcom());
 		dcr.setVrspgd(dto.vrspgd());
+		Auxiliar.preencheAuditoria(dcr, request);
+		
+		return repository.save(dcr);
+	}
+	
+	public void delete(Dcrcoli0 dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		
+		repository.delete(dcr);
+	}
+	
+	public Dcrcoli0 createLote(ColigadoLoteDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Dcrcoli0 dcr = new Dcrcoli0();
+		
+		Dcrcoli0Key key = new Dcrcoli0Key();
+		key.setDcre(dto.getDcre());
+		key.setDenom(dto.getDenom());
+	
+		
+		dcr.setKey(key);
+		dcr.setCdclient(dto.getCdclient());
+		dcr.setDtdcre(dto.getDtdcre());
+		dcr.setCnpj(dto.getCnpj());
+		dcr.setCpfrl(dto.getCpfrl());
+		dcr.setDcrant(dto.getDcrant());
+		dcr.setEncargos(dto.getEncargos());
+		dcr.setIdreg(dto.getIdreg());
+		dcr.setNcm(dto.getNcm());
+		dcr.setOrigdcr(dto.getOrigdcr());
+		dcr.setPeso(dto.getPeso());
+		dcr.setPpb(dto.getPpb());
+		dcr.setProcretif(dto.getProcretif());
+		dcr.setSalarios(dto.getSalarios());
+		dcr.setTpcoef(dto.getTpcoef());
+		dcr.setTpdcre(dto.getTpdcre());
+		dcr.setUndcom(dto.getUndcom());
+		dcr.setVrspgd(dto.getVrspgd());
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);

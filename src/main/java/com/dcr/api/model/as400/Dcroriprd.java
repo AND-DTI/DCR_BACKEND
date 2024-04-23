@@ -83,6 +83,11 @@ public class Dcroriprd {
     @Column(columnDefinition = "int")
     private Integer astecppan1;
 
+	@TamanhoMaximo(5)
+	@TamanhoMinimo(1)
+    @Column(columnDefinition = "int")
+    private Integer reprocstru;
+	
     @Column(columnDefinition = "char(40)")
     private String itaudsys;
 
@@ -248,6 +253,14 @@ public class Dcroriprd {
 
 	public void setStsconfig(Integer stsconfig) {
 		this.stsconfig = stsconfig;
+	}
+
+	public Integer getReprocstru() {
+		return reprocstru;
+	}
+
+	public void setReprocstru(Integer reprocstru) {
+		this.reprocstru = reprocstru;
 	}
 
 }
