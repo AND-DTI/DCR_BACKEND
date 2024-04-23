@@ -23,10 +23,10 @@ public class ColigadoLoteDTO {
 	private String origdcr;
 	private String tpcoef;
 	
-	private List<Dcrcoli1DTO> coliUm;
-	private List<Dcrcoli2DTO> coliDois;
-	private List<Dcrcoli3DTO> coliTres;
-	private List<Dcrcoli4DTO> coliQuatro;
+	private List<Dcrcoli1LoteDTO> coliUm;
+	private List<Dcrcoli2LoteDTO> coliDois;
+	private List<Dcrcoli3LoteDTO> coliTres;
+	private List<Dcrcoli4LoteDTO> coliQuatro;
 	
 	public String getDcre() {
 		return dcre;
@@ -142,28 +142,29 @@ public class ColigadoLoteDTO {
 	public void setTpcoef(String tpcoef) {
 		this.tpcoef = tpcoef;
 	}
-	public List<Dcrcoli1DTO> getColiUm() {
+	public List<Dcrcoli1LoteDTO> getColiUm() {
 		return coliUm;
 	}
-	public void setColiUm(List<Dcrcoli1DTO> coliUm) {
+	public void setColiUm(List<Dcrcoli1LoteDTO> coliUm) {
 		this.coliUm = coliUm;
 	}
-	public List<Dcrcoli2DTO> getColiDois() {
+	public List<Dcrcoli2LoteDTO> getColiDois() {
 		return coliDois;
 	}
-	public void setColiDois(List<Dcrcoli2DTO> coliDois) {
+	public void setColiDois(List<Dcrcoli2LoteDTO> coliDois) {
 		this.coliDois = coliDois;
 	}
-	public List<Dcrcoli3DTO> getColiTres() {
+	public List<Dcrcoli3LoteDTO> getColiTres() {
 		return coliTres;
 	}
-	public void setColiTres(List<Dcrcoli3DTO> coliTres) {
+	public void setColiTres(List<Dcrcoli3LoteDTO> coliTres) {
 		this.coliTres = coliTres;
 	}
-	public List<Dcrcoli4DTO> getColiQuatro() {
+	public List<Dcrcoli4LoteDTO> getColiQuatro() {
 		return coliQuatro;
 	}
-	public void setColiQuatro(List<Dcrcoli4DTO> coliQuatro) {
+	public void setColiQuatro(List<Dcrcoli4LoteDTO> coliQuatro) {
 		this.coliQuatro = coliQuatro;
 	}
+
 }

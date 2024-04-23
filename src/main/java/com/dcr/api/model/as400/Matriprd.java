@@ -102,6 +102,16 @@ public class Matriprd {
 	@Column(columnDefinition = "char(8)")
 	private String priohrmnt;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(1)")
+    private String itgarantia;
+	
+	@TamanhoMaximo(250)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(250)")
+    private String obsprio;
+	
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;	
 	
@@ -291,6 +301,22 @@ public class Matriprd {
 
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
+	}
+
+	public String getItgarantia() {
+		return itgarantia;
+	}
+
+	public void setItgarantia(String itgarantia) {
+		this.itgarantia = itgarantia;
+	}
+
+	public String getObsprio() {
+		return obsprio;
+	}
+
+	public void setObsprio(String obsprio) {
+		this.obsprio = obsprio;
 	}
 
 	

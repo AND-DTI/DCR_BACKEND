@@ -11,6 +11,7 @@ import com.dcr.api.model.as400.Dcrcoli1;
 import com.dcr.api.model.as400.Dcrcoli3;
 import com.dcr.api.model.dto.Dcrcoli1DTO;
 import com.dcr.api.model.dto.Dcrcoli3DTO;
+import com.dcr.api.model.dto.Dcrcoli3LoteDTO;
 import com.dcr.api.model.keys.Dcrcoli3Key;
 import com.dcr.api.repository.as400.Dcrcoli3Repository;
 import com.dcr.api.utils.Auxiliar;
@@ -58,9 +59,9 @@ public class Dcrcoli3Service {
 		return repository.save(dcr);
 	}
 	
-	public void createLote(List<Dcrcoli3DTO> lista, String dcre, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void createLote(List<Dcrcoli3LoteDTO> lista, String dcre, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
-		for (Dcrcoli3DTO dto : lista) {
+		for (Dcrcoli3LoteDTO dto : lista) {
 			Dcrcoli3 dcr = new Dcrcoli3();
 			
 			Dcrcoli3Key key = new Dcrcoli3Key();

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.dcr.api.model.as400.Dcrcoli1;
 import com.dcr.api.model.dto.Dcrcoli1DTO;
+import com.dcr.api.model.dto.Dcrcoli1LoteDTO;
 import com.dcr.api.model.keys.Dcrcoli1Key;
 import com.dcr.api.repository.as400.Dcrcoli1Repository;
 import com.dcr.api.utils.Auxiliar;
@@ -22,9 +23,9 @@ public class Dcrcoli1Service {
 	@Autowired
 	Dcrcoli1Repository repository;
 	
-	public void createLote(List<Dcrcoli1DTO> lista, String dcre, String cdclient, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public void createLote(List<Dcrcoli1LoteDTO> lista, String dcre, String cdclient, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
-		for (Dcrcoli1DTO dto : lista) {
+		for (Dcrcoli1LoteDTO dto : lista) {
 			Dcrcoli1 dcr = new Dcrcoli1();
 			
 			Dcrcoli1Key key = new Dcrcoli1Key();

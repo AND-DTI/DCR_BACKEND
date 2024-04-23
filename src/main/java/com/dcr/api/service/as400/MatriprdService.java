@@ -764,6 +764,8 @@ public class MatriprdService {
 		matriz.setSpecial(dto.special());
 		matriz.setTpdcre(dto.tpdcre());
 		matriz.setTpprd(dto.tpprd());
+		matriz.setItgarantia(dto.itgarantia());
+		matriz.setObsprio(dto.obsprio());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
@@ -786,7 +788,8 @@ public class MatriprdService {
 		matriz.setSpecial(dto.special());
 		matriz.setTpdcre(dto.tpdcre());
 		matriz.setTpprd(dto.tpprd());
-		
+		matriz.setItgarantia(dto.itgarantia());
+		matriz.setObsprio(dto.obsprio());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
@@ -809,6 +812,7 @@ public Matriprd updateComCor(Matriprd matriz,  MatriprdComCorIdDTO dto, HttpServ
 		matriz.setSpecial(dto.special());
 		matriz.setTpdcre(dto.tpdcre());
 		matriz.setTpprd(dto.tpprd());
+		
 		
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);

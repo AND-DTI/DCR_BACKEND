@@ -71,6 +71,25 @@ public class Mtasteins {
 	@Column(columnDefinition = "char(25)")
     private String partnew;
 	
+	@TamanhoMaximo(80)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(80)")
+    private String espec;
+	
+	@TamanhoMaximo(80)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(80)")
+    private String undcom;
+	
+	@TamanhoMaximo(8)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(8)")
+    private String ncm;
+	
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "decimal(15,6)")
+    private Double vlrunit;
+	
 	@TamanhoMaximo(30)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
@@ -233,5 +252,37 @@ public class Mtasteins {
 
 	public void setPartnewdsc(String partnewdsc) {
 		this.partnewdsc = partnewdsc;
+	}
+
+	public String getEspec() {
+		return espec;
+	}
+
+	public void setEspec(String espec) {
+		this.espec = espec;
+	}
+
+	public String getUndcom() {
+		return undcom;
+	}
+
+	public void setUndcom(String undcom) {
+		this.undcom = undcom;
+	}
+
+	public String getNcm() {
+		return ncm;
+	}
+
+	public void setNcm(String ncm) {
+		this.ncm = ncm;
+	}
+
+	public Double getVlrunit() {
+		return vlrunit;
+	}
+
+	public void setVlrunit(Double vlrunit) {
+		this.vlrunit = vlrunit;
 	}
 }

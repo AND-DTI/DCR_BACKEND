@@ -78,6 +78,16 @@ public class Mtastec {
 	@Column(columnDefinition = "char(1)")
     private String tpdcre;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(1)")
+    private String itgarantia;
+	
+	@TamanhoMaximo(250)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(250)")
+    private String obsprio;
+	
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;	
 	
@@ -235,5 +245,21 @@ public class Mtastec {
 
 	public void setTpdcre(String tpdcre) {
 		this.tpdcre = tpdcre;
+	}
+
+	public String getItgarantia() {
+		return itgarantia;
+	}
+
+	public void setItgarantia(String itgarantia) {
+		this.itgarantia = itgarantia;
+	}
+
+	public String getObsprio() {
+		return obsprio;
+	}
+
+	public void setObsprio(String obsprio) {
+		this.obsprio = obsprio;
 	}
 }

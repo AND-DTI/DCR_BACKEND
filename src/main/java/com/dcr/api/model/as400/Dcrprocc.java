@@ -18,6 +18,11 @@ public class Dcrprocc {
 	@EmbeddedId
 	private DcrproccKey key;
 	
+	@TamanhoMaximo(1)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(1)")
+	private String tpdcre;
+	
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int(5)")
@@ -242,5 +247,13 @@ public class Dcrprocc {
 
 	public void setIireduzido(Double iireduzido) {
 		this.iireduzido = iireduzido;
+	}
+
+	public String getTpdcre() {
+		return tpdcre;
+	}
+
+	public void setTpdcre(String tpdcre) {
+		this.tpdcre = tpdcre;
 	}
 }
