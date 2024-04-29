@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 public class RoleResponse {
 	private String roleName;
 	private String roleDesc;
+	private Integer roleId;
 	
 	public String getRoleName() {
 		return roleName;
@@ -18,5 +19,11 @@ public class RoleResponse {
 	}
 	public void setRoleDesc(String roleDesc) {
 		this.roleDesc = roleDesc;
+	}
+	public Integer getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 }

@@ -43,6 +43,7 @@ public class RoleService {
 				Optional<Accroles> user = roleRepository.findById(user_Role.getKey().getRoleid());
 				response.setRoleDesc(user.get().getRoledesc().trim());
 				response.setRoleName(user.get().getRolename().trim());
+				response.setRoleId(user.get().getRoleid());
 				roles.add(response);
 			}
 
