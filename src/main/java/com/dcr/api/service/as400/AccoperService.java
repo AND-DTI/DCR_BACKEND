@@ -56,31 +56,37 @@ public class AccoperService {
 		    OperacoesResponse op = new OperacoesResponse();
 		    op.setTitleName(zero.getDescoper().trim());
 		    op.setChildrensItems(new ArrayList<>());
-
+		    op.setId(zero.getIdoper().getIdoper());
 		    for (Accoper um : nivelUm) {
-		        if (um.getIdpai().equals(zero.getIdoper())) {
+		        if (um.getIdpai().equals(zero.getIdoper().getIdoper())) {
 		            OperacoesItens itens = new OperacoesItens();
 		            itens.setName(um.getDescoper().trim());
 		            itens.setIcon(um.getIcon().trim());
 		            itens.setItems(new ArrayList<>());
-
+		            itens.setId(um.getIdoper().getIdoper());
+		            itens.setIdPai(um.getIdpai());
 		            for (Accoper dois : nivelDois) {
-		                if (dois.getIdpai().equals(um.getIdoper())) {
+		                if (dois.getIdpai().equals(um.getIdoper().getIdoper())) {
 		                    Item item = new Item();
 		                    item.setName(dois.getDescoper().trim());
 		                    item.setTo(dois.getRota().trim());
 		                    item.setIcon(dois.getIcon().trim());
+		                    item.setId(dois.getIdoper().getIdoper());
+				            item.setIdPai(dois.getIdpai());
 		                    itens.getItems().add(item);
+		                    
 		                }
 		            }
 		            op.getChildrensItems().add(itens);
 		           
 		            List<Accoper> filhosGen = nivelMap.getOrDefault(um.getNivel() + 1, Collections.emptyList());
 		            for (Accoper filhoGen : filhosGen) {
-		                if (filhoGen.getIdpai().equals(um.getIdoper())) {
+		                if (filhoGen.getIdpai().equals(um.getIdoper().getIdoper())) {
 		                    OperacoesItens itensGen = new OperacoesItens();
 		                    itensGen.setName(filhoGen.getDescoper().trim());
 		                    itensGen.setIcon(filhoGen.getIcon().trim());
+		                    itensGen.setId(filhoGen.getIdoper().getIdoper());
+		                    itensGen.setIdPai(filhoGen.getIdpai());
 		                    itensGen.setItems(new ArrayList<>());
 		                    
 		                    processarNivelGen(Collections.singletonList(filhoGen), nivelMap, op);

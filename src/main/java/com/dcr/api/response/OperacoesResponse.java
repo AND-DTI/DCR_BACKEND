@@ -4,7 +4,9 @@ import java.util.List;
 
 public class OperacoesResponse {
 	private String titleName;
+	private Integer id;
 	private List<OperacoesItens> childrensItems;
+	
 	
 	public String getTitleName() {
 		return titleName;
@@ -17,5 +19,11 @@ public class OperacoesResponse {
 	}
 	public void setChildrensItems(List<OperacoesItens> childrensItems) {
 		this.childrensItems = childrensItems;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
