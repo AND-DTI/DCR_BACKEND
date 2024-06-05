@@ -1,7 +1,5 @@
 package com.dcr.api.controller;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.response.MatriprdByTpprdResponse;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
@@ -19,10 +16,11 @@ import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
 import com.dcr.api.response.ProdutoSemListaResponse;
 import com.dcr.api.service.as400.MatriprdService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -32,6 +30,8 @@ public class DetalheProdutoController {
 	@Autowired
 	MatriprdService service;
 	
+
+
 	@GetMapping(value = "/getDetail", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -61,6 +61,7 @@ public class DetalheProdutoController {
 		}   
 	}
 	
+
 	
 	@GetMapping(value = "/getDetailByTpprd", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
@@ -90,7 +91,9 @@ public class DetalheProdutoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
 	
+
 	@GetMapping(value = "/getProdutoPendencia", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -120,6 +123,8 @@ public class DetalheProdutoController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getPendentes", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -149,6 +154,8 @@ public class DetalheProdutoController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getPendentesSemLista", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -177,4 +184,5 @@ public class DetalheProdutoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
 }

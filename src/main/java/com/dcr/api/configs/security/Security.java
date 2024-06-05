@@ -1,25 +1,27 @@
 package com.dcr.api.configs.security;
-
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+
+
 
 @Configuration
 public class Security {
 
-    @Value("${data.proxy.host}")
-    static String ENV_PROXY_HOST;
-    @Value("${data.proxy.port}")
-    static int ENV_PROXY_PORT;
-    @Value("${data.api_se.api_gateway}")
-    static String APIGATEWAY_SE;
+    //@Value("${data.proxy.host}")
+    //static String ENV_PROXY_HOST;
+    //@Value("${data.proxy.port}")
+    //static int ENV_PROXY_PORT;
+    //@Value("${data.api_se.api_gateway}")
+    //static String APIGATEWAY_SE;
 
     @Autowired
     Environment env;
+
 
     public static HttpClient configProxyClient(HttpClient client) {
 
@@ -35,6 +37,7 @@ public class Security {
         return client;
 
     }
+
 
     public HttpClient configProxyClient2(HttpClient client) {
 
@@ -59,6 +62,7 @@ public class Security {
 
     }
 
+
     public String getAuthenticationHeader(String module) {
 
         String apiToken = env.getProperty("data.api_se.api_gateway");
@@ -66,6 +70,7 @@ public class Security {
 
     }
 
+    
     public static String getDefaultPass(String module) {
 
         String pass = "";

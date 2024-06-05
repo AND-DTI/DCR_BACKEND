@@ -27,4 +27,35 @@ public class DcrcorsipKey {
 	public void setNumip(String numip) {
 		this.numip = numip;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cnpjext == null) ? 0 : cnpjext.hashCode());
+		result = prime * result + ((numip == null) ? 0 : numip.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DcrcorsipKey other = (DcrcorsipKey) obj;
+		if (cnpjext == null) {
+			if (other.cnpjext != null)
+				return false;
+		} else if (!cnpjext.equals(other.cnpjext))
+			return false;
+		if (numip == null) {
+			if (other.numip != null)
+				return false;
+		} else if (!numip.equals(other.numip))
+			return false;
+		return true;
+	}
 }

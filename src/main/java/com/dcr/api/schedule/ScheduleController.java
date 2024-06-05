@@ -1,5 +1,4 @@
 package com.dcr.api.schedule;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -7,34 +6,105 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
-
-import com.dcr.api.model.as400.Matriprd;
-import com.dcr.api.service.as400.ScheduleService;
 import com.dcr.api.utils.Auxiliar;
-
 import jakarta.annotation.PostConstruct;
+
+
 
 @Component
 @EnableScheduling
 public class ScheduleController {
+
+
 	@Autowired
 	ScheduleService service;
 	
+
 	@PostConstruct
 	public void startSchedule() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::gerarArquivo, 0, 30, TimeUnit.MINUTES);
+		scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, 5, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(this::explodeMatrizAvulsa, 0, 5, TimeUnit.MINUTES);
         scheduler.scheduleAtFixedRate(this::verificarPendencias, 0, 30, TimeUnit.MINUTES);
 	}
-	public void verificarPendencias() {
+
+
+	public void atualizaProduto() { //add call online - when create new ppb - set this to 1 hour to correct the ones not updated/called
+		
 		try {
+
+			
+			FileWriter fws = new FileWriter("logs/atualizacaoProduto.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+
+			int pendentes = service.getProdutosPendentes();				        
+	        sbs.append("\n Produtos pendentes de atualizacao (HDCR006C) --> " + pendentes); 
+
+			if (pendentes > 0){
+				sbs.append("\n Calling HDCR006C...");
+				service.atualizaProdutoAcabado();				
+			}
+				    
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Atualização Produto processado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
+
+	public void explodeMatrizAvulsa() { //add call online - when create new ppb - set this to 1 hour to correct the ones not updated/called
+		
+		try {
+
+			
+			FileWriter fws = new FileWriter("logs/explosaoMatrizAvulsa.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sb = new StringBuffer();
+			sb.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+			
+			List<Object[]> lista = service.getMatriprdWithNotInDcrprocc();			
+			sb.append("\n Matrizes avulsas pendentes de explosao: " + lista.size() );
+
+			String idMatriz = "";
+			for (Object[] objects : lista) {
+				idMatriz = objects[0].toString();
+				String tpprd = objects[6].toString();
+				tpprd = tpprd.equals("PC")? "AST" : "PRD";
+				sb.append("\n Calling HDCR004C('"+tpprd+"' 'DCRMODELO '"+idMatriz+"')...");
+				//PGM(LPDPGICE/HDCR004C) PARM('PRD' 'DCRMODELO ' '88        ')
+				service.explodeMatrizAvulsa(tpprd, idMatriz);
+				break; //envia apenas uma matriz
+			}
+	        sb.append("\n Matriz enviada p/ explosao (HDCR0064) --> " + idMatriz); 
+   
+	        bws.write(sb.toString());
+	        bws.close();
+	        System.out.println("Schedule Explosão Matriz Avulsa processado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
+	//recalcula avulsas apos explosao:
+	//MATRIPRD.FLEX4FLW = 'MATRIZ PENDENTE (AVULSA)'
+
+	public void verificarPendencias() {
+		
+		try {
+
 			List<Object[]> lista = service.getPendenciasCadastro();
-			FileWriter fws;
-			 
+			FileWriter fws;			 
 			fws = new FileWriter("logs/pendencias.txt");
 			
 	        BufferedWriter bws = new BufferedWriter(fws); 
@@ -61,15 +131,18 @@ public class ScheduleController {
 	        bws.write(sbs.toString());
 	        bws.close();
 	        System.out.println("Arquivo Pendencias gerado com sucesso!");
+
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
-	public void gerarArquivo() {
+
+
+	/*public void explodeMatrizAvulsa() {
+
 		try {
 				List<Object[]> lista = service.getMatriprdWithNotInDcrprocc();
-				FileWriter fw;
-				 
+				FileWriter fw;				
 				fw = new FileWriter("logs/schedule.txt");
 				
 		        BufferedWriter bw = new BufferedWriter(fw); 
@@ -106,9 +179,10 @@ public class ScheduleController {
 		        bw.write(sb.toString());
 		        bw.close();
 		        System.out.println("Arquivo gerado com sucesso!");
+				
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 				
-	}
+	}*/
 }

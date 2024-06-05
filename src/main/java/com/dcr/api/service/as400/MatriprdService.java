@@ -1,15 +1,12 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdComCorIdDTO;
@@ -32,25 +29,31 @@ import com.dcr.api.response.ProdutoSemListaResponse;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @Service
 public class MatriprdService {
 
+
 	@Autowired
 	MatriprdRepository repository;
 	
+
 	public List<Matriprd> getAll() {
 		
 		return repository.findAll();
 	}
 	
+
 	public Optional<Matriprd> getByID(Integer id) {
 		
 		return repository.findById(id);
 	}
 	
+
 	public MatriprdResponse getDetail(Integer id) {
 		List<Object[]> resultados = repository.consultaJoin(id);
 		
@@ -135,13 +138,14 @@ public class MatriprdService {
 		return res;
 	}
 	
+
 	public List<MatriprdByTpprdResponse> getDetailByTpprd(List<String> tpprdList) {
-		List<Object[]> resultados = repository.consultaByTpprd(tpprdList);
-		
-		List<MatriprdByTpprdResponse> listaResponse = new ArrayList();
-		
-		List<MatriprdByTpprdResponseList> lista = new ArrayList();
-		List<InsumosProdResponse> listaIns = new ArrayList();
+
+		List<Object[]> resultados = repository.consultaByTpprd(tpprdList);		
+		List<MatriprdByTpprdResponse> listaResponse = new ArrayList<MatriprdByTpprdResponse>();	//j4 - array type added 	
+		List<MatriprdByTpprdResponseList> lista = new ArrayList<MatriprdByTpprdResponseList>(); //j4 - array type added 
+		//List<InsumosProdResponse> listaIns = new ArrayList(); //j4 - not used
+
         for (Object[] resultado : resultados) {
         	MatriprdByTpprdResponseList resp = new MatriprdByTpprdResponseList();
         	MatriprdByTpprdResponse res = new MatriprdByTpprdResponse();
@@ -162,27 +166,30 @@ public class MatriprdService {
         	res.setPrevfat(  (resultado[13] != null) ? resultado[13].toString().trim() : "" );
         	res.setPrioresp(  (resultado[14] != null) ? resultado[14].toString().trim() : "" );
         	res.setPriodtmnt(  (resultado[15] != null) ? resultado[15].toString().trim() : "" );
-        	res.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "" );
-        	res.setNome((resultado[29] != null) ? resultado[29].toString().trim() : "" );
+        	res.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "" );        	
         	resp.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "" );
+			resp.setModelo(  (resultado[18] != null) ? resultado[18].toString().trim() : "" );
         	resp.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "" );
         	resp.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "" );
         	resp.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "" );
-        	resp.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "" );
-        	resp.setCdbeg(  (resultado[23] != null) ? resultado[23].toString().trim() : "" );
-        	resp.setCorpt(  (resultado[24] != null) ? resultado[24].toString().trim() : "" );
-        	resp.setCoreng(  (resultado[25] != null) ? resultado[25].toString().trim() : "" );
-        	resp.setTppin(  (resultado[26] != null) ? resultado[26].toString().trim() : "" );
-        	res.setDscpor(  (resultado[27] != null) ? resultado[27].toString().trim() : "" );
-        	res.setDscing(  (resultado[28] != null) ? resultado[28].toString().trim() : "" );
+			resp.setNcm(  (resultado[22] != null) ? resultado[22].toString().trim() : "" ); //j4 - added
+        	resp.setPriocor(  (resultado[23] != null) ? resultado[23].toString().trim() : "" );
+        	resp.setCdbej(  (resultado[24] != null) ? resultado[24].toString().trim() : "" );//j4 - old setCdbeg
+        	resp.setCorpt(  (resultado[25] != null) ? resultado[25].toString().trim() : "" );
+        	resp.setCoreng(  (resultado[26] != null) ? resultado[26].toString().trim() : "" );
+        	resp.setTppin(  (resultado[27] != null) ? resultado[27].toString().trim() : "" );
+        	res.setDscpor(  (resultado[28] != null) ? resultado[28].toString().trim() : "" );
+        	res.setDscing(  (resultado[29] != null) ? resultado[29].toString().trim() : "" );
+			res.setNome((resultado[30] != null) ? resultado[30].toString().trim() : "" );
 
         	Boolean contem = Boolean.FALSE;
         	for (MatriprdByTpprdResponseList item : lista) {
 				if(item.getPartnumpd().equals(resp.getPartnumpd())) {
 					contem = Boolean.TRUE;
+					break;
 				}
 			}
-        	if(!contem) {
+        	if(!contem & !resp.getPartnumpd().equals("")) {
         		lista.add(resp);
         	}
         	
@@ -190,22 +197,21 @@ public class MatriprdService {
         	for (MatriprdByTpprdResponse item : listaResponse) {
 				if(item.getIdMatriz().equals(res.getIdMatriz())) {
 					contemItem = Boolean.TRUE;
-					lista = new ArrayList();
+					//lista = new ArrayList(); //j4
 				}
 			}
         	
         	if(!contemItem) {
         		 res.setItens(lista);
-        		 listaResponse.add(res); 
-        		 
+        		 listaResponse.add(res);         		 
         	}
-        	
-        	
+        	        	
         }
        
 		return listaResponse;
 	}
 	
+
 	public PendenciaResponse complementaPendencia(PendenciaResponse pend, ProdutoPendenciaSimplesResponse resp) {
 		
 		if(!pend.getPartnum().toString().startsWith("00000")) {
@@ -231,7 +237,7 @@ public class MatriprdService {
 			pend.setNumdoc(resultadosDoc.get(0)[0].toString().trim());
 			pend.setSerdoc(resultadosDoc.get(0)[1].toString().trim());
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 		
 		
@@ -245,6 +251,7 @@ public class MatriprdService {
 		return pend;
 	}
 	
+
 	public ProdutoPendenciaSimplesResponse getProdutoPendencia(Integer id, String partnumpd) {
 		List<Object[]> resultados = repository.consultaProdutoPendencia(id, partnumpd);
 		
@@ -596,7 +603,9 @@ public class MatriprdService {
 		return produtos;
 	}
 	
+
 	public List<ProdutoSemListaResponse> getPendenciasSemLista(List<Integer> status) {
+		
 		List<Object[]> resultados = repository.consultaTodasAsPendenciasSemLista(status);
 		
 		List<ProdutoSemListaResponse> produtos = new ArrayList<>();
@@ -706,47 +715,54 @@ public class MatriprdService {
 		return produtos;
 	}
 	
+
 	public static <T> List<T> removerDuplicatas(List<T> lista) {
         Set<T> conjunto = new HashSet<>(lista);
         return new ArrayList<>(conjunto);
     }
 	
+
 	public void delete(Matriprd matriz) {
 		
 		repository.delete(matriz);
 	}
 	
+
 	public Matriprd createComCor(MatriprdComCorDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
-		Matriprd matriz = new Matriprd();
 		
+		Matriprd matriz = new Matriprd();
+		matriz.setProduto(dto.produto());
+		matriz.setModelo(dto.modelo());
 		matriz.setAnomdl(dto.anomdl());
+		matriz.setTpprd(dto.tpprd());
 		matriz.setDesccom(dto.desccom());
 		matriz.setDescrfb(dto.descrfb());
-		if(dto.dtneci() == null) {
-			matriz.setDtneci("");
-		}else {
-			matriz.setDtneci(dto.dtneci());
-		}
-		
-		matriz.setModelo(dto.modelo());
-		matriz.setOrigprd(dto.origprd());
-		matriz.setPrevfat(dto.prevfat());
+		//if(dto.dtneci() == null) {
+		//	matriz.setDtneci("");
+		//}else {
+		//	matriz.setDtneci(dto.dtneci());
+		//}
+		matriz.setProtot(dto.protot());
+		matriz.setSpecial(dto.special());
+		matriz.setTpdcre(dto.tpdcre());		
+		matriz.setOrigprd(dto.origprd()==null? "":dto.origprd()); //j4 - add null controle in entity
+		matriz.setDtneci(dto.dtneci()==null? "":dto.dtneci()); //J4
+		matriz.setPrevfat(dto.prevfat()==null? "":dto.prevfat());//j4
 		matriz.setPriodtmnt(Auxiliar.getDtFormated());
 		matriz.setPriohrmnt(Auxiliar.getHrFormatedSemSegundo());
 		matriz.setPrioresp(Auxiliar.getUser(request));
 		matriz.setPriourgen(dto.priourgen());
-		matriz.setProduto(dto.produto());
-		matriz.setProtot(dto.protot());
-		matriz.setSpecial(dto.special());
-		matriz.setTpdcre(dto.tpdcre());
-		matriz.setTpprd(dto.tpprd());
+		matriz.setItgarantia(""); //add set no update
+		matriz.setObsprio(""); //add set no update
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
+
 	}
 	
+
 	public Matriprd create(MatriprdDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
-		Matriprd matriz = new Matriprd();
 		
+		Matriprd matriz = new Matriprd();
 		matriz.setAnomdl(dto.anomdl());
 		matriz.setDesccom(dto.desccom());
 		matriz.setDescrfb(dto.descrfb());
@@ -768,8 +784,10 @@ public class MatriprdService {
 		matriz.setObsprio(dto.obsprio());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
+
 	}
 	
+
 	public Matriprd update(Matriprd matriz,  MatriprdDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		matriz.setAnomdl(dto.anomdl());
@@ -792,9 +810,11 @@ public class MatriprdService {
 		matriz.setObsprio(dto.obsprio());
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
+		
 	}
 	
-public Matriprd updateComCor(Matriprd matriz,  MatriprdComCorIdDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+
+	public Matriprd updateComCor(Matriprd matriz,  MatriprdComCorIdDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		matriz.setAnomdl(dto.anomdl());
 		matriz.setDesccom(dto.desccom());
@@ -813,8 +833,8 @@ public Matriprd updateComCor(Matriprd matriz,  MatriprdComCorIdDTO dto, HttpServ
 		matriz.setTpdcre(dto.tpdcre());
 		matriz.setTpprd(dto.tpprd());
 		
-		
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
+
 }

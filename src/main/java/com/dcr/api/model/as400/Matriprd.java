@@ -1,20 +1,14 @@
 package com.dcr.api.model.as400;
-
-import java.util.List;
-
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 
 
 @Entity
@@ -22,6 +16,7 @@ import jakarta.persistence.Table;
 @ApiModel
 public class Matriprd {
 
+	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "int", unique = true)
 	@Id
@@ -83,32 +78,32 @@ public class Matriprd {
 	private Integer priourgen;
 	
 	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) j4
 	@Column(columnDefinition = "char(8)")
 	private String prevfat;
 	
 	@TamanhoMaximo(10)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) j4
 	@Column(columnDefinition = "char(10)")
 	private String prioresp;
 	
 	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) j4
 	@Column(columnDefinition = "char(8)")
 	private String priodtmnt;
 	
 	@TamanhoMaximo(8)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "char(8)")
+	//@Column(columnDefinition = "char(8)") j4
 	private String priohrmnt;
 	
 	@TamanhoMaximo(1)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) J4
 	@Column(columnDefinition = "char(1)")
     private String itgarantia;
 	
 	@TamanhoMaximo(250)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) J4
 	@Column(columnDefinition = "char(250)")
     private String obsprio;
 	
@@ -127,197 +122,77 @@ public class Matriprd {
 	@Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public Integer getIdmatriz() {
-		return idmatriz;
-	}
+	public Integer getIdmatriz() {		return idmatriz;	}
+	public void setIdmatriz(Integer idmatriz) {		this.idmatriz = idmatriz;	}
 
-	public void setIdmatriz(Integer idmatriz) {
-		this.idmatriz = idmatriz;
-	}
+	public String getProduto() {		return produto;	}
+	public void setProduto(String produto) {		this.produto = produto;	}
 
-	public String getProduto() {
-		return produto;
-	}
+	public String getModelo() {		return modelo;	}
+	public void setModelo(String modelo) {		this.modelo = modelo;	}
 
-	public void setProduto(String produto) {
-		this.produto = produto;
-	}
+	public String getAnomdl() {		return anomdl;	}
+	public void setAnomdl(String anomdl) {		this.anomdl = anomdl;	}
 
-	public String getModelo() {
-		return modelo;
-	}
+	public String getDesccom() {		return desccom;	}
+	public void setDesccom(String desccom) {		this.desccom = desccom;	}
 
-	public void setModelo(String modelo) {
-		this.modelo = modelo;
-	}
+	public String getDescrfb() {		return descrfb;	}
+	public void setDescrfb(String descrfb) {		this.descrfb = descrfb;	}
 
-	public String getAnomdl() {
-		return anomdl;
-	}
+	public String getTpprd() {		return tpprd;	}
+	public void setTpprd(String tpprd) {		this.tpprd = tpprd;	}
 
-	public void setAnomdl(String anomdl) {
-		this.anomdl = anomdl;
-	}
+	public Integer getProtot() {		return protot;	}
+	public void setProtot(Integer protot) {		this.protot = protot;	}
 
-	public String getDesccom() {
-		return desccom;
-	}
+	public Integer getSpecial() {		return special;	}
+	public void setSpecial(Integer special) {		this.special = special;	}
 
-	public void setDesccom(String desccom) {
-		this.desccom = desccom;
-	}
+	public String getTpdcre() {		return tpdcre;	}
+	public void setTpdcre(String tpdcre) {		this.tpdcre = tpdcre;	}
 
-	public String getDescrfb() {
-		return descrfb;
-	}
+	public String getOrigprd() {		return origprd;	}
+	public void setOrigprd(String origprd) {		this.origprd = origprd;	}
 
-	public void setDescrfb(String descrfb) {
-		this.descrfb = descrfb;
-	}
+	public String getDtneci() {		return dtneci;	}
+	public void setDtneci(String dtneci) {		this.dtneci = dtneci;	}
 
-	public String getTpprd() {
-		return tpprd;
-	}
+	public Integer getPriourgen() {		return priourgen;	}
+	public void setPriourgen(Integer priourgen) {		this.priourgen = priourgen;	}
 
-	public void setTpprd(String tpprd) {
-		this.tpprd = tpprd;
-	}
+	public String getPrevfat() {		return prevfat;	}
+	public void setPrevfat(String prevfat) {		this.prevfat = prevfat;	}
 
-	public Integer getProtot() {
-		return protot;
-	}
+	public String getPrioresp() {		return prioresp;	}
+	public void setPrioresp(String prioresp) {		this.prioresp = prioresp;	}
 
-	public void setProtot(Integer protot) {
-		this.protot = protot;
-	}
+	public String getPriodtmnt() {		return priodtmnt;	}
+	public void setPriodtmnt(String priodtmnt) {		this.priodtmnt = priodtmnt;	}
 
-	public Integer getSpecial() {
-		return special;
-	}
+	public String getPriohrmnt() {		return priohrmnt;	}
+	public void setPriohrmnt(String priohrmnt) {		this.priohrmnt = priohrmnt;	}
 
-	public void setSpecial(Integer special) {
-		this.special = special;
-	}
+	public String getItaudsys() {		return itaudsys;	}
+	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}
 
-	public String getTpdcre() {
-		return tpdcre;
-	}
+	public String getItaudusr() {		return itaudusr;	}
+	public void setItaudusr(String itaudusr) {		this.itaudusr = itaudusr;	}
 
-	public void setTpdcre(String tpdcre) {
-		this.tpdcre = tpdcre;
-	}
+	public String getItaudhst() {		return itaudhst;	}
+	public void setItaudhst(String itaudhst) {		this.itaudhst = itaudhst;	}
 
-	public String getOrigprd() {
-		return origprd;
-	}
+	public String getItauddt() {		return itauddt;	}
+	public void setItauddt(String itauddt) {		this.itauddt = itauddt;	}
 
-	public void setOrigprd(String origprd) {
-		this.origprd = origprd;
-	}
+	public String getItaudhr() {		return itaudhr;	}
+	public void setItaudhr(String itaudhr) {		this.itaudhr = itaudhr;	}
 
-	public String getDtneci() {
-		return dtneci;
-	}
+	public String getItgarantia() {		return itgarantia;	}
+	public void setItgarantia(String itgarantia) {		this.itgarantia = itgarantia;	}
 
-	public void setDtneci(String dtneci) {
-		this.dtneci = dtneci;
-	}
-
-	public Integer getPriourgen() {
-		return priourgen;
-	}
-
-	public void setPriourgen(Integer priourgen) {
-		this.priourgen = priourgen;
-	}
-
-	public String getPrevfat() {
-		return prevfat;
-	}
-
-	public void setPrevfat(String prevfat) {
-		this.prevfat = prevfat;
-	}
-
-	public String getPrioresp() {
-		return prioresp;
-	}
-
-	public void setPrioresp(String prioresp) {
-		this.prioresp = prioresp;
-	}
-
-	public String getPriodtmnt() {
-		return priodtmnt;
-	}
-
-	public void setPriodtmnt(String priodtmnt) {
-		this.priodtmnt = priodtmnt;
-	}
-
-	public String getPriohrmnt() {
-		return priohrmnt;
-	}
-
-	public void setPriohrmnt(String priohrmnt) {
-		this.priohrmnt = priohrmnt;
-	}
-
-	public String getItaudsys() {
-		return itaudsys;
-	}
-
-	public void setItaudsys(String itaudsys) {
-		this.itaudsys = itaudsys;
-	}
-
-	public String getItaudusr() {
-		return itaudusr;
-	}
-
-	public void setItaudusr(String itaudusr) {
-		this.itaudusr = itaudusr;
-	}
-
-	public String getItaudhst() {
-		return itaudhst;
-	}
-
-	public void setItaudhst(String itaudhst) {
-		this.itaudhst = itaudhst;
-	}
-
-	public String getItauddt() {
-		return itauddt;
-	}
-
-	public void setItauddt(String itauddt) {
-		this.itauddt = itauddt;
-	}
-
-	public String getItaudhr() {
-		return itaudhr;
-	}
-
-	public void setItaudhr(String itaudhr) {
-		this.itaudhr = itaudhr;
-	}
-
-	public String getItgarantia() {
-		return itgarantia;
-	}
-
-	public void setItgarantia(String itgarantia) {
-		this.itgarantia = itgarantia;
-	}
-
-	public String getObsprio() {
-		return obsprio;
-	}
-
-	public void setObsprio(String obsprio) {
-		this.obsprio = obsprio;
-	}
+	public String getObsprio() {		return obsprio;	}
+	public void setObsprio(String obsprio) {		this.obsprio = obsprio;	}
 
 	
 }

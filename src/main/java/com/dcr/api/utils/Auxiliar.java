@@ -305,7 +305,65 @@ public class Auxiliar {
 	        }
 	    }
 	}
+
+    /*public static void trimResponseObject(Object obj) {
+		
+
+		Class<?> type = obj.getClass();
+		
+		if(type.equals(Optional.class)) {
+			obj = ((Optional) obj).get();
+		}
+        
+		Class<?> clazz = obj.getClass();
+		
+	    Field[] fields = clazz.getDeclaredFields();
+	    	
+	    for (Field field : fields) {
+	    	
+            try {
+                Object fieldFormatado;
+                String value = (String) field.get(obj);	                
+                fieldFormatado = value != null ? value.trim() : value;	
+                field.set(obj, fieldFormatado);
+
+                if (field.get(obj).getClass().equals(String.class)) {
+                    String val = "";
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }	
+
+	    }
+	}*/
 	
+
+    /*public static void trimResponseList(List objects){
+
+        for (Object obj : objects) {
+			Class<?> clazz = obj.getClass();
+			
+		    Field[] fields = clazz.getDeclaredFields();
+		    	
+		    for (Field field : fields) {
+		    	
+		        if (field.getType().equals(String.class)) {
+		            try {
+		                field.setAccessible(true);
+		                String value = (String) field.get(obj);
+		                if (value != null) {
+		                    field.set(obj, value.trim());
+		                }
+		            } catch (IllegalAccessException e) {
+		                e.printStackTrace();
+		            }
+		        }
+		    }
+		}
+
+    }*/
+
+    
 	public static String addCasasDecimais(Object obj, Integer tamanhoMax, Integer casas) {
         DecimalFormat df = new DecimalFormat("0".repeat(tamanhoMax -  casas) + "." + "0".repeat(casas));
         String formatted = df.format(obj).replace(".", "").replace(",", "");

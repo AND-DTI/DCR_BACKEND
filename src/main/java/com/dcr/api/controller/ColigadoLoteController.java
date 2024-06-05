@@ -1,7 +1,5 @@
 package com.dcr.api.controller;
-
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,46 +9,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Dcrcoli0;
-import com.dcr.api.model.as400.Dcrcoli1;
 import com.dcr.api.model.dto.ColigadoLoteDTO;
-import com.dcr.api.model.dto.Dcrcoli1DTO;
 import com.dcr.api.model.keys.Dcrcoli0Key;
-import com.dcr.api.model.keys.Dcrcoli1Key;
 import com.dcr.api.service.as400.Dcrcoli0Service;
 import com.dcr.api.service.as400.Dcrcoli1Service;
 import com.dcr.api.service.as400.Dcrcoli2Service;
 import com.dcr.api.service.as400.Dcrcoli3Service;
 import com.dcr.api.service.as400.Dcrcoli4Service;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/coligado/")
 public class ColigadoLoteController {
 
+
 	@Autowired
-	Dcrcoli0Service coligadoZeroService;
-	
+	Dcrcoli0Service coligadoZeroService;	
 	@Autowired
-	Dcrcoli1Service coligadoUmService;
-	
+	Dcrcoli1Service coligadoUmService;	
 	@Autowired
-	Dcrcoli2Service coligadoDoisService;
-	
+	Dcrcoli2Service coligadoDoisService;	
 	@Autowired
-	Dcrcoli3Service coligadoTresService;
-	
+	Dcrcoli3Service coligadoTresService;	
 	@Autowired
 	Dcrcoli4Service coligadoQuatroService;
 	
 	
-	@PutMapping(value = "/createEmLote", produces = "application/json")
+	//@PutMapping(value = "/createEmLote", produces = "application/json")
+	@PutMapping(value = "/enviaMovimentoDCR-e", produces = "application/json")
 	@Operation(summary = "Cria coligados em Lote.")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Lote criado!"),
@@ -61,6 +54,7 @@ public class ColigadoLoteController {
 	public ResponseEntity<Object> createRegistro(@RequestBody ColigadoLoteDTO dto, HttpServletRequest request) {
 	
 		try {
+			
 			Dcrcoli0Key key = new Dcrcoli0Key();
 			key.setDenom(dto.getDenom());
 			key.setDcre(dto.getDcre());

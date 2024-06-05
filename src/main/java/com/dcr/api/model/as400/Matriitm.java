@@ -1,20 +1,14 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+
 
 @Entity
 @Table(name = "MATRIITM", schema = "HD4DCDHH")
@@ -38,6 +32,10 @@ public class Matriitm {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(3)")
 	private String unmed;
+
+	@TamanhoMaximo(8)
+	@Column(columnDefinition = "char(3)")
+	private String ncm; //added j4
 	
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
@@ -83,59 +81,29 @@ public class Matriitm {
 		this.unmed = unmed;
 	}
 
-	public String getItaudsys() {
-		return itaudsys;
+	public String getNcm() {		return ncm;	}
+	public void setNcm(String ncm) {
+		this.ncm = ncm==null? "" : ncm;
 	}
 
-	public void setItaudsys(String itaudsys) {
-		this.itaudsys = itaudsys;
-	}
+	public String getItaudsys() {		return itaudsys;	}
+	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}
 
-	public String getItaudusr() {
-		return itaudusr;
-	}
+	public String getItaudusr() {		return itaudusr;	}
+	public void setItaudusr(String itaudusr) {		this.itaudusr = itaudusr;	}
 
-	public void setItaudusr(String itaudusr) {
-		this.itaudusr = itaudusr;
-	}
+	public String getItaudhst() {		return itaudhst;	}
+	public void setItaudhst(String itaudhst) {		this.itaudhst = itaudhst;	}
 
-	public String getItaudhst() {
-		return itaudhst;
-	}
+	public String getItauddt() {		return itauddt;	}
+	public void setItauddt(String itauddt) {		this.itauddt = itauddt;	}
 
-	public void setItaudhst(String itaudhst) {
-		this.itaudhst = itaudhst;
-	}
+	public String getItaudhr() {		return itaudhr;	}
+	public void setItaudhr(String itaudhr) {		this.itaudhr = itaudhr;	}
 
-	public String getItauddt() {
-		return itauddt;
-	}
+	public Integer getPriocor() {		return priocor;	}
+	public void setPriocor(Integer priocor) {		this.priocor = priocor;	}
 
-	public void setItauddt(String itauddt) {
-		this.itauddt = itauddt;
-	}
-
-	public String getItaudhr() {
-		return itaudhr;
-	}
-
-	public void setItaudhr(String itaudhr) {
-		this.itaudhr = itaudhr;
-	}
-
-	public Integer getPriocor() {
-		return priocor;
-	}
-
-	public void setPriocor(Integer priocor) {
-		this.priocor = priocor;
-	}
-
-	public MatriitmKey getKey() {
-		return key;
-	}
-
-	public void setKey(MatriitmKey key) {
-		this.key = key;
-	}
+	public MatriitmKey getKey() {		return key;	}
+	public void setKey(MatriitmKey key) {		this.key = key;	}
 }

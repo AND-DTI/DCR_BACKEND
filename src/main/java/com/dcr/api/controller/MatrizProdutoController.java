@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.dcr.api.model.as400.Cadcor;
+//import com.dcr.api.model.as400.Cadcor;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
@@ -27,18 +24,19 @@ import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MatriitmKey;
-import com.dcr.api.response.MatriprdResponse;
-import com.dcr.api.response.ProdutoPendenciaResponse;
+//import com.dcr.api.response.MatriprdResponse;
+//import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MatriitmService;
 import com.dcr.api.service.as400.MatriprdService;
 import com.dcr.api.service.as400.PendprodService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -57,6 +55,7 @@ public class MatrizProdutoController {
 	@Autowired
 	DcrproccService processoservice;
 	
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto")
 	@ApiResponses(value = {
@@ -85,6 +84,8 @@ public class MatrizProdutoController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getById", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -138,6 +139,8 @@ public class MatrizProdutoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/createComCor", produces = "application/json")
 	@Operation(summary = "Cria um tipo de produto")
 	@ApiResponses(value = {
@@ -166,6 +169,8 @@ public class MatrizProdutoController {
 		}   
 	}
 	
+	
+
 	@PutMapping(value = "/updateComCor", produces = "application/json")
 	@Operation(summary = "Altera uma Matriz de produto")
 	@ApiResponses(value = {
@@ -230,6 +235,8 @@ public class MatrizProdutoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera uma Matriz de produto")
 	@ApiResponses(value = {
@@ -259,6 +266,8 @@ public class MatrizProdutoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+	
+
 	
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta um tipo")

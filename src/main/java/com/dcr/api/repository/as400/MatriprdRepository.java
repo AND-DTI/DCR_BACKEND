@@ -1,11 +1,10 @@
 package com.dcr.api.repository.as400;
-
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
 import com.dcr.api.model.as400.Matriprd;
+
+
 
 public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 
@@ -24,18 +23,24 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 	  		+ "            WHERE prd.IDMATRIZ = :idmatriz", nativeQuery = true)
 	  List<Object[]> consultaJoin(Integer idmatriz);
 	  
-	  @Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
-	  		+ "	  		 							 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"
-	  		+ "	  		 				itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,\r\n"
-	  		+ "	  		 				cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN,\r\n"
-	  		+ "	  		 				tpprd.DSCPOR, tpprd.DSCING, usr.NAME\r\n"
-	  		+ "	  		          FROM HD4DCDHH.MATRIPRD prd \r\n"
-	  		+ "					  LEFT JOIN HD4DCDHH.ACCUSER usr ON prd.PRIORESP = usr.USERNAME \r\n"
-	  		+ "	  		          LEFT JOIN HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ\r\n"
-	  		+ "	  		          LEFT JOIN HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR \r\n"
-	  		+ "	  		          LEFT JOIN HD4DCDHH.CADTPPRD tpprd ON prd.TPPRD = tpprd.TPPRD \r\n"
-	  		+ "	  		          WHERE prd.TPPRD IN :tpprdList", nativeQuery = true)
+	  
+	  @Query(value = 
+	          "SELECT  \r\n"
+			+ "  prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
+	  		+ "	 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT, \r\n"
+	  		+ "	 itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.NCM, itm.PRIOCOR, \r\n"
+	  		+ "	 cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, \r\n"
+	  		+ "  tpprd.DSCPOR, tpprd.DSCING, usr.NAME \r\n"
+	  		+ "FROM \r\n"
+			+ "  HD4DCDHH.MATRIPRD prd join \r\n"
+	  		+ "	 HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ \r\n"
+			+ "	 LEFT JOIN HD4DCDHH.ACCUSER usr ON prd.PRIORESP = usr.USERNAME \r\n"	  		
+	  		+ "	 LEFT JOIN HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR \r\n"
+	  		+ "	 LEFT JOIN HD4DCDHH.CADTPPRD tpprd ON prd.TPPRD = tpprd.TPPRD \r\n"
+	  		+ "WHERE \r\n"
+			+ "  prd.TPPRD IN :tpprdList", nativeQuery = true)
 	  List<Object[]> consultaByTpprd(List<String> tpprdList);
+	  
 	  
 	  @Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
 	  		+ "					 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"

@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,26 +11,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Dcrcoli2;
 import com.dcr.api.model.dto.Dcrcoli2DTO;
 import com.dcr.api.model.keys.Dcrcoli2Key;
 import com.dcr.api.service.as400.Dcrcoli2Service;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/coligado/dois")
 public class ColigadoDoisController {
 
+
 	@Autowired
 	Dcrcoli2Service service;
 	
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os Registros")
 	@ApiResponses(value = {
@@ -97,6 +97,7 @@ public class ColigadoDoisController {
 		}   
 	}
 	
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Cria um Registro")
 	@ApiResponses(value = {
@@ -131,6 +132,7 @@ public class ColigadoDoisController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+	
 	
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca o Registro ativo")
