@@ -1,0 +1,58 @@
+app:
+    name: FERG.COM
+    exe: FER_BACKEND.JAR
+    host: BACKENDSERVER
+    interfaces:
+        user: SYSINTUSER
+
+env:    
+    source: hda
+
+server:
+    port: 3000      
+
+
+spring:
+    datasource:
+        password: password
+        url: jdbc:h2:dev
+        username: SA    
+    mvc:
+        pathmatch:
+            matching-strategy: ANT_PATH_MATCHER    
+    devtools:
+        add-properties: false  
+
+
+data:
+    proxy:
+        host: gateway.zscloud.net
+        port: 443
+    token_pass: SUPER_SECRET_WORD
+    token_expire: 1800000
+    api_se:
+        api_gateway: eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc4OTQ4ODksImV4cCI6MTc2NzIyNTU0MCwiaWRsb2dpbiI6IlNCSU5UMDAxIiwicmF0ZWxpbWl0IjoxMjAsInF1b3RhbGltaXQiOjEwMDAwMH0.DIJUeK6NyEmgZV9i6JBDKcIVoFw6kUBk3gSoILYxZGA
+        base_url: https://motohonda-test.softexpert.com/apigateway
+        adm: https://motohonda-test.softexpert.com/apigateway/se/ws/adm_ws.php
+        form:
+        workflow:    
+      
+
+as400:
+    datasource:
+        jdbcUrl:            jdbc:as400://HSA0014;naming=system;libraries=,PTDHD,LPDDBICE:sslConnection=true;
+        driver-class-name:  com.ibm.as400.access.AS400JDBCDriver
+        username:           SB037635
+        password:           SB037635
+        database-platform:  org.hibernate.dialect.DB2400Dialect
+        hibernate.ddl-auto: validate
+
+
+#File Servers configs
+FileServer: //sahdamvqweb001/C$/sistemas/FER/FileServer
+FileServerPUB: //sahdamvqweb001/C$/sistemas/FER/FileServer/tmp
+FileServer2: C:/DEV/FileServer
+FileServerPUB2: C:/DEV/FileServerCTP
+#File Store Type: DB (databse); FS (file server)
+fileStorageType: FS
+maxBlobSize: 3000000
