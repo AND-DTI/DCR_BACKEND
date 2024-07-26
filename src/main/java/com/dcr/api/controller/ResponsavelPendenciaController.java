@@ -1,22 +1,20 @@
 package com.dcr.api.controller;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Pendresp;
 import com.dcr.api.model.dto.PendrespDTO;
 import com.dcr.api.model.dto.PendrespDeleteDTO;
@@ -25,19 +23,22 @@ import com.dcr.api.response.PendrespDeleteResponse;
 import com.dcr.api.response.PendrespResponse;
 import com.dcr.api.service.as400.PendrespService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/pendencia/responsavel")
 public class ResponsavelPendenciaController {
 
+
 	@Autowired
 	PendrespService service;
+
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
@@ -67,6 +68,8 @@ public class ResponsavelPendenciaController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
@@ -99,6 +102,8 @@ public class ResponsavelPendenciaController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getResponsaveis", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
@@ -128,7 +133,9 @@ public class ResponsavelPendenciaController {
 		}   
 	}
 	
-	@DeleteMapping(value = "/delete", produces = "application/json")
+
+
+	@PostMapping(value = "/delete", produces = "application/json") //j4 - DeleteMapping error - body missing
 	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
@@ -137,6 +144,7 @@ public class ResponsavelPendenciaController {
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> delete(@RequestBody List<PendrespDeleteDTO> listaDto, HttpServletRequest request) {
+	//public ResponseEntity<Object> delete(@RequestParam List<PendrespDeleteDTO> listaDto, HttpServletRequest request) {
 		List<PendrespDeleteDTO> listaErro = new ArrayList<>();
 		try {
 			for (PendrespDeleteDTO dto : listaDto) {
@@ -172,6 +180,8 @@ public class ResponsavelPendenciaController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
@@ -214,6 +224,8 @@ public class ResponsavelPendenciaController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
 	@ApiResponses(value = {
@@ -260,4 +272,5 @@ public class ResponsavelPendenciaController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
 }

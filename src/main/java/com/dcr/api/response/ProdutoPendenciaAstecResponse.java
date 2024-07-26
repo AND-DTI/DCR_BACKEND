@@ -1,28 +1,36 @@
 package com.dcr.api.response;
-
 import java.util.List;
 
+
+
 public class ProdutoPendenciaAstecResponse {
+
+	
 	private Object idMatriz;
     private Object partnumpd;
     private Object desccom;
     private Object descrfb;
-    private Object unmed;
-    private Object origprd;
+    private Object tpdcre;
+	private Object origprd;		
     private Object dtneci;
     private Object priourgen;
     private Object prevfat;
     private Object prioresp;
     private Object priodtmnt;
-    private Object prioHRmnt;
-    private Object tpdcre;
-    private Object status;
-    private Object ppbprd;
+    private Object prioHRmnt; 
+	private Object unmed;   
+	private Object preco; //j4 added
+	private Object ncm; //j4 added
+	private Object ppbprd;
     private Object prddest;
+    private Object status;    
     private Object qtdependencias;
-    
-    private List<PendenciaAstecResponse> pendencias;
+	private Object qtdependenciasEmAberto;  //j4 added  
+    private List<PendenciaAstecResponse> pendencias; 
+	private List<InsumosAstecResponse> insumos; //j4 added //InsumosProdResponse
     private List<DocumentosAstecResponse> documentos;
+
+	
 	public Object getIdMatriz() {
 		return idMatriz;
 	}
@@ -47,11 +55,11 @@ public class ProdutoPendenciaAstecResponse {
 	public void setDescrfb(Object descrfb) {
 		this.descrfb = descrfb;
 	}
-	public Object getUnmed() {
-		return unmed;
+	public Object getTpdcre() {
+		return tpdcre;
 	}
-	public void setUnmed(Object unmed) {
-		this.unmed = unmed;
+	public void setTpdcre(Object tpdcre) {
+		this.tpdcre = tpdcre;
 	}
 	public Object getOrigprd() {
 		return origprd;
@@ -95,29 +103,23 @@ public class ProdutoPendenciaAstecResponse {
 	public void setPrioHRmnt(Object prioHRmnt) {
 		this.prioHRmnt = prioHRmnt;
 	}
-	public Object getStatus() {
-		return status;
+	public Object getUnmed() {
+		return unmed;
 	}
-	public void setStatus(Object status) {
-		this.status = status;
+	public void setUnmed(Object unmed) {
+		this.unmed = unmed;
 	}
-	public Object getQtdependencias() {
-		return qtdependencias;
+	public Object getPreco() {
+		return preco;
 	}
-	public void setQtdependencias(Object qtdependencias) {
-		this.qtdependencias = qtdependencias;
+	public void setPreco(Object preco) {
+		this.preco = preco;
 	}
-	public List<PendenciaAstecResponse> getPendencias() {
-		return pendencias;
+	public Object getNcm() {
+		return ncm;
 	}
-	public void setPendencias(List<PendenciaAstecResponse> pendencias) {
-		this.pendencias = pendencias;
-	}
-	public List<DocumentosAstecResponse> getDocumentos() {
-		return documentos;
-	}
-	public void setDocumentos(List<DocumentosAstecResponse> documentos) {
-		this.documentos = documentos;
+	public void setNcm(Object ncm) {
+		this.ncm = ncm;
 	}
 	public Object getPpbprd() {
 		return ppbprd;
@@ -131,10 +133,44 @@ public class ProdutoPendenciaAstecResponse {
 	public void setPrddest(Object prddest) {
 		this.prddest = prddest;
 	}
-	public Object getTpdcre() {
-		return tpdcre;
+	public Object getStatus() {
+		return status;
 	}
-	public void setTpdcre(Object tpdcre) {
-		this.tpdcre = tpdcre;
+	public void setStatus(Object status) {
+		this.status = status;
 	}
+	public Object getQtdependencias() {
+		return qtdependencias;
+	}
+	public void setQtdependencias(Object qtdependencias) {
+		this.qtdependencias = qtdependencias;
+	}
+	public Object getQtdependenciasEmAberto() {
+		return qtdependenciasEmAberto;
+	}
+	public void setQtdependenciasEmAberto(Object qtdependenciasEmAberto) {
+		this.qtdependenciasEmAberto = qtdependenciasEmAberto;
+	}
+	public List<PendenciaAstecResponse> getPendencias() {
+		return pendencias;
+	}
+	public void setPendencias(List<PendenciaAstecResponse> pendencias) {
+		this.pendencias = pendencias;
+	}
+	public List<InsumosAstecResponse> getInsumos() {
+		return insumos;
+	}
+	public void setInsumos(List<InsumosAstecResponse> insumos) {
+		this.insumos = insumos;
+	}
+	public List<DocumentosAstecResponse> getDocumentos() {
+		return documentos;
+	}
+	public void setDocumentos(List<DocumentosAstecResponse> documentos) {
+		this.documentos = documentos;
+	} 
+
+
+
+
 }

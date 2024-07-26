@@ -68,6 +68,7 @@ public class MatriitmService {
 		matriz.setUnmed(dto.unmed());
 		matriz.setPriocor(dto.priocor());
 		matriz.setNcm(dto.ncm()); //j4 - null value controled by entity
+		matriz.setPreco(0.);
 				
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
@@ -82,5 +83,11 @@ public class MatriitmService {
 		matriz.setNcm(dto.ncm()); //j4 - null value controled by entity - update only by replication routines
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
+	}
+
+	public Matriitm save(Matriitm matriz){
+
+		return repository.save(matriz);
+
 	}
 }

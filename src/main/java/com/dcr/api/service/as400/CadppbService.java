@@ -12,7 +12,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 //import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import com.dcr.api.configs.security.Auditoria;
 //import com.dcr.api.controller.TipoProdutoController;
 import com.dcr.api.model.as400.Cadppb;
 import com.dcr.api.model.dto.AstecDTO;
@@ -202,14 +204,34 @@ public class CadppbService {
     }
 	
 	
+	public int desobrigaPPB(String partnumpd, String tpprd, String desccom, HttpServletRequest request) 
+		throws JsonMappingException, JsonProcessingException, UnknownHostException{
+
+		String prddest = ""; //PRDDEST apenas em CADPPB
+		Auditoria auditoria = new Auditoria(request);
+
+		return repository.desobrigaPPB(partnumpd, tpprd, desccom, prddest, auditoria.getItaudsys(), auditoria.getItaudusr(), auditoria.getItaudhst());	
+		//return repository.desobrigaPPB(partnumpd);	
+
+	}
 
 
 	public void delete(Cadppb ppb) {
 		
 		repository.delete(ppb);
+
 	}
+
+	public void removerPPBxProduto(Cadppb ppb) {
+		
+		repository.delete(ppb);
+		repository.deletePRODFAT(ppb.getPartnumpd());
+		repository.deletePRODMOD(ppb.getPartnumpd());
+
+	}	
 	
 	public Cadppb create(CadppbDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+		
 		Cadppb ppb = new Cadppb();
 		
 		//ProdutoKey key = new ProdutoKey();
@@ -228,12 +250,19 @@ public class CadppbService {
 		return repository.save(ppb);
 	}
 	
+
 	public Cadppb update(Cadppb ppb,  CadppbDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		ppb.setDesccom(dto.tpprd()); //added j4
 		ppb.setDesccom(dto.desccom());
 		ppb.setDescrfb(dto.descrfb());
 		ppb.setPpbprd(dto.ppbprd());
 		ppb.setPrddest(dto.prddest());
+		Auxiliar.preencheAuditoria(ppb, request);
+		return repository.save(ppb);
+	}
+
+
+	public Cadppb updateEntity(Cadppb ppb, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException { //j4 - added		
 		Auxiliar.preencheAuditoria(ppb, request);
 		return repository.save(ppb);
 	}

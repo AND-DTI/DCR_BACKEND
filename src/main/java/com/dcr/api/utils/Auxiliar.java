@@ -1,5 +1,4 @@
 package com.dcr.api.utils;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
@@ -16,10 +15,8 @@ import java.util.Random;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.aspectj.apache.bcel.generic.ObjectType;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.dcr.api.model.as400.Dcrlayout;
 import com.dcr.api.service.TokenService;
 import com.dcr.api.validator.Validator;
@@ -28,31 +25,38 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 public class Auxiliar {
 
-	 @Autowired
-	 TokenService tokenService;
-	 
+
+	@Autowired
+	TokenService tokenService;
+ 
 	private static final String timezone = "GMT-4";
 	private static final String dtFormat = "yyyyMMdd";
 	private static final String hrFormat = "HH:mm:ss";
 	private static final String hrFormatSemSegundo = "HH:mm";
 	private static final String dtHrFormat = "dd MMM yyyy hh:mm:ss";
 	
+
     public static String trimNull(String field) {
         return field == null ? "" : field.trim();
     }
+
 
     public static String nvl(String str, String nullText) {
         return str == null ? nullText : str;
     }
 
+
     public static String nvl2(String valor) {
         return valor + "####";
     }
+
 
     public static JsonNode nodeFromXML(String xml, String pathNode) throws IOException {
 
@@ -66,9 +70,11 @@ public class Auxiliar {
 
     }
 
+
     public static String nvl(String valor) {
         return valor + "####";
     }
+
 
     public static class text {
 
@@ -78,7 +84,9 @@ public class Auxiliar {
         }
     }
     
+
     public static String getCaptcha() {
+
         char data[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
                 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
                 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
@@ -94,16 +102,21 @@ public class Auxiliar {
             index[i] = data[ran];
         }
         return new String(index);
+
     }
     
+
     public static Boolean validatePassword(String pass) {
+
     	String regex = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,20}$";
     	final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         final Matcher matcher = pattern.matcher(pass);
         
         return matcher.matches();
+
     }
     
+
     public static String getClientHost(HttpServletRequest request) throws UnknownHostException {
         
         String req = request.getHeader("X-FORWARDED-FOR");
@@ -122,6 +135,7 @@ public class Auxiliar {
         return host;
     }   
     
+
     //for web app
     public static String getClientIP(HttpServletRequest request) {
         String ip = request.getHeader("X-FORWARDED-FOR");
@@ -132,6 +146,7 @@ public class Auxiliar {
          
         return ip;
     }
+
 
     public static String getClientUser(HttpServletRequest request) {
         
@@ -152,6 +167,7 @@ public class Auxiliar {
         return username;
     }
     
+
     public static String getDtFormated() {
     	Date date = new Date();
 		
@@ -161,6 +177,7 @@ public class Auxiliar {
 		return sdf.format(date);
     }
     
+
     public static String getDtHrFormated() {
     	Date date = new Date();
 		
@@ -170,6 +187,7 @@ public class Auxiliar {
 		return sdf.format(date);
     }
     
+
 	public static String getHrFormated() {
     	Date date = new Date();
 		
@@ -179,6 +197,7 @@ public class Auxiliar {
 		return sdf.format(date);
     }
 	
+
 	public static String getHrFormatedSemSegundo() {
     	Date date = new Date();
 		
@@ -188,6 +207,7 @@ public class Auxiliar {
 		return sdf.format(date);
     }
 	
+
 	public static Boolean validateField(ObjectType type, int size, Object field) {
 		if(field.getClass().getTypeName().equals(type.getClassName())) {			
 			return Boolean.TRUE;
@@ -202,6 +222,7 @@ public class Auxiliar {
 		return Boolean.TRUE;
 	}
 	
+
 	public static String getUser(HttpServletRequest request) throws JsonMappingException, JsonProcessingException {
 		String atributo = request.getHeader("Authorization");
 		String token = atributo.replace("Bearer ", "");
@@ -216,6 +237,7 @@ public class Auxiliar {
 
 		return jsonNode.get("sub").asText();
 	}
+
 
 	public static void preencheAuditoria(Object obj, HttpServletRequest request) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, JsonMappingException, JsonProcessingException, UnknownHostException {
         Class<?> classe = obj.getClass();
@@ -243,6 +265,7 @@ public class Auxiliar {
         itaudhr.set(obj, getHrFormated());
 	}
 	
+
 	public static String formatName(String name) {
 		
 		String[] names = name.split(" ");
@@ -252,6 +275,7 @@ public class Auxiliar {
 		return name;
 	}
 	
+
 	public static void formatResponseList(List objects) {
 		
 		for (Object obj : objects) {
@@ -276,6 +300,7 @@ public class Auxiliar {
 		}
 	}
 	
+
 	public static void formatResponse(Object obj) {
 		
 		Class<?> type = obj.getClass();
@@ -305,6 +330,7 @@ public class Auxiliar {
 	        }
 	    }
 	}
+
 
     /*public static void trimResponseObject(Object obj) {
 		
@@ -374,6 +400,7 @@ public class Auxiliar {
         return formatted;
 	}
 	
+
 	public static String addZeros(Object num, int tamanho) {
         String str = num.toString();
         if (str.length() >= tamanho) {
@@ -402,6 +429,7 @@ public class Auxiliar {
         return sb.toString();
     }
 	
+
 	public static String filterNumbers(String stringAFiltrar) {
         Pattern padrao = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+");
 
@@ -416,6 +444,7 @@ public class Auxiliar {
         return numerosString.toString();
     }
 	
+
 	public static Integer verificarCampoData(String campo) {
         Pattern pattern = Pattern.compile("-\\d+");
         Matcher matcher = pattern.matcher(campo);
@@ -427,6 +456,7 @@ public class Auxiliar {
         return -1;
     }
 	
+
 	public static String verificarPreenchimento(Object reg, Dcrlayout campo, String campoAcessado) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 			Class<?> classe = reg.getClass();
 			Field field = classe.getDeclaredField(campo.getCondfield().toLowerCase().trim());
@@ -450,4 +480,5 @@ public class Auxiliar {
 			
 			return Auxiliar.addSpaces(camposAcess.get(reg), campo.getCampotam());
     }
+
 }

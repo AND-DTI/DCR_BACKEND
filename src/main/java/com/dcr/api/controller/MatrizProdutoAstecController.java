@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,41 +13,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.as400.Pendastec;
-import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MtastecDTO;
 import com.dcr.api.model.keys.DcrproccKey;
-import com.dcr.api.model.keys.MtastecKey;
 import com.dcr.api.response.AstecDetailResponse;
 import com.dcr.api.response.ProdutoPendenciaAstecResponse;
-import com.dcr.api.response.ProdutoPendenciaResponse;
-import com.dcr.api.response.ProdutoPendenciaSimplesAstecResponse;
-import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
 import com.dcr.api.response.ProdutoSemListaAstecResponse;
-import com.dcr.api.response.ProdutoSemListaResponse;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MtastecService;
 import com.dcr.api.utils.Auxiliar;
-import com.dcr.api.service.as400.MtastecService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/matriz/produto/astec")
 public class MatrizProdutoAstecController {
 
+
 	@Autowired
 	MtastecService service;
 	
 	@Autowired
 	DcrproccService processoservice;
+
+
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto ASTEC")
@@ -79,6 +73,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getDetail", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto ASTEC")
 	@ApiResponses(value = {
@@ -107,6 +103,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getById", produces = "application/json")
 	@Operation(summary = "Busca uma matriz de produto ASTEC")
 	@ApiResponses(value = {
@@ -136,6 +134,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma matriz de produto ASTEC")
 	@ApiResponses(value = {
@@ -158,6 +158,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera uma Matriz de produto ASTEC")
 	@ApiResponses(value = {
@@ -210,6 +212,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta uma matriz de produto ASTEC")
 	@ApiResponses(value = {
@@ -239,6 +243,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getProdutoPendencia", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -247,11 +253,11 @@ public class MatrizProdutoAstecController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getProdutoPendencia(@RequestParam Integer idmatriz, @RequestParam String partnum) {
+	public ResponseEntity<Object> getProdutoPendencia(@RequestParam Integer idmatriz/*, @RequestParam String partnum*/) {
 	
 		try {
 
-			ProdutoPendenciaSimplesAstecResponse lista = service.getProdutoPendencia(idmatriz, partnum);
+			ProdutoPendenciaAstecResponse lista = service.getProdutoPendencia(idmatriz,"-"); //old ProdutoPendenciaSimplesAstecResponse(idmatriz, partnum)
 	        if (lista.getIdMatriz() == null) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -268,6 +274,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getPendentes", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -279,8 +287,9 @@ public class MatrizProdutoAstecController {
 	public ResponseEntity<Object> getPendentes(@RequestParam List<Integer> status) {
 	
 		try {
+			
+			List<ProdutoSemListaAstecResponse> lista = service.getTodasAsPendencias(status); //j4 - old List<ProdutoPendenciaAstecResponse>
 
-			List<ProdutoPendenciaAstecResponse> lista = service.getTodasAsPendencias(status);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -297,6 +306,8 @@ public class MatrizProdutoAstecController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getPendentesSemLista", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -325,4 +336,6 @@ public class MatrizProdutoAstecController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

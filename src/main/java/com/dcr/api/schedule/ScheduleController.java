@@ -26,9 +26,11 @@ public class ScheduleController {
 	@PostConstruct
 	public void startSchedule() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-		scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, 5, TimeUnit.MINUTES);
-        scheduler.scheduleAtFixedRate(this::explodeMatrizAvulsa, 0, 5, TimeUnit.MINUTES);
-        scheduler.scheduleAtFixedRate(this::verificarPendencias, 0, 30, TimeUnit.MINUTES);
+		scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, 10, TimeUnit.MINUTES);
+        //scheduler.scheduleAtFixedRate(this::explodeMatrizAvulsa, 0, 10, TimeUnit.MINUTES);
+		scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_PRD, 0, 10, TimeUnit.MINUTES);
+		//scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_ASTEC, 0, 10, TimeUnit.MINUTES);
+        //scheduler.scheduleAtFixedRate(this::verificarPendencias, 0, 30, TimeUnit.MINUTES);
 	}
 
 
@@ -79,9 +81,10 @@ public class ScheduleController {
 				idMatriz = objects[0].toString();
 				String tpprd = objects[6].toString();
 				tpprd = tpprd.equals("PC")? "AST" : "PRD";
+				String user = objects[13].toString();
 				sb.append("\n Calling HDCR004C('"+tpprd+"' 'DCRMODELO '"+idMatriz+"')...");
 				//PGM(LPDPGICE/HDCR004C) PARM('PRD' 'DCRMODELO ' '88        ')
-				service.explodeMatrizAvulsa(tpprd, idMatriz);
+				service.explodeMatrizAvulsa(tpprd, user, idMatriz);
 				break; //envia apenas uma matriz
 			}
 	        sb.append("\n Matriz enviada p/ explosao (HDCR0064) --> " + idMatriz); 
@@ -98,6 +101,80 @@ public class ScheduleController {
 
 	//recalcula avulsas apos explosao:
 	//MATRIPRD.FLEX4FLW = 'MATRIZ PENDENTE (AVULSA)'
+	public void reprocessaMatrizAvulsa_PRD() { 
+		
+		try {
+
+			
+			FileWriter fws = new FileWriter("logs/processamentoMatrizAvulsa-PRODUTO.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+
+			
+			sbs.append("\n Calling HDCR005C...");
+			service.reprocessaMatrizAvulsa("PRD"); 
+							    
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Reprocessamento Matriz Avulsa executado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+
+	public void reprocessaPendencias() { 
+		
+		try {
+
+			
+			FileWriter fws = new FileWriter("logs/reprocessamentoPendencias-PRODUTO.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+
+			
+			sbs.append("\n Calling HDCR003C...");
+			//service.reprocessaPendencias("PRD", null, "DCRMODELO"); //criar param in  HDCR003C p/ reprocessar todas as matrizes compendêcia - diariamente 2x dia
+							    
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Reprocessamento de Pendências executado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
+
+	public void reprocessaMatrizAvulsa_ASTEC() { 
+		
+		try {
+
+			
+			FileWriter fws = new FileWriter("logs/processamentoMatrizAvulsa-ASTEC.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+
+			
+			sbs.append("\n Calling HDCR005C...");
+			service.reprocessaMatrizAvulsa("AST"); 
+							    
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Reprocessamento Matriz Avulsa processado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
+
 
 	public void verificarPendencias() {
 		

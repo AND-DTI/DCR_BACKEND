@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.response.MatriprdByTpprdResponse;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
-import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
+//import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
 import com.dcr.api.response.ProdutoSemListaResponse;
 import com.dcr.api.service.as400.MatriprdService;
 import com.dcr.api.utils.Auxiliar;
@@ -106,7 +106,7 @@ public class DetalheProdutoController {
 	
 		try {
 
-			ProdutoPendenciaSimplesResponse lista = service.getProdutoPendencia(idmatriz, partnumpd);
+			ProdutoPendenciaResponse lista = service.getProdutoPendencia(idmatriz, partnumpd); //j4 - old ProdutoPendenciaSimplesResponse
 	        if (lista.getIdMatriz() == null) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -170,7 +170,7 @@ public class DetalheProdutoController {
 
 			List<ProdutoSemListaResponse> lista = service.getPendenciasSemLista(status);
 	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência de produto encontrada!");
 	        }

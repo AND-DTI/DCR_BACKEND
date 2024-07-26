@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-//import com.dcr.api.model.as400.Cadcor;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
@@ -24,8 +23,7 @@ import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MatriitmKey;
-//import com.dcr.api.response.MatriprdResponse;
-//import com.dcr.api.response.ProdutoPendenciaResponse;
+import com.dcr.api.schedule.ScheduleService;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MatriitmService;
 import com.dcr.api.service.as400.MatriprdService;
@@ -38,23 +36,25 @@ import jakarta.servlet.http.HttpServletRequest;
 
 
 
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/matriz/produto")
 public class MatrizProdutoController {
 
+
 	@Autowired
-	MatriprdService service;
-	
+	MatriprdService service;	
 	@Autowired
-	MatriitmService corService;
-	
+	MatriitmService corService;	
 	@Autowired
-	PendprodService pendservice;
-	
+	PendprodService pendservice;	
 	@Autowired
 	DcrproccService processoservice;
+	@Autowired
+	ScheduleService scheduleService;
 	
+
 
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de produto")
@@ -195,11 +195,31 @@ public class MatrizProdutoController {
 				
 				List<Pendprod> pendencias = pendservice.findPendenciasZero(Long.valueOf(cor.idmatriz()), cor.partnumpd());
 		        
-		        if(pendencias.isEmpty() && cor.priocor() == 1) {
+
+				//Se nao tem pendencia em aberto (0) - avanca para 3 (em diagnostico) senão avança para 1 (em tratativa de pendencias) //j4 adeed:
+				if (cor.priocor() == 1){
+
+					DcrproccKey dcrproccKey = new DcrproccKey();
+					dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
+					dcrproccKey.setPartnumpd(cor.partnumpd());					
+					dcrproccKey.setTpprd(dto.tpprd());
+					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+					
+					int status = pendencias.isEmpty()? 3: 1;									
+					if(!dcr.isEmpty()){
+						if(dcr.get().getStatus() < status){
+							processoservice.setStatus(dcr.get(), status, request);
+						}						
+					}
+					
+				}
+
+
+				//Gui: j4 - commented
+				/*if(pendencias.isEmpty() && cor.priocor() == 1) {
 		        	DcrproccKey dcrproccKey = new DcrproccKey();
 		        	dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
-		        	dcrproccKey.setPartnumpd(cor.partnumpd());
-					
+		        	dcrproccKey.setPartnumpd(cor.partnumpd());					
 		        	dcrproccKey.setTpprd(dto.tpprd());
 					
 					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
@@ -207,13 +227,12 @@ public class MatrizProdutoController {
 		        }else {
 		        	DcrproccKey dcrproccKey = new DcrproccKey();
 		        	dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
-		        	dcrproccKey.setPartnumpd(cor.partnumpd());
-					
+		        	dcrproccKey.setPartnumpd(cor.partnumpd());					
 		        	dcrproccKey.setTpprd(dto.tpprd());
 					
 					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
 		        	processoservice.setStatus(dcr.get(), 1, request);
-		        }
+		        }*/
 				
 			}
 			Optional<Matriprd> lista = service.getByID(dto.idmatriz());
@@ -307,4 +326,107 @@ public class MatrizProdutoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
+	@GetMapping(value = "/reprocStruct", produces = "application/json")
+	@Operation(summary = "Recalcula estrutura de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "OK"),
+	        @ApiResponse(responseCode = "400", description = "Matriz não existe"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> reprocStruct(@RequestParam Integer idmatriz, HttpServletRequest request) {
+	
+		try {
+	       
+			
+			Optional<Matriprd> lista = service.getByID(idmatriz);
+
+			if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz de produto com este ID não encontrada!");
+	        }
+
+			Matriprd matriz = lista.get();
+			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.header("Accept", "application/json")
+				.body("Matriz bloqueada por outro processo!");
+			}
+			
+			//Chama explosão direto (HDCR004C) sem schedule (schedule somente p/ pós explosão - HDCR005C):
+			matriz.setFlex4flw("MATRIZ PENDENTE REPROCESSAMENTO");
+			service.save(matriz, request); //save atualiza Itaudusr	
+			String tpprd = matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";					
+			scheduleService.explodeMatrizAvulsa(tpprd,  matriz.getItaudusr(), matriz.getIdmatriz().toString());
+						
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Matriz enviada para reprocessamento com sucesso!");
+
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
+	}
+
+
+
+	@GetMapping(value = "/reprocPendencies", produces = "application/json")
+	@Operation(summary = "Recalcula estrutura de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "OK"),
+	        @ApiResponse(responseCode = "400", description = "Matriz não existe"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> reprocPendencies(@RequestParam Integer idmatriz, HttpServletRequest request) {
+	
+		try {
+	       
+			
+			Optional<Matriprd> lista = service.getByID(idmatriz);
+
+			if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz de produto com este ID não encontrada!");
+	        }
+
+			Matriprd matriz = lista.get();
+			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.header("Accept", "application/json")
+				.body("Matriz bloqueada por outro processo!");
+			}
+			
+			//Chama explosão direto (HDCR004C) sem schedule (schedule somente p/ pós explosão - HDCR005C):
+			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
+			service.save(matriz, request); //save atualiza Itaudusr	
+			String tpprd = matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";					
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr());
+						
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Matriz enviada para reprocessamento de pendências com sucesso!");
+
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
+	}
+
+
+
+
+
+
 }

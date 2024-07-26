@@ -1,21 +1,37 @@
 package com.dcr.api.response;
 
+
+
 public class InsumosAstecResponse {
-	private Object partnum;
+
+
+	private Object idmatriz;  //key - j4
+	private Object partnum;   //key - j4
+
 	private Object partdesc;
 	private Object itmorg;
 	private Object ittyp;
-	private Object unmsr;
+	private Object unmsr;	
 	private Object necfil;
 	private Object cdspn;
 	private Object weght;
 	private Object emcomp;
-	private Object ncm;
-	private Object vlrunit;
+	private Object espec;   //j4 - added
+	private Object undcom;  //j4 - added
+	private Object ncm;     
+	private Object vlrunit;	
 	private Object partsugest;
 	private Object partsugdsc;
 	private Object partnew;
 	private Object partnewdsc;
+
+	
+	public Object getIdmatriz() {
+		return idmatriz;
+	}
+	public void setIdmatriz(Object idmatriz) {
+		this.idmatriz = idmatriz;
+	}
 	public Object getPartnum() {
 		return partnum;
 	}
@@ -70,6 +86,18 @@ public class InsumosAstecResponse {
 	public void setEmcomp(Object emcomp) {
 		this.emcomp = emcomp;
 	}
+	public Object getEspec() {
+		return espec;
+	}
+	public void setEspec(Object espec) {
+		this.espec = espec;
+	}
+	public Object getUndcom() {
+		return undcom;
+	}
+	public void setUndcom(Object undcom) {
+		this.undcom = undcom;
+	}
 	public Object getNcm() {
 		return ncm;
 	}
@@ -106,4 +134,7 @@ public class InsumosAstecResponse {
 	public void setPartnewdsc(Object partnewdsc) {
 		this.partnewdsc = partnewdsc;
 	}
+
+
+
 }

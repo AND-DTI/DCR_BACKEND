@@ -1,6 +1,10 @@
 package com.dcr.api.response;
 
+
+
 public class PendenciaResponseSemLista {
+
+
 	private Object partnum;
 	private Object numpend;
     private Object cdpend;
@@ -12,7 +16,6 @@ public class PendenciaResponseSemLista {
     private Object serdoc2;
     private Object emidoc;
     private Object emidoc2;
-    
     
     private Object obsresol;
     private Object numdoc2;
@@ -26,6 +29,7 @@ public class PendenciaResponseSemLista {
     private Object serdoc3;
     private Object emidoc3;
     
+	
 	public Object getCdbej() {
 		return cdbej;
 	}

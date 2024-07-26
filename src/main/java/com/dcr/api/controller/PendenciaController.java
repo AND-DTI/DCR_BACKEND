@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Cadtppend;
 import com.dcr.api.model.as400.Pendastec;
 import com.dcr.api.model.as400.Pendprod;
@@ -25,16 +22,19 @@ import com.dcr.api.service.as400.PendastecService;
 import com.dcr.api.service.as400.PendprodService;
 import com.dcr.api.service.as400.PendrespService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/pendencia")
 public class PendenciaController {
+
 
 	@Autowired
 	CadtppendService service;
@@ -48,6 +48,8 @@ public class PendenciaController {
 	@Autowired
 	PendastecService pendastec;
 	
+	
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as pendências")
 	@ApiResponses(value = {
@@ -77,11 +79,14 @@ public class PendenciaController {
 		}   
 	}
 	
+
+
+
 	@GetMapping(value = "/getByID", produces = "application/json")
-	@Operation(summary = "Busca todas as pendências")
+	@Operation(summary = "Busca pendência por ID")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência encontrada!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhuma pendência encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
@@ -91,7 +96,7 @@ public class PendenciaController {
 			
 			Optional<Cadtppend> lista = service.getByID(id);
 	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência encontrado!");
 	        }
@@ -100,6 +105,7 @@ public class PendenciaController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
+					
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")

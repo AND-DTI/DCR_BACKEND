@@ -46,8 +46,8 @@ public class Matriprd {
 	@Column(columnDefinition = "char(80)")
 	private String descrfb;
 	
-	@TamanhoMaximo(2)
-	@Column(columnDefinition = "char(2)")
+	@TamanhoMaximo(4) //j4 - old 2
+	@Column(columnDefinition = "char(4)") //j4 - old 2
 	private String tpprd;
 	
 	@TamanhoMaximo(1)
@@ -106,7 +106,15 @@ public class Matriprd {
 	//@TamanhoMinimo(1) J4
 	@Column(columnDefinition = "char(250)")
     private String obsprio;
-	
+
+	@TamanhoMaximo(10)
+	@Column(columnDefinition = "bigint")
+	private Long flex1flw;	
+
+	@TamanhoMaximo(40)
+	@Column(columnDefinition = "char(40)")
+	private String flex4flw;	
+
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;	
 	
@@ -172,6 +180,16 @@ public class Matriprd {
 
 	public String getPriohrmnt() {		return priohrmnt;	}
 	public void setPriohrmnt(String priohrmnt) {		this.priohrmnt = priohrmnt;	}
+
+	public Long getFlex1flw() {		return flex1flw;	}
+	public void setFlex1flw(Long flex1flw) {		
+		this.flex1flw = flex1flw==null? 0 : flex1flw;
+	}
+
+	public String getFlex4flw() {		return flex4flw;	}
+	public void setFlex4flw(String flex4flw) {		
+		this.flex4flw = flex4flw==null? "" : flex4flw;
+	}
 
 	public String getItaudsys() {		return itaudsys;	}
 	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}

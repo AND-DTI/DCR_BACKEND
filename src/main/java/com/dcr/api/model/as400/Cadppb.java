@@ -41,8 +41,7 @@ public class Cadppb {
 	@Column(columnDefinition = "char(25)")
 	private String tpprd;
 	
-	@TamanhoMaximo(150)
-	@TamanhoMinimo(1)
+	@TamanhoMaximo(150)	
 	@Column(columnDefinition = "char(150)")
 	private String desccom;
 	
@@ -90,10 +89,10 @@ public class Cadppb {
 	public void setTpprd(String tpprd) {		this.tpprd = tpprd;	}
 
 	public String getDesccom() {		return desccom;	}
-	public void setDesccom(String desccom) {		this.desccom = desccom;	}
+	public void setDesccom(String desccom) {		this.desccom = desccom==null? "" : desccom;	}
 
 	public String getDescrfb() {		return descrfb;	}
-	public void setDescrfb(String descrfb) {		this.descrfb = descrfb;	}
+	public void setDescrfb(String descrfb) {		this.descrfb = descrfb==null? "" : descrfb;	}
 
 	public String getPrddest() {		return prddest;	}
 	public void setPrddest(String prddest) {		this.prddest = prddest;	}

@@ -1,5 +1,7 @@
 package com.dcr.api.schedule;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 //import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,19 +29,37 @@ public class ScheduleService {
 		return repositorySchedule.produtosPendentes();
 	}
 
+
 	public int atualizaProdutoAcabado() {
 		return repositorySchedule.atualizaProdutoAcabado();
 	}
 
-	public int explodeMatrizAvulsa(String TpPrd, String idMatriz){
+
+	public int explodeMatrizAvulsa(String TpPrd, String usersys, String idMatriz){
 
 		//complete blank til 10 in idmatriz 
-		idMatriz = (idMatriz+"          ").substring(0, 10);
-		//idMatiz = StringUtils.leftPad(idMatiz, 10);
-		return repositorySchedule.explodeMatrizAvulsa(TpPrd, "DCRMODELO ", idMatriz);
+		idMatriz = (idMatriz+"          ").substring(0, 10);		
+		usersys = StringUtils.rightPad(usersys, 10);
+		return repositorySchedule.explodeMatrizAvulsa(TpPrd, usersys, idMatriz);
 		//String cmd = "call HDCR004C('"+TpPrd+"' 'DCRMODELO ' '"+idMatriz+"')";
 		//return repositorySchedule.callCL(cmd);
 	}
 
 	
+	public int reprocessaPendencias(String TpPrd, String idMatriz, String usersys){
+		
+		idMatriz = StringUtils.rightPad(idMatriz, 10);
+		usersys  = StringUtils.rightPad(usersys, 10);
+		return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, "PEN");
+				
+	}	
+
+	
+
+
+	public int reprocessaMatrizAvulsa(String tpprd){
+				
+		return repositorySchedule.reprocessaAvulsa(tpprd);
+
+	}
 }

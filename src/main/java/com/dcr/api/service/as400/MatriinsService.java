@@ -124,9 +124,19 @@ public class MatriinsService {
 		return repository.save(matriz);
 	}
 	
-public Matriins resolverPendencia(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+	public Matriins resolverPendencia(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
+
+
+	//j4- added
+	public Matriins salvar(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+	}
+
+
 }

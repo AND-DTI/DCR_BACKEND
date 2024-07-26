@@ -1,20 +1,20 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.MatriinsKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+
 
 @Entity
 @Table(name = "MATRIINS", schema = "HD4DCDHH")
 @ApiModel
 public class Matriins {
+
 
 	@EmbeddedId
 	private MatriinsKey key;
@@ -44,7 +44,7 @@ public class Matriins {
 	private Double necfil;
 	
 	@TamanhoMaximo(20)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) - j4 removidos de todos os nao obrigatorios
 	@Column(columnDefinition = "char(20)")
 	private String cdspn;
 	
@@ -68,31 +68,27 @@ public class Matriins {
 	private String undcom;
 	
 	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) ?
 	@Column(columnDefinition = "char(8)")
 	private String ncm;
 	
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1) ?
 	@Column(columnDefinition = "decimal(15,6)")
 	private Double vlrunit;
 	
-	@TamanhoMaximo(25)
-	@TamanhoMinimo(1)
+	@TamanhoMaximo(25)	
 	@Column(columnDefinition = "char(25)")
 	private String partsugest;
 	
 	@TamanhoMaximo(30)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
 	private String partsugdsc;
 	
 	@TamanhoMaximo(25)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(25)")
 	private String partnew;
 	
 	@TamanhoMaximo(30)
-	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
 	private String partnewdsc;
 	
@@ -102,7 +98,7 @@ public class Matriins {
 	@Column(columnDefinition = "char(10)")
     private String itaudusr;
 	
-	@Column(columnDefinition = "char(20)")
+	@Column(columnDefinition = "char(30)")
     private String itaudhst;
 	
 	@Column(columnDefinition = "char(8)")
@@ -111,179 +107,68 @@ public class Matriins {
 	@Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public MatriinsKey getKey() {
-		return key;
-	}
+	
+	public MatriinsKey getKey() {		return key;	}
+	public void setKey(MatriinsKey key) {		this.key = key;	}
 
-	public void setKey(MatriinsKey key) {
-		this.key = key;
-	}
+	public String getPartdesc() {		return partdesc;	}
+	public void setPartdesc(String partdesc) {		this.partdesc = partdesc;	}
 
-	public String getPartdesc() {
-		return partdesc;
-	}
+	public String getItmorg() {		return itmorg;	}
+	public void setItmorg(String itmorg) {		this.itmorg = itmorg;	}
 
-	public void setPartdesc(String partdesc) {
-		this.partdesc = partdesc;
-	}
+	public String getIttyp() {		return ittyp;	}
+	public void setIttyp(String ittyp) {		this.ittyp = ittyp;	}
 
-	public String getItmorg() {
-		return itmorg;
-	}
+	public String getUnmsr() {		return unmsr;	}
+	public void setUnmsr(String unmsr) {		this.unmsr = unmsr;	}
 
-	public void setItmorg(String itmorg) {
-		this.itmorg = itmorg;
-	}
+	public Double getNecfil() {		return necfil;	}
+	public void setNecfil(Double necfil) {		this.necfil = necfil;	}
 
-	public String getIttyp() {
-		return ittyp;
-	}
+	public String getCdspn() {		return cdspn;	}
+	public void setCdspn(String cdspn) {		this.cdspn = cdspn==null? "" : cdspn;	}
 
-	public void setIttyp(String ittyp) {
-		this.ittyp = ittyp;
-	}
+	public Double getWeght() {		return weght;	}
+	public void setWeght(Double weght) {		this.weght = weght;	}
 
-	public String getUnmsr() {
-		return unmsr;
-	}
+	public String getEmcomp() {		return emcomp;	}
+	public void setEmcomp(String emcomp) {		this.emcomp = emcomp;	}
 
-	public void setUnmsr(String unmsr) {
-		this.unmsr = unmsr;
-	}
+	public String getEspec() {		return espec;	}
+	public void setEspec(String espec) {		this.espec = espec;	}
 
-	public String getCdspn() {
-		return cdspn;
-	}
+	public String getUndcom() {		return undcom;	}
+	public void setUndcom(String undcom) {		this.undcom = undcom;	}
 
-	public void setCdspn(String cdspn) {
-		this.cdspn = cdspn;
-	}
+	public String getNcm() {		return ncm;	}
+	public void setNcm(String ncm) {		this.ncm = ncm==null? "" : ncm;	}	
 
-	public String getEmcomp() {
-		return emcomp;
-	}
+	public Double getVlrunit() {		return vlrunit;	}
+	public void setVlrunit(Double vlrunit) {		this.vlrunit = vlrunit;	}
 
-	public void setEmcomp(String emcomp) {
-		this.emcomp = emcomp;
-	}
+	public String getPartsugest() {		return partsugest;	}
+	public void setPartsugest(String partsugest) {		this.partsugest = partsugest==null? "" : partsugest;	}
 
-	public String getPartsugest() {
-		return partsugest;
-	}
+	public String getPartsugdsc() {		return partsugdsc;	}
+	public void setPartsugdsc(String partsugdsc) {		this.partsugdsc = partsugdsc==null? "" : partsugdsc;	}
 
-	public void setPartsugest(String partsugest) {
-		this.partsugest = partsugest;
-	}
+	public String getPartnew() {		return partnew;	}
+	public void setPartnew(String partnew) {		this.partnew = partnew==null? "" : partnew;	}
 
-	public String getPartsugdsc() {
-		return partsugdsc;
-	}
+	public String getPartnewdsc() {		return partnewdsc;	}
+	public void setPartnewdsc(String partnewdsc) {		this.partnewdsc = partnewdsc==null? "" : partnewdsc;	}
 
-	public void setPartsugdsc(String partsugdsc) {
-		this.partsugdsc = partsugdsc;
-	}
 
-	public String getPartnew() {
-		return partnew;
-	}
+	public String getItaudsys() {		return itaudsys;	}
+	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}
+	public String getItaudusr() {		return itaudusr;	}
+	public void setItaudusr(String itaudusr) {		this.itaudusr = itaudusr;	}
+	public String getItaudhst() {		return itaudhst;	}
+	public void setItaudhst(String itaudhst) {		this.itaudhst = itaudhst;	}
+	public String getItauddt() {		return itauddt;	}
+	public void setItauddt(String itauddt) {		this.itauddt = itauddt;	}
+	public String getItaudhr() {		return itaudhr;	}
+	public void setItaudhr(String itaudhr) {		this.itaudhr = itaudhr;	}	
 
-	public void setPartnew(String partnew) {
-		this.partnew = partnew;
-	}
-
-	public String getPartnewdsc() {
-		return partnewdsc;
-	}
-
-	public void setPartnewdsc(String partnewdsc) {
-		this.partnewdsc = partnewdsc;
-	}
-
-	public String getItaudsys() {
-		return itaudsys;
-	}
-
-	public void setItaudsys(String itaudsys) {
-		this.itaudsys = itaudsys;
-	}
-
-	public String getItaudusr() {
-		return itaudusr;
-	}
-
-	public void setItaudusr(String itaudusr) {
-		this.itaudusr = itaudusr;
-	}
-
-	public String getItaudhst() {
-		return itaudhst;
-	}
-
-	public void setItaudhst(String itaudhst) {
-		this.itaudhst = itaudhst;
-	}
-
-	public String getItauddt() {
-		return itauddt;
-	}
-
-	public void setItauddt(String itauddt) {
-		this.itauddt = itauddt;
-	}
-
-	public String getItaudhr() {
-		return itaudhr;
-	}
-
-	public void setItaudhr(String itaudhr) {
-		this.itaudhr = itaudhr;
-	}
-
-	public Double getNecfil() {
-		return necfil;
-	}
-
-	public void setNecfil(Double necfil) {
-		this.necfil = necfil;
-	}
-
-	public Double getWeght() {
-		return weght;
-	}
-
-	public void setWeght(Double weght) {
-		this.weght = weght;
-	}
-
-	public String getEspec() {
-		return espec;
-	}
-
-	public void setEspec(String espec) {
-		this.espec = espec;
-	}
-
-	public String getUndcom() {
-		return undcom;
-	}
-
-	public void setUndcom(String undcom) {
-		this.undcom = undcom;
-	}
-
-	public String getNcm() {
-		return ncm;
-	}
-
-	public void setNcm(String ncm) {
-		this.ncm = ncm;
-	}
-
-	public Double getVlrunit() {
-		return vlrunit;
-	}
-
-	public void setVlrunit(Double vlrunit) {
-		this.vlrunit = vlrunit;
-	}
 }
