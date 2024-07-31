@@ -233,7 +233,7 @@ public class ProcessoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getResumo(@RequestParam Long idmatriz,@RequestParam String partnumpd, HttpServletRequest request) {
+	public ResponseEntity<Object> getResumo(@RequestParam Long idmatriz, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
 	
 		try {
 		
@@ -249,6 +249,44 @@ public class ProcessoController {
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);
+	       
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	
+	}
+
+
+
+	@GetMapping(value = "/geraRegistros", produces = "application/json") //"text/plain" causes error in axios requisition
+	@Operation(summary = "Gera registros da matriz (0 a 9)")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Registros criados!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum Processo encontrado para geração de registros!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> geraRegistros(@RequestParam Integer idmatriz, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
+	
+		try {
+		
+
+			DcrproccKey key = new DcrproccKey(idmatriz, partnumpd, tpprd);					
+			Optional<Dcrprocc> dcr = service.getByKey(key);
+			
+			if (dcr.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.header("Accept", "application/json")
+						.body("Nenhum Processo encontrado para geração de registros!");
+		    }
+
+			String resultado = service.geraRegistrosMatriz(idmatriz, partnumpd, request);
+											
+			return ResponseEntity.status(HttpStatus.OK)
+			        .header("Accept", "application/json")
+			            .body(resultado);
 	       
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 

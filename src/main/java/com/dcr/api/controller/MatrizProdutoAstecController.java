@@ -184,7 +184,7 @@ public class MatrizProdutoAstecController {
 	        
 	        if(pendencias.isEmpty()) {
 	        	DcrproccKey dcrproccKey = new DcrproccKey();
-	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setIdmatriz(Integer.valueOf(dto.idmatriz()));
 	        	dcrproccKey.setPartnumpd(dto.partnumpd());
 				
 	        	dcrproccKey.setTpprd("PC");
@@ -193,7 +193,7 @@ public class MatrizProdutoAstecController {
 	        	processoservice.setStatus(dcr.get(), 3, request);
 	        }else {
 	           	DcrproccKey dcrproccKey = new DcrproccKey();
-	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setIdmatriz(Integer.valueOf(dto.idmatriz()));
 	        	dcrproccKey.setPartnumpd(dto.partnumpd());
 				
 	        	dcrproccKey.setTpprd("PC");

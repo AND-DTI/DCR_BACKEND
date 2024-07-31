@@ -11,7 +11,8 @@ public class ProdutoPendenciaResponse {
     private Object anomdl;
     private Object desccom;
     private Object descrfb;
-    private Object tpprd;
+	private Object ppbprd;    
+	private Object tpprd;
     private Object protot;
     private Object special;
     private Object tpdcre;
@@ -49,6 +50,9 @@ public class ProdutoPendenciaResponse {
 
 	public Object getDescrfb() {		return descrfb;	}
 	public void setDescrfb(Object descrfb) {		this.descrfb = descrfb;	}
+
+	public Object getPpbprd() {		return ppbprd;	}
+	public void setPpbprd(Object ppbprd) {		this.ppbprd = ppbprd;	}
 
 	public Object getTpprd() {		return tpprd;	}
 	public void setTpprd(Object tpprd) {		this.tpprd = tpprd;	}

@@ -316,7 +316,7 @@ public class MatrizPendenciaController {
 	        
 	        if(pendencias.isEmpty()) {
 	        	DcrproccKey dcrproccKey = new DcrproccKey();
-	        	dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+	        	dcrproccKey.setIdmatriz(Integer.valueOf(dto.idmatriz()));
 	        	dcrproccKey.setPartnumpd(dto.partnumpd());
 				
 	        	dcrproccKey.setTpprd(dto.tpprd());
@@ -387,7 +387,7 @@ public class MatrizPendenciaController {
 
 			//Pega registro Processo (DCRPROCC)
 			DcrproccKey dcrproccKey = new DcrproccKey();
-			dcrproccKey.setIdmatriz(Long.valueOf(dto.idmatriz()));
+			dcrproccKey.setIdmatriz(Integer.valueOf(dto.idmatriz()));
 			dcrproccKey.setPartnumpd(dto.partnumpd());				
 			dcrproccKey.setTpprd(dto.tpprd());				
 			Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
@@ -496,7 +496,7 @@ public class MatrizPendenciaController {
 
 			//AVANÇA PARA DIAGNÓSTICO (se não há mais pendências em aberto):
 	        List<Pendprod> pendencias = service.findPendenciasZero(Long.valueOf(dto.idmatriz()), dto.partnumpd());	        
-	        if(pendencias.isEmpty()) {
+	        if(pendencias.isEmpty()) { 
 	        	
 	        	//processoservice.setStatus(dcrprocc, 3, request);
 				//cria pendencia de confirmacao de avanço p/ diagnóstico

@@ -280,6 +280,7 @@ public class MatriprdService {
         	String _Anomdl    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Desccom   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Descrfb   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ppbprd    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Tpprd 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Protot    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Special   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -290,7 +291,7 @@ public class MatriprdService {
         	String _Prevfat   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Prioresp  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Priodtmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _PrioHRmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //16		
+        	String _PrioHRmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //17		
 			
 			String _Partnumpd = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;       
 			String _Codcor    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -303,7 +304,7 @@ public class MatriprdService {
 			String _Status    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
 			String _Cdbej     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;        	
 			String _Coreng    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Tppin     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //28
+			String _Tppin     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //29
 			
 			String _Numpend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Cdpend     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -312,12 +313,12 @@ public class MatriprdService {
 			String _Descpend   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
 			String _Obspend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
 			String _Obsdetail  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-			String _Tpreg      = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 			 
+			String _Tpreg      = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //37			 
         	String _Partnum    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  
 			String _Partsugest = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partsugdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partnew    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //41
+			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //42
 
 			String _PartdescIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Itmorg = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -330,7 +331,7 @@ public class MatriprdService {
 			String _Espec = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Undcom = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _NcmIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Vlrunit = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;	//53	
+			String _Vlrunit = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;	//54	
 			
 			String _Tpdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Numdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -343,7 +344,7 @@ public class MatriprdService {
 			String _VlrunitDoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Siglaund = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Codinco = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;   //54     							
+			String _Modal = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;   //66    							
 			String _Numdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Serdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Emidoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -365,7 +366,7 @@ public class MatriprdService {
 			String _Vlrunit3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Siglaund3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Codinco3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  //87		
+			String _Modal3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  //88		
 			//#endregion
 
 			produto.setIdMatriz( _IdMatriz );
@@ -374,6 +375,7 @@ public class MatriprdService {
         	produto.setAnomdl( _Anomdl );
         	produto.setDesccom( _Desccom );
         	produto.setDescrfb(_Descrfb );
+			produto.setPpbprd(_Ppbprd);
         	produto.setTpprd( _Tpprd );
         	produto.setProtot( _Protot );
         	produto.setSpecial( _Special );
@@ -534,146 +536,7 @@ public class MatriprdService {
 			}
 
 		}
-
-        	/*resp.setIdMatriz( (resultado[0] != null) ? resultado[0].toString().trim() : "" );
-        	resp.setProduto(  (resultado[1] != null) ? resultado[1].toString().trim() : "");
-        	resp.setModelo(  (resultado[2] != null) ? resultado[2].toString().trim() : "");
-        	resp.setAnomdl(  (resultado[3] != null) ? resultado[3].toString().trim() : "");
-        	resp.setDesccom(  (resultado[4] != null) ? resultado[4].toString().trim() : "");
-        	resp.setDescrfb(  (resultado[5] != null) ? resultado[5].toString().trim() : "");
-        	resp.setTpprd( (resultado[6] != null) ? resultado[6].toString().trim() : "");
-        	resp.setProtot(  (resultado[7] != null) ? resultado[7].toString().trim() : "");
-        	resp.setSpecial(  (resultado[8] != null) ? resultado[8].toString().trim() : "");
-        	resp.setTpdcre((resultado[9] != null) ? resultado[9].toString().trim() : "");
-        	resp.setOrig((resultado[10] != null) ? resultado[10].toString().trim() : "");
-        	resp.setDtneci(  (resultado[11] != null) ? resultado[11].toString().trim() : "");
-        	resp.setPriourgen(  (resultado[12] != null) ? resultado[12].toString().trim() : "");
-        	resp.setPrevfat(  (resultado[13] != null) ? resultado[13].toString().trim() : "");
-        	resp.setPrioresp(  (resultado[14] != null) ? resultado[14].toString().trim() : "");
-        	resp.setPriodtmnt(  (resultado[15] != null) ? resultado[15].toString().trim() : "");
-        	resp.setPrioHRmnt(  (resultado[16] != null) ? resultado[16].toString().trim() : "");
-        	resp.setModelo((resultado[18] != null) ? resultado[18].toString().trim() : "");
         	
-        	cor.setPartnumpd(  (resultado[17] != null) ? resultado[17].toString().trim() : "");
-        	cor.setCodcor(  (resultado[19] != null) ? resultado[19].toString().trim() : "");
-        	cor.setPartdesc(  (resultado[20] != null) ? resultado[20].toString().trim() : "");
-        	cor.setUnmed(  (resultado[21] != null) ? resultado[21].toString().trim() : "");
-        	cor.setPriocor(  (resultado[22] != null) ? resultado[22].toString().trim() : "");
-        	cor.setIdmatriz((resultado[49] != null) ? resultado[49].toString().trim() : "");
-        	cor.setCorpt((resultado[67] != null) ? resultado[67].toString().trim() : "");
-        	
-        	item.setPartnum( (resultado[23] != null) ? resultado[23].toString().trim() : "");
-        	item.setItmorg((resultado[24] != null) ? resultado[24].toString().trim() : "");
-        	item.setIttyp( (resultado[25] != null) ? resultado[25].toString().trim() : "");
-        	item.setUnmsr( (resultado[26] != null) ? resultado[26].toString().trim() : "");
-        	item.setNecfil( (resultado[27] != null) ? resultado[27].toString().trim() : "");
-        	item.setCdspn( (resultado[28] != null) ? resultado[28].toString().trim() : "");
-        	item.setWeght( (resultado[29] != null) ? resultado[29].toString().trim() : "");
-        	item.setEmcomp( (resultado[30] != null) ? resultado[30].toString().trim() : "");
-        	item.setPartsugest( (resultado[31] != null) ? resultado[31].toString().trim() : "");
-        	item.setPartsugdsc((resultado[32] != null) ? resultado[32].toString().trim() : "");
-        	item.setPartnew( (resultado[33] != null) ? resultado[33].toString().trim() : "");
-        	item.setPartnewdsc( (resultado[34] != null) ? resultado[34].toString().trim() : "");
-        	item.setPartnumpd((resultado[65] != null) ? resultado[65].toString().trim() : "");
-        	
-        	pend.setNumpend( (resultado[35] != null) ? resultado[35].toString().trim() : "");
-        	pend.setCdpend( (resultado[36] != null) ? resultado[36].toString().trim() : "");
-        	pend.setObspend( (resultado[68] != null) ? resultado[68].toString().trim() : "");
-        	pend.setStatus( (resultado[38] != null) ? resultado[38].toString().trim() : "");
-        	pend.setPartnum((resultado[50] != null) ? resultado[50].toString().trim() : "");
-        	pend.setIdmatriz((resultado[51] != null) ? resultado[51].toString().trim() : "");
-        	pend.setPartnumpd((resultado[66] != null) ? resultado[66].toString().trim() : "");
-        	pend.setObsresol((resultado[69] != null) ? resultado[69].toString().trim() : "");
-        	
-        	pend.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
-        	pend.setNumdoc2((resultado[43] != null) ? resultado[43].toString().trim() : "");
-        	pend.setSerdoc((resultado[41] != null) ? resultado[41].toString().trim() : "");
-        	pend.setSerdoc2((resultado[44] != null) ? resultado[44].toString().trim() : "");
-        	pend.setEmidoc((resultado[42] != null) ? resultado[42].toString().trim() : "");
-        	pend.setEmidoc2((resultado[45] != null) ? resultado[45].toString().trim() : "");
-        	
-        	doc.setTpdoc((resultado[39] != null) ? resultado[39].toString().trim() : "");
-        	doc.setNumdoc((resultado[40] != null) ? resultado[40].toString().trim() : "");
-        	doc.setSerdoc((resultado[41] != null) ? resultado[41].toString().trim() : "");
-        	doc.setEmidoc((resultado[42] != null) ? resultado[42].toString().trim() : "");
-        	doc.setNumdoc2((resultado[43] != null) ? resultado[43].toString().trim() : "");
-        	doc.setSerdoc2((resultado[44] != null) ? resultado[44].toString().trim() : "");
-        	doc.setEmidoc2((resultado[45] != null) ? resultado[45].toString().trim() : "");
-        	doc.setNumdoc3((resultado[46] != null) ? resultado[46].toString().trim() : "");
-        	doc.setSerdoc3((resultado[47] != null) ? resultado[47].toString().trim() : "");
-        	doc.setEmidoc3((resultado[48] != null) ? resultado[48].toString().trim() : "");
-        	doc.setPartnum((resultado[52] != null) ? resultado[52].toString().trim() : "");
-        	
-        	doc.setCnpjfor((resultado[53] != null) ? resultado[53].toString().trim() : "");
-        	doc.setIe((resultado[54] != null) ? resultado[54].toString().trim() : "");
-        	doc.setAdicao((resultado[55] != null) ? resultado[55].toString().trim() : "");
-        	doc.setItadicao((resultado[56] != null) ? resultado[56].toString().trim() : "");
-        	
-         	doc.setCnpjfor2((resultado[57] != null) ? resultado[57].toString().trim() : "");
-        	doc.setIe2((resultado[58] != null) ? resultado[58].toString().trim() : "");
-        	doc.setAdicao2((resultado[59] != null) ? resultado[59].toString().trim() : "");
-        	doc.setItadicao2((resultado[60] != null) ? resultado[60].toString().trim() : "");
-        	
-         	doc.setCnpjfor3((resultado[61] != null) ? resultado[61].toString().trim() : "");
-        	doc.setIe3((resultado[62] != null) ? resultado[62].toString().trim() : "");
-        	doc.setAdicao3((resultado[63] != null) ? resultado[63].toString().trim() : "");
-        	doc.setItadicao3((resultado[64] != null) ? resultado[64].toString().trim() : "");
-        	doc.setPartnumpd((resultado[70] != null) ? resultado[70].toString().trim() : "");
-        	Boolean existeItem = Boolean.FALSE;
-        	for (ProdutoPendenciaResponseList coresSimplesResponse : listaItemSet) {
-				if(coresSimplesResponse.getPartnum().equals(item.getPartnum())) {
-					existeItem = Boolean.TRUE;
-				}
-			}
-        	if(!existeItem) {
-        		listaItemSet.add(item);
-        	}
-        	
-        	
-        	Boolean existeCor = Boolean.FALSE;
-        	for (CoresSimplesResponse coresSimplesResponse : coresSet) {
-				if(coresSimplesResponse.getPartnumpd().equals(cor.getPartnumpd())) {
-					existeCor = Boolean.TRUE;
-				}
-			}
-        	if(!existeCor) {
-        		coresSet.add(cor);
-        	}
-        	
-        	
-        	Boolean existePend = Boolean.FALSE;
-        	for (PendenciaResponse coresSimplesResponse : listaPendSet) {
-				if(coresSimplesResponse.getNumpend().equals(pend.getNumpend())) {
-					existePend = Boolean.TRUE;
-				}
-			}
-        	if(!existePend) {
-        		listaPendSet.add(pend);
-        	}
-        	
-        	Boolean existeDoc = Boolean.FALSE;
-        	for (DocumentosResponse coresSimplesResponse : listaDocSet) {
-				if(coresSimplesResponse.getNumdoc().equals(doc.getNumdoc()) && coresSimplesResponse.getPartnumpd().equals(doc.getPartnumpd())) {
-					existeDoc = Boolean.TRUE;
-				}
-			}
-        	if(!existeDoc) {
-        		listaDocSet.add(doc);
-        	}
-        }
-        List<CoresSimplesResponse> listaCor = new ArrayList<>(coresSet);
-        List<ProdutoPendenciaResponseList> listaItem = new ArrayList<>(listaItemSet);
-        List<PendenciaResponse> listaPend = new ArrayList<>(listaPendSet);
-        List<DocumentosResponse> listaDoc = new ArrayList<>(listaDocSet);
-        resp.setItens(removerDuplicatas(listaItem));
-        resp.setPendencias(listaPend);
-        resp.setDocumentos(removerDuplicatas(listaDoc));
-        resp.setCores(removerDuplicatas(listaCor));
-       
-        for (PendenciaResponse pendencia : resp.getPendencias()) {
-			pendencia = complementaPendencia(pendencia, resp);
-		}*/
-
 		return produto; 
 	}
 	
@@ -1006,6 +869,7 @@ public class MatriprdService {
         	String _Anomdl    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Desccom   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Descrfb   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ppbprd    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Tpprd 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Protot    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Special   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -1016,7 +880,7 @@ public class MatriprdService {
         	String _Prevfat   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Prioresp  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Priodtmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _PrioHRmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //16		
+        	String _PrioHRmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //17	
 			
 			String _Partnumpd = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;       
 			String _Codcor    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -1038,12 +902,12 @@ public class MatriprdService {
 			String _Descpend   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
 			String _Obspend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
 			String _Obsdetail  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-			String _Tpreg      = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 			 
+			String _Tpreg      = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //37			 
         	String _Partnum    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  
 			String _Partsugest = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partsugdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partnew    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //41
+			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //42
 			
 			/* Insumos - não usado na lista geral
 			String _PartdescIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -1057,9 +921,9 @@ public class MatriprdService {
 			String _Espec = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Undcom = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _NcmIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Vlrunit = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; */	//53	
+			String _Vlrunit = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; */	//54	
 
-			i = 54;
+			i = 55;
 			String _Tpdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Numdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Serdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -1071,7 +935,7 @@ public class MatriprdService {
 			String _VlrunitDoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Siglaund = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Codinco = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;   //65     							
+			String _Modal = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;   //66    							
 			String _Numdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Serdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
         	String _Emidoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -1093,7 +957,7 @@ public class MatriprdService {
 			String _Vlrunit3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Siglaund3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Codinco3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  //87	
+			String _Modal3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  //88	
 			//#endregion
 
 			produto.setIdMatriz( _IdMatriz );
@@ -1102,6 +966,7 @@ public class MatriprdService {
         	produto.setAnomdl( _Anomdl );
         	produto.setDesccom( _Desccom );
         	produto.setDescrfb(_Descrfb );
+			produto.setPpbprd(_Ppbprd);
         	produto.setTpprd( _Tpprd );
         	produto.setProtot( _Protot );
         	produto.setSpecial( _Special );

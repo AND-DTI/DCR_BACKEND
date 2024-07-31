@@ -1,11 +1,9 @@
 package com.dcr.api.controller;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Dcrproto;
 import com.dcr.api.model.as400.Dcrreg0;
@@ -34,16 +31,20 @@ import com.dcr.api.service.as400.Dcrreg0Service;
 import com.dcr.api.service.as400.DcrregraService;
 import com.dcr.api.service.as400.DcrvigenService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/protocolo")
 public class DcrprotoController {
+
+
 	@Autowired
 	DcrprotoService service;
 	
@@ -59,6 +60,8 @@ public class DcrprotoController {
 	@Autowired
 	DcrregraService regraService;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos as protocolos")
 	@ApiResponses(value = {
@@ -85,8 +88,11 @@ public class DcrprotoController {
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+		
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca um protocolo")
 	@ApiResponses(value = {
@@ -120,6 +126,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByProduto", produces = "application/json")
 	@Operation(summary = "Busca um protocolo")
 	@ApiResponses(value = {
@@ -148,6 +156,8 @@ public class DcrprotoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+	
+
 	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um protocolo")
@@ -179,6 +189,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -209,6 +221,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/geraRegistro", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -340,6 +354,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/geraDiagnostico", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -390,6 +406,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/deletaDiagnostico", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -398,7 +416,7 @@ public class DcrprotoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> deletaDiagnostico(@RequestParam Long idmatriz, @RequestParam String protdcre, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
+	public ResponseEntity<Object> deletaDiagnostico(@RequestParam Integer idmatriz, @RequestParam String protdcre, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
 	
 		try {
 	
@@ -419,13 +437,13 @@ public class DcrprotoController {
 	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);
 	       
 	        if(procc.isPresent()) {
-	        	procc.get().setTaxausd(new Double(0));
-	        	procc.get().setTotalnac(new Double(0));
-	        	procc.get().setTotalimp(new Double(0));
-	        	procc.get().setCustotal(new Double(0));
-	        	procc.get().setCoefred(new Double(0));
-	        	procc.get().setIitotal(new Double(0));
-	        	procc.get().setIireduzido(new Double(0));
+	        	procc.get().setTaxausd(Double.valueOf(0));//new Double(0)); //j4 - deprecated
+	        	procc.get().setTotalnac(Double.valueOf(0));
+	        	procc.get().setTotalimp(Double.valueOf(0));
+	        	procc.get().setCustotal(Double.valueOf(0));
+	        	procc.get().setCoefred(Double.valueOf(0));
+	        	procc.get().setIitotal(Double.valueOf(0));
+	        	procc.get().setIireduzido(Double.valueOf(0));
 	        	
 	        	dcrProccservice.update(procc.get(), request);
 	        }
@@ -440,6 +458,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta um protocolo")
 	@ApiResponses(value = {
@@ -469,4 +489,6 @@ public class DcrprotoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

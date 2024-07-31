@@ -108,8 +108,8 @@ public class PendprodService {
 		key.setNumpend(repository.getLastPend(idmatriz, partnumpd)); //get Max
 		pend.setCdpend("END");
 		pend.setKey(key);		
-		pend.setObsresol("Pendências finalizadas");
-		pend.setStatus(1);
+		pend.setObsresol("Confirmação de finalização das pendências");
+		pend.setStatus(0);
 		
 		Auxiliar.preencheAuditoria(pend, request);
 		return repository.save(pend);

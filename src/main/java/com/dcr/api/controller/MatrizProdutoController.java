@@ -200,7 +200,7 @@ public class MatrizProdutoController {
 				if (cor.priocor() == 1){
 
 					DcrproccKey dcrproccKey = new DcrproccKey();
-					dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
+					dcrproccKey.setIdmatriz(Integer.valueOf(cor.idmatriz()));
 					dcrproccKey.setPartnumpd(cor.partnumpd());					
 					dcrproccKey.setTpprd(dto.tpprd());
 					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
