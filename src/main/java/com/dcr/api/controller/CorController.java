@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,28 +13,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Cadcor;
-import com.dcr.api.model.as400.Cadtaxa;
 import com.dcr.api.model.dto.CadcorDTO;
-import com.dcr.api.model.dto.CadtaxaDTO;
 import com.dcr.api.service.as400.CadcorService;
-import com.dcr.api.service.as400.CadtaxaService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/cor")
 public class CorController {
 
+
 	@Autowired
 	CadcorService service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as cores")
 	@ApiResponses(value = {
@@ -65,6 +64,8 @@ public class CorController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca uma cor")
 	@ApiResponses(value = {
@@ -94,6 +95,8 @@ public class CorController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma cor")
 	@ApiResponses(value = {
@@ -124,6 +127,8 @@ public class CorController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera uma cor")
 	@ApiResponses(value = {
@@ -154,6 +159,8 @@ public class CorController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta uma cor")
 	@ApiResponses(value = {
@@ -183,4 +190,6 @@ public class CorController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

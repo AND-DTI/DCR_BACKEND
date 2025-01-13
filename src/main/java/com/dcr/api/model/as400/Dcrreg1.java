@@ -1,17 +1,17 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.Dcrreg1Key;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+
+
 @Entity
-@Table(name = "DCRREG1", schema = "HD4DCDHH")
+@Table(name = "DCRREG1"/*, schema = "HD4DCDHH"*/)
 @ApiModel
 public class Dcrreg1 {
 
@@ -50,7 +50,7 @@ public class Dcrreg1 {
     private String itauddt;
 
     @Column(columnDefinition = "char(8)")
-    private String itaudhr;
+    private String itaudhr;	
 
 	public Dcrreg1Key getKey() {
 		return key;

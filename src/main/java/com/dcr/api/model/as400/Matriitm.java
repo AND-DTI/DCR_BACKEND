@@ -40,6 +40,10 @@ public class Matriitm {
 	@TamanhoMaximo(8)
 	@Column(columnDefinition = "char(3)")
 	private String ncm; //added j4
+
+	@TamanhoMaximo(80)
+	@Column(columnDefinition = "char(80)")
+	private String undcom; //added j5
 	
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
@@ -75,9 +79,10 @@ public class Matriitm {
 	public void setPreco(Double preco) {		this.preco = preco;	}
 
 	public String getNcm() {		return ncm;	}
-	public void setNcm(String ncm) {
-		this.ncm = ncm==null? "" : ncm;
-	}
+	public void setNcm(String ncm) {		this.ncm = ncm==null? "" : ncm;	}
+
+	public String getUndcom() {		return undcom;	}
+	public void setUndcom(String undcom) {		this.undcom = undcom;	}
 
 	public String getItaudsys() {		return itaudsys;	}
 	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}
@@ -99,4 +104,5 @@ public class Matriitm {
 
 	public MatriitmKey getKey() {		return key;	}
 	public void setKey(MatriitmKey key) {		this.key = key;	}
+		
 }

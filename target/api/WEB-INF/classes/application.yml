@@ -29,7 +29,7 @@ data:
         host: gateway.zscloud.net
         port: 443
     token_pass: SUPER_SECRET_WORD
-    token_expire: 1800000
+    token_expire: 280000000
     api_se:
         api_gateway: eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc4OTQ4ODksImV4cCI6MTc2NzIyNTU0MCwiaWRsb2dpbiI6IlNCSU5UMDAxIiwicmF0ZWxpbWl0IjoxMjAsInF1b3RhbGltaXQiOjEwMDAwMH0.DIJUeK6NyEmgZV9i6JBDKcIVoFw6kUBk3gSoILYxZGA
         base_url: https://motohonda-test.softexpert.com/apigateway
@@ -46,6 +46,11 @@ as400:
         password:           SB037635
         database-platform:  org.hibernate.dialect.DB2400Dialect
         hibernate.ddl-auto: validate
+
+schedule:
+    atualizaPRD: true
+    reprocMatrizPRD: false
+    reprocMatrizAST: false
 
 
 #File Servers configs

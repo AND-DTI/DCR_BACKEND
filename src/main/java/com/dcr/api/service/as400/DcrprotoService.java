@@ -136,4 +136,8 @@ public class DcrprotoService {
 		repository.delete(dcr);
 	}
 
+	public void geraHistorico(Integer idmatriz, String partnumpd, String tpprd) {
+		repository.setHistoricoProtocolo(idmatriz, partnumpd);
+	}
+
 }

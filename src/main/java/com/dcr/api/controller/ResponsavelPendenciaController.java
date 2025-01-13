@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Pendresp;
 import com.dcr.api.model.dto.PendrespDTO;
+import com.dcr.api.model.dto.PendrespDTO2;
 import com.dcr.api.model.dto.PendrespDeleteDTO;
 import com.dcr.api.model.keys.PendenciaKey;
 import com.dcr.api.response.PendrespDeleteResponse;
@@ -39,6 +39,7 @@ public class ResponsavelPendenciaController {
 	@Autowired
 	PendrespService service;
 
+	
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos as responsáveis")
@@ -190,21 +191,50 @@ public class ResponsavelPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody List<PendrespDTO> listaDto, HttpServletRequest request) {
-		List<PendrespDTO> listaErro = new ArrayList<>();
+	//public ResponseEntity<Object> create(@RequestBody List<PendrespDTO> listaDto, HttpServletRequest request) {
+    public ResponseEntity<Object> create(@RequestBody PendrespDTO2 listaDto, HttpServletRequest request) {
+		
+        List<PendrespDTO> listaErro = new ArrayList<>();
+
 		try {
-			for (PendrespDTO dto : listaDto) {
-				PendenciaKey key = new PendenciaKey();
-				key.setCdpend(dto.cdpend());
-				key.setCdresp(dto.cdresp());
+			//for (PendrespDTO dto : listaDto) {
+            for (PendrespDTO dto : listaDto.responsaveis()) {
 				
-				Optional<Pendresp> lista = service.getByID(key);
-		        if (!lista.isEmpty()) {
-		            listaErro.add(dto);
-		        }else {
-		        	service.create(dto, request);
-		        }
+                
+                if( listaDto.subtipos().size() > 0){
+                    for (String subtp : listaDto.subtipos()) {
+
+                        PendenciaKey key = new PendenciaKey();
+                        key.setCdpend(dto.cdpend());
+                        key.setSubtipo(subtp);
+                        key.setCdresp(dto.cdresp());
+                        
+                        Optional<Pendresp> lista = service.getByID(key);
+                        if (!lista.isEmpty()) {
+                            listaErro.add(dto);
+                        }else {                            
+                            service.create2(dto, subtp, request);
+                        }
+                                               
+                    }
+        
+                }else{
+                    PendenciaKey key = new PendenciaKey();
+                    key.setCdpend(dto.cdpend());
+                    key.setSubtipo("");
+                    key.setCdresp(dto.cdresp());
+                    
+                    Optional<Pendresp> lista = service.getByID(key);
+                    if (!lista.isEmpty()) {
+                        listaErro.add(dto);
+                    }else {
+                        //service.create(dto, request);
+                        service.create2(dto, "", request);
+                    }
+                }
+
 			}
+
 			if(listaErro.size() > 0) {
 				PendrespResponse resp = new PendrespResponse();
 				resp.setErros(listaErro);

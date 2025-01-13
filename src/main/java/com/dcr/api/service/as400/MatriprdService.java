@@ -1,31 +1,37 @@
 package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Matriprd;
+import com.dcr.api.model.dto.CorProdutoDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.repository.as400.MatriprdRepository;
 import com.dcr.api.response.CoresResponse;
-//import com.dcr.api.response.CoresSimplesResponse;
+import com.dcr.api.response.DocumentosProdResponse;
 import com.dcr.api.response.DocumentosResponse;
 import com.dcr.api.response.InsumosProdResponse;
 import com.dcr.api.response.MatriprdByTpprdResponse;
 import com.dcr.api.response.MatriprdByTpprdResponseList;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.MatriprdResponseList;
+import com.dcr.api.response.PendenciaProdResponse;
 import com.dcr.api.response.PendenciaResponse;
-//import com.dcr.api.response.PendenciaResponseSemLista;
 import com.dcr.api.response.ProdutoPendenciaResponse;
+import com.dcr.api.response.ProdutoPendenciaResponse2;
 import com.dcr.api.response.ProdutoPendenciaResponseList;
 import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
 import com.dcr.api.response.ProdutoSemListaResponse;
+import com.dcr.api.response.Interface.PendenciaINT;
+import com.dcr.api.response.Interface.PendenciaProdINT;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -40,6 +46,9 @@ public class MatriprdService {
 
 	@Autowired
 	MatriprdRepository repository;
+
+    @Autowired
+	private ModelMapper mapper;
 	
 
 	public List<Matriprd> getAll() {
@@ -243,301 +252,79 @@ public class MatriprdService {
 		return pend;
 	}
 	
+	
+	public ProdutoPendenciaResponse2 getProdutoPendencia(Integer id, String partnumpd) {
 
-	//public ProdutoPendenciaSimplesResponse getProdutoPendencia(Integer id, String partnumpd) {
-	public ProdutoPendenciaResponse getProdutoPendencia(Integer id, String partnumpd) {
-
-
-		List<Object[]> resultados = repository.consultaProdutoPendencia(id, partnumpd);	
-		
-		ProdutoPendenciaResponse produto = new ProdutoPendenciaResponse(); //j4 - old ProdutoPendenciaSimplesResponse resp
-		List<InsumosProdResponse> listaInsumo = new ArrayList<>(); //j4 - old listaItem
-		List<PendenciaResponse> listaPend = new ArrayList<>();
-		List<DocumentosResponse> listaDoc = new ArrayList<>();
-		List<CoresResponse> listaCor = new ArrayList<>();
-		
-		produto.setCores(listaCor);	
-		produto.setPendencias(listaPend);		
-		produto.setInsumos(listaInsumo); //j4 - old produto.setItens(listaItem);			
+        List<PendenciaProdINT> resultados = repository.consultaProdutoPendencia(id, partnumpd);
+        
+        ProdutoPendenciaResponse2 produto = new ProdutoPendenciaResponse2();       
+		List<PendenciaProdResponse> listaPend = new ArrayList<>(); 
+        List<InsumosProdResponse> listaInsumo = new ArrayList<>();
+		List<DocumentosProdResponse> listaDoc = new ArrayList<>();
+        produto.setPendencias(listaPend);		
+		produto.setInsumos(listaInsumo); 
 		produto.setDocumentos(listaDoc);
-		produto.setQtdependencias(repository.countPendenciasCor(id.toString(), partnumpd));
+
+        //ver lista cor no antigo:
+        //List<CoresResponse> listaCor = new ArrayList<>();		
+		//produto.setCores(listaCor);	
+		
+        if(resultados.isEmpty()){
+			return produto;
+		}
+
+
+        produto = mapper.map(resultados.get(0), ProdutoPendenciaResponse2.class);
+        produto.setQtdependencias(repository.countPendenciasCor(id.toString(), partnumpd));
 		produto.setQtdependenciasEmAberto(repository.countPendenciasCorEmAberto(id.toString(), partnumpd));
 
+        //Cor
+        CorProdutoDTO cor = mapper.map(resultados.get(0), CorProdutoDTO.class);
+        produto.setCor(cor);
+        
 
-        for (Object[] resultado : resultados) {
-			
 
-			CoresResponse cor = new CoresResponse(); //old CoresSimplesResponse						
-        	PendenciaResponse pend = new PendenciaResponse();
-			InsumosProdResponse insumo = new InsumosProdResponse(); //j4 - old ProdutoPendenciaResponseList
-        	DocumentosResponse doc = new DocumentosResponse();
-			int i = 0;
+        //converte lista inteira - não se repete pois é o último nível
+        listaPend = Arrays.asList(mapper.map(resultados, PendenciaProdResponse[].class));
+        produto.setPendencias(listaPend);
 
-			//#region FIELDS
-			String _IdMatriz  = (resultado[0] != null) ? resultado[0].toString().trim() : ""; i++;
-			String _Produto   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Modelo    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Anomdl    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Desccom   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Descrfb   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Ppbprd    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Tpprd 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Protot    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Special   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Tpdcre    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Orig 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Dtneci    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Priourgen = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Prevfat   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Prioresp  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Priodtmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _PrioHRmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //17		
-			
-			String _Partnumpd = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;       
-			String _Codcor    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Corpt     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Partdesc  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Unmed     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Preco     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Ncm       = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Priocor   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;        													
-			String _Status    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-			String _Cdbej     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;        	
-			String _Coreng    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Tppin     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //29
-			
-			String _Numpend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Cdpend     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Obsresol   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-        	String _StatusPend = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-			String _Descpend   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-			String _Obspend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-			String _Obsdetail  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
-			String _Tpreg      = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //37			 
-        	String _Partnum    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  
-			String _Partsugest = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Partsugdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Partnew    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //42
+        for (PendenciaProdINT result : resultados) {
 
-			String _PartdescIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Itmorg = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Ittyp = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Unmsr = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Necfil = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Cdspn = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Weght = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Emcomp = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Espec = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Undcom = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _NcmIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Vlrunit = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;	//54	
-			
-			String _Tpdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Numdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Serdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Emidoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Cnpjfor = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Ie = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Adicao = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Itadicao = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _VlrunitDoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Siglaund = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Codinco = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;   //66    							
-			String _Numdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Serdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Emidoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Cnpjfor2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Ie2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Adicao2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Itadicao2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Vlrunit2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Siglaund2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Codinco2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;     				
-			String _Numdoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Serdoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Emidoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;			        	        	        	        	        	         	        	
-         	String _Cnpjfor3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Ie3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Adicao3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-        	String _Itadicao3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Vlrunit3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Siglaund3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Codinco3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  //88		
-			//#endregion
+            DocumentosProdResponse doc = new DocumentosProdResponse();        	
+        	InsumosProdResponse insumo = new InsumosProdResponse();
+            String partnum = Auxiliar.trimNull(result.getPartnum());
+            String tpdoc = Auxiliar.trimNull(result.getTpdoc());
 
-			produto.setIdMatriz( _IdMatriz );
-        	produto.setProduto(  _Produto);
-        	produto.setModelo(  _Modelo );
-        	produto.setAnomdl( _Anomdl );
-        	produto.setDesccom( _Desccom );
-        	produto.setDescrfb(_Descrfb );
-			produto.setPpbprd(_Ppbprd);
-        	produto.setTpprd( _Tpprd );
-        	produto.setProtot( _Protot );
-        	produto.setSpecial( _Special );
-        	produto.setTpdcre( _Tpdcre );
-        	produto.setOrig( _Orig );
-        	produto.setDtneci( _Dtneci );
-        	produto.setPriourgen( _Priourgen );
-        	produto.setPrevfat( _Prevfat );
-        	produto.setPrioresp( _Prioresp );
-        	produto.setPriodtmnt( _Priodtmnt );
-        	produto.setPrioHRmnt( _PrioHRmnt );
-        	
-			cor.setIdmatriz(produto.getIdMatriz());
-        	cor.setPartnumpd( _Partnumpd );  
-			cor.setModelo( _Modelo );      
-        	cor.setCodcor( _Codcor );
-        	cor.setCorpt( _Corpt );
-			cor.setPartdesc( _Partdesc );
-        	cor.setUnmed( _Unmed );
-			cor.setPreco( _Preco );
-			cor.setNcm( _Ncm );
-        	cor.setPriocor( _Priocor );        													
-			cor.setStatus( _Status ); //j4 - old produto.setStatus - status proc é por cor
-			cor.setCdbej( _Cdbej );        	
-        	cor.setCoreng( _Coreng );
-        	cor.setTppin( _Tppin );
-        	
-        	pend.setIdmatriz(produto.getIdMatriz());
-			pend.setPartnumpd(cor.getPartnumpd());
-			pend.setNumpend( _Numpend );
-        	pend.setCdpend( _Cdpend );
-        	pend.setObsresol( _Obsresol ); 
-        	pend.setStatus( _StatusPend ); 
-			pend.setDescpend( _Descpend ); 
-			pend.setObspend(_Obspend ); 
-			pend.setObsdetail( _Obsdetail ); 
-			pend.setTpreg( _Tpreg ); 			 
-        	pend.setPartnum( _Partnum );  
-			pend.setPartsugest( _Partsugest );
-			pend.setPartsugdsc( _Partsugdsc);
-			pend.setPartnew( _Partnew );
-			pend.setPartnewdsc( _Partnewdsc );
-			
-			//Detalhe insumo da pendencia
-			insumo.setIdmatriz(produto.getIdMatriz());
-			insumo.setPartnumpd(cor.getPartnumpd());
-			insumo.setPartnum( _Partnum );  
-			insumo.setPartsugest( _Partsugest );
-			insumo.setPartsugdsc( _Partsugdsc );
-			insumo.setPartnew( _Partnew );
-			insumo.setPartnewdsc( _Partnewdsc );			
-			insumo.setPartdesc( _PartdescIns );
-			insumo.setItmorg( _Itmorg );
-			insumo.setIttyp( _Ittyp );
-			insumo.setUnmsr( _Unmsr );
-			insumo.setNecfil( _Necfil );
-			insumo.setCdspn(_Cdspn );
-			insumo.setWeght( _Weght );
-			insumo.setEmcomp( _Emcomp );
-			insumo.setEspec( _Espec );
-			insumo.setUndcom( _Undcom );
-			insumo.setNcm( _NcmIns );
-			insumo.setVlrunit( _Vlrunit );																		        							    	
-        				
-			//Documentos insumo  
-			doc.setIdmatriz(produto.getIdMatriz());
-			doc.setPartnumpd(cor.getPartnumpd());
-			doc.setPartnum( insumo.getPartnum());           				
-        	doc.setTpdoc( _Tpdoc );
-        	doc.setNumdoc( _Numdoc );
-        	doc.setSerdoc( _Serdoc );
-        	doc.setEmidoc( _Emidoc );
-			doc.setCnpjfor( _Cnpjfor );
-        	doc.setIe( _Ie );
-        	doc.setAdicao( _Adicao );
-        	doc.setItadicao( _Itadicao );
-			doc.setVlrunit( _VlrunitDoc );
-			doc.setSiglaund( _Siglaund );
-			doc.setCodinco( _Codinco );
-			doc.setModal( _Modal );        							
-			doc.setNumdoc2( _Numdoc2 );
-        	doc.setSerdoc2( _Serdoc2);
-        	doc.setEmidoc2( _Emidoc2 );
-        	doc.setCnpjfor2( _Cnpjfor2 );
-        	doc.setIe2( _Ie2 );
-        	doc.setAdicao2( _Adicao2 );
-        	doc.setItadicao2( _Itadicao2 );
-			doc.setVlrunit2( _Vlrunit2 );
-			doc.setSiglaund2( _Siglaund2 );
-			doc.setCodinco2( _Codinco2 );
-			doc.setModal2( _Modal2 );     				
-			doc.setNumdoc3( _Numdoc3 );
-        	doc.setSerdoc3(_Serdoc3 );
-        	doc.setEmidoc3( _Emidoc3 );			        	        	        	        	        	         	        	
-         	doc.setCnpjfor3( _Cnpjfor3);
-        	doc.setIe3( _Ie3 );
-        	doc.setAdicao3( _Adicao3 );
-        	doc.setItadicao3( _Itadicao3 );
-			doc.setVlrunit3( _Vlrunit3 );
-			doc.setSiglaund3( _Siglaund3 );
-			doc.setCodinco3( _Codinco3 );
-			doc.setModal3( _Modal3 );     
-			
-			//Complementa dados da pendencia - sql ja traz dados do insumo relacionado a pendencia - substitui complementaPendencia(...)
-			pend.setNumdoc(doc.getNumdoc());
-			pend.setSerdoc(doc.getSerdoc());
-			pend.setEmidoc(doc.getEmidoc());			
-			pend.setVlrunit(doc.getVlrunit());    //new
-			pend.setSiglaund(doc.getSiglaund());  //new
-			pend.setCodinco(doc.getCodinco());    //new
-			pend.setModal(doc.getModal());        //new
-			pend.setNumdoc2(doc.getNumdoc2());
-			pend.setSerdoc2(doc.getSerdoc2());
-			pend.setEmidoc2(doc.getEmidoc2());
-			pend.setVlrunit2(doc.getVlrunit2());    //new
-			pend.setSiglaund2(doc.getSiglaund2());  //new
-			pend.setCodinco2(doc.getCodinco2());    //new
-			pend.setModal2(doc.getModal2());        //new
-			pend.setNumdoc3(doc.getNumdoc3());
-			pend.setSerdoc3(doc.getSerdoc3());
-			pend.setEmidoc3(doc.getEmidoc3());			
-			pend.setVlrunit3(doc.getVlrunit3());    //new
-			pend.setSiglaund3(doc.getSiglaund3());  //new
-			pend.setCodinco3(doc.getCodinco3());    //new
-			pend.setModal3(doc.getModal3());        //new
-			pend.setItmorg( _Itmorg ); //19.07.2024 - add to CRTL
+          
+            //Add distinct insumo - pode se repetir porque pode ter mais de uma pendencia para o mesmo insumo
+			Boolean insumoValido = !partnum.equals(null) && !partnum.equals("") && 
+                                   !partnum.equals(produto.getPartnumpd());			
+            if( insumoValido ){
+                for(InsumosProdResponse ins :  listaInsumo){
+                    if(ins.getPartnum().equals(partnum)){
+                        insumoValido = false;   break; //repetido
+                    }
+                }							
+            }			
 
-						
+            if(insumoValido){  
+                insumo = mapper.map(result, InsumosProdResponse.class);
+                listaInsumo.add(insumo);                 
+                if(!tpdoc.equals("")){
+                    doc = mapper.map(result, DocumentosProdResponse.class);
+                    listaDoc.add(doc); 	//insumo x doc - 1 pra 1	
+                }				
+            }  
+                        
+        }
 
-			//Add distinct cor			
-			Boolean corRepetida = false;			
-			for(CoresResponse color : listaCor){
-				if(color.getPartnumpd().equals(cor.getPartnumpd())){
-					corRepetida = true;   break;
-				}
-			}
-			if(!corRepetida){  listaCor.add(cor);  }
-			
-			//Add pendencia - não se repete pois é o último nível
-			if(!pend.getNumpend().equals("")){
-				listaPend.add(pend);				
-			}
-			
-			//Add distinct insumo - pode se repetir porque pode ter mais de uma pendencia para o mesmo insumo	
-			Boolean insumoRepetido = false;
-			if(!insumo.getPartnum().equals("")){
-				for(InsumosProdResponse ins :  listaInsumo){
-					if(ins.getPartnum().equals(insumo.getPartnum())){
-						insumoRepetido = true;   break;
-					}
-				}							
-			}
-			if(!insumoRepetido && !insumo.getPartnum().equals("")){  
-				listaInsumo.add(insumo); 
-				if(!doc.getTpdoc().equals("")){
-					listaDoc.add(doc); 	//insumo x doc - 1 pra 1	
-				}					
-			}
+        produto.setDocumentos(listaDoc);
+        produto.setInsumos(listaInsumo);
 
-		}
-        	
-		return produto; 
+
+      
+        return produto;
+
 	}
 	
 	
@@ -629,7 +416,7 @@ public class MatriprdService {
 			insumo.setEmcomp( (resultado[47] != null) ? resultado[47].toString().trim() : "");
 			insumo.setEspec( (resultado[48] != null) ? resultado[48].toString().trim() : "");
 			insumo.setUndcom( (resultado[49] != null) ? resultado[49].toString().trim() : "");
-			insumo.setNcm( (resultado[50] != null) ? resultado[50].toString().trim() : "");
+			insumo.setNcmins( (resultado[50] != null) ? resultado[50].toString().trim() : "");
 			insumo.setVlrunit( (resultado[51] != null) ? resultado[51].toString().trim() : "");																		        							    	
         				
 			//Documentos insumo  
@@ -1111,6 +898,302 @@ public class MatriprdService {
 	}
 	
 
+	public ProdutoPendenciaResponse getProdutoPendenciaDiagnostico(Integer id, String partnumpd) {
+
+
+		List<Object[]> resultados = repository.consultaProdutoPendenciaDiagnostico(id, partnumpd);	
+		
+		ProdutoPendenciaResponse produto = new ProdutoPendenciaResponse(); //j4 - old ProdutoPendenciaSimplesResponse resp
+		List<InsumosProdResponse> listaInsumo = new ArrayList<>(); //j4 - old listaItem
+		List<PendenciaResponse> listaPend = new ArrayList<>();
+		List<DocumentosResponse> listaDoc = new ArrayList<>();
+		List<CoresResponse> listaCor = new ArrayList<>();
+		
+		produto.setCores(listaCor);	
+		produto.setPendencias(listaPend);		
+		produto.setInsumos(listaInsumo); //j4 - old produto.setItens(listaItem);			
+		produto.setDocumentos(listaDoc);
+		produto.setQtdependencias(repository.countPendenciasCor(id.toString(), partnumpd));
+		produto.setQtdependenciasEmAberto(repository.countPendenciasCorEmAberto(id.toString(), partnumpd));
+
+
+        for (Object[] resultado : resultados) {
+			
+
+			CoresResponse cor = new CoresResponse(); //old CoresSimplesResponse						
+        	PendenciaResponse pend = new PendenciaResponse();
+			InsumosProdResponse insumo = new InsumosProdResponse(); //j4 - old ProdutoPendenciaResponseList
+        	DocumentosResponse doc = new DocumentosResponse();
+			int i = 0;
+
+			//#region FIELDS
+			String _IdMatriz  = (resultado[0] != null) ? resultado[0].toString().trim() : ""; i++;
+			String _Produto   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Modelo    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Anomdl    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Desccom   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Descrfb   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ppbprd    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Tpprd 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Protot    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Special   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Tpdcre    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Orig 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Dtneci    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Priourgen = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Prevfat   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Prioresp  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Priodtmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _PrioHRmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //17		
+			
+			String _Partnumpd = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;       
+			String _Codcor    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Corpt     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partdesc  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Unmed     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Preco     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ncm       = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Priocor   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;        													
+			String _Status    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Cdbej     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;        	
+			String _Coreng    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Tppin     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //29
+			
+			String _Numpend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Cdpend     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Obsresol   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+        	String _StatusPend = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Descpend   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Obspend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Obsdetail  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Tpreg      = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //37			 
+        	String _Partnum    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  
+			String _Partsugest = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partsugdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partnew    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //42
+
+			String _PartdescIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Itmorg = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ittyp = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Unmsr = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Necfil = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Cdspn = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Weght = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Emcomp = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Espec = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Undcom = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _NcmIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Vlrunit = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;	//54	
+			
+			String _Tpdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Numdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Serdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Emidoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Cnpjfor = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Ie = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Adicao = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Itadicao = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _VlrunitDoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Siglaund = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Codinco = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Modal = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;   //66    							
+			String _Numdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Serdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Emidoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Cnpjfor2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Ie2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Adicao2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Itadicao2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Vlrunit2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Siglaund2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Codinco2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Modal2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;     				
+			String _Numdoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Serdoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Emidoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;			        	        	        	        	        	         	        	
+         	String _Cnpjfor3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Ie3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Adicao3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Itadicao3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Vlrunit3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Siglaund3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Codinco3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Modal3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  //88		
+			//#endregion
+
+			produto.setIdMatriz( _IdMatriz );
+        	produto.setProduto(  _Produto);
+        	produto.setModelo(  _Modelo );
+        	produto.setAnomdl( _Anomdl );
+        	produto.setDesccom( _Desccom );
+        	produto.setDescrfb(_Descrfb );
+			produto.setPpbprd(_Ppbprd);
+        	produto.setTpprd( _Tpprd );
+        	produto.setProtot( _Protot );
+        	produto.setSpecial( _Special );
+        	produto.setTpdcre( _Tpdcre );
+        	produto.setOrig( _Orig );
+        	produto.setDtneci( _Dtneci );
+        	produto.setPriourgen( _Priourgen );
+        	produto.setPrevfat( _Prevfat );
+        	produto.setPrioresp( _Prioresp );
+        	produto.setPriodtmnt( _Priodtmnt );
+        	produto.setPrioHRmnt( _PrioHRmnt );
+        	
+			cor.setIdmatriz(produto.getIdMatriz());
+        	cor.setPartnumpd( _Partnumpd );  
+			cor.setModelo( _Modelo );      
+        	cor.setCodcor( _Codcor );
+        	cor.setCorpt( _Corpt );
+			cor.setPartdesc( _Partdesc );
+        	cor.setUnmed( _Unmed );
+			cor.setPreco( _Preco );
+			cor.setNcm( _Ncm );
+        	cor.setPriocor( _Priocor );        													
+			cor.setStatus( _Status ); //j4 - old produto.setStatus - status proc é por cor
+			cor.setCdbej( _Cdbej );        	
+        	cor.setCoreng( _Coreng );
+        	cor.setTppin( _Tppin );
+        	
+        	pend.setIdmatriz(produto.getIdMatriz());
+			pend.setPartnumpd(cor.getPartnumpd());
+			pend.setNumpend( _Numpend );
+        	pend.setCdpend( _Cdpend );
+        	pend.setObsresol( _Obsresol ); 
+        	pend.setStatus( _StatusPend ); 
+			pend.setDescpend( _Descpend ); 
+			pend.setObspend(_Obspend ); 
+			pend.setObsdetail( _Obsdetail ); 
+			pend.setTpreg( _Tpreg ); 			 
+        	pend.setPartnum( _Partnum );  
+			pend.setPartsugest( _Partsugest );
+			pend.setPartsugdsc( _Partsugdsc);
+			pend.setPartnew( _Partnew );
+			pend.setPartnewdsc( _Partnewdsc );
+			
+			//Detalhe insumo da pendencia
+			insumo.setIdmatriz(produto.getIdMatriz());
+			insumo.setPartnumpd(cor.getPartnumpd());
+			insumo.setPartnum( _Partnum );  
+			insumo.setPartsugest( _Partsugest );
+			insumo.setPartsugdsc( _Partsugdsc );
+			insumo.setPartnew( _Partnew );
+			insumo.setPartnewdsc( _Partnewdsc );			
+			insumo.setPartdesc( _PartdescIns );
+			insumo.setItmorg( _Itmorg );
+			insumo.setIttyp( _Ittyp );
+			insumo.setUnmsr( _Unmsr );
+			insumo.setNecfil( _Necfil );
+			insumo.setCdspn(_Cdspn );
+			insumo.setWeght( _Weght );
+			insumo.setEmcomp( _Emcomp );
+			insumo.setEspec( _Espec );
+			insumo.setUndcom( _Undcom );
+			insumo.setNcmins( _NcmIns );
+			insumo.setVlrunit( _Vlrunit );																		        							    	
+        				
+			//Documentos insumo  
+			doc.setIdmatriz(produto.getIdMatriz());
+			doc.setPartnumpd(cor.getPartnumpd());
+			doc.setPartnum( insumo.getPartnum());           				
+        	doc.setTpdoc( _Tpdoc );
+        	doc.setNumdoc( _Numdoc );
+        	doc.setSerdoc( _Serdoc );
+        	doc.setEmidoc( _Emidoc );
+			doc.setCnpjfor( _Cnpjfor );
+        	doc.setIe( _Ie );
+        	doc.setAdicao( _Adicao );
+        	doc.setItadicao( _Itadicao );
+			doc.setVlrunit( _VlrunitDoc );
+			doc.setSiglaund( _Siglaund );
+			doc.setCodinco( _Codinco );
+			doc.setModal( _Modal );        							
+			doc.setNumdoc2( _Numdoc2 );
+        	doc.setSerdoc2( _Serdoc2);
+        	doc.setEmidoc2( _Emidoc2 );
+        	doc.setCnpjfor2( _Cnpjfor2 );
+        	doc.setIe2( _Ie2 );
+        	doc.setAdicao2( _Adicao2 );
+        	doc.setItadicao2( _Itadicao2 );
+			doc.setVlrunit2( _Vlrunit2 );
+			doc.setSiglaund2( _Siglaund2 );
+			doc.setCodinco2( _Codinco2 );
+			doc.setModal2( _Modal2 );     				
+			doc.setNumdoc3( _Numdoc3 );
+        	doc.setSerdoc3(_Serdoc3 );
+        	doc.setEmidoc3( _Emidoc3 );			        	        	        	        	        	         	        	
+         	doc.setCnpjfor3( _Cnpjfor3);
+        	doc.setIe3( _Ie3 );
+        	doc.setAdicao3( _Adicao3 );
+        	doc.setItadicao3( _Itadicao3 );
+			doc.setVlrunit3( _Vlrunit3 );
+			doc.setSiglaund3( _Siglaund3 );
+			doc.setCodinco3( _Codinco3 );
+			doc.setModal3( _Modal3 );     
+			
+			//Complementa dados da pendencia - sql ja traz dados do insumo relacionado a pendencia - substitui complementaPendencia(...)
+			pend.setNumdoc(doc.getNumdoc());
+			pend.setSerdoc(doc.getSerdoc());
+			pend.setEmidoc(doc.getEmidoc());			
+			pend.setVlrunit(doc.getVlrunit());    //new
+			pend.setSiglaund(doc.getSiglaund());  //new
+			pend.setCodinco(doc.getCodinco());    //new
+			pend.setModal(doc.getModal());        //new
+			pend.setNumdoc2(doc.getNumdoc2());
+			pend.setSerdoc2(doc.getSerdoc2());
+			pend.setEmidoc2(doc.getEmidoc2());
+			pend.setVlrunit2(doc.getVlrunit2());    //new
+			pend.setSiglaund2(doc.getSiglaund2());  //new
+			pend.setCodinco2(doc.getCodinco2());    //new
+			pend.setModal2(doc.getModal2());        //new
+			pend.setNumdoc3(doc.getNumdoc3());
+			pend.setSerdoc3(doc.getSerdoc3());
+			pend.setEmidoc3(doc.getEmidoc3());			
+			pend.setVlrunit3(doc.getVlrunit3());    //new
+			pend.setSiglaund3(doc.getSiglaund3());  //new
+			pend.setCodinco3(doc.getCodinco3());    //new
+			pend.setModal3(doc.getModal3());        //new
+			pend.setItmorg( _Itmorg ); //19.07.2024 - add to CRTL
+
+						
+
+			//Add distinct cor			
+			Boolean corRepetida = false;			
+			for(CoresResponse color : listaCor){
+				if(color.getPartnumpd().equals(cor.getPartnumpd())){
+					corRepetida = true;   break;
+				}
+			}
+			if(!corRepetida){  listaCor.add(cor);  }
+			
+			//Add pendencia - não se repete pois é o último nível
+			if(!pend.getNumpend().equals("")){
+				listaPend.add(pend);				
+			}
+			
+			//Add distinct insumo - pode se repetir porque pode ter mais de uma pendencia para o mesmo insumo	
+			Boolean insumoRepetido = false;
+			if(!insumo.getPartnum().equals("")){
+				for(InsumosProdResponse ins :  listaInsumo){
+					if(ins.getPartnum().equals(insumo.getPartnum())){
+						insumoRepetido = true;   break;
+					}
+				}							
+			}
+			if(!insumoRepetido && !insumo.getPartnum().equals("")){  
+				listaInsumo.add(insumo); 
+				if(!doc.getTpdoc().equals("")){
+					listaDoc.add(doc); 	//insumo x doc - 1 pra 1	
+				}					
+			}
+
+		}
+        	
+		return produto; 
+	}
+	
+
 	public static <T> List<T> removerDuplicatas(List<T> lista) {
 
         Set<T> conjunto = new HashSet<>(lista);
@@ -1244,4 +1327,387 @@ public class MatriprdService {
 		return repository.save(matriz);
 	}
 
+
+    public ProdutoPendenciaResponse2 getProdutoPendenciaBySubtype(Integer id, String partnumpd, String subtype, int status) {
+
+
+        List<PendenciaINT> resultados = repository.consultaProdutoPendenciaBySubtype(id, partnumpd, subtype, status);
+        
+        ProdutoPendenciaResponse2 produto = new ProdutoPendenciaResponse2();       
+		List<PendenciaProdResponse> listaPend = new ArrayList<>(); 
+        List<InsumosProdResponse> listaInsumo = new ArrayList<>();
+		List<DocumentosProdResponse> listaDoc = new ArrayList<>();
+        produto.setPendencias(listaPend);		
+		produto.setInsumos(listaInsumo); 
+		produto.setDocumentos(listaDoc);
+		
+        if(resultados.isEmpty()){
+			return produto;
+		}
+
+
+        produto = mapper.map(resultados.get(0), ProdutoPendenciaResponse2.class);
+        produto.setQtdependencias(repository.countPendencias(id.toString(), partnumpd));
+		produto.setQtdependenciasEmAberto(repository.countPendenciasCorEmAberto(id.toString(), partnumpd));
+
+        //converte lista inteira - não se repete pois é o último nível
+        listaPend = Arrays.asList(mapper.map(resultados, PendenciaProdResponse[].class));
+        produto.setPendencias(listaPend);
+
+        for (PendenciaINT result : resultados) {
+
+            DocumentosProdResponse doc = new DocumentosProdResponse();        	
+        	InsumosProdResponse insumo = new InsumosProdResponse();
+            String partnum = Auxiliar.trimNull(result.getPartnum());
+            String tpdoc = Auxiliar.trimNull(result.getTpdoc());
+
+          
+            //Add distinct insumo - pode se repetir porque pode ter mais de uma pendencia para o mesmo insumo
+			Boolean insumoValido = !partnum.equals(null) && !partnum.equals("") && 
+                                   !partnum.equals(produto.getPartnumpd());			
+            if( insumoValido ){
+                for(InsumosProdResponse ins :  listaInsumo){
+                    if(ins.getPartnum().equals(partnum)){
+                        insumoValido = false;   break; //repetido
+                    }
+                }							
+            }			
+
+            if(insumoValido){  
+                insumo = mapper.map(result, InsumosProdResponse.class);
+                listaInsumo.add(insumo);                 
+                if(!tpdoc.equals("")){
+                    doc = mapper.map(result, DocumentosProdResponse.class);
+                    listaDoc.add(doc); 	//insumo x doc - 1 pra 1	
+                }				
+            }  
+                        
+        }
+
+        produto.setDocumentos(listaDoc);
+        produto.setInsumos(listaInsumo);
+
+
+      
+        return produto;
+
+    }
+
+    
+
 }
+
+
+/* OLD:
+//public ProdutoPendenciaSimplesResponse getProdutoPendencia(Integer id, String partnumpd) {
+	public ProdutoPendenciaResponse getProdutoPendencia(Integer id, String partnumpd) {
+
+
+		List<Object[]> resultados = repository.consultaProdutoPendencia(id, partnumpd);	
+		
+		ProdutoPendenciaResponse produto = new ProdutoPendenciaResponse(); //j4 - old ProdutoPendenciaSimplesResponse resp
+		List<InsumosProdResponse> listaInsumo = new ArrayList<>(); //j4 - old listaItem
+		List<PendenciaResponse> listaPend = new ArrayList<>();
+		List<DocumentosResponse> listaDoc = new ArrayList<>();
+		List<CoresResponse> listaCor = new ArrayList<>();
+		
+		produto.setCores(listaCor);	
+		produto.setPendencias(listaPend);		
+		produto.setInsumos(listaInsumo); //j4 - old produto.setItens(listaItem);			
+		produto.setDocumentos(listaDoc);
+		produto.setQtdependencias(repository.countPendenciasCor(id.toString(), partnumpd));
+		produto.setQtdependenciasEmAberto(repository.countPendenciasCorEmAberto(id.toString(), partnumpd));
+
+
+        for (Object[] resultado : resultados) {
+			
+
+			CoresResponse cor = new CoresResponse(); //old CoresSimplesResponse						
+        	PendenciaProdResponse pend = new PendenciaProdResponse(); //old PendenciaResponse
+			InsumosProdResponse insumo = new InsumosProdResponse(); //j4 - old ProdutoPendenciaResponseList
+        	DocumentosProdResponse doc = new DocumentosProdResponse(); //old DocumentosResponse
+			int i = 0;
+
+			//#region FIELDS
+			String _IdMatriz  = (resultado[0] != null) ? resultado[0].toString().trim() : ""; i++;
+			String _Produto   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Modelo    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Anomdl    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Desccom   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Descrfb   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ppbprd    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Tpprd 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Protot    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Special   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Tpdcre    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Orig 	  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Dtneci    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Priourgen = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Prevfat   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Prioresp  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Priodtmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _PrioHRmnt = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //17		
+			
+			String _Partnumpd = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;       
+			String _Codcor    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Corpt     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partdesc  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Unmed     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Preco     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ncm       = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Priocor   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;        													
+			String _Status    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Cdbej     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;        	
+			String _Coreng    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Tppin     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //29
+			
+			String _Numpend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Cdpend     = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Obsresol   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+        	String _StatusPend = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Descpend   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Obspend    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Obsdetail  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; 
+			String _Tpreg      = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //37			 
+        	String _Partnum    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  
+			String _Partsugest = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partsugdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partnew    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //42
+
+			String _PartdescIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Itmorg = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Ittyp = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Unmsr = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Necfil = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Cdspn = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Weght = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Emcomp = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Espec = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Undcom = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _NcmIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Vlrunit = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;	//54	
+			
+			String _Tpdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Numdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Serdoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Emidoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Cnpjfor = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Ie = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Adicao = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Itadicao = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _VlrunitDoc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Siglaund = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Codinco = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Modal = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;   //66    							
+			String _Numdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Serdoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Emidoc2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Cnpjfor2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Ie2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Adicao2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Itadicao2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Vlrunit2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Siglaund2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Codinco2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Modal2 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;     				
+			String _Numdoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Serdoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Emidoc3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;			        	        	        	        	        	         	        	
+         	String _Cnpjfor3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Ie3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Adicao3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+        	String _Itadicao3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Vlrunit3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Siglaund3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Codinco3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
+			String _Modal3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;  //88		
+			//#endregion
+
+			produto.setIdMatriz( _IdMatriz );
+        	produto.setProduto(  _Produto);
+        	produto.setModelo(  _Modelo );
+        	produto.setAnomdl( _Anomdl );
+        	produto.setDesccom( _Desccom );
+        	produto.setDescrfb(_Descrfb );
+			produto.setPpbprd(_Ppbprd);
+        	produto.setTpprd( _Tpprd );
+        	produto.setProtot( _Protot );
+        	produto.setSpecial( _Special );
+        	produto.setTpdcre( _Tpdcre );
+        	produto.setOrig( _Orig );
+        	produto.setDtneci( _Dtneci );
+        	produto.setPriourgen( _Priourgen );
+        	produto.setPrevfat( _Prevfat );
+        	produto.setPrioresp( _Prioresp );
+        	produto.setPriodtmnt( _Priodtmnt );
+        	produto.setPrioHRmnt( _PrioHRmnt );
+        	
+			cor.setIdmatriz(produto.getIdMatriz());
+        	cor.setPartnumpd( _Partnumpd );  
+			cor.setModelo( _Modelo );      
+        	cor.setCodcor( _Codcor );
+        	cor.setCorpt( _Corpt );
+			cor.setPartdesc( _Partdesc );
+        	cor.setUnmed( _Unmed );
+			cor.setPreco( _Preco );
+			cor.setNcm( _Ncm );
+        	cor.setPriocor( _Priocor );        													
+			cor.setStatus( _Status ); //j4 - old produto.setStatus - status proc é por cor
+			cor.setCdbej( _Cdbej );        	
+        	cor.setCoreng( _Coreng );
+        	cor.setTppin( _Tppin );
+        	
+        	pend.setIdmatriz(produto.getIdMatriz());
+			pend.setPartnumpd(cor.getPartnumpd());
+			pend.setNumpend( _Numpend );
+        	pend.setCdpend( _Cdpend );
+        	pend.setObsresol( _Obsresol ); 
+        	pend.setStatus( _StatusPend ); 
+			pend.setDescpend( _Descpend ); 
+			pend.setObspend(_Obspend ); 
+			pend.setObsdetail( _Obsdetail ); 
+			pend.setTpreg( _Tpreg ); 			 
+        	pend.setPartnum( _Partnum );  
+			pend.setPartsugest( _Partsugest );
+			pend.setPartsugdsc( _Partsugdsc);
+			pend.setPartnew( _Partnew );
+			pend.setPartnewdsc( _Partnewdsc );
+			
+			//Detalhe insumo da pendencia
+			insumo.setIdmatriz(produto.getIdMatriz());
+			insumo.setPartnumpd(cor.getPartnumpd());
+			insumo.setPartnum( _Partnum );  
+			insumo.setPartsugest( _Partsugest );
+			insumo.setPartsugdsc( _Partsugdsc );
+			insumo.setPartnew( _Partnew );
+			insumo.setPartnewdsc( _Partnewdsc );			
+			insumo.setPartdesc( _PartdescIns );
+			insumo.setItmorg( _Itmorg );
+			insumo.setIttyp( _Ittyp );
+			insumo.setUnmsr( _Unmsr );
+			insumo.setNecfil( _Necfil );
+			insumo.setCdspn(_Cdspn );
+			insumo.setWeght( _Weght );
+			insumo.setEmcomp( _Emcomp );
+			insumo.setEspec( _Espec );
+			insumo.setUndcom( _Undcom );
+			insumo.setNcmins( _NcmIns );
+			insumo.setVlrunit( _Vlrunit );																		        							    	
+        				
+			//Documentos insumo  
+			doc.setIdmatriz(produto.getIdMatriz());
+			doc.setPartnumpd(cor.getPartnumpd());
+			doc.setPartnum( insumo.getPartnum());           				
+        	doc.setTpdoc( _Tpdoc );
+        	doc.setNumdoc( _Numdoc );
+        	doc.setSerdoc( _Serdoc );
+        	doc.setEmidoc( _Emidoc );
+			doc.setCnpjfor( _Cnpjfor );
+        	doc.setIe( _Ie );
+        	doc.setAdicao( _Adicao );
+        	doc.setItadicao( _Itadicao );
+			doc.setVlrunit( _VlrunitDoc );
+			doc.setSiglaund( _Siglaund );
+			doc.setCodinco( _Codinco );
+			doc.setModal( _Modal );        							
+			doc.setNumdoc2( _Numdoc2 );
+        	doc.setSerdoc2( _Serdoc2);
+        	doc.setEmidoc2( _Emidoc2 );
+        	doc.setCnpjfor2( _Cnpjfor2 );
+        	doc.setIe2( _Ie2 );
+        	doc.setAdicao2( _Adicao2 );
+        	doc.setItadicao2( _Itadicao2 );
+			doc.setVlrunit2( _Vlrunit2 );
+			doc.setSiglaund2( _Siglaund2 );
+			doc.setCodinco2( _Codinco2 );
+			doc.setModal2( _Modal2 );     				
+			doc.setNumdoc3( _Numdoc3 );
+        	doc.setSerdoc3(_Serdoc3 );
+        	doc.setEmidoc3( _Emidoc3 );			        	        	        	        	        	         	        	
+         	doc.setCnpjfor3( _Cnpjfor3);
+        	doc.setIe3( _Ie3 );
+        	doc.setAdicao3( _Adicao3 );
+        	doc.setItadicao3( _Itadicao3 );
+			doc.setVlrunit3( _Vlrunit3 );
+			doc.setSiglaund3( _Siglaund3 );
+			doc.setCodinco3( _Codinco3 );
+			doc.setModal3( _Modal3 );     
+			
+			//Complementa dados da pendencia - sql ja traz dados do insumo relacionado a pendencia - substitui complementaPendencia(...)
+            pend.setNumdoc(doc.getNumdoc());
+			pend.setSerdoc(doc.getSerdoc());
+			pend.setEmidoc(doc.getEmidoc());
+			pend.setVlrunit(doc.getVlrunit());    //(Double) doc.getVlrunit()
+			pend.setSiglaund(doc.getSiglaund());  //new
+			pend.setCnpjfor(doc.getCnpjfor());    //new
+			pend.setIe(doc.getIe());      	      //new
+			pend.setAdicao(doc.getAdicao());      //new
+			pend.setItadicao(doc.getItadicao());  //new
+			pend.setCodinco(doc.getCodinco());    //new
+			pend.setModal(doc.getModal());        //new
+
+
+			pend.setNumdoc2(doc.getNumdoc2());
+			pend.setSerdoc2(doc.getSerdoc2());
+			pend.setEmidoc2(doc.getEmidoc2());
+			pend.setVlrunit2(doc.getVlrunit2());    //new
+			pend.setSiglaund2(doc.getSiglaund2());  //new
+			pend.setCnpjfor2(doc.getCnpjfor2());    //new
+			pend.setIe2(doc.getIe2());      	    //new
+			pend.setAdicao2(doc.getAdicao2());      //new
+			pend.setItadicao2(doc.getItadicao2());  //new
+			pend.setCodinco2(doc.getCodinco2());    //new
+			pend.setModal2(doc.getModal2());        //new
+				
+            pend.setNumdoc3(doc.getNumdoc3());
+			pend.setSerdoc3(doc.getSerdoc3());
+			pend.setEmidoc3(doc.getEmidoc3());			
+			pend.setVlrunit3(doc.getVlrunit3());    //new
+			pend.setSiglaund3(doc.getSiglaund3());  //new
+			pend.setCnpjfor3(doc.getCnpjfor3());    //new
+			pend.setIe3(doc.getIe3());      	    //new
+			pend.setAdicao3(doc.getAdicao3());      //new
+			pend.setItadicao3(doc.getItadicao3());  //new
+			pend.setCodinco3(doc.getCodinco3());    //new
+			pend.setModal3(doc.getModal3());        //new
+			pend.setItmorg(_Itmorg); //19.07.2024 - add to CRTL
+
+						
+
+			//Add distinct cor			
+			Boolean corRepetida = false;			
+			for(CoresResponse color : listaCor){
+				if(color.getPartnumpd().equals(cor.getPartnumpd())){
+					corRepetida = true;   break;
+				}
+			}
+			if(!corRepetida){  listaCor.add(cor);  }
+			
+			//Add pendencia - não se repete pois é o último nível
+			if(!pend.getNumpend().equals("")){
+				listaPend.add(pend);				
+			}
+			
+			//Add distinct insumo - pode se repetir porque pode ter mais de uma pendencia para o mesmo insumo	
+			Boolean insumoRepetido = false;
+			if(!insumo.getPartnum().equals("")){
+				for(InsumosProdResponse ins :  listaInsumo){
+					if(ins.getPartnum().equals(insumo.getPartnum())){
+						insumoRepetido = true;   break;
+					}
+				}							
+			}
+			if(!insumoRepetido && !insumo.getPartnum().equals("")){  
+				listaInsumo.add(insumo); 
+				if(!doc.getTpdoc().equals("")){
+					listaDoc.add(doc); 	//insumo x doc - 1 pra 1	
+				}					
+			}
+
+		}
+        	
+		return produto; 
+	}
+
+*/

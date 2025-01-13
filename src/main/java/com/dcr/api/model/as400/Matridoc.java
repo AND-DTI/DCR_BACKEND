@@ -1,7 +1,9 @@
 package com.dcr.api.model.as400;
+import java.util.Objects;
+
 import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.validator.TamanhoMaximo;
-import com.dcr.api.validator.TamanhoMinimo;
+//import com.dcr.api.validator.TamanhoMinimo;
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -12,7 +14,7 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name = "MATRIDOC", schema = "HD4DCDHH")
+@Table(name = "MATRIDOC"/*, schema = "HD4DCDHH"*/)
 @ApiModel
 public class Matridoc {
 	
@@ -21,7 +23,7 @@ public class Matridoc {
 	private MatridocKey key;
 	
 	@TamanhoMaximo(20)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(20)")
 	private String numdoc;
 	
@@ -31,7 +33,7 @@ public class Matridoc {
 	private String serdoc;
 	
 	@TamanhoMaximo(8)
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(8)")
 	private String emidoc;
 	
@@ -52,7 +54,7 @@ public class Matridoc {
 	private int itadicao;
 
 	@TamanhoMaximo(15) 
-	@TamanhoMinimo(1)
+	//@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,6)")
 	private Double vlrunit;
 
@@ -178,18 +180,42 @@ public class Matridoc {
 	//Create for pendency resolution - create doc3 (no original doc, no sugest doc2)
 	public Matridoc(MatridocKey key, String numdoc3, String emidoc3, String serdoc3, Long cnpjfor3, String ie3, 
 				    String adicao3, int itadicao3, Double vlrunit3, String siglaund3, String codinco3, String modal3) {
+						
 		this.key = key;
 		this.numdoc3 = numdoc3;
 		this.emidoc3 = emidoc3;
-		this.serdoc3 = serdoc3;
-		this.cnpjfor3 = cnpjfor3;
-		this.ie3 = ie3;
-		this.adicao3 = adicao3;
-		this.itadicao3 = itadicao3;
-		this.vlrunit3 = vlrunit3;
-		this.siglaund3 = siglaund3;
-		this.codinco3 = codinco3;
-		this.modal3 = modal3;
+		this.serdoc3 = serdoc3 == null? "": serdoc3;
+		this.cnpjfor3 = cnpjfor3 == null? 0L: cnpjfor3;
+		this.ie3 = ie3 == null? "": ie3;
+		this.adicao3 = adicao3 == null? "": adicao3;
+		this.itadicao3 =  Objects.equals(itadicao3, null)? 0: itadicao3;
+		this.vlrunit3 = vlrunit3 == null? 0.: vlrunit3;
+		this.siglaund3 = siglaund3 == null? "": serdoc3;
+		this.codinco3 = codinco3 == null? "": serdoc3;
+		this.modal3 = modal3 == null? "": serdoc3;
+
+		this.numdoc = "";
+		this.serdoc = "";
+		this.emidoc = "";
+		this.cnpjfor = 0L;
+		this.ie = "";
+		this.adicao = "";
+		this.itadicao = 0;
+		this.vlrunit = 0.;
+		this.siglaund = "";
+		this.codinco = "";
+		this.modal = "";
+		this.numdoc2 = "";
+		this.serdoc2 = "";
+		this.emidoc2 = "";
+		this.cnpjfor2 = 0L;
+		this.ie2 = "";
+		this.adicao2 = "";
+		this.itadicao2 = 0;
+		this.vlrunit2 = 0.;
+		this.siglaund2 = "";
+		this.codinco2 = "";
+		this.modal2 = "";
 	}
 
 

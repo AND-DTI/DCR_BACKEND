@@ -93,9 +93,16 @@ public class Dcrreg0Service {
 	}
 	
 	
-	public List<Dcrreg0> getById(Integer idmatriz, String partnumpd, String tpprd) {
+	public Dcrreg0 getById(Integer idmatriz, String partnumpd, String tpprd) {
 
-		return repository.consultaByIds(idmatriz, partnumpd, tpprd);
+		//return repository.consultaByIds(idmatriz, partnumpd, tpprd);
+	
+		List<Dcrreg0> regs = repository.consultaByIds(idmatriz, partnumpd, tpprd);
+		
+		Dcrreg0 reg0 = regs.isEmpty() ? null: regs.get(0);
+		Auxiliar.formatResponse(reg0);
+
+		return reg0;
 
 	}
 

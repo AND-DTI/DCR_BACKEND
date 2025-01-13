@@ -1,17 +1,17 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.DcrlayoutKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+
+
 @Entity
-@Table(name = "DCRLAYOUT", schema = "HD4DCDHH")
+@Table(name = "DCRLAYOUT"/*, schema = "HD4DCDHH"*/)
 @ApiModel
 public class Dcrlayout {
 	
@@ -37,7 +37,11 @@ public class Dcrlayout {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private Integer campotam;
-	
+
+	@TamanhoMaximo(9)
+	@Column(columnDefinition = "smallint")
+	private Integer casasdec;
+
 	@TamanhoMaximo(30)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(30)")
@@ -127,6 +131,9 @@ public class Dcrlayout {
 	public void setCampotam(Integer campotam) {
 		this.campotam = campotam;
 	}
+
+	public Integer getCasasdec() {		return casasdec;	}
+	public void setCasasdec(Integer casasdec) {		this.casasdec = casasdec;	}
 
 	public String getCampodesc() {
 		return campodesc;

@@ -4,13 +4,37 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.as400.Pendastec;
+import com.dcr.api.response.Interface.PendenciaASTEC;
 
 
 
 
 public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 
+
 	Mtastec findByIdmatrizAndPartnumpd(Integer idmatriz, String partnumpd);
+
+
+	String sqlbase_listProd = """
+	SELECT 
+		prd.IDMATRIZ, prd.PARTNUMPD, prd.DESCCOM, prd.DESCRFB, ppb.PRDDEST, ppb.PPBPRD, 
+		prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT, prd.UNMED, prd.PRECO, prd.NCM as ncm_prd, prc.status as status_prc, /*6 ~ 17*/  
+		pen.NUMPEND, pen.CDPEND, pen.OBSRESOL, pen.STATUS, tpe.descpend, tpe.obspend, pen.flex5flw as obsdetail, tpe.tpreg, /*18 ~ 25*/
+		pen.PARTNUM, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC, /*26 ~ 30*/
+		ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM as ncm_ins, ins.VLRUNIT as vlrUnit_ins, /*31 ~ 42*/     
+		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.CNPJFOR, doc.IE, doc.ADICAO, doc.ITADICAO, doc.VLRUNIT, doc.SIGLAUND, doc.CODINCO, doc.MODAL, /*43 ~ 54*/   
+		doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.CNPJFOR2, doc.IE2, doc.ADICAO2, doc.ITADICAO2, doc.VLRUNIT2, doc.SIGLAUND2, doc.CODINCO2, doc.MODAL2, /*55 ~ 65*/
+		doc.NUMDOC3, doc.SERDOC3, doc.EMIDOC3,  doc.CNPJFOR3, doc.IE3, doc.ADICAO3, doc.ITADICAO3, doc.VLRUNIT3, doc.SIGLAUND3, doc.CODINCO3, doc.MODAL3  /*66 ~ 76*/
+	FROM 
+		HD4DCDHH.MTASTEC  as PRD join 
+		HD4DCDHH.DCRPROCC as PRC on prc.idmatriz= prd.idmatriz and prc.PARTNUMPD= prd.PARTNUMPD left join 
+		HD4DCDHH.CADPPB   as PPB on ppb.partnumpd= prd.partnumpd and ppb.tpprd= 'PC' left join
+		-- pendências:		
+		HD4DCDHH.PENDASTEC as PEN on pen.idmatriz= prd.idmatriz left join
+		HD4DCDHH.CADTPPEND as TPE on tpe.CDPEND = pen.CDPEND left join 
+		HD4DCDHH.MTASTEINS as INS on ins.idmatriz= pen.idmatriz and ins.partnum= pen.partnum left join  
+		HD4DCDHH.MTASTEDOC as DOC on doc.idmatriz= prd.idmatriz and doc.partnum= pen.partnum 
+	""";
 	
 
 	@Query(value = "SELECT mta.IDMATRIZ, mta.PARTNUMPD, mta.DESCCOM, mta.DESCRFB, mta.UNMED, mta.ORIGPRD, mta.DTNECI, mta.PRIOURGEN, mta.PREVFAT, mta.PRIORESP, mta.PRIODTMNT, mta.PRIOHRMNT,\r\n"
@@ -55,60 +79,39 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 	List<Object[]> complementaPendenciaDesc(String cdpend);
 	
 		
-	@Query(value = """
-		SELECT 
-			prd.IDMATRIZ, prd.PARTNUMPD, prd.DESCCOM, prd.DESCRFB, ppb.PRDDEST, ppb.PPBPRD, 
-			prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT, prd.UNMED, prd.PRECO, prd.NCM, prc.status, /*6 ~ 17*/  
-			pen.NUMPEND, pen.CDPEND, pen.OBSRESOL, pen.STATUS, tpe.descpend, tpe.obspend, pen.flex5flw as obsdetail, tpe.tpreg, /*18 ~ 25*/
-			pen.PARTNUM, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC, /*26 ~ 30*/
-			ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM, ins.VLRUNIT, /*31 ~ 42*/     
-			doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.CNPJFOR, doc.IE, doc.ADICAO, doc.ITADICAO, doc.VLRUNIT, doc.SIGLAUND, doc.CODINCO, doc.MODAL, /*43 ~ 54*/   
-			doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.CNPJFOR2, doc.IE2, doc.ADICAO2, doc.ITADICAO2, doc.VLRUNIT2, doc.SIGLAUND2, doc.CODINCO2, doc.MODAL2, /*55 ~ 65*/
-			doc.NUMDOC3, doc.SERDOC3, doc.EMIDOC3,  doc.CNPJFOR3, doc.IE3, doc.ADICAO3, doc.ITADICAO3, doc.VLRUNIT3, doc.SIGLAUND3, doc.CODINCO3, doc.MODAL3  /*66 ~ 76*/
-		FROM 
-			HD4DCDHH.MTASTEC as PRD join 
-			HD4DCDHH.DCRPROCC as PRC on prc.idmatriz= prd.idmatriz and prc.PARTNUMPD= prd.PARTNUMPD   
-			left join
-			HD4DCDHH.PENDASTEC as PEN on pen.idmatriz= prd.idmatriz left join
-			HD4DCDHH.CADTPPEND as TPE on tpe.CDPEND = pen.CDPEND left join 
-			HD4DCDHH.MTASTEINS as INS on ins.idmatriz= pen.idmatriz and ins.partnum= pen.partnum left join  
-			HD4DCDHH.MTASTEDOC as DOC on doc.idmatriz= prd.idmatriz and doc.partnum= pen.partnum 
-			left join
-			HD4DCDHH.CADPPB AS PPB on ppb.partnumpd= prd.partnumpd and ppb.tpprd= 'PC'
-		WHERE 			
-		    prd.IDMATRIZ= :idmatriz and ( :partnum = '-' or pen.PARTNUM = :partnum)
-		Order by prd.idmatriz, pen.numpend
-		""", nativeQuery = true)		
-		List<Object[]> consultaProdutoPendencia(Integer idmatriz, String partnum);
-
-
-		
-	@Query(value = """
-	SELECT 
-		prd.IDMATRIZ, prd.PARTNUMPD, prd.DESCCOM, prd.DESCRFB, ppb.PRDDEST, ppb.PPBPRD, 
-		prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT, prd.UNMED, prd.PRECO, prd.NCM, prc.status, /*6 ~ 17*/  
-		pen.NUMPEND, pen.CDPEND, pen.OBSRESOL, pen.STATUS, tpe.descpend, tpe.obspend, pen.flex5flw as obsdetail, tpe.tpreg, /*18 ~ 25*/
-		pen.PARTNUM, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC, /*26 ~ 30*/
-		ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM, ins.VLRUNIT, /*31 ~ 42*/     
-		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.CNPJFOR, doc.IE, doc.ADICAO, doc.ITADICAO, doc.VLRUNIT, doc.SIGLAUND, doc.CODINCO, doc.MODAL, /*43 ~ 54*/   
-		doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.CNPJFOR2, doc.IE2, doc.ADICAO2, doc.ITADICAO2, doc.VLRUNIT2, doc.SIGLAUND2, doc.CODINCO2, doc.MODAL2, /*55 ~ 65*/
-		doc.NUMDOC3, doc.SERDOC3, doc.EMIDOC3,  doc.CNPJFOR3, doc.IE3, doc.ADICAO3, doc.ITADICAO3, doc.VLRUNIT3, doc.SIGLAUND3, doc.CODINCO3, doc.MODAL3  /*66 ~ 76*/
-	FROM 
-		HD4DCDHH.MTASTEC as PRD join 
-		HD4DCDHH.DCRPROCC as PRC on prc.idmatriz= prd.idmatriz and prc.PARTNUMPD= prd.PARTNUMPD   
-		left join
-		HD4DCDHH.PENDASTEC as PEN on pen.idmatriz= prd.idmatriz left join
-		HD4DCDHH.CADTPPEND as TPE on tpe.CDPEND = pen.CDPEND left join 
-		HD4DCDHH.MTASTEINS as INS on ins.idmatriz= pen.idmatriz and ins.partnum= pen.partnum left join  
-		HD4DCDHH.MTASTEDOC as DOC on doc.idmatriz= prd.idmatriz and doc.partnum= pen.partnum 
-		left join
-		HD4DCDHH.CADPPB AS PPB on ppb.partnumpd= prd.partnumpd and ppb.tpprd= 'PC'
+	@Query(value = 
+	sqlbase_listProd + """
 	WHERE 			
+		prd.IDMATRIZ= :idmatriz and ( :partnum = '-' or pen.PARTNUM = :partnum)  
+	Order by pen.numpend
+	""", nativeQuery = true)
+	//List<Object[]> consultaProdutoPendencia(Integer idmatriz, String partnumpd);
+	List<PendenciaASTEC> consultaProdutoPendencia(Integer idmatriz, String partnum);
+
+	@Query(value = 
+	sqlbase_listProd + """
+	WHERE 
+		prd.IDMATRIZ= :idmatriz and pen.flex3flw= 'DIAG' and pen.status = 0 /*add field SUBTIPO*/
+	""", nativeQuery = true)
+	List<PendenciaASTEC> consultaProdutoPendenciaDiagnostico(Integer idmatriz);
+	
+
+	@Query(value = 
+	sqlbase_listProd + """
+	WHERE 
+		prd.IDMATRIZ= :idmatriz and pen.flex3flw= :subtype and pen.status= :status /*add field SUBTIPO*/
+	""", nativeQuery = true)
+	List<PendenciaASTEC> consultaProdutoPendenciaBySubtype(Integer idmatriz, String subtype, int status);
+
+
+	@Query(value = 
+	sqlbase_listProd + """
+	WHERE 
 		prc.status in :status 
 	Order by prd.idmatriz, pen.numpend
 	""", nativeQuery = true)
 	List<Object[]> consultaTodasAsPendencias(List<Integer> status);
-	  
+
 
 	@Query(value = "SELECT COUNT(IDMATRIZ) FROM HD4DCDHH.PENDASTEC WHERE IDMATRIZ = :idmatriz AND STATUS = 0", nativeQuery = true)
 	Integer countPendenciasNoPartnum(String idmatriz);

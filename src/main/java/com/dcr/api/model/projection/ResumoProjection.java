@@ -1,5 +1,6 @@
 package com.dcr.api.model.projection;
 
+
 public interface ResumoProjection {
     Long getIdmatriz();
     String getPartnumpd();
@@ -20,10 +21,22 @@ public interface ResumoProjection {
     String getHrenvio();
     String getRepreenvio();
     String getProtostatus();
-    Double getPeso();
-    Double getSalarios();
-    String getUndcom();
-    String getTpdcre();
-    Double getEncargos();
+    String getPpb(); 
+    String getDenom();
     String getNcm();
+    String getUndcom();
+    Double getSalarios();
+    Double getEncargos();
+    Double getPeso();
+    Double getPreco_brl(); 
+    Double getPreco_usd();
+    String getTpdcre();
+    String getDcrant(); 
+    String getProcretif();
+    Double getTaxa();
+    Double getPre_totalnac();   
+    Double getPre_totalimp();
+    Double getPre_custotal();
+    Double getPre_iitotal(); 
+    Double getPre_iireduzido(); 
 }

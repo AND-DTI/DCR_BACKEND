@@ -108,7 +108,9 @@ public class SistemaController {
 				            .body("Registro já existe!");
 			}
 			
-			Accsys dcrNew = service.create(dto, request);
+			//Accsys dcrNew = service.create(dto, request);
+			service.create(dto, request);
+
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
 			            .body("OK");
@@ -140,7 +142,9 @@ public class SistemaController {
 				            .body("Registro não existe!");
 			}
 			
-			Accsys dcrNew = service.update(dcr.get(), dto, request);
+			//Accsys dcrNew = service.update(dcr.get(), dto, request);
+			service.update(dcr.get(), dto, request);
+			
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
 			            .body("OK");

@@ -1,29 +1,27 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.dcr.api.model.as400.Dcrcors;
-import com.dcr.api.model.as400.Dcrcorsip;
 import com.dcr.api.model.as400.Dcrcorsrq;
-import com.dcr.api.model.dto.DcrcorsDTO;
 import com.dcr.api.model.dto.DcrcorsrqDTO;
-import com.dcr.api.repository.as400.DcrcorsRepository;
 import com.dcr.api.repository.as400.DcrcorsrqRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @Service
 public class DcrcorsrqService {
+
+
 	@Autowired
 	DcrcorsrqRepository repository;
+	
 	
 	public List<Dcrcorsrq> getAll(){
 		return repository.findAll();

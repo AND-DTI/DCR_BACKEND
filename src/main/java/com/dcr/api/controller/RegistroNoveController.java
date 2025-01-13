@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,26 +12,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.dcr.api.model.as400.Dcrreg1;
 import com.dcr.api.model.as400.Dcrreg9;
 import com.dcr.api.model.dto.Dcrreg9DTO;
 import com.dcr.api.model.keys.Dcrreg9Key;
 import com.dcr.api.service.as400.Dcrreg9Service;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/registro/nove")
 public class RegistroNoveController {
+	
+	
+
 	@Autowired
 	Dcrreg9Service service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os registros")
 	@ApiResponses(value = {
@@ -60,9 +63,11 @@ public class RegistroNoveController {
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+
 	}
 	
 	
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um registro")
 	@ApiResponses(value = {
@@ -97,8 +102,11 @@ public class RegistroNoveController {
 		    		.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Cria um registro")
 	@ApiResponses(value = {
@@ -131,13 +139,16 @@ public class RegistroNoveController {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    		.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
-		}   
+		}  
+
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
-	@Operation(summary = "Busca o registro ativo")
+	@Operation(summary = "Busca o registro 9")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "201", description = "registro criado!"),
+	        @ApiResponse(responseCode = "200", description = "Registro encontrado!"),
 	        @ApiResponse(responseCode = "400", description = "Nenhum registro encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
@@ -146,9 +157,10 @@ public class RegistroNoveController {
 	
 		try {
 
-			List<Dcrreg9> dcr = service.getByIds(idmatriz, partnumpd, tpprd);
+			//List<Dcrreg9> dcr = service.getByIds(idmatriz, partnumpd, tpprd);
+			Dcrreg9 dcr = service.getByIds(idmatriz, partnumpd, tpprd);
 			
-			if (dcr.isEmpty()) {
+			if (dcr == null) {//if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 						.header("Accept", "application/json")
 						.body("Nenhum registro encontrado!");
@@ -162,6 +174,8 @@ public class RegistroNoveController {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    		.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
-		}   
+		}  
+		 
 	}
+
 }

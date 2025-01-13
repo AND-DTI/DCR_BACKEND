@@ -9,8 +9,9 @@ public class ProdutoSemListaAstecResponse {
 
 	private Object idMatriz;
 	private Object partnumpd;
-
-    private Object desccom;
+	private Object tpprd;
+    
+	private Object desccom;
     private Object descrfb;
 	private Object ppbprd; 
     private Object prddest;
@@ -39,6 +40,9 @@ public class ProdutoSemListaAstecResponse {
 
 	public Object getPartnumpd() {		return partnumpd;	}
 	public void setPartnumpd(Object partnumpd) {		this.partnumpd = partnumpd;	}
+
+	public Object getTpprd() {		return tpprd;	}
+	public void setTpprd(Object tpprd) {		this.tpprd = tpprd;	}
 
 	public Object getDesccom() {		return desccom;	}
 	public void setDesccom(Object desccom) {		this.desccom = desccom;	}

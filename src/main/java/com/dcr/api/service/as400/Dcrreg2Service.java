@@ -1,13 +1,9 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.dcr.api.model.as400.Dcrreg1;
 import com.dcr.api.model.as400.Dcrreg2;
 import com.dcr.api.model.dto.Dcrreg2DTO;
 import com.dcr.api.model.keys.Dcrreg2Key;
@@ -15,8 +11,10 @@ import com.dcr.api.repository.as400.Dcrreg2Repository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @Service
 public class Dcrreg2Service {
@@ -80,8 +78,11 @@ public class Dcrreg2Service {
 		return repository.findById(dto);
 	}
 	
-	public List<Dcrreg2> getByIds(Integer idmatriz, String partnumpd, String tpprd) {
+	public List<Dcrreg2> getByIds(Integer idmatriz, String partnumpd, String tpprd) {		
 
-		return repository.consultaByIds(idmatriz, partnumpd, tpprd);
+		List<Dcrreg2> lista = repository.consultaByIds(idmatriz, partnumpd, tpprd);
+		Auxiliar.formatResponse(lista);
+
+		return lista;
 	}
 }

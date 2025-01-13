@@ -1,14 +1,8 @@
 package com.dcr.api.controller;
-
-import java.io.Serial;
-import java.math.BigInteger;
-import java.net.UnknownHostException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,13 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Accuser;
-import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.CreateUserDTO;
 import com.dcr.api.model.dto.UpdateUserDTO;
-import com.dcr.api.model.dto.User;
-import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.response.RoleResponse;
 import com.dcr.api.service.AuthenticationService;
 import com.dcr.api.service.as400.RoleService;
@@ -40,16 +30,19 @@ import com.dcr.api.service.as400.UserRoleService;
 import com.dcr.api.service.as400.UserService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
 
     @Autowired
     private UserService userService;
@@ -68,6 +61,8 @@ public class UserController {
 
     @Autowired
     AuthenticationManager authManager;
+
+
 
     @PutMapping(value = "/create", produces = "application/json")
     @Operation(summary = "Create User")
@@ -165,6 +160,7 @@ public class UserController {
     }
     
 
+
     @GetMapping(value = "/getAll", produces = "application/json")
     @Operation(summary = "Listar usuários")
     @ApiResponses(value = {
@@ -183,6 +179,8 @@ public class UserController {
 
     }
     
+
+
     @GetMapping(value = "/getAtivos", produces = "application/json")
     @Operation(summary = "Listar usuários")
     @ApiResponses(value = {
@@ -201,6 +199,8 @@ public class UserController {
 
     }
     
+
+
     @GetMapping(value = "/getUser", produces = "application/json")
     @Operation(summary = "Listar usuário por username")
     @ApiResponses(value = {
@@ -219,6 +219,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(optUser.get());
 
     }
+
+
 
     @PostMapping(value = "/update", produces = "application/json")
     @Operation(summary = "Alterar usuário.")
@@ -262,4 +264,5 @@ public class UserController {
                     .body(userALT);
         }
     }
+
 }

@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
-import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MatriitmKey;
+import com.dcr.api.response.ProdutoPendenciaResponse2;
 import com.dcr.api.schedule.ScheduleService;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MatriitmService;
@@ -182,7 +182,10 @@ public class MatrizProdutoController {
 	public ResponseEntity<Object> updateComCor(@RequestBody MatriprdComCorIdDTO dto, HttpServletRequest request) {
 	
 		try {
+
+			//Update Cor
 			for (MatriitmDTO cor : dto.itens()) {
+
 				MatriitmKey key = new MatriitmKey();
 				key.setIdmatriz(cor.idmatriz());
 				key.setModelo(cor.modelo());
@@ -193,26 +196,35 @@ public class MatrizProdutoController {
 					corService.update(corOg.get(), cor, request);
 				}
 				
-				List<Pendprod> pendencias = pendservice.findPendenciasZero(Long.valueOf(cor.idmatriz()), cor.partnumpd());
-		        
 
-				//Se nao tem pendencia em aberto (0) - avanca para 3 (em diagnostico) senão avança para 1 (em tratativa de pendencias) //j4 adeed:
-				if (cor.priocor() == 1){
-
-					DcrproccKey dcrproccKey = new DcrproccKey();
-					dcrproccKey.setIdmatriz(Integer.valueOf(cor.idmatriz()));
-					dcrproccKey.setPartnumpd(cor.partnumpd());					
-					dcrproccKey.setTpprd(dto.tpprd());
-					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
-					
-					int status = pendencias.isEmpty()? 3: 1;									
-					if(!dcr.isEmpty()){
-						if(dcr.get().getStatus() < status){
-							processoservice.setStatus(dcr.get(), status, request);
-						}						
-					}
-					
+				//Pega Processo
+				DcrproccKey dcrproccKey = new DcrproccKey();
+				dcrproccKey.setIdmatriz(Integer.valueOf(cor.idmatriz()));
+				dcrproccKey.setPartnumpd(cor.partnumpd());					
+				dcrproccKey.setTpprd(dto.tpprd());
+				Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
+				if (dcr.isEmpty()) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.header("Accept", "application/json")
+							.body("Processo da Matriz ASTEC não encontrado!");
 				}
+
+				Dcrprocc processo = dcr.get();
+				if (cor.priocor() == 1){
+					if (processo.getStatus() == 0){
+						processoservice.setStatus(processo, 1, request);
+					}
+				}
+
+				/*Não avançar - após geração de pendência - GX vai add END - se não encontrar nehuma pendencia @@validar GX - implementar 
+				//Se nao tem pendencia em aberto (0) - avanca para 3 (em diagnostico) senão avança para 1 (em tratativa de pendencias) //j4 adeed:
+				List<Pendprod> pendencias = pendservice.findPendenciasZero(Long.valueOf(cor.idmatriz()), cor.partnumpd());
+				if (cor.priocor() == 1){										
+					int status = pendencias.isEmpty()? 3: 1;														
+					if(processo.getStatus() < status){
+						processoservice.setStatus(processo, status, request);
+					}
+				} */
 
 
 				//Gui: j4 - commented
@@ -220,33 +232,35 @@ public class MatrizProdutoController {
 		        	DcrproccKey dcrproccKey = new DcrproccKey();
 		        	dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
 		        	dcrproccKey.setPartnumpd(cor.partnumpd());					
-		        	dcrproccKey.setTpprd(dto.tpprd());
-					
+		        	dcrproccKey.setTpprd(dto.tpprd());					
 					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
 		        	processoservice.setStatus(dcr.get(), 3, request);
 		        }else {
 		        	DcrproccKey dcrproccKey = new DcrproccKey();
 		        	dcrproccKey.setIdmatriz(Long.valueOf(cor.idmatriz()));
 		        	dcrproccKey.setPartnumpd(cor.partnumpd());					
-		        	dcrproccKey.setTpprd(dto.tpprd());
-					
+		        	dcrproccKey.setTpprd(dto.tpprd());					
 					Optional<Dcrprocc> dcr = processoservice.getByKey(dcrproccKey);
 		        	processoservice.setStatus(dcr.get(), 1, request);
 		        }*/
 				
 			}
+			
+			
+			//Update Matriz
 			Optional<Matriprd> lista = service.getByID(dto.idmatriz());
 	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .header("Accept", "application/json")
 	                    .body("Matriz de produto não encontrada!");
 	        }
-	        
-	        
+	      
 	        service.updateComCor(lista.get(), dto,  request);
+
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -328,6 +342,7 @@ public class MatrizProdutoController {
 	}
 
 
+    
 	@GetMapping(value = "/reprocStruct", produces = "application/json")
 	@Operation(summary = "Recalcula estrutura de produto")
 	@ApiResponses(value = {
@@ -350,7 +365,7 @@ public class MatrizProdutoController {
 	        }
 
 			Matriprd matriz = lista.get();
-			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
+			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().trim().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.header("Accept", "application/json")
 				.body("Matriz bloqueada por outro processo!");
@@ -426,7 +441,50 @@ public class MatrizProdutoController {
 
 
 
+    @GetMapping(value = "/getProdutoPendenciaBySubtype", produces = "application/json")
+	@Operation(summary = "Busca pendência do produto por subtipo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência de produto encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getProdutoPendenciaBySubtype(@RequestParam Integer idmatriz, @RequestParam String partnumpd, @RequestParam String subtype, @RequestParam int status) {
+	
+		try {
+
+			ProdutoPendenciaResponse2 lista = service.getProdutoPendenciaBySubtype(idmatriz, partnumpd, subtype, status); 													
+	        if (lista.getIdMatriz() == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma pendência de diagnóstico encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+			Auxiliar.formatResponseList2(lista.getPendencias());
+			Auxiliar.formatResponseList2(lista.getInsumos());
+			Auxiliar.formatResponseList2(lista.getDocumentos()); 
+						
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+					
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+
+
 
 
 
 }
+/*
+
+List<JobExplosaoINT> lista = repository.getJobExplosao();
+
+List<JobExplosaoDTO> procs = Arrays.asList(mapper.map(lista, JobExplosaoDTO[].class));
+
+return procs;
+*/

@@ -12,6 +12,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -29,7 +30,11 @@ public class Pendresp {
     private String nmresp;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cdpend", referencedColumnName = "cdpend", insertable = false, updatable = false)
+    //@JoinColumn(name = "cdpend", referencedColumnName = "cdpend", insertable = false, updatable = false)
+    @JoinColumns({
+        @JoinColumn(name = "cdpend", referencedColumnName = "cdpend", insertable = false, updatable = false)
+        //@JoinColumn(name = "subtipo", referencedColumnName = "subtipo", insertable = false, updatable = false)        
+    })
     private Cadtppend cadtppend;
 	
     @Column(columnDefinition = "char(40)")

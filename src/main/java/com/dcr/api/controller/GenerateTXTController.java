@@ -48,7 +48,7 @@ public class GenerateTXTController {
 		
 		
 		try {
-			String fileName = txtService.gerarArquivoTXT(idmatriz, partnumpd, tpprd, "diagnostico");
+			String fileName = txtService.gerarArquivoTXT2(idmatriz, partnumpd, tpprd, "diagnostico"); //old .gerarArquivoTXT(
 			var file = new File(fileName);//old "arquivoTeste2.txt"
 	        var path = Paths.get(file.getAbsolutePath());
 	        //var resource = new ByteArrayResource(Files.readAllBytes(path));			

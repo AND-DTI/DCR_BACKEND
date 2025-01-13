@@ -69,8 +69,9 @@ public class MatriitmService {
 		matriz.setPriocor(dto.priocor());
 		matriz.setNcm(dto.ncm()); //j4 - null value controled by entity
 		matriz.setPreco(0.);
-				
+		matriz.setUndcom("");				
 		Auxiliar.preencheAuditoria(matriz, request);
+		
 		return repository.save(matriz);
 	}
 	

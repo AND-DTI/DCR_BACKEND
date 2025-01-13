@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +13,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Cadtaxa;
-import com.dcr.api.model.as400.Cadtpprd;
 import com.dcr.api.model.dto.CadtaxaDTO;
-import com.dcr.api.model.dto.CadtpprdDTO;
-import com.dcr.api.repository.as400.CadtaxaRepository;
 import com.dcr.api.response.TaxaResponse;
 import com.dcr.api.service.as400.CadtaxaService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/taxa")
 public class TaxaController {
 	
+
 	@Autowired
 	CadtaxaService service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos as tipos de produtos")
 	@ApiResponses(value = {
@@ -66,6 +65,8 @@ public class TaxaController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -95,6 +96,8 @@ public class TaxaController {
 		}   
 	}
 
+
+
 	@GetMapping(value = "/getTaxa", produces = "application/json")
 	@Operation(summary = "Busca um tipo de produto")
 	@ApiResponses(value = {
@@ -108,23 +111,27 @@ public class TaxaController {
 		try {
 			
 			TaxaResponse taxa = service.getVigente(cdmoed);
-	        
-	        Auxiliar.formatResponse(taxa);
+	        	        
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(taxa);
+
 		} catch (Exception ae) {
+
 			if(ae.getMessage().equals("No value present")) {
 				 return ResponseEntity.status(HttpStatus.BAD_REQUEST) 
 			    			.header("Accept", "application/json")
 			        		.body("Taxa não encontrada!");      
 			}
+			
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um tipo de produto")
 	@ApiResponses(value = {
@@ -155,6 +162,8 @@ public class TaxaController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera um tipo")
 	@ApiResponses(value = {
@@ -185,6 +194,8 @@ public class TaxaController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta um tipo")
 	@ApiResponses(value = {

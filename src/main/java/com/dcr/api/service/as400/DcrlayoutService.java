@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -177,13 +178,17 @@ public class DcrlayoutService {
 		//reg-1
 		for (Dcrreg1 dcrreg1 : reg1) {
 			
-			for (Dcrlayout campo : map.get("1 ")) {
-			
+			//String fieldReg = "modelo";
+			//sb.append(Auxiliar.verificarPreenchimento2(dcrreg1, campo, "modelo"));
+			//Dcrlayout regraLayout = 
+
+			for (Dcrlayout campo : map.get("1 ")) {							
 			if(campo.getKey().getCampo().toLowerCase().trim().equals("modelo")) {
 				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
 					sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "modelo"));
 				}else {
-					sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getModelo(), campo.getCampotam()) );
+					//sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getModelo(), campo.getCampotam()) );
+					sb.append(Auxiliar.addZeros(dcrreg1.getKey().getModelo(), campo.getCampotam()) );				  
 				}
 			} else
 			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
@@ -630,6 +635,223 @@ public class DcrlayoutService {
     }
 	
 	
+	public String /*void*/ gerarArquivoTXT2(Integer idMatriz, String partnumpd, String tpprd, String path) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        
+		//String fileName = tpprd+ StringUtils.leftPad(String.valueOf(idMatriz), 10, "0") +partnumpd.replace("00000", "");
+		String fileName = tpprd+String.valueOf(idMatriz)+"_"+partnumpd.replace("00000", "")+".txt";
+		String file = (path+"\\"+fileName).replace("/\s/g", ""); //j4
+		FileWriter fw = new FileWriter(file); 
+		BufferedWriter bw = new BufferedWriter(fw); 
+		StringBuffer sb = null;
+		Sort sort = Sort.by(Sort.Direction.ASC, "key.idreg", "posini");
+		List<Dcrlayout> campos =  repository.findAll(sort);
+		String representante= "94762953687";
+         
+		Map<Object, List<Dcrlayout>> map = campos.stream()
+				.collect(Collectors.groupingBy(dcrlayout -> dcrlayout.getKey().getIdreg()));
+         
+		List<Dcrreg0> reg0 = reg0Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg1> reg1 = reg1Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg2> reg2 = reg2Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg3> reg3 = reg3Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg4> reg4 = reg4Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg9> reg9 = reg9Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+
+
+		//REG-0	
+		sb = new StringBuffer();
+		String idreg = "0 ";
+		for (Dcrreg0 registro : reg0) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString().replace("***********", representante));
+
+
+		//REG-1		
+		sb = new StringBuffer();
+		idreg = "1 ";
+		for (Dcrreg1 registro : reg1) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString());
+
+
+		//REG-2		
+		sb = new StringBuffer();
+		idreg = "2 ";
+		for (Dcrreg2 registro : reg2) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);		
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString());
+
+
+		//REG-3		
+		sb = new StringBuffer();
+		idreg = "3 ";
+		for (Dcrreg3 registro : reg3) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString());		
+
+
+		//REG-4
+		sb = new StringBuffer();
+		idreg = "4 ";
+		for (Dcrreg4 registro : reg4) {
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");
+		}
+		bw.write(sb.toString());
+		/*bw.write("\n");
+		bw.write(sb.toString());
+		bw.write("\n");
+		bw.write(sb.toString());
+		bw.write("\n");
+		bw.write(sb.toString());
+		bw.write("\n");*/
+		
+
+		//REG-9
+		sb = new StringBuffer();
+		idreg = "9 ";
+		for (Dcrreg9 registro : reg9) {
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				sb.append(campoFormatado);												
+
+			}
+			sb.append("\r\n");
+		}	
+		//System.out.println(sb.toString());	
+		//String total9 = sb.toString();		
+		//bw.write("\n aaa \n");
+		//bw.write(total9);
+		bw.write(sb.toString());
+		bw.close();
+
+
+		//Copy File to operator
+		List<String> files = new ArrayList<String>();
+		files.add(fileName);
+		String publicPath = "//Htb0133/htb/HTB/HTB/DCR".replace("/\s/g", "");		
+		Auxiliar.copyFiles(files, path, publicPath);
+
+
+		return file;
+	}
+
+
 	public Optional<Dcrlayout> getById(DcrlayoutKey key) {
 		return repository.findById(key);
 	}
