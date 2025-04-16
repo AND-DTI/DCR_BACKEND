@@ -25,14 +25,15 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
             p.partnumpd, mt.produto, mt.modelo, mt.desccom, mt.tpprd, mt.origprd,
             j.cnrojob, j.cdtinicio, j.cdtfinal, j.cstsjob, p.status,     
             case when h.stsold is null 
-            then p.dtstatus else h.dtstatus
-            end as dtMatriz
+              then p.dtstatus else h.dtstatus
+            end as dtMatriz,
+			substring(trim(flex5), 1, 16) dtProcessamento			
         from 
             (select idmatriz, flex1flw statusMatriz, itaudusr idusr, trim(flex4flw) descStatus, 
-                    produto, modelo, desccom, tpprd, origprd
+                    produto, modelo, desccom, tpprd, origprd, flex5flw flex5
              from   HD4DCDHH.MATRIPRD union
              select idmatriz, flex1flw statusMatriz, itaudusr idusr, trim(flex4flw) descStatus, 
-                    '' produto, '' modelo, desccom, 'PC' tpprd, origprd
+                    '' produto, '' modelo, desccom, 'PC' tpprd, origprd, flex5flw flex5
              from   HD4DCDHH.MTASTEC
             )mt left join
             HD4DCDHH.DCRPROCC p on p.idmatriz= mt.idmatriz and p.tpprd= mt.tpprd left join

@@ -20,7 +20,9 @@ public class ProcessamentoMatrizDTO {
     private String cstsjob;
     private int status;
     private String dtmatriz;
+    private String dtProcessamento;
 
+    
     public Integer getStatusmatriz() {
         return statusmatriz;
     }
@@ -123,5 +125,10 @@ public class ProcessamentoMatrizDTO {
     public void setDtmatriz(String dtmatriz) {
         this.dtmatriz = dtmatriz;
     }
+
+    public String getDtProcessamento() {        return dtProcessamento;    }
+    public void setDtProcessamento(String dtProcessamento) {
+        this.dtProcessamento = dtProcessamento;
+    }    
     
 }

@@ -19,5 +19,6 @@ public interface ProcessamentoMatrizINT {
     String getCstsjob();
     int getStatus();
     String getDtmatriz();
+    String getDtProcessamento();
 
 }
