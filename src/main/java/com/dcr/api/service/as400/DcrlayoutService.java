@@ -1,20 +1,17 @@
 package com.dcr.api.service.as400;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import com.dcr.api.model.as400.Dcrlayout;
 import com.dcr.api.model.as400.Dcrreg0;
 import com.dcr.api.model.as400.Dcrreg1;
@@ -34,11 +31,15 @@ import com.dcr.api.repository.as400.Dcrreg9Repository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
 
 @Service
 public class DcrlayoutService {
+
+
+
 	@Autowired
 	DcrlayoutRepository repository;
 	
@@ -59,169 +60,182 @@ public class DcrlayoutService {
 	
 	@Autowired
 	Dcrreg9Repository reg9Repository;
+
+
 	
-	public void gerarArquivoTXT(Integer idMatriz, String partnumpd, String tpprd) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-         FileWriter fw = new FileWriter("arquivoTeste2.txt");
-         BufferedWriter bw = new BufferedWriter(fw); 
-         StringBuffer sb = new StringBuffer();
-         Sort sort = Sort.by(Sort.Direction.ASC, "key.idreg", "posini");
-         List<Dcrlayout> campos =  repository.findAll(sort);
-         
-         Map<Object, List<Dcrlayout>> map = campos.stream()
-                 .collect(Collectors.groupingBy(dcrlayout -> dcrlayout.getKey().getIdreg()));
-         
+	public String /*void*/ gerarArquivoTXT(Integer idMatriz, String partnumpd, String tpprd, String path) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         
-         List<Dcrreg0> reg0 = reg0Repository.consultaByIds(idMatriz, partnumpd, tpprd);
-         List<Dcrreg1> reg1 = reg1Repository.consultaByIds(idMatriz, partnumpd, tpprd);
-         List<Dcrreg2> reg2 = reg2Repository.consultaByIds(idMatriz, partnumpd, tpprd);
-         List<Dcrreg3> reg3 = reg3Repository.consultaByIds(idMatriz, partnumpd, tpprd);
-         List<Dcrreg4> reg4 = reg4Repository.consultaByIds(idMatriz, partnumpd, tpprd);
-         List<Dcrreg9> reg9 = reg9Repository.consultaByIds(idMatriz, partnumpd, tpprd);
-         for (Dcrreg0 dcrreg0 : reg0) {
-        	 
-        	 for (Dcrlayout campo : map.get("0 ")) {
-    			
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("denom")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "denom"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getDenom(), campo.getCampotam()));
-	       			}
-    			} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "partnumpd"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getPartnumpd(), campo.getCampotam()) );
-	       			}
-    			} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "tpprd"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getTpprd(), campo.getCampotam()) );
-	       			}
-    			} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "idmatriz"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getIdmatriz(), campo.getCampotam()) );
-	       			}
-    			} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("peso")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "peso"));
-	       			}else {
-	       				sb.append(Auxiliar.addCasasDecimais(dcrreg0.getPeso(), campo.getCampotam(), 5));
-	       			}
-    			} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("salarios")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "salarios"));
-	       			}else {
-	       				sb.append(Auxiliar.addCasasDecimais(dcrreg0.getSalarios(), campo.getCampotam(), 2));
-	       			}
-    			} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("encargos")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "encargos"));
-	       			}else {
-	       				sb.append(Auxiliar.addCasasDecimais(dcrreg0.getEncargos(), campo.getCampotam(), 2));
-	       			}
-    			} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("dcrant")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "dcrant"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg0.getDcrant(), campo.getCampotam()));
-	       			}
-        		} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("procretif")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "procretif"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg0.getProcretif(), campo.getCampotam()));
-	       			}
-        		} else
-    			if(campo.getKey().getCampo().toLowerCase().trim().equals("vrspgd")) {
-    				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "vrspgd"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg0.getVrspgd(), campo.getCampotam()));
-	       			}
-        		} else {
-	    			Class<?> classe = dcrreg0.getClass();
-	    			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-	    			field.setAccessible(true);
-	    			
-	    			if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg0), campo, campo.getKey().getCampo().toLowerCase().trim()));
-	       			}else if(campo.getFillblank()!= null) {
-	     				sb.append(Auxiliar.addSpaces(field.get(dcrreg0), campo.getCampotam()));
-	     			}else {
-	     				sb.append(Auxiliar.addZeros(field.get(dcrreg0), campo.getCampotam()));
-	     			}
-        		}
+		String fileName = (path+"\\"+tpprd+idMatriz+partnumpd).replace("/\s/g", "")+".txt"; //j4
+		FileWriter fw = new FileWriter(fileName); //old arquivoTeste2.txt
+		BufferedWriter bw = new BufferedWriter(fw); 
+		StringBuffer sb = new StringBuffer();
+		Sort sort = Sort.by(Sort.Direction.ASC, "key.idreg", "posini");
+		List<Dcrlayout> campos =  repository.findAll(sort);
+         
+		Map<Object, List<Dcrlayout>> map = campos.stream()
+				.collect(Collectors.groupingBy(dcrlayout -> dcrlayout.getKey().getIdreg()));
+         
+		List<Dcrreg0> reg0 = reg0Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg1> reg1 = reg1Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg2> reg2 = reg2Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg3> reg3 = reg3Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg4> reg4 = reg4Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg9> reg9 = reg9Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+
+		//REG-0
+		for (Dcrreg0 dcrreg0 : reg0) {
+			
+			for (Dcrlayout campo : map.get("0 ")) {
+			
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("denom")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "denom"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getDenom(), campo.getCampotam()));
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "partnumpd"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getPartnumpd(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "tpprd"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getTpprd(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "idmatriz"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg0.getKey().getIdmatriz(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("peso")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "peso"));
+				}else {
+					sb.append(Auxiliar.addCasasDecimais(dcrreg0.getPeso(), campo.getCampotam(), 5));
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("salarios")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "salarios"));
+				}else {
+					sb.append(Auxiliar.addCasasDecimais(dcrreg0.getSalarios(), campo.getCampotam(), 2));
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("encargos")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "encargos"));
+				}else {
+					sb.append(Auxiliar.addCasasDecimais(dcrreg0.getEncargos(), campo.getCampotam(), 2));
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("dcrant")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "dcrant"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg0.getDcrant(), campo.getCampotam()));
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("procretif")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "procretif"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg0.getProcretif(), campo.getCampotam()));
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("vrspgd")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg0, campo, "vrspgd"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg0.getVrspgd(), campo.getCampotam()));
+				}
+			} else {
+				Class<?> classe = dcrreg0.getClass();
+				Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+				field.setAccessible(true);
+				
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg0), campo, campo.getKey().getCampo().toLowerCase().trim()));
+				}else if(campo.getFillblank()!= null) {
+					sb.append(Auxiliar.addSpaces(field.get(dcrreg0), campo.getCampotam()));
+				}else {
+					sb.append(Auxiliar.addZeros(field.get(dcrreg0), campo.getCampotam()));
+				}
 			}
-        	 sb.append("\n");
-         }
-         bw.write(sb.toString());
-         sb = new StringBuffer();
-         for (Dcrreg1 dcrreg1 : reg1) {
-        	 
-        	 for (Dcrlayout campo : map.get("1 ")) {
-      			
-      			if(campo.getKey().getCampo().toLowerCase().trim().equals("modelo")) {
-      				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "modelo"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getModelo(), campo.getCampotam()) );
-	       			}
-      			} else
-      			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
-      				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "partnumpd"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getPartnumpd(), campo.getCampotam()) );
-	       			}
-      			} else
-      			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
-      				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "partnumpd"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getPartnumpd(), campo.getCampotam()) );
-	       			}
-      			} else
-      			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
-      				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "idmatriz"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getIdmatriz(), campo.getCampotam()) );
-	       			}
-      			} else
-      			if(campo.getKey().getCampo().toLowerCase().trim().equals("preco")) {
-    		        sb.append(Auxiliar.addCasasDecimais(dcrreg1.getPreco(), campo.getCampotam(), 2));
-    			} else {
-      			
-	      			Class<?> classe = dcrreg1.getClass();
-	      			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-	      			field.setAccessible(true);
-	      			
-	      			if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg1), campo, campo.getKey().getCampo().toLowerCase().trim()));
-	       			}else if(campo.getFillblank()!= null) {
-	     				sb.append(Auxiliar.addSpaces(field.get(dcrreg1), campo.getCampotam()));
-	     			}else {
-	     				sb.append(Auxiliar.addZeros(field.get(dcrreg1), campo.getCampotam()));
-	     			}
-    			}
-     		}
-        	 sb.append("\n");
-          }
-         bw.write(sb.toString());
-         sb = new StringBuffer();
-         for (Dcrreg2 dcrreg2 : reg2) {
+		}
+			sb.append("\n");
+		}						
+		bw.write(sb.toString());
+		sb = new StringBuffer();
+         		 
+		//reg-1
+		for (Dcrreg1 dcrreg1 : reg1) {
+			
+			//String fieldReg = "modelo";
+			//sb.append(Auxiliar.verificarPreenchimento2(dcrreg1, campo, "modelo"));
+			//Dcrlayout regraLayout = 
+
+			for (Dcrlayout campo : map.get("1 ")) {							
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("modelo")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "modelo"));
+				}else {
+					//sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getModelo(), campo.getCampotam()) );
+					sb.append(Auxiliar.addZeros(dcrreg1.getKey().getModelo(), campo.getCampotam()) );				  
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "partnumpd"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getPartnumpd(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "partnumpd"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getPartnumpd(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg1, campo, "idmatriz"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg1.getKey().getIdmatriz(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("preco")) {
+				sb.append(Auxiliar.addCasasDecimais(dcrreg1.getPreco(), campo.getCampotam(), 2));
+			} else {
+			
+				Class<?> classe = dcrreg1.getClass();
+				Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+				field.setAccessible(true);
+				
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg1), campo, campo.getKey().getCampo().toLowerCase().trim()));
+				}else if(campo.getFillblank()!= null) {
+					sb.append(Auxiliar.addSpaces(field.get(dcrreg1), campo.getCampotam()));
+				}else {
+					sb.append(Auxiliar.addZeros(field.get(dcrreg1), campo.getCampotam()));
+				}
+			}
+		}
+			sb.append("\n");
+		}
+		bw.write(sb.toString());
+		sb = new StringBuffer();
+         
+		//REG2
+		for (Dcrreg2 dcrreg2 : reg2) {
         	 for (Dcrlayout campo : map.get("2 ")) {
      			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
      				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
@@ -280,9 +294,11 @@ public class DcrlayoutService {
  			}
         	 sb.append("\n");
           }
-          bw.write(sb.toString());
-          sb = new StringBuffer();
-          for (Dcrreg3 dcrreg3 : reg3) {
+		bw.write(sb.toString());
+		sb = new StringBuffer();
+        
+		//REG-3
+		for (Dcrreg3 dcrreg3 : reg3) {
          	 
          	 for (Dcrlayout campo : map.get("3 ")) {
        			
@@ -420,206 +436,427 @@ public class DcrlayoutService {
         		}
    			}
          	sb.append("\n");
-          }
-         
-          bw.write(sb.toString());
-          sb = new StringBuffer();
-          
-          for (Dcrreg4 dcrreg4 : reg4) {
-         	 
-         	 for (Dcrlayout campo : map.get("4 ")) {
-         			
-         			if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
-         				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "numcomp"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getNumcomp(), campo.getCampotam()) );
-    	       			}
-         			} else
-         			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
-         				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "partnumpd"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getPartnumpd(), campo.getCampotam()) );
-    	       			}
-         			} else
-         			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
-         				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "tpprd"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getTpprd(), campo.getCampotam()) );
-    	       			}
-         			} else
-         			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
-         				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "idmatriz"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getIdmatriz(), campo.getCampotam()) );
-    	       			}
-         			} else
-         			if(campo.getKey().getCampo().toLowerCase().trim().equals("qtde")) {
-         				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "qtde"));
-    	       			}else {
-    	       			 sb.append(Auxiliar.addCasasDecimais(dcrreg4.getQtde(), campo.getCampotam(), 7));
-    	       			}
-        			} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("vlrunit")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "vlrunit"));
-    	       			}else {
-    	       			 sb.append(Auxiliar.addCasasDecimais(dcrreg4.getVlrunit(), campo.getCampotam(), 6));
-    	       			}
-        			} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("di")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "di"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getDi(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("itemadicao")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "itemadicao"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getItemadicao(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("adicao")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "adicao"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getAdicao(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("numnf")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "numnf"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getNumnf(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "sernf"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getSernf(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("cnpjfor")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "cnpjfor"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getCnpjfor(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "sernf"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getSernf(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("eminf")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "eminf"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getEminf(), campo.getCampotam()));
-    	       			}
-            		} else
-           			if(campo.getKey().getCampo().toLowerCase().trim().equals("espec")) {
-           				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "espec"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getEspec(), campo.getCampotam()));
-    	       			}
-            		} else
-         			if(campo.getKey().getCampo().toLowerCase().trim().equals("undcom")) {
-         				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "undcom"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getUndcom(), campo.getCampotam()));
-    	       			}
-            		} else
-            		if(campo.getKey().getCampo().toLowerCase().trim().equals("ncm")) {
-            			if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "ncm"));
-    	       			}else {
-    	       				sb.append(Auxiliar.addSpaces(dcrreg4.getNcm(), campo.getCampotam()));
-    	       			}
-            		} else {
-            			Class<?> classe = dcrreg4.getClass();
-             			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-             			field.setAccessible(true);
-             			
-             			if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-    	       				sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg4), campo, campo.getKey().getCampo().toLowerCase().trim()));
-    	       			}else if(campo.getFillblank()!= null) {
-    	     				sb.append(Auxiliar.addSpaces(field.get(dcrreg4), campo.getCampotam()));
-    	     			}else {
-    	     				sb.append(Auxiliar.addZeros(field.get(dcrreg4), campo.getCampotam()));
-    	     			}
-            		}
-         			
-     			}
-         	sb.append("\n");
-            }
-          
-          bw.write(sb.toString());
-          sb = new StringBuffer();
-          
-          for (Dcrreg9 dcrreg9 : reg9) {
-         	 
-         	 for (Dcrlayout campo : map.get("9 ")) {
-       			
-       			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
-       				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg9, campo, "partnumpd"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getPartnumpd(), campo.getCampotam()) );
-	       			}
-       			} else
-       			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
-       				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg9, campo, "tpprd"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getTpprd(), campo.getCampotam()) );
-	       			}
-       			} else
-       			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
-       				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(dcrreg9, campo, "idmatriz"));
-	       			}else {
-	       				sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getIdmatriz(), campo.getCampotam()) );
-	       			}
-       			} else {
-       				Class<?> classe = dcrreg9.getClass();
-           			Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
-           			field.setAccessible(true);
-           			
-           			if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
-	       				sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg9), campo, campo.getKey().getCampo().toLowerCase().trim()));
-	       			}else if(campo.getFillblank()!= null) {
-	     				sb.append(Auxiliar.addSpaces(field.get(dcrreg9), campo.getCampotam()));
-	     			}else {
-	     				sb.append(Auxiliar.addZeros(field.get(dcrreg9), campo.getCampotam()));
-	     			}
-       			}
-       				
-       			
-   			}
-         	sb.append("\n");
-          }
-          bw.write(sb.toString());
-          sb = new StringBuffer();
-          bw.close();
+          }         
+		bw.write(sb.toString());
+		sb = new StringBuffer();
+		
+		//REG-4
+		for (Dcrreg4 dcrreg4 : reg4) {
+			
+			for (Dcrlayout campo : map.get("4 ")) {
+				
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("numcomp")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "numcomp"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getNumcomp(), campo.getCampotam()) );
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "partnumpd"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getPartnumpd(), campo.getCampotam()) );
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "tpprd"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getTpprd(), campo.getCampotam()) );
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "idmatriz"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getKey().getIdmatriz(), campo.getCampotam()) );
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("qtde")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "qtde"));
+					}else {
+						sb.append(Auxiliar.addCasasDecimais(dcrreg4.getQtde(), campo.getCampotam(), 7));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("vlrunit")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "vlrunit"));
+					}else {
+						sb.append(Auxiliar.addCasasDecimais(dcrreg4.getVlrunit(), campo.getCampotam(), 6));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("di")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "di"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getDi(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("itemadicao")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "itemadicao"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getItemadicao(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("adicao")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "adicao"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getAdicao(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("numnf")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "numnf"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getNumnf(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "sernf"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getSernf(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("cnpjfor")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "cnpjfor"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getCnpjfor(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("sernf")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "sernf"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getSernf(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("eminf")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "eminf"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getEminf(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("espec")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "espec"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getEspec(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("undcom")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "undcom"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getUndcom(), campo.getCampotam()));
+					}
+				} else
+				if(campo.getKey().getCampo().toLowerCase().trim().equals("ncm")) {
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(dcrreg4, campo, "ncm"));
+					}else {
+						sb.append(Auxiliar.addSpaces(dcrreg4.getNcm(), campo.getCampotam()));
+					}
+				} else {
+					Class<?> classe = dcrreg4.getClass();
+					Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+					field.setAccessible(true);
+					
+					if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+						sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg4), campo, campo.getKey().getCampo().toLowerCase().trim()));
+					}else if(campo.getFillblank()!= null) {
+						sb.append(Auxiliar.addSpaces(field.get(dcrreg4), campo.getCampotam()));
+					}else {
+						sb.append(Auxiliar.addZeros(field.get(dcrreg4), campo.getCampotam()));
+					}
+				}
+				
+			}
+		sb.append("\n");
+		}		
+		bw.write(sb.toString());
+		sb = new StringBuffer();
+		
+		//REG-9
+		for (Dcrreg9 dcrreg9 : reg9) {
+			
+			for (Dcrlayout campo : map.get("9 ")) {
+			
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("partnumpd")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg9, campo, "partnumpd"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getPartnumpd(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("tpprd")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg9, campo, "tpprd"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getTpprd(), campo.getCampotam()) );
+				}
+			} else
+			if(campo.getKey().getCampo().toLowerCase().trim().equals("idmatriz")) {
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(dcrreg9, campo, "idmatriz"));
+				}else {
+					sb.append(Auxiliar.addSpaces(dcrreg9.getKey().getIdmatriz(), campo.getCampotam()) );
+				}
+			} else {
+				Class<?> classe = dcrreg9.getClass();
+				Field field = classe.getDeclaredField(campo.getKey().getCampo().toLowerCase().trim());
+				field.setAccessible(true);
+				
+				if(campo.getCondfield() != null && campo.getCondfield().trim().length() > 0) {
+					sb.append(Auxiliar.verificarPreenchimento(field.get(dcrreg9), campo, campo.getKey().getCampo().toLowerCase().trim()));
+				}else if(campo.getFillblank()!= null) {
+					sb.append(Auxiliar.addSpaces(field.get(dcrreg9), campo.getCampotam()));
+				}else {
+					sb.append(Auxiliar.addZeros(field.get(dcrreg9), campo.getCampotam()));
+				}
+			}
+				
+			
+		}
+		sb.append("\n");
+		}
+		bw.write(sb.toString());
+		sb = new StringBuffer();
+		bw.close();
+
+		return fileName;
+		
     }
 	
 	
+	public String /*void*/ gerarArquivoTXT2(Integer idMatriz, String partnumpd, String tpprd, String path) throws IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+        
+		//String fileName = tpprd+ StringUtils.leftPad(String.valueOf(idMatriz), 10, "0") +partnumpd.replace("00000", "");
+		String fileName = tpprd+String.valueOf(idMatriz)+"_"+partnumpd.replace("00000", "")+".txt";
+		String file = (path+"\\"+fileName).replace("/\s/g", ""); //j4
+		FileWriter fw = new FileWriter(file); 
+		BufferedWriter bw = new BufferedWriter(fw); 
+		StringBuffer sb = null;
+		Sort sort = Sort.by(Sort.Direction.ASC, "key.idreg", "posini");
+		List<Dcrlayout> campos =  repository.findAll(sort);
+		String representante= "94762953687";
+         
+		Map<Object, List<Dcrlayout>> map = campos.stream()
+				.collect(Collectors.groupingBy(dcrlayout -> dcrlayout.getKey().getIdreg()));
+         
+		List<Dcrreg0> reg0 = reg0Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg1> reg1 = reg1Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg2> reg2 = reg2Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg3> reg3 = reg3Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg4> reg4 = reg4Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+		List<Dcrreg9> reg9 = reg9Repository.consultaByIds(idMatriz, partnumpd, tpprd);
+
+
+		//REG-0	
+		sb = new StringBuffer();
+		String idreg = "0 ";
+		for (Dcrreg0 registro : reg0) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString().replace("***********", representante));
+
+
+		//REG-1		
+		sb = new StringBuffer();
+		idreg = "1 ";
+		for (Dcrreg1 registro : reg1) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString());
+
+
+		//REG-2		
+		sb = new StringBuffer();
+		idreg = "2 ";
+		for (Dcrreg2 registro : reg2) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);		
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString());
+
+
+		//REG-3		
+		sb = new StringBuffer();
+		idreg = "3 ";
+		for (Dcrreg3 registro : reg3) {	
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");	
+		}
+		bw.write(sb.toString());		
+
+
+		//REG-4
+		sb = new StringBuffer();
+		idreg = "4 ";
+		for (Dcrreg4 registro : reg4) {
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				campoFormatado = Auxiliar.removeSpecialChar(campoFormatado);
+				sb.append(campoFormatado);												
+
+			}
+
+			sb.append("\r\n");
+		}
+		bw.write(sb.toString());
+		/*bw.write("\n");
+		bw.write(sb.toString());
+		bw.write("\n");
+		bw.write(sb.toString());
+		bw.write("\n");
+		bw.write(sb.toString());
+		bw.write("\n");*/
+		
+
+		//REG-9
+		sb = new StringBuffer();
+		idreg = "9 ";
+		for (Dcrreg9 registro : reg9) {
+
+			for (Dcrlayout layout : map.get(idreg)) {
+				
+				String fieldName = layout.getKey().getCampo().toLowerCase().trim();
+
+				//1. Procura campo primeiro na chave do retistro
+				String campoFormatado = Auxiliar.verificarPreenchimento2(registro.getKey(), layout, fieldName);
+				if (!campoFormatado.isEmpty()){
+					sb.append(campoFormatado);
+					continue;
+				}			
+				
+				//2. Procura campo no registro
+				campoFormatado = Auxiliar.verificarPreenchimento2(registro, layout, fieldName);
+				sb.append(campoFormatado);												
+
+			}
+			sb.append("\r\n");
+		}	
+		//System.out.println(sb.toString());	
+		//String total9 = sb.toString();		
+		//bw.write("\n aaa \n");
+		//bw.write(total9);
+		bw.write(sb.toString());
+		bw.close();
+
+
+		//Copy File to operator
+		List<String> files = new ArrayList<String>();
+		files.add(fileName);
+		String publicPath = "//Htb0133/htb/HTB/HTB/DCR".replace("/\s/g", "");		
+		Auxiliar.copyFiles(files, path, publicPath);
+
+
+		return file;
+	}
+
+
 	public Optional<Dcrlayout> getById(DcrlayoutKey key) {
 		return repository.findById(key);
 	}
 	
+
 	public Dcrlayout create(DcrlayoutDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Dcrlayout dcr = new Dcrlayout();
 		
@@ -642,6 +879,7 @@ public class DcrlayoutService {
 		return repository.save(dcr);
 	}
 	
+
 	public Dcrlayout update(DcrlayoutDTO dto, Dcrlayout dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 		
 		dcr.setCampodesc(dto.campodesc());
@@ -657,9 +895,11 @@ public class DcrlayoutService {
 		return repository.save(dcr);
 	}
 	
+
 	public List<Dcrlayout> getAll() {
 		
 		return repository.findAll();
+		
 	}
 
 }

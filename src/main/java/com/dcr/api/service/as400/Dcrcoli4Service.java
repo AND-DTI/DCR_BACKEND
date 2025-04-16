@@ -1,15 +1,10 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.dcr.api.model.as400.Dcrcoli1;
 import com.dcr.api.model.as400.Dcrcoli4;
-import com.dcr.api.model.dto.Dcrcoli1DTO;
 import com.dcr.api.model.dto.Dcrcoli4DTO;
 import com.dcr.api.model.dto.Dcrcoli4LoteDTO;
 import com.dcr.api.model.keys.Dcrcoli4Key;
@@ -17,14 +12,17 @@ import com.dcr.api.repository.as400.Dcrcoli4Repository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @Service
 public class Dcrcoli4Service {
 	
 	@Autowired
 	Dcrcoli4Repository repository;
+	
 	
 	public Dcrcoli4 create(Dcrcoli4DTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Dcrcoli4 dcr = new Dcrcoli4();

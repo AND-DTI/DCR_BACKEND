@@ -1,19 +1,20 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.DcrregraKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+
+
 @Entity
 @Table(name = "DCRREGRA", schema = "HD4DCDHH")
 @ApiModel
 public class Dcrregra {
+
 
 	@EmbeddedId
     private DcrregraKey dcrregraKey;
@@ -98,7 +99,16 @@ public class Dcrregra {
     @Column(columnDefinition = "int")
     private Integer substfatn;
 
-    @Column(columnDefinition = "char(40)")
+	//@TamanhoMaximo(3)	
+    @Column(columnDefinition = "decimal(3,2)")
+    private Double coefredu;
+
+	//@TamanhoMaximo(3)	
+    @Column(columnDefinition = "decimal(3,2)")
+    private Double aliqiipad;		
+
+
+	@Column(columnDefinition = "char(40)")
     private String itaudsys;
 
     @Column(columnDefinition = "char(10)")
@@ -113,6 +123,7 @@ public class Dcrregra {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
+	
 	public Integer getPeritran() {
 		return peritran;
 	}
@@ -217,74 +228,57 @@ public class Dcrregra {
 		this.substfatn = substfatn;
 	}
 
-	public String getItaudsys() {
-		return itaudsys;
+	public Double getCoefredu() {		return coefredu;	}
+	public void setCoefredu(Double coefredu) {
+		this.coefredu = coefredu == null? 0 : coefredu;
 	}
 
+	public Double getAliqiipad() {		return aliqiipad;	}
+	public void setAliqiipad(Double aliqiipad) {
+		this.aliqiipad = aliqiipad == null? 0 :aliqiipad;
+	}
+
+	public String getItaudsys() {		return itaudsys;	}
 	public void setItaudsys(String itaudsys) {
 		this.itaudsys = itaudsys;
 	}
 
-	public String getItaudusr() {
-		return itaudusr;
-	}
-
+	public String getItaudusr() {		return itaudusr;	}
 	public void setItaudusr(String itaudusr) {
 		this.itaudusr = itaudusr;
 	}
 
-	public String getItaudhst() {
-		return itaudhst;
-	}
-
+	public String getItaudhst() {		return itaudhst;	}
 	public void setItaudhst(String itaudhst) {
 		this.itaudhst = itaudhst;
 	}
 
-	public String getItauddt() {
-		return itauddt;
-	}
-
+	public String getItauddt() {		return itauddt;	}
 	public void setItauddt(String itauddt) {
 		this.itauddt = itauddt;
 	}
 
-	public String getItaudhr() {
-		return itaudhr;
-	}
-
+	public String getItaudhr() {		return itaudhr;	}
 	public void setItaudhr(String itaudhr) {
 		this.itaudhr = itaudhr;
 	}
 
-	public DcrregraKey getDcrregraKey() {
-		return dcrregraKey;
-	}
-
+	public DcrregraKey getDcrregraKey() {		return dcrregraKey;	}
 	public void setDcrregraKey(DcrregraKey dcrregraKey) {
 		this.dcrregraKey = dcrregraKey;
 	}
 
-	public Integer getStsconfig() {
-		return stsconfig;
-	}
-
+	public Integer getStsconfig() {		return stsconfig;	}
 	public void setStsconfig(Integer stsconfig) {
 		this.stsconfig = stsconfig;
 	}
 
-	public String getCnpjemi() {
-		return cnpjemi;
-	}
-
+	public String getCnpjemi() {		return cnpjemi;	}
 	public void setCnpjemi(String cnpjemi) {
 		this.cnpjemi = cnpjemi;
 	}
 
-	public String getRazsoc() {
-		return razsoc;
-	}
-
+	public String getRazsoc() {		return razsoc;	}
 	public void setRazsoc(String razsoc) {
 		this.razsoc = razsoc;
 	}

@@ -1,13 +1,11 @@
 package com.dcr.api.service.txt;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import org.springframework.stereotype.Service;
 
-import com.dcr.api.model.as400.Dcrlayout;
-import com.dcr.api.service.as400.DcrlayoutService;
+
+
 
 @Service
 public class GenerateTxtService {
@@ -23,4 +21,5 @@ public class GenerateTxtService {
             System.out.println("Erro ao gerar o arquivo de texto: " + e.getMessage());
         }
     }
+
 }

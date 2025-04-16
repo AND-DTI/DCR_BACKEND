@@ -1,51 +1,55 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.as400.Mtasteins;
-import com.dcr.api.model.dto.MatriprdDTO;
 import com.dcr.api.model.dto.MtasteinsDTO;
 import com.dcr.api.model.keys.MtasteinsKey;
 import com.dcr.api.repository.as400.MtasteinsRepository;
 import com.dcr.api.response.PendenciaInsumoAstecResponse;
-import com.dcr.api.response.PendenciaInsumoResponse;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
 
-@Service
-public class MtasteinsService {
 
+
+
+@Service
+public class MtasteinsService { 
+
+	
 	@Autowired
 	MtasteinsRepository repository;
 	
+
 	public List<Mtasteins> getAll() {
 		
 		return repository.findAll();
+
 	}
 	
+
 	public Optional<Mtasteins> getByID(MtasteinsKey id) {
 		
 		return repository.findById(id);
+
 	}
 	
+
 	public void delete(Mtasteins matriz) {
 		
 		repository.delete(matriz);
+
 	}
 	
+
 	public List<PendenciaInsumoAstecResponse> getPendencia(Integer idmatriz, String partnum) {
-		List<Object[]> resultados = repository.consultaPendenciaInsumo(idmatriz, partnum);
 		
+		List<Object[]> resultados = repository.consultaPendenciaInsumo(idmatriz, partnum);
 		List<PendenciaInsumoAstecResponse> produtos = new ArrayList<>();
 
         for (Object[] resultado : resultados) {
@@ -73,9 +77,10 @@ public class MtasteinsService {
 		return produtos;
 	}
 	
+
 	public Mtasteins create(MtasteinsDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
-		Mtasteins matriz = new Mtasteins();
 		
+		Mtasteins matriz = new Mtasteins();
 		MtasteinsKey key = new MtasteinsKey();
 		key.setIdmatriz(dto.idmatriz());
 		key.setPartnum(dto.partnum());
@@ -102,8 +107,8 @@ public class MtasteinsService {
 		return repository.save(matriz);
 	}
 	
+
 	public Mtasteins update(Mtasteins matriz,  MtasteinsDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
-		
 		
 		matriz.setCdspn(dto.cdspn());
 		matriz.setEmcomp(dto.emcomp());
@@ -123,4 +128,14 @@ public class MtasteinsService {
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
 	}
+
+
+	//j5- added
+	public Mtasteins salvar(Mtasteins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+		
+	}
+
 }

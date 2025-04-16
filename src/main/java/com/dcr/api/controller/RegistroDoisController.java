@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,26 +12,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.dcr.api.model.as400.Dcrreg1;
 import com.dcr.api.model.as400.Dcrreg2;
 import com.dcr.api.model.dto.Dcrreg2DTO;
 import com.dcr.api.model.keys.Dcrreg2Key;
 import com.dcr.api.service.as400.Dcrreg2Service;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/registro/dois")
 public class RegistroDoisController {
+	
+	
 	@Autowired
 	Dcrreg2Service service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os registros")
 	@ApiResponses(value = {
@@ -62,6 +64,7 @@ public class RegistroDoisController {
 		}   
 	}
 	
+
 	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um registro")
@@ -100,6 +103,8 @@ public class RegistroDoisController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Cria um registro")
 	@ApiResponses(value = {
@@ -137,6 +142,8 @@ public class RegistroDoisController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca o registro ativo")
 	@ApiResponses(value = {
@@ -167,4 +174,6 @@ public class RegistroDoisController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

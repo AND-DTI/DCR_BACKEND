@@ -27,12 +27,12 @@ public class UserService {
     @Autowired
     RoleService roleService;
 
-    @Autowired
-    private ModelMapper mapper;
+    //@Autowired
+    //private ModelMapper mapper;
 
     public UserService(UserRepository userRepository, ModelMapper mapper) {
         this.userRepository = userRepository;
-        this.mapper = mapper;
+        //this.mapper = mapper;
 
     }
 

@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import com.dcr.api.utils.Auxiliar;
@@ -21,16 +22,37 @@ public class ScheduleController {
 
 	@Autowired
 	ScheduleService service;
+
+    @Autowired
+    Environment env;
 	
 
 	@PostConstruct
 	public void startSchedule() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-		//scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, 10, TimeUnit.MINUTES);
-        //scheduler.scheduleAtFixedRate(this::explodeMatrizAvulsa, 0, 10, TimeUnit.MINUTES);
-		//scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa, 0, 10, TimeUnit.MINUTES);
+
+        Boolean atualizaProduto = Boolean.valueOf(env.getProperty("schedule.atualizaPRD"));
+        Boolean reprocessaMatrizPRD = Boolean.valueOf(env.getProperty("schedule.reprocMatrizPRD"));
+        Boolean reprocessaMatrizAST = Boolean.valueOf(env.getProperty("schedule.reprocMatrizAST"));
+
+        if(atualizaProduto){
+            scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, 15, TimeUnit.MINUTES);
+        }
+
+        if(reprocessaMatrizPRD){
+            scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_PRD, 0, 15, TimeUnit.MINUTES);
+        }
+
+        if(reprocessaMatrizAST){
+            scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_ASTEC, 0, 15, TimeUnit.MINUTES);
+        }
+
+         		
+        //scheduler.scheduleAtFixedRate(this::explodeMatrizAvulsa, 0, 10, TimeUnit.MINUTES);		
         //scheduler.scheduleAtFixedRate(this::verificarPendencias, 0, 30, TimeUnit.MINUTES);
+        
 	}
+
 
 
 	public void atualizaProduto() { //add call online - when create new ppb - set this to 1 hour to correct the ones not updated/called
@@ -98,25 +120,26 @@ public class ScheduleController {
 	}
 
 
+
 	//recalcula avulsas apos explosao:
 	//MATRIPRD.FLEX4FLW = 'MATRIZ PENDENTE (AVULSA)'
-	public void reprocessaMatrizAvulsa() { 
+	public void reprocessaMatrizAvulsa_PRD() { 
 		
 		try {
 
 			
-			FileWriter fws = new FileWriter("logs/processamentoMatrizAvulsa.txt");
+			FileWriter fws = new FileWriter("logs/processamentoMatrizAvulsa-PRODUTO.txt");
 	        BufferedWriter bws = new BufferedWriter(fws); 
 	        StringBuffer sbs = new StringBuffer();
 			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
 
 			
 			sbs.append("\n Calling HDCR005C...");
-			service.reprocessaMatrizAvulsa("DCRMODELO"); //pegar do usuário que gerou a avulsa			
+			service.reprocessaMatrizAvulsa("PRD"); 
 							    
 	        bws.write(sbs.toString());
 	        bws.close();
-	        System.out.println("Schedule Reprocessamento Matriz Avulsa processado com sucesso!");
+	        System.out.println("Schedule Reprocessamento Matriz Avulsa executado com sucesso!");
 
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -124,6 +147,54 @@ public class ScheduleController {
 	}
 	
 
+
+	public void reprocessaPendencias() { 
+		
+		try {
+
+			
+			FileWriter fws = new FileWriter("logs/reprocessamentoPendencias-PRODUTO.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+
+			
+			sbs.append("\n Calling HDCR003C...");
+			//service.reprocessaPendencias("PRD", null, "DCRMODELO"); //criar param in  HDCR003C p/ reprocessar todas as matrizes compendêcia - diariamente 2x dia
+							    
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Reprocessamento de Pendências executado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
+
+	public void reprocessaMatrizAvulsa_ASTEC() { 
+		
+		try {
+
+			
+			FileWriter fws = new FileWriter("logs/processamentoMatrizAvulsa-ASTEC.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+
+			
+			sbs.append("\n Calling HDCR005C...");
+			service.reprocessaMatrizAvulsa("AST"); 
+							    
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Reprocessamento Matriz ASTEC Avulsa processado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
 
 

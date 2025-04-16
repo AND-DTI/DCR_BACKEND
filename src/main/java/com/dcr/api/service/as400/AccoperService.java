@@ -1,5 +1,4 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,10 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.dto.AccoperDTO;
 import com.dcr.api.model.keys.AccoperKey;
@@ -21,20 +18,24 @@ import com.dcr.api.response.OperacoesResponse;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @Service
 public class AccoperService {
 
 	@Autowired
 	AccoperRepository repository;
+
+
 	private List<OperacoesResponse> formatJson(List<Accoper> operacoes) {
 		
-		List<Accoper> nivelZero = new ArrayList();
-		List<Accoper> nivelUm = new ArrayList();
-		List<Accoper> nivelDois = new ArrayList();
-		List<OperacoesResponse> lista = new ArrayList();
+		List<Accoper> nivelZero = new ArrayList<>();
+		List<Accoper> nivelUm = new ArrayList<>();
+		List<Accoper> nivelDois = new ArrayList<>();
+		List<OperacoesResponse> lista = new ArrayList<>();
 		
 		for (Accoper accoper : operacoes) {
 			if(accoper.getNivel().equals(0)) {
@@ -99,6 +100,7 @@ public class AccoperService {
 		return lista;
 	}
 	
+	@SuppressWarnings("unlikely-arg-type") //j4
 	public void processarNivelGen(List<Accoper> nivelGen, Map<Integer, List<Accoper>> nivelMap, OperacoesResponse op) {
 	    for (Accoper gen : nivelGen) {
 	        OperacoesItens itens = new OperacoesItens();
@@ -108,7 +110,7 @@ public class AccoperService {
 
 	        List<Accoper> filhos = nivelMap.getOrDefault(gen.getNivel() + 1, Collections.emptyList());
 	        for (Accoper filho : filhos) {
-	            if (filho.getIdpai().equals(gen.getIdoper())) {
+	            if (filho.getIdpai().equals(gen.getIdoper())) { //j4 - @SuppressWarnings added
 	                Item item = new Item();
 	                item.setName(filho.getDescoper().trim());
 	                item.setTo(filho.getRota().trim());

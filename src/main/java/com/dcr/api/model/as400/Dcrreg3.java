@@ -1,20 +1,27 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.Dcrreg3Key;
-
+import com.dcr.api.validator.TamanhoMaximo;
+import com.dcr.api.validator.TamanhoMinimo;
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+
+
 @Entity
-@Table(name = "DCRREG3", schema = "HD4DCDHH")
+@Table(name = "DCRREG3"/* schema = "HD4DCDHH"*/)
 @ApiModel
 public class Dcrreg3 {
 
 	@EmbeddedId
 	private Dcrreg3Key key;
+
+	@TamanhoMaximo(25)
+	@TamanhoMinimo(1)
+	@Column(columnDefinition = "char(25)")
+	private String partnum;	
 	
 	@Column(columnDefinition = "char(1)")
 	private String idreg;
@@ -92,6 +99,9 @@ public class Dcrreg3 {
 	public void setKey(Dcrreg3Key key) {
 		this.key = key;
 	}
+
+	public String getPartnum() {		return partnum;	}
+	public void setPartnum(String partnum) {		this.partnum = partnum;	}
 
 	public String getIdreg() {
 		return idreg;

@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +13,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Cadtppend;
 import com.dcr.api.model.as400.Pendastec;
 import com.dcr.api.model.as400.Pendprod;
 import com.dcr.api.model.dto.CadtppendDTO;
+import com.dcr.api.model.projection.CadtppendJoinPendrespDTO;
+import com.dcr.api.response.Interface.DocumentoIMP;
+import com.dcr.api.response.Interface.DocumentoNAC;
 import com.dcr.api.service.as400.CadtppendService;
+import com.dcr.api.service.as400.PartnumberService;
 import com.dcr.api.service.as400.PendastecService;
 import com.dcr.api.service.as400.PendprodService;
 import com.dcr.api.service.as400.PendrespService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/pendencia")
 public class PendenciaController {
+
 
 	@Autowired
 	CadtppendService service;
@@ -47,7 +51,12 @@ public class PendenciaController {
 	
 	@Autowired
 	PendastecService pendastec;
+
+	@Autowired
+	PartnumberService partnumberService;
 	
+	
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as pendências")
 	@ApiResponses(value = {
@@ -77,11 +86,13 @@ public class PendenciaController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByID", produces = "application/json")
-	@Operation(summary = "Busca todas as pendências")
+	@Operation(summary = "Busca pendência por ID")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência encontrada!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhuma pendência encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
@@ -91,15 +102,16 @@ public class PendenciaController {
 			
 			Optional<Cadtppend> lista = service.getByID(id);
 	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência encontrado!");
 	        }
 	        Auxiliar.formatResponse(lista.get());
-	        Auxiliar.formatResponse(lista.get().getResponsaveis());
+	        Auxiliar.formatResponseList2(lista.get().getResponsaveis());
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
+					
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -107,6 +119,42 @@ public class PendenciaController {
 		}   
 	}
 	
+
+    @GetMapping(value = "/getByID2", produces = "application/json")
+	@Operation(summary = "Busca pendência por ID/Subtipo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "404", description = "Nenhuma pendência encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByID2(@RequestParam String id, String subtipo) {
+	
+		try {
+			
+			Optional<CadtppendJoinPendrespDTO> lista = service.getByID2(id, subtipo);
+	        
+            if(lista.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhum responsável encontrado!");                
+            }
+	        
+            Auxiliar.formatResponse(lista.get());
+            Auxiliar.formatResponseList2(lista.get().getResponsaveis());
+            return ResponseEntity.status(HttpStatus.OK)
+                .header("Accept", "application/json")
+                .body(lista);
+					
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}  
+
+	}
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Busca todas as pendências")
 	@ApiResponses(value = {
@@ -149,6 +197,7 @@ public class PendenciaController {
 	}
 	
 	
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um Tipo de Pendência")
 	@ApiResponses(value = {
@@ -169,7 +218,8 @@ public class PendenciaController {
 					        .body("Tipo de Pendência já existe");
 			    }
 				
-				Cadtppend pendNew = service.create(cadtppendDTO, request);
+				//Cadtppend pendNew = service.create(cadtppendDTO, request);
+				service.create(cadtppendDTO, request);
 			}
 			
 			return ResponseEntity.status(HttpStatus.CREATED)
@@ -183,6 +233,8 @@ public class PendenciaController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Cria um Tipo de Pendência")
 	@ApiResponses(value = {
@@ -203,7 +255,9 @@ public class PendenciaController {
 				        .body("Tipo de Pendência não existe");
 		    }
 			
-			Cadtppend pendNew = service.update(dcr.get(), dto, request);
+			//Cadtppend pendNew = service.update(dcr.get(), dto, request);
+			service.update(dcr.get(), dto, request);
+			
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body("Ok");
@@ -215,4 +269,59 @@ public class PendenciaController {
 		}   
 	}
 	
-}
+
+
+	@GetMapping(value = "/documentos", produces = "application/json")
+	@Operation(summary = "Busca cadastro partnumber")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "404", description = "Nenhuma partnumber encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getDocumentos(@RequestParam String partnum, @RequestParam String documento, @RequestParam String tpdoc) {	
+	
+		try {
+
+			//Partnumber partnumber = new Partnumber();			
+			//Optional<Partnumber> lista = partnumberService.getByID(partnum);	
+			if(tpdoc.equals("NF")){
+				
+				List<DocumentoNAC> lista = partnumberService.getDocumentoNAC(documento, partnum);
+				if (lista.isEmpty()) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.header("Accept", "application/json")
+							.body("");
+				}
+				//Partnumber item = lista.get();
+				//Auxiliar.formatResponse(lista); dont work with interface
+				return ResponseEntity.status(HttpStatus.OK)
+						.header("Accept", "application/json")					
+						.body(lista);
+
+			}else{
+
+				List<DocumentoIMP> lista = partnumberService.getDocumentoIMP(documento, partnum);
+				if (lista.isEmpty()) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.header("Accept", "application/json")
+							.body("");
+				}
+				return ResponseEntity.status(HttpStatus.OK)
+						.header("Accept", "application/json")					
+						.body(lista);
+			}
+			
+	        
+			
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(null);                
+		}   
+
+	}
+	
+
+} 

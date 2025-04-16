@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.response.MatriprdByTpprdResponse;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
+import com.dcr.api.response.ProdutoPendenciaResponse2;
 //import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
 import com.dcr.api.response.ProdutoSemListaResponse;
 import com.dcr.api.service.as400.MatriprdService;
@@ -77,7 +78,7 @@ public class DetalheProdutoController {
 
 			List<MatriprdByTpprdResponse> lista = service.getDetailByTpprd(listaTpprd);
 			  if (lista.isEmpty()) {
-		            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+		            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 		                    .header("Accept", "application/json")
 		                    .body("Nenhum produto encontrado!");
 		        }
@@ -106,11 +107,45 @@ public class DetalheProdutoController {
 	
 		try {
 
-			ProdutoPendenciaResponse lista = service.getProdutoPendencia(idmatriz, partnumpd); //j4 - old ProdutoPendenciaSimplesResponse
+			ProdutoPendenciaResponse2 lista = service.getProdutoPendencia(idmatriz, partnumpd); //j4 - old ProdutoPendenciaSimplesResponse
 	        if (lista.getIdMatriz() == null) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência de produto encontrada!");
+	        }
+	        Auxiliar.formatResponse(lista);
+            Auxiliar.formatResponse(lista.getCor());
+            Auxiliar.formatResponseList2(lista.getPendencias());
+			Auxiliar.formatResponseList2(lista.getInsumos());
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+
+
+	@GetMapping(value = "/getProdutoPendenciaDiagnostico", produces = "application/json") //j5 - added
+	@Operation(summary = "Busca um tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma pendência de produto encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getProdutoPendenciaDiagnostico(@RequestParam Integer idmatriz, @RequestParam String partnumpd) {
+	
+		try {
+
+			ProdutoPendenciaResponse lista = service.getProdutoPendenciaDiagnostico(idmatriz, partnumpd); 
+	        if (lista.getIdMatriz() == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma pendência de diagnóstico encontrada!");
 	        }
 	        Auxiliar.formatResponse(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -170,7 +205,7 @@ public class DetalheProdutoController {
 
 			List<ProdutoSemListaResponse> lista = service.getPendenciasSemLista(status);
 	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhuma pendência de produto encontrada!");
 	        }

@@ -1,14 +1,14 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+
 
 @Entity
 @Table(name = "DCRPROCC", schema = "HD4DCDHH")

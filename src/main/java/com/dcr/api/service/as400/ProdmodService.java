@@ -1,29 +1,27 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.dcr.api.model.as400.Prodmod;
 import com.dcr.api.model.as400.Prodmod;
 import com.dcr.api.model.dto.ProdmodDTO;
-import com.dcr.api.model.keys.PendenciaKey;
-import com.dcr.api.repository.as400.ProdmodRepository;
 import com.dcr.api.repository.as400.ProdmodRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @Service
 public class ProdmodService {
+
 	
 	@Autowired
 	ProdmodRepository repository;
+	
 	
 	public List<Prodmod> getAll() {
 		

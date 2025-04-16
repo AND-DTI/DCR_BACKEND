@@ -19,8 +19,8 @@ public class InsumosProdResponse {
 	private Object emcomp;
 	private Object espec;   //j4 - added
 	private Object undcom;  //j4 - added
-	private Object ncm;     //j4 - added
-	private Object vlrunit;	//j4 - added
+	private Object ncmins;     //j4 - added	
+    private Object vlrunit;	//j4 - added
 	private Object partsugest;
 	private Object partsugdsc;
 	private Object partnew;
@@ -66,8 +66,8 @@ public class InsumosProdResponse {
 	public Object getUndcom() {		return undcom;	}
 	public void setUndcom(Object undcom) {		this.undcom = undcom;	}
 
-	public Object getNcm() {		return ncm;	}
-	public void setNcm(Object ncm) {		this.ncm = ncm;	}
+	public Object getNcmins() {        return ncmins;    }
+    public void setNcmins(Object ncmins) {        this.ncmins = ncmins;    }
 
 	public Object getVlrunit() {		return vlrunit;	}
 	public void setVlrunit(Object vlrunit) {		this.vlrunit = vlrunit;	}

@@ -1,12 +1,9 @@
 package com.dcr.api.model.keys;
-
 import java.util.Objects;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+
+
 
 @Embeddable
 public class MtastecKey {
@@ -21,10 +18,12 @@ public class MtastecKey {
 	public void setPartnumpd(String partnumpd) {
 		this.partnumpd = partnumpd;
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(idmatriz, partnumpd);
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

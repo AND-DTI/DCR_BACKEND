@@ -1,13 +1,10 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.dcr.api.model.as400.Matriins;
 import com.dcr.api.model.dto.MatriinsDTO;
 import com.dcr.api.model.keys.MatriinsKey;
@@ -16,33 +13,42 @@ import com.dcr.api.response.PendenciaInsumoResponse;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
+
 
 @Service
 public class MatriinsService {
 
+
 	@Autowired
 	MatriinsRepository repository;
 	
+
 	public List<Matriins> getAll() {
 		
 		return repository.findAll();
+
 	}
 	
+
 	public Optional<Matriins> getByID(MatriinsKey id) {
 		
 		return repository.findById(id);
+
 	}
 	
+
 	public void delete(Matriins matriz) {
 		
 		repository.delete(matriz);
+
 	}
 	
+
 	public List<PendenciaInsumoResponse> getPendencia(Integer idmatriz, String partnum) {
-		List<Object[]> resultados = repository.consultaPendenciaInsumo(idmatriz, partnum);
 		
+		List<Object[]> resultados = repository.consultaPendenciaInsumo(idmatriz, partnum);	
 		List<PendenciaInsumoResponse> produtos = new ArrayList<>();
 
         for (Object[] resultado : resultados) {
@@ -71,9 +77,10 @@ public class MatriinsService {
 		return produtos;
 	}
 	
+
 	public Matriins create(MatriinsDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
-		Matriins matriz = new Matriins();
 		
+		Matriins matriz = new Matriins();	
 		MatriinsKey key = new MatriinsKey();
 		key.setIdmatriz(dto.idmatriz());
 		key.setPartnum(dto.partnum());
@@ -101,6 +108,7 @@ public class MatriinsService {
 		return repository.save(matriz);
 	}
 	
+
 	public Matriins update(Matriins matriz,  MatriinsDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		matriz.setCdspn(dto.cdspn());
@@ -124,9 +132,22 @@ public class MatriinsService {
 		return repository.save(matriz);
 	}
 	
-public Matriins resolverPendencia(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+
+	public Matriins resolverPendencia(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 
 		Auxiliar.preencheAuditoria(matriz, request);
 		return repository.save(matriz);
+
 	}
+
+
+	//j4- added
+	public Matriins salvar(Matriins matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+
+		Auxiliar.preencheAuditoria(matriz, request);
+		return repository.save(matriz);
+		
+	}
+
+
 }

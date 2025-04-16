@@ -12,7 +12,8 @@ public class ProdutoSemListaResponse {
     private Object anomdl;
     private Object desccom;     
     private Object descrfb;
-    private Object tpprd;
+	private Object ppbprd;    
+	private Object tpprd;
     private Object protot;
     private Object special;
     private Object tpdcre;
@@ -31,6 +32,8 @@ public class ProdutoSemListaResponse {
     private Object codcor;
     private Object partdesc;
     private Object unmed;
+	private Object preco; //j4 - added
+	private Object ncm;   //j4 - added
     private Object priocor;
     private Object cdbej;
     private Object corpt;
@@ -57,6 +60,9 @@ public class ProdutoSemListaResponse {
 	
 	public Object getDescrfb() {		return descrfb;	}
 	public void setDescrfb(Object descrfb) {		this.descrfb = descrfb;	}
+
+	public Object getPpbprd() {		return ppbprd;	}
+	public void setPpbprd(Object ppbprd) {		this.ppbprd = ppbprd;	}
 	
 	public Object getTpprd() {		return tpprd;	}
 	public void setTpprd(Object tpprd) {		this.tpprd = tpprd;	}
@@ -129,5 +135,17 @@ public class ProdutoSemListaResponse {
 	
 	public List<PendenciaResponse> getPendencias() {		return pendencias;	}
 	public void setPendencias(List<PendenciaResponse> pendencias) {		this.pendencias = pendencias;	}
+	public Object getPreco() {
+		return preco;
+	}
+	public void setPreco(Object preco) {
+		this.preco = preco;
+	}
+	public Object getNcm() {
+		return ncm;
+	}
+	public void setNcm(Object ncm) {
+		this.ncm = ncm;
+	}
 
 }

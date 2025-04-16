@@ -1,9 +1,6 @@
 package com.dcr.api.controller;
-
-import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.dto.GenerateCode;
 import com.dcr.api.model.dto.Login;
@@ -34,11 +28,13 @@ import com.dcr.api.service.as400.RoleService;
 import com.dcr.api.service.as400.UserService;
 import com.dcr.api.utils.Auxiliar;
 import com.dcr.api.utils.EmailUtil;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -60,6 +56,8 @@ public class AuthController {
     @Autowired
     TokenService tokenService;
     
+
+
     @PostMapping(value = "/login", produces = "application/json")
     @Operation(summary = "Realiza o login do usuário")
     @ApiResponses(value = {
@@ -116,6 +114,8 @@ public class AuthController {
 
     }
     
+
+
     @PostMapping(value = "/generateCode", produces = "application/json")
     @Operation(summary = "Listar usuários")
     @ApiResponses(value = {
@@ -165,6 +165,8 @@ public class AuthController {
         
     }
     
+
+
     @PostMapping(value = "/resetPassword", produces = "application/json")
     @Operation(summary = "Reset de senha")
     @ApiResponses(value = {
@@ -215,6 +217,8 @@ public class AuthController {
 		}
     }
 
+
+
     @PostMapping(value = "/newPassword", produces = "application/json")
     @Operation(summary = "Nova senha")
     @ApiResponses(value = {
@@ -257,4 +261,5 @@ public class AuthController {
 		}
        
     }
+
 }

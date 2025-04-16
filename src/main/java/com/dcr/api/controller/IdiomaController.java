@@ -15,18 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Accidioma;
-import com.dcr.api.model.as400.Cadinco;
 import com.dcr.api.model.dto.AccidiomaDTO;
-import com.dcr.api.model.dto.CadincoDTO;
 import com.dcr.api.service.as400.AccidiomaService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -36,6 +35,8 @@ public class IdiomaController {
 	@Autowired
 	AccidiomaService service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os idiomas")
 	@ApiResponses(value = {
@@ -64,6 +65,8 @@ public class IdiomaController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getById", produces = "application/json")
 	@Operation(summary = "Busca um idioma")
 	@ApiResponses(value = {
@@ -93,6 +96,8 @@ public class IdiomaController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um idioma")
 	@ApiResponses(value = {
@@ -123,6 +128,8 @@ public class IdiomaController {
 		} 
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera um idioma")
 	@ApiResponses(value = {
@@ -153,6 +160,8 @@ public class IdiomaController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta um idioma")
 	@ApiResponses(value = {
@@ -182,4 +191,6 @@ public class IdiomaController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

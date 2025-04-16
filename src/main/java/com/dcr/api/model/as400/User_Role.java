@@ -1,23 +1,15 @@
 package com.dcr.api.model.as400;
-
 import static com.dcr.api.utils.Auxiliar.*;
-
 import org.springframework.security.core.GrantedAuthority;
-
 import com.dcr.api.model.keys.User_RoleKey;
-import com.dcr.api.validator.TamanhoMaximo;
-import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+
+
+
 
 @Entity
 @Table(name = "ACCUSERRL", schema = "HD4DCDHH")

@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Accoper;
 import com.dcr.api.model.dto.AccoperDTO;
 import com.dcr.api.model.keys.AccoperKey;
-import com.dcr.api.response.OperacoesItens;
 import com.dcr.api.response.OperacoesResponse;
 import com.dcr.api.service.as400.AccoperService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -37,6 +35,8 @@ public class OperacoesController {
 	@Autowired
 	AccoperService service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os processamentos")
 	@ApiResponses(value = {
@@ -65,6 +65,7 @@ public class OperacoesController {
 		}   
 	}
 	
+
 	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma operação")
@@ -102,6 +103,8 @@ public class OperacoesController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByCdModule", produces = "application/json")
 	@Operation(summary = "Busca a operação pelo id")
 	@ApiResponses(value = {
@@ -131,6 +134,8 @@ public class OperacoesController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera uma operação")
 	@ApiResponses(value = {
@@ -164,6 +169,8 @@ public class OperacoesController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta um incoterm")
 	@ApiResponses(value = {
@@ -196,4 +203,5 @@ public class OperacoesController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
 }

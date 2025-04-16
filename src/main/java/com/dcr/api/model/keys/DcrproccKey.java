@@ -1,16 +1,16 @@
 package com.dcr.api.model.keys;
-
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import jakarta.persistence.Embeddable;
+
+
 
 @Embeddable
 public class DcrproccKey {
 
 	@TamanhoMaximo(9)
 	@TamanhoMinimo(1)
-	private Long idmatriz;
+	private Integer idmatriz;
 	
 	@TamanhoMaximo(25)
 	@TamanhoMinimo(1)
@@ -20,29 +20,24 @@ public class DcrproccKey {
 	@TamanhoMinimo(1)
 	private String tpprd;
 
-	public Long getIdmatriz() {
-		return idmatriz;
-	}
-
-	public void setIdmatriz(Long idmatriz) {
+	public DcrproccKey(Integer idmatriz, String partnumpd, String tpprd) {
 		this.idmatriz = idmatriz;
-	}
-
-	public String getPartnumpd() {
-		return partnumpd;
-	}
-
-	public void setPartnumpd(String partnumpd) {
 		this.partnumpd = partnumpd;
-	}
-
-	public String getTpprd() {
-		return tpprd;
-	}
-
-	public void setTpprd(String tpprd) {
 		this.tpprd = tpprd;
 	}
+
+	public DcrproccKey() {
+		
+	}
+	
+	public Integer getIdmatriz() {		return idmatriz;	}
+	public void setIdmatriz(Integer idmatriz) {		this.idmatriz = idmatriz;	}
+
+	public String getPartnumpd() {		return partnumpd;	}
+	public void setPartnumpd(String partnumpd) {		this.partnumpd = partnumpd;	}
+
+	public String getTpprd() {		return tpprd;	}
+	public void setTpprd(String tpprd) {		this.tpprd = tpprd;	}
 
 	@Override
 	public int hashCode() {

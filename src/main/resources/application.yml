@@ -47,6 +47,11 @@ as400:
         database-platform:  org.hibernate.dialect.DB2400Dialect
         hibernate.ddl-auto: validate
 
+schedule:
+    atualizaPRD: true
+    reprocMatrizPRD: false
+    reprocMatrizAST: false
+
 
 #File Servers configs
 FileServer: //sahdamvqweb001/C$/sistemas/FER/FileServer

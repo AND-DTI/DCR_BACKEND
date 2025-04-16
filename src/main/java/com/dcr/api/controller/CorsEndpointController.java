@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,17 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.dcr.api.model.as400.Dcrcorsip;
 import com.dcr.api.model.as400.Dcrcorsrq;
 import com.dcr.api.model.dto.DcrcorsrqDTO;
 import com.dcr.api.service.as400.DcrcorsrqService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+//import com.dcr.api.model.as400.Dcrcorsip;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -62,6 +61,8 @@ public class CorsEndpointController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca uma permissão")
 	@ApiResponses(value = {
@@ -91,6 +92,8 @@ public class CorsEndpointController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByCnpj", produces = "application/json")
 	@Operation(summary = "Busca uma permissão")
 	@ApiResponses(value = {
@@ -119,6 +122,8 @@ public class CorsEndpointController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma permissão")
 	@ApiResponses(value = {
@@ -142,6 +147,8 @@ public class CorsEndpointController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera uma permissão")
 	@ApiResponses(value = {
@@ -172,6 +179,8 @@ public class CorsEndpointController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta uma permissão")
 	@ApiResponses(value = {
@@ -201,4 +210,6 @@ public class CorsEndpointController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

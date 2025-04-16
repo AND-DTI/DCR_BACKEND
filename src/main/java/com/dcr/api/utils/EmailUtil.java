@@ -1,13 +1,5 @@
-/**
- * 
- */
 package com.dcr.api.utils;
-
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Properties;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -18,7 +10,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

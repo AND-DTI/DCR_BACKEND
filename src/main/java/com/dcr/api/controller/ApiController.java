@@ -1,41 +1,40 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Dcrapi;
-import com.dcr.api.model.as400.Dcrregra;
 import com.dcr.api.model.dto.DcrapiDTO;
-import com.dcr.api.model.dto.DcrapiKeyDTO;
-import com.dcr.api.model.dto.DcrregraKeyDTO;
 import com.dcr.api.service.as400.DcrapiService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/config")
 public class ApiController {
 
+
+
 	@Autowired
 	DcrapiService service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as configurações")
 	@ApiResponses(value = {
@@ -64,6 +63,8 @@ public class ApiController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getAtivo", produces = "application/json")
 	@Operation(summary = "Busca uma configuração através da data")
 	@ApiResponses(value = {
@@ -93,6 +94,8 @@ public class ApiController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma configuração")
 	@ApiResponses(value = {
@@ -105,7 +108,7 @@ public class ApiController {
 	
 		try {
 			Optional<Dcrapi> dcr = service.getAtivo();
-			DcrapiKeyDTO key = new DcrapiKeyDTO(Auxiliar.getDtFormated(), Auxiliar.getDtFormated());
+			//DcrapiKeyDTO key = new DcrapiKeyDTO(Auxiliar.getDtFormated(), Auxiliar.getDtFormated()); j5 - not used
 			List<Dcrapi> dcrOld = service.getAll();
 			
 			
@@ -122,7 +125,7 @@ public class ApiController {
 				service.update(dto, dcr.get(), request, Auxiliar.getDtFormated());
 		    }
 			
-			Dcrapi dcrNew = service.create(dto, request);
+			//Dcrapi dcrNew = service.create(dto, request); //j5 - not used
 			return ResponseEntity.status(HttpStatus.CREATED)
 			        .header("Accept", "application/json")
 			            .body("OK");

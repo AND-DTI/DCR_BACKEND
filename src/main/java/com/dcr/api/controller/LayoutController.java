@@ -1,13 +1,11 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
+//import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,25 +13,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Dcrlayout;
 import com.dcr.api.model.dto.DcrlayoutDTO;
 import com.dcr.api.model.keys.DcrlayoutKey;
 import com.dcr.api.service.as400.DcrlayoutService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/layout")
 public class LayoutController {
+
+
 	@Autowired
 	DcrlayoutService service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os layouts")
 	@ApiResponses(value = {
@@ -62,6 +64,8 @@ public class LayoutController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getById", produces = "application/json")
 	@Operation(summary = "Busca um layout")
 	@ApiResponses(value = {
@@ -93,6 +97,8 @@ public class LayoutController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um layout")
 	@ApiResponses(value = {
@@ -115,6 +121,8 @@ public class LayoutController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera um layout")
 	@ApiResponses(value = {
@@ -149,7 +157,4 @@ public class LayoutController {
 	}
 	
 
-	
-	
-	
 }

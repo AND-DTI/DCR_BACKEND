@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.dcr.api.model.as400.Matridoc;
 import com.dcr.api.model.as400.Mtasteins;
 import com.dcr.api.model.dto.MtasteinsDTO;
-import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.model.keys.MtasteinsKey;
 import com.dcr.api.service.as400.MtasteinsService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
+
+
+
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -37,6 +34,8 @@ public class MatrizInsumoAstecController {
 	@Autowired
 	MtasteinsService service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todas as Matrizes de documento")
 	@ApiResponses(value = {
@@ -65,6 +64,8 @@ public class MatrizInsumoAstecController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getById", produces = "application/json")
 	@Operation(summary = "Busca uma matriz de documento")
 	@ApiResponses(value = {
@@ -96,6 +97,8 @@ public class MatrizInsumoAstecController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria uma matriz de documento")
 	@ApiResponses(value = {
@@ -118,6 +121,8 @@ public class MatrizInsumoAstecController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera uma Matriz de documento")
 	@ApiResponses(value = {
@@ -152,6 +157,8 @@ public class MatrizInsumoAstecController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta uma matriz de documento")
 	@ApiResponses(value = {
@@ -184,4 +191,6 @@ public class MatrizInsumoAstecController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

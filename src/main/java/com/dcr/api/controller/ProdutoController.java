@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Cadppb;
 import com.dcr.api.model.as400.Pstruc;
+import com.dcr.api.model.dto.CadppbComCorDTO;
 import com.dcr.api.model.dto.CadppbDTO;
-//import com.dcr.api.model.projection.Nivel2Projection;
-//import com.dcr.api.model.keys.ProdutoKey;
+import com.dcr.api.model.dto.CorDTO;
 import com.dcr.api.model.projection.TpprdProjection;
 import com.dcr.api.repository.as400.PstrucRepository;
 import com.dcr.api.service.as400.CadppbService;
@@ -28,18 +28,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
 
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/produto")
 public class ProdutoController {
+
 
 	@Autowired
 	CadppbService service;	
 	@Autowired
 	PstrucRepository repoPstruc;
 	
+
+	
 	@GetMapping(value = "/getAll", produces = "application/json")
-	@Operation(summary = "Busca todas as regras")
+	@Operation(summary = "Busca todas os produtos")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
 	        @ApiResponse(responseCode = "400", description = "Nenhum produto encontrado!"),
@@ -49,9 +53,10 @@ public class ProdutoController {
 	public ResponseEntity<Object> getAll() {
 	
 		try {
+
 			List<Cadppb> lista = service.getAll();
 	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .header("Accept", "application/json")
 	                    .body("Nenhum produto encontrado!");
 	        }
@@ -59,6 +64,7 @@ public class ProdutoController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -69,22 +75,17 @@ public class ProdutoController {
 
 
 	@GetMapping(value = "/getByKey", produces = "application/json")
-	@Operation(summary = "Busca todos as responsáveis")
+	@Operation(summary = "Busca produto pela chave")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
-	@ResponseStatus(HttpStatus.OK)
-	//public ResponseEntity<Object> getByKey(@RequestParam String cdprd, @RequestParam String tpprd) {
+	@ResponseStatus(HttpStatus.OK)	
 	public ResponseEntity<Object> getByKey(@RequestParam String partnumpd) { //added j4
 	
 		try {
-			//ProdutoKey key = new ProdutoKey();
-			//key.setCdprd(cdprd);
-			//key.setTpprd(tpprd);
-			
-			//Optional<Cadppb> lista = service.getByID(key);
+							
 			Optional<Cadppb> lista = service.getByID(partnumpd);
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -95,6 +96,7 @@ public class ProdutoController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -105,16 +107,15 @@ public class ProdutoController {
 
 
 	@GetMapping(value = "/getByTpprd", produces = "application/json")
-	@Operation(summary = "Busca todos as responsáveis")
+	@Operation(summary = "Busca produtos por lista de tipos")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum produto encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getByTpprd(@RequestParam List<String> listaTpprd) {
 		
-	
 		try {
 			
 			TpprdProjection lista = service.getByTpprd(listaTpprd);
@@ -123,32 +124,28 @@ public class ProdutoController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+
 	}
 	
 
 
 	@PutMapping(value = "/create", produces = "application/json")
-	@Operation(summary = "Busca todos as responsáveis")
+	@Operation(summary = "Insere cadastro PPB")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "201", description = "Ok"),	        
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Object> create(@RequestBody CadppbDTO dto, HttpServletRequest request) {
 	
 		try {
-			//ProdutoKey key = new ProdutoKey();
-			//key.setCdprd(dto.cdprd());
-			//key.setTpprd(dto.tpprd());
 			
-
-			//Optional<Cadppb> lista = service.getByID(key);
 			Optional<Cadppb> lista = service.getByID(dto.partnumpd()); //j4 added
 	        if (!lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -158,8 +155,7 @@ public class ProdutoController {
 		
 
 			//Valida código na estrutura			
-			List<Pstruc> produtos = null;
-			//Boolean codEncontrado = false;
+			List<Pstruc> produtos = null;			
 			if (!dto.tpprd().equals("PC")){
 				produtos = repoPstruc.pegaProdutoAcabado(dto.partnumpd());
 			}else{
@@ -184,42 +180,57 @@ public class ProdutoController {
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+
 	}
 	
 
 
 	@PutMapping(value = "/update", produces = "application/json")
-	@Operation(summary = "Busca todos as responsáveis")
+	@Operation(summary = "Atualiza Cadastro PPB")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "201", description = "Ok"),
-	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum responsável encontrado!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> update(@RequestBody CadppbDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody CadppbComCorDTO dto, HttpServletRequest request) {//CadppbDTO
 	
 		try {
-			//ProdutoKey key = new ProdutoKey();  //j4
-			//key.setCdprd(dto.cdprd());  //j4
-			//key.setTpprd(dto.tpprd());  //j4
-			
-			//Optional<Cadppb> lista = service.getByID(key); //j4
-			Optional<Cadppb> lista = service.getByID(dto.partnumpd()); //added j4
-	        if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                    .header("Accept", "application/json")
-	                    .body("Associação não encontrada!");
-	        }
-		
-	        service.update(lista.get(), dto,  request);
+
+			int encontrados = 0;
+			for (CorDTO cor : dto.cores()) {
+
+				Optional<Cadppb> lista = service.getByID(cor.partnumPd()); 
+
+				if (!lista.isEmpty()) {
+					encontrados ++;
+					Cadppb ppb = lista.get();
+					ppb.setTpprd(dto.tpprd());					
+					ppb.setDesccom(dto.desccom());
+					ppb.setDescrfb(dto.descrfb());
+					ppb.setPpbprd(dto.ppbprd());
+					ppb.setPrddest(dto.prddest());					
+					service.updateEntity(ppb, request);
+				}
+
+			}
+
+			if(encontrados == 0){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.header("Accept", "application/json")
+				.body("Produto não encontrado!");
+			}
+
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
-		}   
+		}  
+
 	}
 	
 
@@ -231,30 +242,29 @@ public class ProdutoController {
 	        @ApiResponse(responseCode = "400", description = "Partnumber não encontrado para remoção!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
-	@ResponseStatus(HttpStatus.OK)
-	//public ResponseEntity<Object> delete(@RequestParam String cdprd, @RequestParam String tpprd) {
-    //public ResponseEntity<Object> delete(@RequestParam List<Nivel2Projection> itens) {
+	@ResponseStatus(HttpStatus.OK)	
     public ResponseEntity<Object> delete(@RequestParam List<String> itens) {
 	
 		try {
-			//ProdutoKey key = new ProdutoKey();
-			//key.setCdprd(cdprd);
-			//key.setTpprd(tpprd);
 			
-			//Optional<Cadppb> lista = service.getByID(key);
-			Integer nao_encontrados = 0;
+			Integer encontrados = 0;
 			for (String partnumber : itens) {
 							
 				Optional<Cadppb> lista = service.getByID(partnumber); //added j4				
-				if (lista.isEmpty()) {
-					nao_encontrados += 1;
-					//return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					//		.header("Accept", "application/json")
-					//		.body("Nenhum produto encontrado!");
+				if (lista.isEmpty()) {					
+					//write log...					
 				}else{
+					encontrados ++;
 					//service.delete(lista.get());
+					service.removerPPBxProduto(lista.get());
 				}							
 
+			}
+
+			if(encontrados == 0){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.header("Accept", "application/json")
+				.body("Produto não encontrado!");
 			}
 
 	        return ResponseEntity.status(HttpStatus.OK)
@@ -266,5 +276,8 @@ public class ProdutoController {
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+
 	}
+
+	
 }

@@ -1,12 +1,13 @@
 package com.dcr.api.response;
-
 import java.util.List;
-
-import com.dcr.api.model.as400.User_Role;
-
 import io.swagger.annotations.ApiModel;
+
+
+
+
 @ApiModel
 public class LoginResponse {
+	
 	private String username;
 	private String token;
 	private String name;

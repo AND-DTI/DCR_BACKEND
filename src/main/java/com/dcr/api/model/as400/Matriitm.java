@@ -33,9 +33,17 @@ public class Matriitm {
 	@Column(columnDefinition = "char(3)")
 	private String unmed;
 
+	@TamanhoMaximo(15)
+	@Column(columnDefinition = "decimal(15,2)")
+	private Double preco; //added j4
+
 	@TamanhoMaximo(8)
 	@Column(columnDefinition = "char(3)")
 	private String ncm; //added j4
+
+	@TamanhoMaximo(80)
+	@Column(columnDefinition = "char(80)")
+	private String undcom; //added j5
 	
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
@@ -57,34 +65,24 @@ public class Matriitm {
 	@Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public String getCodcor() {
-		return codcor;
-	}
+	
+	public String getCodcor() {		return codcor;	}
+	public void setCodcor(String codcor) {		this.codcor = codcor;	}
 
-	public void setCodcor(String codcor) {
-		this.codcor = codcor;
-	}
+	public String getPartdesc() {		return partdesc;	}
+	public void setPartdesc(String partdesc) {		this.partdesc = partdesc;	}
 
-	public String getPartdesc() {
-		return partdesc;
-	}
+	public String getUnmed() { 		return unmed;	}
+	public void setUnmed(String unmed) {		this.unmed = unmed;	}
 
-	public void setPartdesc(String partdesc) {
-		this.partdesc = partdesc;
-	}
-
-	public String getUnmed() {
-		return unmed;
-	}
-
-	public void setUnmed(String unmed) {
-		this.unmed = unmed;
-	}
+	public Double getPreco() {		return preco;	}
+	public void setPreco(Double preco) {		this.preco = preco;	}
 
 	public String getNcm() {		return ncm;	}
-	public void setNcm(String ncm) {
-		this.ncm = ncm==null? "" : ncm;
-	}
+	public void setNcm(String ncm) {		this.ncm = ncm==null? "" : ncm;	}
+
+	public String getUndcom() {		return undcom;	}
+	public void setUndcom(String undcom) {		this.undcom = undcom;	}
 
 	public String getItaudsys() {		return itaudsys;	}
 	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}
@@ -106,4 +104,5 @@ public class Matriitm {
 
 	public MatriitmKey getKey() {		return key;	}
 	public void setKey(MatriitmKey key) {		this.key = key;	}
+		
 }

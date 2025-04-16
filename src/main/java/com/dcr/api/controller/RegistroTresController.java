@@ -1,8 +1,6 @@
 package com.dcr.api.controller;
-
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,26 +12,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.dcr.api.model.as400.Dcrreg1;
 import com.dcr.api.model.as400.Dcrreg3;
 import com.dcr.api.model.dto.Dcrreg3DTO;
 import com.dcr.api.model.keys.Dcrreg3Key;
 import com.dcr.api.service.as400.Dcrreg3Service;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/registro/tres")
 public class RegistroTresController {
+	
+	
 	@Autowired
 	Dcrreg3Service service;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os registros")
 	@ApiResponses(value = {
@@ -63,6 +65,7 @@ public class RegistroTresController {
 	}
 	
 	
+
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um registro")
 	@ApiResponses(value = {
@@ -101,6 +104,8 @@ public class RegistroTresController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Cria um registro")
 	@ApiResponses(value = {
@@ -138,6 +143,8 @@ public class RegistroTresController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca o registro ativo")
 	@ApiResponses(value = {
@@ -168,4 +175,6 @@ public class RegistroTresController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
 }

@@ -6,19 +6,28 @@ public class CoresResponse {
 
 		private Object idmatriz;
 		private Object partnumpd;
-	    private Object codcor;
+		private Object modelo; //j4 - added - use for matriitm key	   
+		private Object codcor;
 	    private Object partdesc;
 	    private Object unmed;
-	    private Object priocor;
+		private Object preco; //j4 - added
+		private Object ncm;   //j4 - added	   
+		private Object priocor;
 	    private Object cdbej;
 	    private Object corpt;
 	    private Object coreng;
 	    private Object tppin;
 		private Object status; //j4 - added
 		
+		
+		public Object getIdmatriz() {			return idmatriz;		}
+		public void setIdmatriz(Object idmatriz) {			this.idmatriz = idmatriz;		}
 
 		public Object getPartnumpd() {			return partnumpd;		}
 		public void setPartnumpd(Object partnumpd) {			this.partnumpd = partnumpd;		}
+
+		public Object getModelo() {			return modelo;		}
+		public void setModelo(Object modelo) {			this.modelo = modelo;		}		
 
 		public Object getCodcor() {			return codcor;		}
 		public void setCodcor(Object codcor) {			this.codcor = codcor;		}
@@ -28,6 +37,12 @@ public class CoresResponse {
 
 		public Object getUnmed() {			return unmed;		}
 		public void setUnmed(Object unmed) {			this.unmed = unmed;		}
+
+		public Object getPreco() {			return preco;		}
+		public void setPreco(Object preco) {			this.preco = preco;		}
+		
+		public Object getNcm() {			return ncm;		}
+		public void setNcm(Object ncm) {			this.ncm = ncm;		}		
 
 		public Object getPriocor() {			return priocor;		}
 		public void setPriocor(Object priocor) {			this.priocor = priocor;		}
@@ -43,10 +58,7 @@ public class CoresResponse {
 
 		public Object getTppin() {			return tppin;		}
 		public void setTppin(Object tppin) {			this.tppin = tppin;		}
-		
-		public Object getIdmatriz() {			return idmatriz;		}
-		public void setIdmatriz(Object idmatriz) {			this.idmatriz = idmatriz;		}
-
+			
 		public Object getStatus() {			return status;		}
 		public void setStatus(Object status) {			this.status = status;		}		
 }

@@ -26,7 +26,7 @@ public class Dcrprocch {
 	@TamanhoMaximo(10)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int(10)")
-	private Long idmatriz;
+	private Integer idmatriz;
 	
 	@TamanhoMaximo(25)
 	@TamanhoMinimo(1)
@@ -86,11 +86,11 @@ public class Dcrprocch {
 		this.idhist = idhist;
 	}
 
-	public Long getIdmatriz() {
+	public Integer getIdmatriz() {
 		return idmatriz;
 	}
 
-	public void setIdmatriz(Long idmatriz) {
+	public void setIdmatriz(Integer idmatriz) {
 		this.idmatriz = idmatriz;
 	}
 

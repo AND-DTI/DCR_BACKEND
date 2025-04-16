@@ -45,11 +45,21 @@ public class ScheduleService {
 		//return repositorySchedule.callCL(cmd);
 	}
 
-
-	public int reprocessaMatrizAvulsa(String usersys){
+	
+	public int reprocessaPendencias(String TpPrd, String idMatriz, String usersys){
 		
-		usersys = StringUtils.rightPad(usersys, 10);
-		return repositorySchedule.reprocessaAvulsa(usersys);
+		idMatriz = StringUtils.rightPad(idMatriz, 10);
+		usersys  = StringUtils.rightPad(usersys, 10);
+		return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, "PEN");
+				
+	}	
+
+	
+
+
+	public int reprocessaMatrizAvulsa(String tpprd){
+				
+		return repositorySchedule.reprocessaAvulsa(tpprd);
 
 	}
 }

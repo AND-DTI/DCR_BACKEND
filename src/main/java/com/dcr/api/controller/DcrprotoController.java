@@ -1,11 +1,9 @@
 package com.dcr.api.controller;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Dcrproto;
 import com.dcr.api.model.as400.Dcrreg0;
@@ -27,23 +24,30 @@ import com.dcr.api.model.as400.Dcrvigen;
 import com.dcr.api.model.dto.DcrprotoDTO;
 import com.dcr.api.model.dto.GeraDiagnosticoDTO;
 import com.dcr.api.model.dto.GeraRegistroDTO;
+import com.dcr.api.model.dto.RegistrarDCReDTO;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.DcrprotoService;
 import com.dcr.api.service.as400.Dcrreg0Service;
 import com.dcr.api.service.as400.DcrregraService;
 import com.dcr.api.service.as400.DcrvigenService;
+import com.dcr.api.service.as400.PendastecService;
+import com.dcr.api.service.as400.PendprodService;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/api/protocolo")
 public class DcrprotoController {
+
+
 	@Autowired
 	DcrprotoService service;
 	
@@ -58,7 +62,18 @@ public class DcrprotoController {
 	
 	@Autowired
 	DcrregraService regraService;
+
+	@Autowired
+	PendprodService pendService;
+
+	@Autowired
+	PendastecService pendAstecService;
+
+    @Autowired
+	DcrvigenService dcrvigenService;
 	
+
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos as protocolos")
 	@ApiResponses(value = {
@@ -85,8 +100,11 @@ public class DcrprotoController {
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+		
 	}
 	
+
+
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca um protocolo")
 	@ApiResponses(value = {
@@ -120,6 +138,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@GetMapping(value = "/getByProduto", produces = "application/json")
 	@Operation(summary = "Busca um protocolo")
 	@ApiResponses(value = {
@@ -148,6 +168,8 @@ public class DcrprotoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+	
+
 	
 	@PutMapping(value = "/create", produces = "application/json")
 	@Operation(summary = "Cria um protocolo")
@@ -179,6 +201,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -209,6 +233,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/geraRegistro", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -252,10 +278,11 @@ public class DcrprotoController {
 	        	dcrProccservice.update(procc.get(), request);
 	        	
 	        	try {
-	        		List<Dcrreg0> listareg = reg0Service.getById(dto.idmatriz().intValue(), dto.partnumpd(), dto.tpprd());
+	        		//List<Dcrreg0> listareg = reg0Service.getById(dto.idmatriz().intValue(), dto.partnumpd(), dto.tpprd());
+					Dcrreg0 reg0 = reg0Service.getById(dto.idmatriz().intValue(), dto.partnumpd(), dto.tpprd());
 	        		Optional<Dcrregra> regra = regraService.getAtivo();
 	        		
-	        		String tpdcre = listareg.get(0).getTpdcre();
+	        		String tpdcre = reg0.getTpdcre();//listareg.get(0).getTpdcre();
 		        	Dcrvigen vigen = new Dcrvigen();
 		        	vigen.setDcre(dto.dcre());
 		        	vigen.setCoefred(dto.coefred());
@@ -340,6 +367,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@PutMapping(value = "/geraDiagnostico", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -359,30 +388,44 @@ public class DcrprotoController {
 	                    .body("Esse protocolo já existe!");
 	        }
 		
+			//Marca anterior como histórico
+			service.geraHistorico(dto.idmatriz(), dto.partnumpd(), dto.tpprd());
+
+
+			//grava novo
 	        service.create(dto, request);
 	        
+
+			//atualiza valores do processo
 	        DcrproccKey key = new DcrproccKey();
 	        key.setIdmatriz(dto.idmatriz());
 	        key.setPartnumpd(dto.partnumpd());
-	        key.setTpprd(dto.tpprd());
-	        
-	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);
-	       
-	        if(procc.isPresent()) {
+	        key.setTpprd(dto.tpprd());	        
+	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);	       
+			if(procc.isPresent()) {
 	        	procc.get().setTaxausd(dto.taxausd());
 	        	procc.get().setTotalnac(dto.totalnac());
 	        	procc.get().setTotalimp(dto.totalimp());
 	        	procc.get().setCustotal(dto.custotal());
 	        	procc.get().setCoefred(dto.coefred());
 	        	procc.get().setIitotal(dto.iitotal());
-	        	procc.get().setIireduzido(dto.iireduzido());
-	        	
+	        	procc.get().setIireduzido(dto.iireduzido());	        	
 	        	dcrProccservice.update(procc.get(), request);
 	        }
 	        
+
+			//Associa pendencias abertaas de diagnóstico ao protocolo (FLEX3FLW='DIAG')
+			if(dto.tpprd().equals("PC")){
+				pendAstecService.vinculaProtocolo(dto.idmatriz(), dto.protdcre());
+			}else{
+				pendService.vinculaProtocolo(dto.idmatriz(), dto.partnumpd(), dto.protdcre());
+			}
+			
+
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
-		            .body("OK");
+		            .body("Diagnóstico gerado com sucesso!");
+					
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -390,6 +433,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/deletaDiagnostico", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
 	@ApiResponses(value = {
@@ -398,7 +443,7 @@ public class DcrprotoController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> deletaDiagnostico(@RequestParam Long idmatriz, @RequestParam String protdcre, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
+	public ResponseEntity<Object> deletaDiagnostico(@RequestParam Integer idmatriz, @RequestParam String protdcre, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
 	
 		try {
 	
@@ -419,13 +464,13 @@ public class DcrprotoController {
 	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);
 	       
 	        if(procc.isPresent()) {
-	        	procc.get().setTaxausd(new Double(0));
-	        	procc.get().setTotalnac(new Double(0));
-	        	procc.get().setTotalimp(new Double(0));
-	        	procc.get().setCustotal(new Double(0));
-	        	procc.get().setCoefred(new Double(0));
-	        	procc.get().setIitotal(new Double(0));
-	        	procc.get().setIireduzido(new Double(0));
+	        	procc.get().setTaxausd(Double.valueOf(0));//new Double(0)); //j4 - deprecated
+	        	procc.get().setTotalnac(Double.valueOf(0));
+	        	procc.get().setTotalimp(Double.valueOf(0));
+	        	procc.get().setCustotal(Double.valueOf(0));
+	        	procc.get().setCoefred(Double.valueOf(0));
+	        	procc.get().setIitotal(Double.valueOf(0));
+	        	procc.get().setIireduzido(Double.valueOf(0));
 	        	
 	        	dcrProccservice.update(procc.get(), request);
 	        }
@@ -433,6 +478,7 @@ public class DcrprotoController {
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("OK");
+					
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -440,6 +486,8 @@ public class DcrprotoController {
 		}   
 	}
 	
+
+
 	@DeleteMapping(value = "/delete", produces = "application/json")
 	@Operation(summary = "Deleta um protocolo")
 	@ApiResponses(value = {
@@ -469,4 +517,78 @@ public class DcrprotoController {
 		        		.body(ae.getMessage());                
 		}   
 	}
+
+
+
+    @PutMapping(value = "/registrarDCRe", produces = "application/json")
+	@Operation(summary = "Altera um protocolo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "protocolo não encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> registrarDCRe(@RequestBody RegistrarDCReDTO dto, HttpServletRequest request) {
+	
+		try {
+	
+			Optional<Dcrvigen> lista =  dcrvigenService.getByKey(dto.dcre());
+	        if (!lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Esse número de DCR-e já existe!");
+	        }
+		
+
+            //yyyy MM dd
+            //0123 45 67
+            String dd   = dto.dtregistro().substring(6, 8);
+            String mm   = dto.dtregistro().substring(4, 6);
+            String yyyy = dto.dtregistro().substring(0, 4);
+            String dttime = dd +' '+mm+' '+yyyy+' '+dto.hrregistro();
+            Date dt = Auxiliar.getStrToDate(dttime, "dd MM yyyy hh:mm:ss");
+           
+            
+            //Calc. Vigency date - add 48 hours:            
+            Date dtFuture = Auxiliar.addDaysToDate(dt, 2);            
+            String dtvigini =  Auxiliar.getDateToStr(dtFuture, "yyyyMMdd");
+            String hrvigini = dto.hrregistro();
+            
+
+            //Save DCR-e
+            Dcrvigen dcr = new Dcrvigen(
+                dto.dcre(), dto.idmatriz(), dto.partnumpd(), dto.tpprd(), 
+                dto.dtregistro(), dto.hrregistro(), dto.dcrant(), dtvigini, hrvigini,
+                dto.taxausd(), dto.totalnac(), dto.totalimp(), dto.custotal(), 
+                dto.coefred(), dto.iitotal(), dto.iireduzido());
+            dcrvigenService.create(dcr, request);
+    
+
+			//Atualiza valores do processo (tpdcre, dtregistro, hrregistro)
+	        DcrproccKey key = new DcrproccKey();
+	        key.setIdmatriz(dto.idmatriz());
+	        key.setPartnumpd(dto.partnumpd());
+	        key.setTpprd(dto.tpprd());	        
+	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);	       
+			if(procc.isPresent()) {
+	        	procc.get().setTpdcre(dto.tpdcre());
+	        	procc.get().setDtregistro(dto.dtregistro());
+	        	procc.get().setHrregistro(dto.hrregistro());
+                procc.get().setStatus(6); //status registrado
+	        	dcrProccservice.update(procc.get(), request);
+	        }
+			
+
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Registro DCR-e gravado com sucesso!");
+					
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+
 }
