@@ -1,0 +1,147 @@
+package com.dcr.api.schedule.dto;
+
+
+public class Reg3TXT {
+
+    private Integer numsubcomp; // NUM_SUBCOMPONENTE_IMPORTADO	02	05	04
+    private Integer numcomp;    // NUM_COMPONENTE_NACIONAL	    06	09	04
+    private char iibasecalc;    // IN_BASE_CALCULO	            10	10	01
+    private char impdireta;     // IN_IMP_DIRETA	            11	11	01
+    private char suspens;       // IN_COM_SUSPENSAO	            12	12	01
+    private String di;          // NUM_DI	                    13	22	10 **adapt for DUIMP
+    private String adicao;      // NUM_ADICAO	                23	25	03
+    private String itemadicao;  // NUM_ITEM	                    26	27	02
+    private Long numnf;         // NUM_NOTA_FISCAL	            28	37	10
+    private String sernf;       // NUM_SERIE_NF	                38	42	05
+    private String cnpjfor;     // CNPJ_FORNECEDOR	            43	56	14
+    private String ie;          // INSCRIÇÃO_ESTADUAL	        57	71	15
+    private String eminf;       // DATA_EMISSAO_NF	            72	79	08 (AAAAMMDD)
+    private String espec;       // ESPECIFICACAO	            80	159	80
+    private String undcom;      // UNIDADE_COMERCIAL	        160	239	80
+    private String ncm;         // NCM	                        240	247	08
+    private Double qtde;        // QUANTIDADE	                248	262	15 (7deci)
+    private char inreducii;     // IN_REDUÇÃO_II	            263	263	01
+    private Double vlrunit;     // CUSTO_UNITARIO	            264	278	15 (6deci)
+
+    public Integer getNumsubcomp() {
+        return numsubcomp;
+    }
+    public void setNumsubcomp(Integer numsubcomp) {
+        this.numsubcomp = numsubcomp;
+    }
+    public Integer getNumcomp() {
+        return numcomp;
+    }
+    public void setNumcomp(Integer numcomp) {
+        this.numcomp = numcomp;
+    }
+    public char getIibasecalc() {
+        return iibasecalc;
+    }
+    public void setIibasecalc(char iibasecalc) {
+        this.iibasecalc = iibasecalc;
+    }
+    public char getImpdireta() {
+        return impdireta;
+    }
+    public void setImpdireta(char impdireta) {
+        this.impdireta = impdireta;
+    }
+    public char getSuspens() {
+        return suspens;
+    }
+    public void setSuspens(char suspens) {
+        this.suspens = suspens;
+    }
+    public String getDi() {
+        return di;
+    }
+    public void setDi(String di) {
+        this.di = di;
+    }
+    public String getAdicao() {
+        return adicao;
+    }
+    public void setAdicao(String adicao) {
+        this.adicao = adicao;
+    }
+    public String getItemadicao() {
+        return itemadicao;
+    }
+    public void setItemadicao(String itemadicao) {
+        this.itemadicao = itemadicao;
+    }
+    public Long getNumnf() {
+        return numnf;
+    }
+    public void setNumnf(Long numnf) {
+        this.numnf = numnf;
+    }
+    public String getSernf() {
+        return sernf;
+    }
+    public void setSernf(String sernf) {
+        this.sernf = sernf;
+    }
+    public String getCnpjfor() {
+        return cnpjfor;
+    }
+    public void setCnpjfor(String cnpjfor) {
+        this.cnpjfor = cnpjfor;
+    }
+    public String getIe() {
+        return ie;
+    }
+    public void setIe(String ie) {
+        this.ie = ie;
+    }
+    public String getEminf() {
+        return eminf;
+    }
+    public void setEminf(String eminf) {
+        this.eminf = eminf;
+    }
+    public String getEspec() {
+        return espec;
+    }
+    public void setEspec(String espec) {
+        this.espec = espec;
+    }
+    public String getUndcom() {
+        return undcom;
+    }
+    public void setUndcom(String undcom) {
+        this.undcom = undcom;
+    }
+    public String getNcm() {
+        return ncm;
+    }
+    public void setNcm(String ncm) {
+        this.ncm = ncm;
+    }
+    public Double getQtde() {
+        return qtde;
+    }
+    public void setQtde(Double qtde) {
+        this.qtde = qtde;
+    }
+    public char getInreducii() {
+        return inreducii;
+    }
+    public void setInreducii(char inreducii) {
+        this.inreducii = inreducii;
+    }
+    public Double getVlrunit() {
+        return vlrunit;
+    }
+    public void setVlrunit(Double vlrunit) {
+        this.vlrunit = vlrunit;
+    }
+
+
+    
+        
+
+}
+
+

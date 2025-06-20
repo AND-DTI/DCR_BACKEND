@@ -42,15 +42,16 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
             HD4EMDHD.EMACJOB j on j.cuserid= mt.idusr
             left join
             (select 0 sts, 'Disponivel' dscsts from SYSIBM.SYSDUMMY1 s union 
-            select 1 sts, 'Explodindo Estrutura' dsc from SYSIBM.SYSDUMMY1 s union
-            select 2 sts, 'Processando Matriz' dsc from SYSIBM.SYSDUMMY1 s union
-            select 3 sts, 'Processando Documentos' dsc from SYSIBM.SYSDUMMY1 s union
-            select 4 sts, 'rocessando Pendências' dsc from SYSIBM.SYSDUMMY1 s union
-            select 5 sts, 'Acoplando Coligada' dsc from SYSIBM.SYSDUMMY1 s 
+             select 1 sts, 'Explodindo Estrutura' dsc from SYSIBM.SYSDUMMY1 s union
+             select 2 sts, 'Processando Matriz' dsc from SYSIBM.SYSDUMMY1 s union
+             select 3 sts, 'Processando Documentos' dsc from SYSIBM.SYSDUMMY1 s union
+             select 4 sts, 'Processando Pendências' dsc from SYSIBM.SYSDUMMY1 s union
+             select 5 sts, 'Acoplando Coligada' dsc from SYSIBM.SYSDUMMY1 s 
             )st on st.sts = mt.statusMatriz
         )vw
     where 
         statusMatriz <> 0 
+	order by idmatriz desc
     """, nativeQuery = true)
     //Optional<ResumoProjection> getProcessando();
     List<ProcessamentoMatrizINT> getProcessando();

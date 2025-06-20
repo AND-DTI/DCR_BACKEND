@@ -51,6 +51,14 @@ schedule:
     atualizaPRD: true
     reprocMatrizPRD: false
     reprocMatrizAST: false
+    procTXTShowa: true
+
+interface:
+    txt_showa:
+        dirIN: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/in
+        dirOUT: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/out
+        dirTMP: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/tmp
+        dirPROC: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/processado
 
 
 #File Servers configs

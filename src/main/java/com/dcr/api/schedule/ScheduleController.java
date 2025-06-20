@@ -34,6 +34,7 @@ public class ScheduleController {
         Boolean atualizaProduto = Boolean.valueOf(env.getProperty("schedule.atualizaPRD"));
         Boolean reprocessaMatrizPRD = Boolean.valueOf(env.getProperty("schedule.reprocMatrizPRD"));
         Boolean reprocessaMatrizAST = Boolean.valueOf(env.getProperty("schedule.reprocMatrizAST"));
+		Boolean processaTXTShowa = Boolean.valueOf(env.getProperty("schedule.procTXTShowa"));
 
         if(atualizaProduto){
             scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, 15, TimeUnit.MINUTES);
@@ -47,6 +48,9 @@ public class ScheduleController {
             scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_ASTEC, 0, 15, TimeUnit.MINUTES);
         }
 
+		if(processaTXTShowa){
+            scheduler.scheduleAtFixedRate(this::procINT_TXT_Showa, 0, 15, TimeUnit.MINUTES);
+        }
          		
         //scheduler.scheduleAtFixedRate(this::explodeMatrizAvulsa, 0, 10, TimeUnit.MINUTES);		
         //scheduler.scheduleAtFixedRate(this::verificarPendencias, 0, 30, TimeUnit.MINUTES);
@@ -237,6 +241,34 @@ public class ScheduleController {
 	}
 
 
+	public void procINT_TXT_Showa() { 
+		
+		try {
+
+			
+			FileWriter fws = new FileWriter("logs/interfaceTXT_Showa.txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+
+			int pendentes = 1;//service.getProdutosPendentes();				        
+	        sbs.append("\n Arquivos TXT pendentes de processamento --> " + pendentes); 
+
+			if (pendentes > 0){
+				sbs.append("\n Processando Interface de TXT Showa...");
+				service.processaINT_TXTShowa();				
+			}
+				    
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Interface TXT Showa processado com sucesso!");
+
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+
 	/*public void explodeMatrizAvulsa() {
 
 		try {
@@ -284,4 +316,5 @@ public class ScheduleController {
 		}
 				
 	}*/
+
 }
