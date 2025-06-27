@@ -12,7 +12,7 @@ public class TXTShowa {
     private String denom;       // 107	186	80
     private String ncm;         // 187	194	08
     private String undcom;      // 195	274	80
-    private String peso;        // 275	288	14; 5deci
+    private Double peso;        // 275	288	14; 5deci
     private String tpdcre;      // 319	319	01
     private String dcrant;      // 320	329	10
     private String origdcr;     // 351	351	1
@@ -20,7 +20,7 @@ public class TXTShowa {
     //REG 1
     private String modelo;      // 02	05	04
     private String descricao;   // 06	85	80
-    private String preco;       // 86	100	15; 2deci
+    private Double preco;       // 86	100	15; 2deci
     private String codint;      // 101	115	15
     private String cdclient;    //from field "descricao" after first "/" obs.: //insert into reg0 and reg1
 
@@ -70,10 +70,10 @@ public class TXTShowa {
     public void setUndcom(String undcom) {
         this.undcom = undcom;
     }
-    public String getPeso() {
+    public Double getPeso() {
         return peso;
     }
-    public void setPeso(String peso) {
+    public void setPeso(Double peso) {
         this.peso = peso;
     }
     public String getTpdcre() {
@@ -112,10 +112,10 @@ public class TXTShowa {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    public String getPreco() {
+    public Double getPreco() {
         return preco;
     }
-    public void setPreco(String preco) {
+    public void setPreco(Double preco) {
         this.preco = preco;
     }
     public String getCodint() {

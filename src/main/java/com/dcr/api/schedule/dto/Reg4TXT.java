@@ -20,6 +20,28 @@ public class Reg4TXT {
     private char inreducii;     // IN_REDUÇÃO_II	        258	258	01
     private Double vlrunit;     // CUSTO_UNITARIO	        259	273	15 (6deci)
     
+    public Reg4TXT(Integer numcomp, char impdireta, char suspens, String di, String adicao, String itemadicao,
+                   Long numnf, String sernf, String cnpjfor, String ie, String eminf, String espec, String undcom, String ncm,
+                   Double qtde, char inreducii, Double vlrunit) {
+        this.numcomp = numcomp;
+        this.impdireta = impdireta;
+        this.suspens = suspens;
+        this.di = di;
+        this.adicao = adicao;
+        this.itemadicao = itemadicao;
+        this.numnf = numnf;
+        this.sernf = sernf;
+        this.cnpjfor = cnpjfor;
+        this.ie = ie;
+        this.eminf = eminf;
+        this.espec = espec;
+        this.undcom = undcom;
+        this.ncm = ncm;
+        this.qtde = qtde;
+        this.inreducii = inreducii;
+        this.vlrunit = vlrunit;
+    }
+    
     public Integer getNumcomp() {
         return numcomp;
     }

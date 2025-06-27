@@ -3,8 +3,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,13 @@ import com.dcr.api.schedule.dto.Reg2TXT;
 import com.dcr.api.schedule.dto.Reg3TXT;
 import com.dcr.api.schedule.dto.Reg4TXT;
 import com.dcr.api.schedule.dto.TXTShowa;
+import com.dcr.api.service.as400.ColigadaService;
 import com.dcr.api.utils.FileProperties;
 import com.dcr.api.utils.FileUtil;
 import com.dcr.api.utils.Log;
+import com.dcr.api.model.dto.Dcrcoli0DTO;
+import com.dcr.api.model.dto.Dcrcoli1DTO;
+import com.dcr.api.model.dto.Dcrcoli2DTO;
 
 
 
@@ -28,6 +34,12 @@ public class ScheduleService {
 	ScheduleRepository repositorySchedule;
 	@Autowired
     Environment env;
+
+	@Autowired
+	ColigadaService coligadaService;
+
+	@Autowired
+	private ModelMapper mapper;
 
 	
 	public List<Object[]> getMatriprdWithNotInDcrprocc() {
@@ -97,27 +109,28 @@ public class ScheduleService {
 			for(String file : files){
 
 				TXTShowa txt = doTXTEntity(dirTMP+"\\"+file);
+				String partnumber = formatPartnumber(txt.getCdclient());
+				txt.setCdclient(partnumber);
 
-				
+				cadastraLoteTXT(txt, log);
+
                 FileUtil.movFile(file, dirTMP, dirPROC, log);
 
 			}
 
 		} catch (Exception e) {
 			//throw new Exception();
-			log.saveLog("Erro ao carregar KD (load_KDList)! ["+e+"]");
+			log.saveLog("Falha ao processar arquivos TXT Showa! ["+e+"]");
 		}
 
 		return 2;
 
 	}
 
+
 	public TXTShowa doTXTEntity(String file){
 
-		TXTShowa txt = new TXTShowa();
-		//Reg2TXT reg2 = new Reg2TXT();
-		Reg3TXT reg3 = new Reg3TXT();
-		Reg4TXT reg4 = new Reg4TXT();
+		TXTShowa txt = new TXTShowa();		
 		List<Reg2TXT> list_reg2 = new ArrayList<Reg2TXT>();
 		List<Reg3TXT> list_reg3 = new ArrayList<Reg3TXT>();
 		List<Reg4TXT> list_reg4 = new ArrayList<Reg4TXT>();	
@@ -149,7 +162,7 @@ public class ScheduleService {
 					txt.setDenom(line.substring(106, 186));
 					txt.setNcm(line.substring(186, 194));
 					txt.setUndcom(line.substring(194, 274));
-					txt.setPeso(line.substring(274, 288));
+					txt.setPeso(Double.valueOf(line.substring(274, 288))/100000); //5deci
 					txt.setTpdcre(line.substring(318, 319));
 					txt.setDcrant(line.substring(319, 329));
 					txt.setOrigdcr(line.substring(350, 351));
@@ -159,27 +172,15 @@ public class ScheduleService {
 				if(StringUtils.equals(tprecord, "1")){					
 					txt.setModelo(line.substring(1, 5));
 					txt.setDescricao(line.substring(5, 85));
-					txt.setPreco(line.substring(85, 100));
+					txt.setPreco(Double.valueOf(line.substring(85, 100))/100); //2deci
 					txt.setCodint(line.substring(100, 115));
 					String descricao = line.substring(5, 85);
 					int posCodClient= descricao.indexOf("/")+2; //Start after "/ "
 					txt.setCdclient(descricao.substring(posCodClient, posCodClient+25));
 				}
 				
-				if(StringUtils.equals(tprecord, "2")){
-					/*reg2.setNumcomp(Integer.valueOf(line.substring(1, 5)));
-					reg2.setNumnf(Long.valueOf(line.substring(5, 15)));
-					reg2.setSernf(line.substring(15, 20));
-					reg2.setCnpjfor(line.substring(20, 34));
-					reg2.setIe(line.substring(34, 49));
-					reg2.setEminf(line.substring(49, 57));
-					reg2.setEspec(line.substring(57, 137));
-					reg2.setUndcom(line.substring(137, 217));
-					reg2.setNcm(line.substring(217, 225));
-					reg2.setQtde(Double.valueOf(line.substring(225, 240))/10000000); //7decimais
-					reg2.setVlrunit(Double.valueOf(line.substring(240, 255))/1000000); //6decimais*/
-					list_reg2.add(new Reg2TXT(
-						//Integer numcomp, Long numnf, String sernf, String cnpjfor, String ie, String eminf, String espec, String undcom, String ncm, Double qtde, Double vlrunit
+				if(StringUtils.equals(tprecord, "2")){					
+					list_reg2.add(new Reg2TXT(						
 						Integer.valueOf(line.substring(1, 5)),
 						Long.valueOf(line.substring(5, 15)),
 						line.substring(15, 20),
@@ -189,54 +190,58 @@ public class ScheduleService {
 						line.substring(57, 137),
 						line.substring(137, 217),
 						line.substring(217, 225),
-						Double.valueOf(line.substring(225, 240))/10000000), //7decimais
-						Double.valueOf(line.substring(240, 255))/1000000) //6decimais						
+						Double.valueOf(line.substring(225, 240))/10000000, //7decimais
+						Double.valueOf(line.substring(240, 255))/1000000 //6decimais						
 						)
 					);
 				}
 				
 				if(StringUtils.equals(tprecord, "3")){
-					reg3.setNumsubcomp(Integer.valueOf(line.substring(1, 5)));
-					reg3.setNumcomp(Integer.valueOf(line.substring(5, 9)));
-					reg3.setIibasecalc(line.substring(9, 10).charAt(0));
-					reg3.setImpdireta(line.substring(10, 11).charAt(0));
-					reg3.setSuspens(line.substring(11, 12).charAt(0));
-					reg3.setDi(line.substring(12, 22));
-					reg3.setAdicao(line.substring(23, 25));
-					reg3.setItemadicao(line.substring(25, 27));
-					reg3.setNumnf(Long.valueOf(line.substring(27, 37)));
-					reg3.setSernf(line.substring(37, 42));
-					reg3.setCnpjfor(line.substring(42, 56));
-					reg3.setIe(line.substring(56, 71));
-					reg3.setEminf(line.substring(71, 79));
-					reg3.setEspec(line.substring(79, 159));
-					reg3.setUndcom(line.substring(159, 239));
-					reg3.setNcm(line.substring(239, 247));
-					reg3.setQtde(Double.valueOf(line.substring(247, 262))/10000000); //7decimais
-					reg3.setInreducii(line.substring(262, 263).charAt(0));
-					reg3.setVlrunit(Double.valueOf(line.substring(263, 278))/1000000); //6decimais
-					list_reg3.add(reg3);
+					
+					list_reg3.add(new Reg3TXT(
+						Integer.valueOf(line.substring(1, 5)),
+						Integer.valueOf(line.substring(5, 9)),
+						line.substring(9, 10).charAt(0),
+						line.substring(10, 11).charAt(0),
+						line.substring(11, 12).charAt(0),
+						line.substring(12, 22),
+						line.substring(23, 25),
+						line.substring(25, 27),
+						Long.valueOf(line.substring(27, 37)),
+						line.substring(37, 42),
+						line.substring(42, 56),
+						line.substring(56, 71),
+						line.substring(71, 79),
+						line.substring(79, 159),
+						line.substring(159, 239),
+						line.substring(239, 247),
+						Double.valueOf(line.substring(247, 262))/10000000, //7decimais
+						line.substring(262, 263).charAt(0),
+						Double.valueOf(line.substring(263, 278))/1000000   //6decimais
+					));
+
 				}
 				
-				if(StringUtils.equals(tprecord, "4")){
-					reg4.setNumcomp(Integer.valueOf(line.substring(1, 5)));										
-					reg4.setImpdireta(line.substring(5, 6).charAt(0));
-					reg4.setSuspens(line.substring(6, 7).charAt(0));
-					reg4.setDi(line.substring(7, 17));
-					reg4.setAdicao(line.substring(17, 20));
-					reg4.setItemadicao(line.substring(20, 22));
-					reg4.setNumnf(Long.valueOf(line.substring(22, 32)));
-					reg4.setSernf(line.substring(33, 37));
-					reg4.setCnpjfor(line.substring(37, 51));
-					reg4.setIe(line.substring(51, 66));
-					reg4.setEminf(line.substring(66, 74));
-					reg4.setEspec(line.substring(74, 154));
-					reg4.setUndcom(line.substring(154, 234));
-					reg4.setNcm(line.substring(234, 242));
-					reg4.setQtde(Double.valueOf(line.substring(242, 257))/10000000); //7decimais
-					reg4.setInreducii(line.substring(257, 258).charAt(0));
-					reg4.setVlrunit(Double.valueOf(line.substring(258, 273))/1000000); //6decimais					
-					list_reg4.add(reg4);
+				if(StringUtils.equals(tprecord, "4")){					
+					list_reg4.add(new Reg4TXT(
+						Integer.valueOf(line.substring(1, 5)),										
+						line.substring(5, 6).charAt(0),
+						line.substring(6, 7).charAt(0),
+						line.substring(7, 17),
+						line.substring(17, 20),
+						line.substring(20, 22),
+						Long.valueOf(line.substring(22, 32)),
+						line.substring(33, 37),
+						line.substring(37, 51),
+						line.substring(51, 66),
+						line.substring(66, 74),
+						line.substring(74, 154),
+						line.substring(154, 234),
+						line.substring(234, 242),
+						Double.valueOf(line.substring(242, 257))/10000000, //7decimais
+						line.substring(257, 258).charAt(0),
+						Double.valueOf(line.substring(258, 273))/1000000 //6decimais	
+					));
 				}				
 					/*
 					private Integer numcomp;    //NUM_COMPONENTE_IMPORTADO	02	05	04
@@ -270,6 +275,45 @@ public class ScheduleService {
 		}
 
 		return txt;
+
+	}
+
+
+	private String formatPartnumber(String codigo){
+
+		String codigoFormatado = codigo;
+
+		return codigoFormatado;
+
+	}
+
+
+	private int cadastraLoteTXT(TXTShowa txt, Log log) throws Exception{
+
+		//Registro Zero (0)
+		Dcrcoli0DTO dto0 = new Dcrcoli0DTO(			
+			txt.getDcre(), txt.getDenom(), txt.getCdclient(), txt.getDtdcre(), "0", 
+			txt.getCnpj(), "*", txt.getPpb(), txt.getNcm(), txt.getUndcom(), txt.getPeso(), 
+			0.0, 0.0, txt.getTpdcre(), txt.getDcrant(), "", "", 
+			txt.getOrigdcr(), txt.getTpcoef()
+		);
+		coligadaService.criaReg0(dto0);
+
+
+		//Registro Um (1) **No DCR-e é lista, mas p/ Honda é apenas um nível
+		Dcrcoli1DTO dt01 = new Dcrcoli1DTO(
+			txt.getDcre(), txt.getCdclient(),  
+			Integer.valueOf(txt.getModelo()), "1", txt.getDescricao(), txt.getPreco()
+		);
+		coligadaService.criaReg1(dt01);
+
+
+		//Registro Dois (2)
+		//List<Dcrcoli2DTO> dto2 = Arrays.asList(mapper.map(txt.getReg2(), Dcrcoli2DTO[].class)); **modelmapper not work with Record class
+		//String dcre, Integer numcomp, String idreg,String numnf,String sernf,Long cnpjfor,String ie,String eminf,String espec,String undcom,String ncm,Double qtde,Double vlrunit){
+		//Reg2TXT(Integer numcomp, Long numnf, String sernf, String cnpjfor, String ie, String eminf, String espec, String undcom, String ncm, Double qtde, Double vlrunit) {
+
+		return 1;
 
 	}
 

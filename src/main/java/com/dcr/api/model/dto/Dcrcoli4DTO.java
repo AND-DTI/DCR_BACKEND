@@ -1,5 +1,5 @@
 package com.dcr.api.model.dto;
 
-public record Dcrcoli4DTO(String dcre, Integer numcomp, String idreg,String impdireta,String suspens,Long di,String adicao,Integer itemadicao,String numnf,String sernf,Integer cnpjfor,String ie,String eminf,String espec,String undcom,String ncm,Double qtde,String indreducii,Double vlrunit) {
+public record Dcrcoli4DTO(String dcre, Integer numcomp, String idreg,String impdireta,String suspens,Long di,String adicao,Integer itemadicao,String numnf,String sernf,Long cnpjfor,String ie,String eminf,String espec,String undcom,String ncm,Double qtde,String indreducii,Double vlrunit) {
 
 }

@@ -25,8 +25,8 @@ public class Dcrcoli4Service {
 	
 	
 	public Dcrcoli4 create(Dcrcoli4DTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Dcrcoli4 dcr = new Dcrcoli4();
 		
+		Dcrcoli4 dcr = new Dcrcoli4();		
 		Dcrcoli4Key key = new Dcrcoli4Key();
 		key.setDcre(dto.dcre());
 		key.setNumcomp(dto.numcomp());
@@ -55,8 +55,10 @@ public class Dcrcoli4Service {
 		Auxiliar.preencheAuditoria(dcr, request);
 		
 		return repository.save(dcr);
+
 	}
 	
+
 	public void createLote(List<Dcrcoli4LoteDTO> lista, String dcre, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
 		for (Dcrcoli4LoteDTO dto : lista) {
@@ -77,7 +79,7 @@ public class Dcrcoli4Service {
 			dcr.setNcm(dto.ncm());
 			dcr.setUndcom(dto.undcom());
 			dcr.setAdicao(dto.adicao());
-			dcr.setCnpjfor(dto.cnpjfor());
+			dcr.setCnpjfor(Long.valueOf(dto.cnpjfor()));
 			dcr.setDi(dto.di());
 			dcr.setEminf(dto.eminf());
 			dcr.setEspec(dto.espec());

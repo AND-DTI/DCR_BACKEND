@@ -26,8 +26,8 @@ public class Dcrcoli3Service {
 	
 	
 	public Dcrcoli3 create(Dcrcoli3DTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Dcrcoli3 dcr = new Dcrcoli3();
 		
+		Dcrcoli3 dcr = new Dcrcoli3();
 		Dcrcoli3Key key = new Dcrcoli3Key();
 		key.setDcre(dto.dcre());
 		key.setNumcomp(dto.numcomp());
@@ -59,6 +59,7 @@ public class Dcrcoli3Service {
 		return repository.save(dcr);
 	}
 	
+
 	public void createLote(List<Dcrcoli3LoteDTO> lista, String dcre, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
 		for (Dcrcoli3LoteDTO dto : lista) {
@@ -101,11 +102,14 @@ public class Dcrcoli3Service {
 		}
 	}
 	
+
 	public void delete(Dcrcoli3 dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
 		repository.delete(dcr);
+
 	}
 	
+
 	public Dcrcoli3 update(Dcrcoli3DTO dto, Dcrcoli3 dcr, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {		
 
 		dcr.setIdreg(dto.idreg());
@@ -134,12 +138,15 @@ public class Dcrcoli3Service {
 		return repository.save(dcr);
 	}
 	
+
 	public List<Dcrcoli3> getAll() {
 		return repository.findAll();
 	}
 	
+
 	public Optional<Dcrcoli3> getByKey(Dcrcoli3Key dto) {
 
 		return repository.findById(dto);
 	}
+
 }

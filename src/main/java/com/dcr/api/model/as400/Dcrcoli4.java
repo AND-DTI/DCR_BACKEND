@@ -1,14 +1,14 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.Dcrcoli4Key;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+
 
 @Entity
 @Table(name = "DCRCOLI4", schema = "HD4DCDHH")
@@ -60,8 +60,8 @@ public class Dcrcoli4 {
 	
 	@TamanhoMaximo(14)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "int")
-	private Integer cnpjfor;
+	@Column(columnDefinition = "bigint")	
+	private Long cnpjfor; //old Integer
 	
 	@TamanhoMaximo(15)
 	@TamanhoMinimo(1)
@@ -189,11 +189,11 @@ public class Dcrcoli4 {
 		this.sernf = sernf;
 	}
 
-	public Integer getCnpjfor() {
+	public Long getCnpjfor() {
 		return cnpjfor;
 	}
 
-	public void setCnpjfor(Integer cnpjfor) {
+	public void setCnpjfor(Long cnpjfor) {
 		this.cnpjfor = cnpjfor;
 	}
 

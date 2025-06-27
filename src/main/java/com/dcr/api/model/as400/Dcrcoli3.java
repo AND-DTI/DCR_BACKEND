@@ -1,14 +1,14 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.model.keys.Dcrcoli3Key;
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+
 
 @Entity
 @Table(name = "DCRCOLI3", schema = "HD4DCDHH")
@@ -26,17 +26,17 @@ public class Dcrcoli3 {
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
-	private String iibasecalc;
+	private char iibasecalc;
 	
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
-	private String impdireta;
+	private char impdireta;
 	
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
-	private String suspens;
+	private char suspens;
 	
 	@TamanhoMaximo(10)
 	@TamanhoMinimo(1)
@@ -65,8 +65,8 @@ public class Dcrcoli3 {
 	
 	@TamanhoMaximo(14)
 	@TamanhoMinimo(1)
-	@Column(columnDefinition = "int")
-	private Integer cnpjfor;
+	@Column(columnDefinition = "bigint")
+	private Long cnpjfor; //old Integer
 	
 	@TamanhoMaximo(15)
 	@TamanhoMinimo(1)
@@ -100,7 +100,7 @@ public class Dcrcoli3 {
 	@TamanhoMaximo(1)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
-	private String indreducii;
+	private char indreducii;
 	
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "decimal(15,6)")
@@ -138,27 +138,27 @@ public class Dcrcoli3 {
 		this.idreg = idreg;
 	}
 
-	public String getIibasecalc() {
+	public char getIibasecalc() {
 		return iibasecalc;
 	}
 
-	public void setIibasecalc(String iibasecalc) {
+	public void setIibasecalc(char iibasecalc) {
 		this.iibasecalc = iibasecalc;
 	}
 
-	public String getImpdireta() {
+	public char getImpdireta() {
 		return impdireta;
 	}
 
-	public void setImpdireta(String impdireta) {
+	public void setImpdireta(char impdireta) {
 		this.impdireta = impdireta;
 	}
 
-	public String getSuspens() {
+	public char getSuspens() {
 		return suspens;
 	}
 
-	public void setSuspens(String suspens) {
+	public void setSuspens(char suspens) {
 		this.suspens = suspens;
 	}
 
@@ -202,11 +202,11 @@ public class Dcrcoli3 {
 		this.sernf = sernf;
 	}
 
-	public Integer getCnpjfor() {
+	public Long getCnpjfor() {
 		return cnpjfor;
 	}
 
-	public void setCnpjfor(Integer cnpjfor) {
+	public void setCnpjfor(Long cnpjfor) {
 		this.cnpjfor = cnpjfor;
 	}
 
@@ -258,11 +258,11 @@ public class Dcrcoli3 {
 		this.qtde = qtde;
 	}
 
-	public String getIndreducii() {
+	public char getIndreducii() {
 		return indreducii;
 	}
 
-	public void setIndreducii(String indreducii) {
+	public void setIndreducii(char indreducii) {
 		this.indreducii = indreducii;
 	}
 

@@ -1,6 +1,7 @@
 app:
-    name: FERG.COM
-    exe: FER_BACKEND.JAR
+    name: NEWDCR-E.COM
+    code: DCRE-BACK
+    exe: DCRE_BACKEND.JAR
     host: BACKENDSERVER
     interfaces:
         user: SYSINTUSER

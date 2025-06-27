@@ -23,6 +23,30 @@ public class Reg3TXT {
     private char inreducii;     // IN_REDUÇÃO_II	            263	263	01
     private Double vlrunit;     // CUSTO_UNITARIO	            264	278	15 (6deci)
 
+    public Reg3TXT(Integer numsubcomp, Integer numcomp, char iibasecalc, char impdireta, char suspens, String di,
+                   String adicao, String itemadicao, Long numnf, String sernf, String cnpjfor, String ie, String eminf,
+                   String espec, String undcom, String ncm, Double qtde, char inreducii, Double vlrunit) {
+        this.numsubcomp = numsubcomp;
+        this.numcomp = numcomp;
+        this.iibasecalc = iibasecalc;
+        this.impdireta = impdireta;
+        this.suspens = suspens;
+        this.di = di;
+        this.adicao = adicao;
+        this.itemadicao = itemadicao;
+        this.numnf = numnf;
+        this.sernf = sernf;
+        this.cnpjfor = cnpjfor;
+        this.ie = ie;
+        this.eminf = eminf;
+        this.espec = espec;
+        this.undcom = undcom;
+        this.ncm = ncm;
+        this.qtde = qtde;
+        this.inreducii = inreducii;
+        this.vlrunit = vlrunit;
+    }
+    
     public Integer getNumsubcomp() {
         return numsubcomp;
     }
