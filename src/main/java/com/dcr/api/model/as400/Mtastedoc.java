@@ -186,9 +186,9 @@ public class Mtastedoc {
 		this.adicao3 = adicao3 == null? "": adicao3;
 		this.itadicao3 =  Objects.equals(itadicao3, null)? 0: itadicao3;
 		this.vlrunit3 = vlrunit3 == null? 0.: vlrunit3;
-		this.siglaund3 = siglaund3 == null? "": serdoc3;
-		this.codinco3 = codinco3 == null? "": serdoc3;
-		this.modal3 = modal3 == null? "": serdoc3;
+		this.siglaund3 = siglaund3 == null? "": siglaund3;
+		this.codinco3 = codinco3 == null? "": codinco3;
+		this.modal3 = modal3 == null? "": modal3;
 
 		this.numdoc = "";
 		this.serdoc = "";

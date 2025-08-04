@@ -245,8 +245,8 @@ public interface DcrproccAstecRepository extends JpaRepository<Dcrprocc, Dcrproc
 		ITAUDSYS, ITAUDUSR, ITAUDHST, ITAUDDT, ITAUDHR
 	)
 	SELECT 
-		prd.idmatriz, prd.partnumpd, 'PC', ins.partnum, '3' reg,
-		reg2.numcomp as sub, Rownumber() Over(Partition by prd.partnumpd) as numcomp, 
+		prd.idmatriz, prd.partnumpd, 'PC', ins.partnum, '3' reg,		
+		Rownumber() Over(Partition by prd.partnumpd) as sub, reg2.numcomp,
 		'S', 'S', 'S', 'N' as indii,
 		case when NUMDOC3='' then NUMDOC else NUMDOC3 end as DI,
 		case when NUMDOC3='' then ADICAO else ADICAO3 end as ADICAO,
@@ -316,8 +316,8 @@ public interface DcrproccAstecRepository extends JpaRepository<Dcrprocc, Dcrproc
 		join /*join - ver se permite exclusão de item sem doc - INS ficará maior que DOC*/
 		HD4DCDHH.MTASTEDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.partnum= ins.partnum 
 		left join
-		(select idmatriz, partnumpd, max(numcomp) lastcomp 
-		from HD4DCDHH.DCRREG3 group by idmatriz, partnumpd
+		(select idmatriz, partnumpd, max(numsubcomp) lastcomp /*old max(numcomp)*/
+		 from HD4DCDHH.DCRREG3 group by idmatriz, partnumpd
 		) as R3 on r3.IDMATRIZ= prd.IDMATRIZ and r3.PARTNUMPD= prd.PARTNUMPD
 	WHERE 
 		prd.IDMATRIZ= :idmatriz and prd.PARTNUMPD= :partnumpd and 

@@ -1,13 +1,10 @@
 package com.dcr.api.service.as400;
-
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.as400.User_Role;
 import com.dcr.api.model.dto.User;
@@ -16,8 +13,8 @@ import com.dcr.api.response.ErrorResponse;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-
 import jakarta.servlet.http.HttpServletRequest;
+
 
 @Service
 public class UserService {
@@ -152,6 +149,31 @@ public class UserService {
 
     }
 
+    public Accuser save(Accuser user, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    	Auxiliar.preencheAuditoria(user, request);
+    	for (User_Role role : user.getRoles()) {
+    		Auxiliar.preencheAuditoria(role, request);
+		}
+    	
+        return userRepository.save(user);
+
+    }
+
+    public Accuser save0(Accuser user) {
+
+        return userRepository.save(user);
+
+    }
+
+    public String getRepresentanteCert(){
+
+        String representante = "94762953687"; //implement SSL Entity
+
+        return representante;
+
+    }
+
+
 //    public User saveUser(CtpuserDTO userDTO) {
 //
 //        Auditoria audit = new Auditoria();
@@ -171,21 +193,6 @@ public class UserService {
 //
 //    }
 
-    public Accuser save(Accuser user, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-    	Auxiliar.preencheAuditoria(user, request);
-    	for (User_Role role : user.getRoles()) {
-    		Auxiliar.preencheAuditoria(role, request);
-		}
-    	
-        return userRepository.save(user);
-
-    }
-
-    public Accuser save0(Accuser user) {
-
-        return userRepository.save(user);
-
-    }
 
 //    public User mapDTOToEntity(CtpuserDTO userDTO) {
 //

@@ -8,6 +8,7 @@ import com.dcr.api.model.as400.Matridoc;
 import com.dcr.api.model.dto.MatridocDTO;
 import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.repository.as400.MatridocRepository;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -22,32 +23,40 @@ public class MatridocService {
 	
 	@Autowired
 	MatridocRepository repository;
+
+	@Autowired
+    AuditoriaService auditoriaService;
+
 	
 	public List<Matridoc> getAll() {
 		
 		return repository.findAll();
+
 	}
 	
 
 	public Optional<Matridoc> getByID(MatridocKey id) {
 		
 		return repository.findById(id);
+
 	}
 	
 
 	public Optional<Matridoc> buscaDoc(Integer idmatriz, String partnum, String partnumpd) {
 		
 		return repository.buscaDoc(idmatriz, partnum, partnumpd);
+
 	}
 
 	
 	public void delete(Matridoc matriz) {
 		
 		repository.delete(matriz);
+
 	}
 	
 
-	public Matridoc create(MatridocDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+	public Matridoc create(MatridocDTO dto/* HttpServletRequest request*/) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		Matridoc matriz = new Matridoc();
 		MatridocKey key = new MatridocKey();
@@ -93,8 +102,15 @@ public class MatridocService {
 		matriz.setCodinco3(dto.codinco3()); //j4
 		matriz.setModal3(dto.modal3()); //j4
 		
-		Auxiliar.preencheAuditoria(matriz, request);
+		//Auxiliar.preencheAuditoria(matriz, request);
+		try {
+			auditoriaService.preencheAuditoria(matriz);
+		} catch (Exception e) {			
+			//e.printStackTrace();
+		}
+
 		return repository.save(matriz);
+
 	}
 	
 
@@ -137,9 +153,17 @@ public class MatridocService {
 	}
 
 	//j4 - added
-	public Matridoc save(Matridoc matriz, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
-		
-		Auxiliar.preencheAuditoria(matriz, request);
+	public Matridoc save(Matridoc matriz/*, HttpServletRequest request*/) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+				
+		Auxiliar.formatResponse(matriz);
+		//Auxiliar.preencheAuditoria(matriz, request);
+
+		try {
+			auditoriaService.preencheAuditoria(matriz);
+		} catch (Exception e) {			
+			//e.printStackTrace();
+		}
+
 		return repository.save(matriz);
 		
 	}

@@ -15,7 +15,8 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, ppb.PPBPRD, prd.TPPRD, prd.PROTOT, prd.SPECIAL,                      /*0  ~ 9 */
 		prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,                                      /*10 ~ 17*/
 		itm.PARTNUMPD, itm.CODCOR, cor.CORPT, itm.PARTDESC, itm.UNMED, itm.PRECO, itm.NCM ncmprd, itm.PRIOCOR, prc.status statusproc, cor.CDBEJ, cor.CORENG, cor.TPPIN,     /*18 ~ 29*/
-		pen.NUMPEND, pen.CDPEND, pen.OBSRESOL, pen.STATUS, tpe.descpend, tpe.obspend, pen.flex5flw as obsdetail, tpe.tpreg,                               /*30 ~ 37*/
+		pen.NUMPEND, pen.CDPEND, pen.OBSRESOL, pen.STATUS, tpe.descpend, 				/*30 ~ 34*/
+		case when pen.obspend<>'' then pen.obspend else tpe.obspend end as obspend, pen.flex5flw as obsdetail, tpe.tpreg,                               /*35 ~ 37*/
 		pen.PARTNUM, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC,                                                                         /*38 ~ 42*/
 		ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM ncmins, ins.VLRUNIT,        /*43 ~ 54*/     
 		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.CNPJFOR, doc.IE, doc.ADICAO, doc.ITADICAO, doc.VLRUNIT, doc.SIGLAUND, doc.CODINCO, doc.MODAL,  /*55 ~ 66*/   

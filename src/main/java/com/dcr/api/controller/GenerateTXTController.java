@@ -50,7 +50,7 @@ public class GenerateTXTController {
 		try {
 			String fileName = txtService.gerarArquivoTXT2(idmatriz, partnumpd, tpprd, "diagnostico"); //old .gerarArquivoTXT(
 			var file = new File(fileName);//old "arquivoTeste2.txt"
-	        var path = Paths.get(file.getAbsolutePath());
+	        var path = Paths.get(file.getAbsolutePath()); //fail on linux - set fileserver directory			
 	        //var resource = new ByteArrayResource(Files.readAllBytes(path));			
 			String content = new String(Files.readAllBytes(path), StandardCharsets.ISO_8859_1);
 			//byte[] resource2 = Files.readAllBytes(path);
@@ -64,10 +64,42 @@ public class GenerateTXTController {
 		} catch (IOException e) {
 			return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
-		            .body("Erro na geração do arquivo!");
+		            .body("Erro na geração do arquivo! [Erro: "+e.getMessage()+"]");
 		}
 				
 	}
+
+
+	@GetMapping(value = "/generate2", produces = "application/json") //charset=UTF-8
+	@Operation(summary = "Gera txt")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> generate2(@RequestParam Integer idmatriz,@RequestParam String partnumpd,@RequestParam String tpprd, String path ) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		
+		
+		try {
+			String fileName = txtService.gerarArquivoTXT_Linux(idmatriz, partnumpd, tpprd, path); 
+			//String file0 = (path+"//"+fileName).replace("/\s/g", "");
+			//var file = new File(file0);
+			var file = new File(fileName);
+	        var path0 = Paths.get(file.getAbsolutePath()); 
+	        
+			String content = new String(Files.readAllBytes(path0), StandardCharsets.UTF_8);	//ISO_8859_1		
+	        return ResponseEntity
+	                .ok()	                
+					.contentType(new MediaType("text", "plain", StandardCharsets.UTF_8))
+	                .contentLength(file.length())
+	                .body(content); 
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Erro na geração do arquivo! [Erro: "+e.getMessage()+"]");
+		}
+				
+	}	
     
 
 }

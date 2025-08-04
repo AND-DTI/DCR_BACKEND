@@ -211,7 +211,9 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 	select 
 		prd.idmatriz, itm.partnumpd, prd.tpprd, '0', conf.cnpjemi, '***********', ppb.ppbprd, prd.descrfb, itm.ncm, itm.undcom, 
 		(select sum(WEGHT) from HD4DCDHH.MATRIINS x where x.idmatriz= prd.idmatriz), /* --> criar campo e salvar quando explodir estrutura */
-		0, 0, prd.tpdcre, '', '', '', 2, 'F',
+		0, 0, 
+		/*prd.tpdcre --> get from config*/ 'N' as tpdcre, 
+		'', '', '', 2, 'F',
 		'DCRBACKEND', CAST(:itaudusr as char(10)), CAST(:itaudhst as char(30)), 
 		VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') dtatual,
 		CHAR(TIME(CURRENT TIMESTAMP),JIS) hratual  
@@ -305,7 +307,8 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 	)
 	SELECT 
 		prd.idmatriz, itm.partnumpd, prd.tpprd, ins.partnum, '3' reg,
-		reg2.numcomp as sub, Rownumber() Over(Partition by doc.partnumpd) as numcomp, 
+		/*reg2.numcomp as sub, Rownumber() Over(Partition by doc.partnumpd) as numcomp, OLD 04.08.2025 */ 
+		Rownumber() Over(Partition by doc.partnumpd) as sub, reg2.numcomp,
 		'S', 'S', 'S', 'N' as indii,
 		case when NUMDOC3='' then NUMDOC else NUMDOC3 end as DI,
 		case when NUMDOC3='' then ADICAO else ADICAO3 end as ADICAO,
@@ -377,8 +380,8 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 		join /*join - ver se permite exclusão de item sem doc - INS ficará maior que DOC*/
 		HD4DCDHH.MATRIDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.PARTNUMPD= itm.PARTNUMPD and doc.partnum= ins.partnum 
 		left join
-		(select idmatriz, partnumpd, max(numcomp) lastcomp 
-		from HD4DCDHH.DCRREG3 group by idmatriz, partnumpd
+		(select idmatriz, partnumpd, max(numsubcomp) lastcomp /*old max(numcomp)*/
+		 from HD4DCDHH.DCRREG3 group by idmatriz, partnumpd
 		) as R3 on r3.IDMATRIZ= prd.IDMATRIZ and r3.PARTNUMPD= itm.PARTNUMPD
 	WHERE 
 		prd.IDMATRIZ= :idmatriz and itm.PARTNUMPD= :partnumpd and 

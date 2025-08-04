@@ -18,14 +18,18 @@ public interface CadtppendRepository extends JpaRepository<Cadtppend, String>{
     Optional<Cadtppend> findPendenciasAndResponsaveisByCdPend(String cdpend);
 
 
-    //@Query("SELECT p FROM Cadtppend p LEFT JOIN FETCH p.responsaveis r where p.cdpend= :cdpend and r.subtipo= :subtipo")
-    @Query(value="""
-    SELECT p.*, --p.cdpend, p.descpend, p.obspend, p.tpreg,
-           responsaveis.subtipo, cdresp, nmresp
+    //@Query("SELECT p FROM Cadtppend p LEFT JOIN FETCH p.responsaveis r where p.cdpend= :cdpend and r.subtipo= :subtipo")    
+    /*old:
+      SELECT p.*, responsaveis.subtipo, cdresp, nmresp
+      FROM   hd4dcdhh.Cadtppend p left join
+             hd4dcdhh.Pendresp responsaveis on responsaveis.cdpend= p.cdpend
+      WHERE  p.cdpend= :cdpend and responsaveis.subtipo= :subtipo */
+    @Query(value="""    
+    SELECT p.*, r.subtipo, r.cdresp, r.nmresp
     FROM   hd4dcdhh.Cadtppend p left join
-           hd4dcdhh.Pendresp responsaveis on responsaveis.cdpend= p.cdpend
-    WHERE  p.cdpend= :cdpend and responsaveis.subtipo= :subtipo 
-    """, nativeQuery=true)                        
+           hd4dcdhh.Pendresp r on r.cdpend= p.cdpend and r.subtipo= :subtipo 
+    WHERE  p.cdpend= :cdpend     
+    """, nativeQuery=true)
     List<RespPendProjection> findPendenciasAndResponsaveisByCdPend2(String cdpend, String subtipo);
 
 }

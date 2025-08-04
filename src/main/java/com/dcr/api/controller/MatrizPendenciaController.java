@@ -362,11 +362,11 @@ public class MatrizPendenciaController {
 				String tpCrud = doc.isEmpty()? "create" : "update";
 
 				Matridoc matridoc = tpCrud.equals("update")? doc.get() 
-				 		 			:new Matridoc( matridocKey,
-										dto.numdoc3(), dto.emidoc3(), dto.serdoc3(), dto.cnpjfor3(), dto.ie3(), 
-										dto.adicao3(), dto.itadicao3(), dto.vlrunit3(), dto.siglaund3(), dto.codinco3(), dto.modal3()								
-									);
-				
+							:new Matridoc( matridocKey,
+								dto.numdoc3(), dto.emidoc3(), dto.serdoc3(), dto.cnpjfor3(), dto.ie3(), 
+								dto.adicao3(), dto.itadicao3(), dto.vlrunit3(), dto.siglaund3(), dto.codinco3(), dto.modal3()								
+							);				
+	
 				if(tpCrud.equals("update")){								
 					matridoc.setNumdoc3(dto.numdoc3());
 					matridoc.setEmidoc3(dto.emidoc3());
@@ -381,7 +381,7 @@ public class MatrizPendenciaController {
 					matridoc.setModal3(dto.modal3());
 				}
 
-				matridocService.save(matridoc, request); //old matridocService.resolverPendencia(matridoc, request);
+				matridocService.save(matridoc/* request*/); //old matridocService.resolverPendencia(matridoc, request);
 				
 				
 				//2. Confirma novo item

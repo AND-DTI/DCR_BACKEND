@@ -226,12 +226,17 @@
 		    <version>2.9.2</version>
 		</dependency-->
 
-
 		<!--tomcat - use for PD buid -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.playwright</groupId>
+			<artifactId>playwright</artifactId>
+			<version>1.54.0</version>
 		</dependency>
 
 	</dependencies>

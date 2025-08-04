@@ -19,7 +19,8 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 	SELECT 
 		prd.IDMATRIZ, prd.PARTNUMPD, prd.DESCCOM, prd.DESCRFB, ppb.PRDDEST, ppb.PPBPRD, 
 		prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT, prd.UNMED, prd.PRECO, prd.NCM as ncm_prd, prc.status as status_prc, /*6 ~ 17*/  
-		pen.NUMPEND, pen.CDPEND, pen.OBSRESOL, pen.STATUS, tpe.descpend, tpe.obspend, pen.flex5flw as obsdetail, tpe.tpreg, /*18 ~ 25*/
+		pen.NUMPEND, pen.CDPEND, pen.OBSRESOL, pen.STATUS, tpe.descpend, /*18 ~ 22*/		
+		case when pen.obspend<>'' then pen.obspend else tpe.obspend end as obspend, pen.flex5flw as obsdetail, tpe.tpreg, /*23 ~ 25*/
 		pen.PARTNUM, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC, /*26 ~ 30*/
 		ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM as ncm_ins, ins.VLRUNIT as vlrUnit_ins, /*31 ~ 42*/     
 		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.CNPJFOR, doc.IE, doc.ADICAO, doc.ITADICAO, doc.VLRUNIT, doc.SIGLAUND, doc.CODINCO, doc.MODAL, /*43 ~ 54*/   
