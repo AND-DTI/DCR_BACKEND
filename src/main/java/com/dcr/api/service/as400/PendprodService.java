@@ -126,6 +126,8 @@ public class PendprodService {
 
 	public Pendprod finalizaTratativa(Integer idmatriz, String partnumpd, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
+		//removeEND(idmatriz, partnumpd, request); ñ remover p/ ver as vezes que foi p/ diagnostico ou consutar HD4DCDHH.DCRPROTO
+
 		Pendprod pend = new Pendprod();		
 		PendprodKey key = new PendprodKey();
 		key.setIdmatriz(idmatriz);

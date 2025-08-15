@@ -28,6 +28,8 @@ import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.model.keys.MatriinsKey;
 import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.model.keys.PendprodKey;
+import com.dcr.api.schedule.ScheduleService;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.service.as400.CadppbService;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MatridocService;
@@ -67,6 +69,10 @@ public class MatrizPendenciaController {
 	CadppbService cadppbservice;
 	@Autowired
 	PartnumberService partnumberService;
+	@Autowired
+	ScheduleService scheduleService;
+	@Autowired
+    AuditoriaService auditoriaService;
 	
 	
 
@@ -316,8 +322,7 @@ public class MatrizPendenciaController {
 	        
 
 			//RESOLVE PENDENCIA DE CUSTO (Atualiza preco de venda):
-			if(dto.cdpend().equals("CUS")){
-																				
+			if(dto.cdpend().equals("CUS")){																				
 				matriitm.setPreco(dto.preco());					
 				matriitmService.save(matriitm);			
 				pendprodService.resolverPendencia(pendprod, dto,  request);
@@ -420,7 +425,10 @@ public class MatrizPendenciaController {
 			//CRIA CONFIRMAÇÃO DE AVANÇO PARA DIAGNÓSTICO (se não há mais pendências em aberto):
 	        List<Pendprod> pendencias = pendprodService.findPendenciasZero(Long.valueOf(dto.idmatriz()), dto.partnumpd());	        
 	        if(pendencias.isEmpty() && !dto.cdpend().equals("END") ) {								
-				pendprodService.finalizaTratativa(dto.idmatriz(), dto.partnumpd(), request); //cria cdpend 'END'
+				//15.08.2025 - não finalizar - enviar p/ pendencias GX (PDCR007A) p/ converter valor unitário e finalizar por lá
+				//pendprodService.finalizaTratativa(dto.idmatriz(), dto.partnumpd(), request); //cria cdpend 'END'
+				String tpprd = dto.tpprd().trim().equals("PC")? "AST" : "PRD";
+				scheduleService.reprocessaPendencias(tpprd, dto.idmatriz().toString(), auditoriaService.getUser(), "PEN");
 	        }else{
 				//avança p/ "em tratativa de pendência (status 2) - ao resolver primeira pendência"
 				if(dcrprocc.getStatus() == 0){

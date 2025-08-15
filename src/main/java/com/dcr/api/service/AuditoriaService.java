@@ -81,4 +81,13 @@ public class AuditoriaService {
     }
 
 
+    public String getUser() throws Exception {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String logedUser = (String) authentication.getPrincipal();
+        
+        return logedUser;
+
+    }
+
 }

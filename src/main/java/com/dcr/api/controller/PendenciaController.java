@@ -279,29 +279,26 @@ public class PendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getDocumentos(@RequestParam String partnum, @RequestParam String documento, @RequestParam String tpdoc) {	
+	public ResponseEntity<Object> getDocumentos(@RequestParam String partnum, @RequestParam String documento, @RequestParam String tpdoc, @RequestParam String itemLike) {	
 	
 		try {
-
-			//Partnumber partnumber = new Partnumber();			
-			//Optional<Partnumber> lista = partnumberService.getByID(partnum);	
+			
 			if(tpdoc.equals("NF")){
 				
-				List<DocumentoNAC> lista = partnumberService.getDocumentoNAC(documento, partnum);
+				List<DocumentoNAC> lista = partnumberService.getDocumentoNAC(documento, partnum, itemLike);
 				if (lista.isEmpty()) {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND)
 							.header("Accept", "application/json")
 							.body("");
 				}
-				//Partnumber item = lista.get();
-				//Auxiliar.formatResponse(lista); dont work with interface
+
 				return ResponseEntity.status(HttpStatus.OK)
 						.header("Accept", "application/json")					
 						.body(lista);
 
 			}else{
 
-				List<DocumentoIMP> lista = partnumberService.getDocumentoIMP(documento, partnum);
+				List<DocumentoIMP> lista = partnumberService.getDocumentoIMP(documento, partnum, itemLike);
 				if (lista.isEmpty()) {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND)
 							.header("Accept", "application/json")
@@ -318,7 +315,7 @@ public class PendenciaController {
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
-		        		.body(null);                
+		        		.body(ae.getMessage());                
 		}   
 
 	}

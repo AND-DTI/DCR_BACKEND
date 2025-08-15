@@ -64,6 +64,9 @@ public class Matriprd {
 	@Column(columnDefinition = "char(1)")
 	private String tpdcre;
 
+	@Column(columnDefinition = "char(10)")
+	private String dcrant;
+	
 	@TamanhoMaximo(7)
 	@Column(columnDefinition = "char(7)")
 	private String origprd;
@@ -159,6 +162,9 @@ public class Matriprd {
 
 	public String getTpdcre() {		return tpdcre;	}
 	public void setTpdcre(String tpdcre) {		this.tpdcre = tpdcre;	}
+
+	public String getDcrant() {		return dcrant;	}
+	public void setDcrant(String dcrant) {		this.dcrant = dcrant;	}
 
 	public String getOrigprd() {		return origprd;	}
 	public void setOrigprd(String origprd) {		this.origprd = origprd;	}

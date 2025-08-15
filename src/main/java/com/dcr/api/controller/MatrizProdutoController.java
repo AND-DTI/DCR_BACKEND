@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,8 @@ import com.dcr.api.model.dto.MatriitmDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
+import com.dcr.api.model.dto.ProcPendenciaDTO;
+import com.dcr.api.model.dto.ProcPendenciaStepDTO;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.response.ProdutoPendenciaResponse2;
@@ -423,8 +426,65 @@ public class MatrizProdutoController {
 			//Chama explosão direto (HDCR004C) sem schedule (schedule somente p/ pós explosão - HDCR005C):
 			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
 			service.save(matriz, request); //save atualiza Itaudusr	
-			String tpprd = matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";					
-			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr());
+			String tpprd = matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";	
+			//@@@implement list of step..				
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN");
+						
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Matriz enviada para reprocessamento de pendências com sucesso!");
+
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
+	}
+
+
+
+	@PostMapping(value = "/reprocPendencies2", produces = "application/json")
+	@Operation(summary = "Recalcula estrutura de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "OK"),
+	        @ApiResponse(responseCode = "400", description = "Matriz não existe"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	//public ResponseEntity<Object> reprocPendencies2(@RequestParam Integer idmatriz, @RequestParam ProcPendenciaDTO proc, HttpServletRequest request) {
+		public ResponseEntity<Object> reprocPendencies2(@RequestBody ProcPendenciaDTO proc, HttpServletRequest request) {
+	
+		try {
+	       
+			
+			Optional<Matriprd> lista = service.getByID(proc.idmatriz());
+
+			if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz de produto com este ID não encontrada!");
+	        }
+
+			Matriprd matriz = lista.get();
+			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.header("Accept", "application/json")
+				.body("Matriz bloqueada por outro processo!");
+			}
+			
+			//Chama explosão direto (HDCR004C) sem schedule (schedule somente p/ pós explosão - HDCR005C):
+			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
+			service.save(matriz, request); //save atualiza Itaudusr	
+			String tpprd = matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";
+
+			String procStep= "PEN";
+			for(ProcPendenciaStepDTO step: proc.steps()){
+				procStep= step.tipo().equals("DOC") && step.processar()?"ALL":procStep;
+			}
+
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), procStep);
 						
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")

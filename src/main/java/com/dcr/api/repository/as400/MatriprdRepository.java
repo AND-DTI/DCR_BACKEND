@@ -101,7 +101,7 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 	sqlbase_listProd + """
 	WHERE 
 	  prc.STATUS IN :status        /*@@teste --> or prd.idmatriz=94 */
-	Order by prd.IDMATRIZ desc
+	Order by PRIOURGEN desc /*prd.IDMATRIZ desc*/
 	""", nativeQuery = true)
 	List<Object[]> consultaTodasAsPendencias(List<Integer> status);
 		  

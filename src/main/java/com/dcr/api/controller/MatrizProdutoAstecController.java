@@ -524,7 +524,8 @@ public class MatrizProdutoAstecController {
 			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
 			service.save(matriz, request); //save atualiza Itaudusr	
 			String tpprd = "AST"; //matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";					
-			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr());
+			//@@@implement list of step..
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN");
 						
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")

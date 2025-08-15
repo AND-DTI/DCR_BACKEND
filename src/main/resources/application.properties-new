@@ -1,0 +1,47 @@
+# Configs values (gets defualt from system env. variables - if exists):
+#spring.application.name=api
+spring.profiles.active=dev
+spring.devtools.add-properties=false
+server.port=3001
+
+
+#Swagger source
+apidoc.swagger.dev-url=http://localhost:8081
+apidoc.swagger.prod-url=https://bezkoder-api.com
+#springdoc.packages-to-scan=com.example.springdoc.api.v1
+#springdoc.paths-to-match=/v1/**
+springfox.documentation.swagger-ui.path=/swagger-ui
+
+
+# DEFAULT CONFIG - Do not remove it! - If not default DB defined
+# datasource
+#spring.datasource.driverClassName=org.h2.Driver
+#spring.datasource.url=jdbc:h2:mem:alura-forum
+#spring.datasource.username=sa
+#spring.datasource.password=
+
+# jpa
+#spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.open-in-view=true
+#spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+ 
+
+# h2
+#spring.h2.console.enabled=true
+#spring.h2.console.path=/h2-console
+
+
+#spring.datasource.hikari.auto-commit=false
+#spring.datasource.hikari.connectionTimeout=30000 
+##spring.datasource.hikari.idleTimeout=600000 
+##spring.datasource.hikari.maxLifetime=1800000
+
+
+
+
+
+# Hibernate configs
+# ddl-auto types: none; create; create-drop; validate;  update
+# spring.jpa.hibernate.use-new-id-generator-mappings=false
+#---spring.main.allow-bean-definition-overriding=true

@@ -10,20 +10,21 @@ env:
     source: hda
 
 server:
-    port: 3000      
+    port: 3001      
 
 
 spring:
-    datasource:
-        password: password
-        url: jdbc:h2:dev
-        username: SA    
+    #datasource:
+    #    password: password
+    #    url: jdbc:h2:dev
+    #    username: SA    
     mvc:
         pathmatch:
             matching-strategy: ANT_PATH_MATCHER    
     devtools:
         add-properties: false  
-
+    datasource:
+        url: jdbc:as400://hsa0014;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=SB037635;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
 
 data:
     proxy:
@@ -56,17 +57,12 @@ schedule:
 
 interface:
     txt_showa:
-        dirIN: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/in
-        dirOUT: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/out
-        dirTMP: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/tmp
-        dirPROC: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/processado
-
-
-#File Servers configs
-FileServer: //sahdamvqweb001/C$/sistemas/FER/FileServer
-FileServerPUB: //sahdamvqweb001/C$/sistemas/FER/FileServer/tmp
-FileServer2: C:/DEV/FileServer
-FileServerPUB2: C:/DEV/FileServerCTP
-#File Store Type: DB (databse); FS (file server)
-fileStorageType: FS
-maxBlobSize: 3000000
+        dirIN: /tmp/dcr/in_out/in
+        dirOUT: /tmp/dcr/in_out/out
+        dirTMP: /tmp/dcr/in_out/tmp
+        dirPROC: /tmp/dcr/in_out/processado    
+        #Windows:
+        #dirIN: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/in
+        #dirOUT: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/out
+        #dirTMP: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/tmp
+        #dirPROC: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/processado

@@ -47,7 +47,10 @@ public class Prodfat {
 	@TamanhoMinimo(4)
 	@Column(columnDefinition = "int")
 	private Integer lastanofab;
-	
+
+	@Column(columnDefinition = "char(8)")
+    private String cutinpro;		
+
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;
 
@@ -158,4 +161,7 @@ public class Prodfat {
 	public void setLastanofab(Integer lastanofab) {
 		this.lastanofab = lastanofab;
 	}
+
+	public String getCutinpro() {		return cutinpro;	}
+	public void setCutinpro(String cutinpro) {		this.cutinpro = cutinpro;	}
 }

@@ -75,6 +75,9 @@ public class Accuser implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timevrfy;
 
+    @Column(columnDefinition = "Integer")
+    private Integer numtentlgn;    
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumns({
         @JoinColumn(name = "username", referencedColumnName = "username")
@@ -246,6 +249,11 @@ public class Accuser implements UserDetails {
 	public Date getTimevrfy() {
 		return timevrfy;
 	}
+
+    public Integer getNumtentlgn() {        return numtentlgn;    }
+    public void setNumtentlgn(Integer numtentlgn) {
+        this.numtentlgn = numtentlgn;
+    }
 
 	public void setRoles(List<User_Role> roles) {
 		this.roles = roles;

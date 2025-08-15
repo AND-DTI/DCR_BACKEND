@@ -55,6 +55,9 @@ public class Mtastedoc {
 	@Column(columnDefinition = "decimal(15,6)")
 	private Double vlrunit;
 
+	@Column(columnDefinition = "decimal(15,5)")
+	private Double pesount;
+
 	@TamanhoMaximo(2)
 	@Column(columnDefinition = "char(2)")
 	private String siglaund;
@@ -100,6 +103,9 @@ public class Mtastedoc {
 	@Column(columnDefinition = "decimal(15,6)")
 	private Double vlrunit2;
 
+	@Column(columnDefinition = "decimal(15,5)")
+	private Double pesount2;
+
 	@TamanhoMaximo(2)
 	@Column(columnDefinition = "char(2)")
 	private String siglaund2;
@@ -144,6 +150,9 @@ public class Mtastedoc {
 	@TamanhoMaximo(15) 
 	@Column(columnDefinition = "decimal(15,6)")
 	private Double vlrunit3;
+
+	@Column(columnDefinition = "decimal(15,5)")
+	private Double pesount3;
 
 	@TamanhoMaximo(2)
 	@Column(columnDefinition = "char(2)")
@@ -289,6 +298,9 @@ public class Mtastedoc {
 	public Double getVlrunit() {		return vlrunit;	}
 	public void setVlrunit(Double vlrunit) {		this.vlrunit = vlrunit;	}
 
+	public Double getPesount() {		return pesount;	}
+	public void setPesount(Double pesount) {		this.pesount = pesount==null? 0 : pesount;}
+
 	public String getSiglaund() {		return siglaund;	}
 	public void setSiglaund(String siglaund) {		this.siglaund = siglaund;	}
 
@@ -322,6 +334,9 @@ public class Mtastedoc {
 
 	public Double getVlrunit2() {		return vlrunit2;	}
 	public void setVlrunit2(Double vlrunit2) {		this.vlrunit2 = vlrunit2==null? 0 : vlrunit2;	}
+
+	public Double getPesount2() {		return pesount2;	}
+	public void setPesount2(Double pesount2) {		this.pesount2 = pesount2==null? 0 : pesount2;	}
 
 	public String getSiglaund2() {		return siglaund2;	}
 	public void setSiglaund2(String siglaund2) {		this.siglaund2 = siglaund2==null? "" : siglaund2;	}
@@ -357,6 +372,9 @@ public class Mtastedoc {
 	public Double getVlrunit3() {		return vlrunit3;	}
 	public void setVlrunit3(Double vlrunit3) {		this.vlrunit3 = vlrunit3==null? 0 : vlrunit3;	}
 
+	public Double getPesount3() {		return pesount3;	}
+	public void setPesount3(Double pesount3) {		this.pesount3 = pesount3==null? 0 : pesount3;	}
+
 	public String getSiglaund3() {		return siglaund3;	}
 	public void setSiglaund3(String siglaund3) {		this.siglaund3 = siglaund3==null? "" : siglaund3;	}
 
@@ -377,6 +395,9 @@ public class Mtastedoc {
 	public void setItauddt(String itauddt) {		this.itauddt = itauddt;	}
 	public String getItaudhr() {		return itaudhr;	}
 	public void setItaudhr(String itaudhr) {		this.itaudhr = itaudhr;	}
+	
+
+
 
 
 

@@ -54,7 +54,10 @@ public class Mtastec {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(1)")
     private String tpdcre;
-	
+
+	@Column(columnDefinition = "char(10)")
+	private String dcrant;	
+
 	@TamanhoMaximo(7)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(7)")
@@ -176,13 +179,11 @@ public class Mtastec {
 		this.undcom = undcom;
 	}
 
-	public String getTpdcre() {
-		return tpdcre;
-	}
+	public String getTpdcre() {		return tpdcre;	}
+	public void setTpdcre(String tpdcre) {		this.tpdcre = tpdcre;	}
 
-	public void setTpdcre(String tpdcre) {
-		this.tpdcre = tpdcre;
-	}
+	public String getDcrant() {		return dcrant;	}
+	public void setDcrant(String dcrant) {		this.dcrant = dcrant;	}
 
 	public String getOrigprd() {
 		return origprd;

@@ -32,34 +32,52 @@ public class PartnumberService {
 		
 	}
 
-	public List<DocumentoIMP> getDocumentoIMP(String numdoc, String partnum){
+	public List<DocumentoIMP> getDocumentoIMP(String numdoc, String partnum, String itemLike){
 
 		numdoc = numdoc.replace("-", "");
 		partnum = partnum.replace("-", "");
+		itemLike = itemLike.trim()+'%';
 		
 		if(!numdoc.isEmpty() && !partnum.equals("")){
 			return repository.findDocumentoImpByDocnumAndPartnum(numdoc, partnum);
 		}
 
-		if(!numdoc.isEmpty() && partnum.isEmpty() ){
+		if(!numdoc.isEmpty() && partnum.isEmpty() && itemLike.isEmpty()){
 			return repository.findDocumentoImpByNumdoc(numdoc);
+		}
+
+		if(!numdoc.isEmpty() && partnum.isEmpty() && !itemLike.isEmpty()){
+			return repository.findDocumentoImpByDocnumAndItemLike(numdoc, itemLike);
+		}
+
+		if(!itemLike.isEmpty() && numdoc.isEmpty() && partnum.isEmpty()){
+			return repository.findDocumentoImpByItemLike(itemLike);		
 		}
 
 		return repository.findDocumentoImpByPartnum(partnum);
 		
 	}
 
-	public List<DocumentoNAC> getDocumentoNAC(String numdoc, String partnum){
+	public List<DocumentoNAC> getDocumentoNAC(String numdoc, String partnum, String itemLike){
 
 		numdoc = numdoc.replace("-", "");
 		partnum = partnum.replace("-", "");
+		itemLike = itemLike.trim()+'%';
 		
 		if(!numdoc.isEmpty() && !partnum.equals("")){
 			return repository.findDocumentoNacByDocnumAndPartnum(numdoc, partnum);
 		}
 
-		if(!numdoc.isEmpty() && partnum.isEmpty() ){
+		if(!numdoc.isEmpty() && partnum.isEmpty() && itemLike.isEmpty()){
 			return repository.findDocumentoNacByNumdoc(numdoc);
+		}
+
+		if(!numdoc.isEmpty() && partnum.isEmpty() && !itemLike.isEmpty()){
+			return repository.findDocumentoNacByDocnumAndItemLike(numdoc, itemLike);
+		}
+
+		if(!itemLike.isEmpty() && numdoc.isEmpty() && partnum.isEmpty()){
+			return repository.findDocumentoNacByItemLike(itemLike);		
 		}
 
 		return repository.findDocumentoNacByPartnum(partnum);

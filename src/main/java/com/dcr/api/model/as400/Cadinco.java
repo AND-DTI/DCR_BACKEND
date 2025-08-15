@@ -24,7 +24,10 @@ public class Cadinco {
 	@TamanhoMaximo(100)
 	@TamanhoMinimo(1)
 	private String dscinco;
-	
+
+	@Column(columnDefinition = "char(1)")
+	private String tpmodal;	
+
 	@Column(columnDefinition = "int")
 	@TamanhoMaximo(5)
 	@TamanhoMinimo(1)
@@ -45,20 +48,19 @@ public class Cadinco {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public String getCodinco() {
-		return codinco;
-	}
-
+	public String getCodinco() {		return codinco;	}
 	public void setCodinco(String codinco) {
 		this.codinco = codinco;
 	}
 
-	public String getDscinco() {
-		return dscinco;
-	}
-
+	public String getDscinco() {		return dscinco;	}
 	public void setDscinco(String dscinco) {
 		this.dscinco = dscinco;
+	}
+
+	public String getTpmodal() {		return tpmodal;	}
+	public void setTpmodal(String tpmodal) {
+		this.tpmodal = tpmodal;
 	}
 
 	public String getItaudsys() {

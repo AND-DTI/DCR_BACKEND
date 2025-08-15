@@ -74,11 +74,17 @@ public class ScheduleService {
 	}
 
 	
-	public int reprocessaPendencias(String TpPrd, String idMatriz, String usersys){
+	public int reprocessaPendencias(String TpPrd, String idMatriz, String usersys, String step){
 		
 		idMatriz = StringUtils.rightPad(idMatriz, 10);
 		usersys  = StringUtils.rightPad(usersys, 10);
-		return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, "PEN");
+		//return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, "PEN");
+		
+		if(step.equals("PEN")){ //call if just PEN / else submit			
+			return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, step);
+		}
+		
+		return repositorySchedule.reprocessaPendenciasSubmit(TpPrd, idMatriz, usersys, step);
 				
 	}	
 
