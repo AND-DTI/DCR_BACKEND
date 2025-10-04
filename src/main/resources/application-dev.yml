@@ -5,13 +5,11 @@ app:
     host: BACKENDSERVER
     interfaces:
         user: SYSINTUSER
-
-env:    
+env:        
+    so: windows
     source: hda
-
 server:
     port: 3001      
-
 
 spring:
     #datasource:
@@ -24,7 +22,8 @@ spring:
     devtools:
         add-properties: false  
     datasource:
-        url: jdbc:as400://hsa0014;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=SB037635;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
+        #url: jdbc:as400://hsa0014;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=SB037635;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
+        url: jdbc:as400://10.146.0.5;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=manaus@04;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
 
 data:
     proxy:
@@ -50,19 +49,30 @@ as400:
         hibernate.ddl-auto: validate
 
 schedule:
-    atualizaPRD: true
-    reprocMatrizPRD: false
-    reprocMatrizAST: false
-    procTXTShowa: true
+    reprocPendencyCAD_PRD: 0
+    reprocPendencyCAD_AST: 0
+    #Reproc docs de 2 em 2 horas 120 ->
+    reprocPendencyALL_PRD: 0
+    reprocPendencyALL_AST: 0
+    atualizaPRD: 15
+    reprocMatrizPRD: 10
+    reprocMatrizAST: 0
+    procTXTShowa: 15
+
+    #reprocPendenciaPRD: true
+    #reprocPendenciaAST: false
+    #atualizaPRD: true
+    ##reprocMatrizPRD: false
+    #reprocMatrizAST: false
+    #procTXTShowa: true
+
 
 interface:
-    txt_showa:
-        dirIN: /tmp/dcr/in_out/in
-        dirOUT: /tmp/dcr/in_out/out
-        dirTMP: /tmp/dcr/in_out/tmp
-        dirPROC: /tmp/dcr/in_out/processado    
-        #Windows:
-        #dirIN: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/in
-        #dirOUT: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/out
-        #dirTMP: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/tmp
-        #dirPROC: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/processado
+    txt_showa:                
+        dirIN: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/in
+        dirOUT: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/out
+        dirTMP: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/tmp
+        dirPROC: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/processado
+storage:
+    fileserver: //hdamdt6196/C$/tmp/dcr
+    approot: C:/sistemas/dcr-backend

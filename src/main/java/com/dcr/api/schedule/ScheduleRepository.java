@@ -42,16 +42,16 @@ public interface ScheduleRepository extends JpaRepository<Cadppb, String>{
 	@Transactional
 	@Modifying
 	@Query(value = 
-	       "call HDCR003CS( CAST(:TPPRD as char(3)), CAST(:IDMATRIZ as char(10)), CAST(:USERSYS as char(10)), CAST(:TPPROC as char(3)))"
+	       "call HDCR003CS( CAST(:TPPRD as char(3)), CAST(:IDMATRIZ as char(10)), CAST(:USERSYS as char(10)), CAST(:TPPROC as char(3)), CAST(:TPDOC as char(2)) )"
 	, nativeQuery = true)
-    int reprocessaPendenciasSubmit(@Param("TPPRD") String tpprd, @Param("IDMATRIZ") String idmatriz, @Param("USERSYS") String usersys, @Param("TPPROC") String procStep);	
+    int reprocessaPendenciasSubmit(@Param("TPPRD") String tpprd, @Param("IDMATRIZ") String idmatriz, @Param("USERSYS") String usersys, @Param("TPPROC") String procStep, @Param("TPDOC") String tpDoc);	
 
 	@Transactional
 	@Modifying
 	@Query(value = 
-	       "call HDCR003C( CAST(:TPPRD as char(3)), CAST(:IDMATRIZ as char(10)), CAST(:USERSYS as char(10)), CAST(:TPPROC as char(3)))"
+	       "call HDCR003C( CAST(:TPPRD as char(3)), CAST(:IDMATRIZ as char(10)), CAST(:USERSYS as char(10)), CAST(:TPPROC as char(3)), CAST(:TPDOC as char(2)) )"
 	, nativeQuery = true)
-    int reprocessaPendencias(@Param("TPPRD") String tpprd, @Param("IDMATRIZ") String idmatriz, @Param("USERSYS") String usersys, @Param("TPPROC") String procStep);
+    int reprocessaPendencias(@Param("TPPRD") String tpprd, @Param("IDMATRIZ") String idmatriz, @Param("USERSYS") String usersys, @Param("TPPROC") String procStep, @Param("TPDOC") String tpDoc);
 	
 
 	//--> Reprocessa Matrizes avulsas de 5 em 5 Min (se explosao finalizou - CL já faz checagem):

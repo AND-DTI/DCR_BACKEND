@@ -1,28 +1,19 @@
 package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-//import java.util.ArrayList;
-//import java.util.Collection;
-//import java.util.Iterator;
 import java.util.List;
-//import java.util.ListIterator;
 import java.util.Map;
-//import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
-//import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import com.dcr.api.configs.security.Auditoria;
-//import com.dcr.api.controller.TipoProdutoController;
 import com.dcr.api.model.as400.Cadppb;
+import com.dcr.api.model.as400.Cadppbtp;
 import com.dcr.api.model.dto.AstecDTO;
-//import com.dcr.api.model.as400.Dcrlayout;
 import com.dcr.api.model.dto.CadppbDTO;
 import com.dcr.api.model.projection.AstecProjection;
 import com.dcr.api.model.projection.ListAstecProjection;
-//import com.dcr.api.model.keys.ProdutoKey;
 import com.dcr.api.model.projection.Nivel1Projection;
 import com.dcr.api.model.projection.Nivel2Projection;
 import com.dcr.api.model.projection.ProdsProjection;
@@ -30,6 +21,7 @@ import com.dcr.api.model.projection.TipoProjection;
 import com.dcr.api.model.projection.TipoProjection2;
 import com.dcr.api.model.projection.TpprdProjection;
 import com.dcr.api.repository.as400.CadppbRepository;
+import com.dcr.api.repository.as400.CadppbtpRepository;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -43,6 +35,9 @@ public class CadppbService {
 	
 	@Autowired
 	CadppbRepository repository;
+
+	@Autowired
+	CadppbtpRepository cadppbtpRepo;
 	
 
 	public List<Cadppb> getAll() {
@@ -222,6 +217,7 @@ public class CadppbService {
 
 	}
 
+
 	public void removerPPBxProduto(Cadppb ppb) {
 		
 		repository.delete(ppb);
@@ -230,6 +226,7 @@ public class CadppbService {
 
 	}	
 	
+
 	public Cadppb create(CadppbDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		Cadppb ppb = new Cadppb();
@@ -266,4 +263,17 @@ public class CadppbService {
 		Auxiliar.preencheAuditoria(ppb, request);
 		return repository.save(ppb);
 	}
+
+
+	public List<Cadppbtp> getCategoriasPPB() {
+	
+		//return repository.findAllCategorias();
+		return cadppbtpRepo.findAll();
+
+	}
+
+
+
+
+
 }

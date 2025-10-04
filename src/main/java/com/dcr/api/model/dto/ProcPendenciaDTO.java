@@ -3,8 +3,8 @@ import java.util.List;
 
 public record ProcPendenciaDTO(
     Integer idmatriz,        
-    List<ProcPendenciaStepDTO> steps
-
+    List<ProcPendenciaStepDTO> steps,
+    String tpDoc
     ) {
     
 

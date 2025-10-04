@@ -272,20 +272,23 @@ public class PendenciaController {
 
 
 	@GetMapping(value = "/documentos", produces = "application/json")
-	@Operation(summary = "Busca cadastro partnumber")
+	@Operation(summary = "Busca entradas de insumos")
 	@ApiResponses(value = {
 	        @ApiResponse(responseCode = "200", description = "Ok"),
 	        @ApiResponse(responseCode = "404", description = "Nenhuma partnumber encontrada!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getDocumentos(@RequestParam String partnum, @RequestParam String documento, @RequestParam String tpdoc, @RequestParam String itemLike) {	
+	public ResponseEntity<Object> getDocumentos(
+		@RequestParam String partnum, @RequestParam String documento, @RequestParam String tpdoc, @RequestParam String itemLike, 
+		Integer years, Boolean elder
+	) {	
 	
 		try {
 			
 			if(tpdoc.equals("NF")){
 				
-				List<DocumentoNAC> lista = partnumberService.getDocumentoNAC(documento, partnum, itemLike);
+				List<DocumentoNAC> lista = partnumberService.getDocumentoNAC(documento, partnum, itemLike, years, elder);
 				if (lista.isEmpty()) {
 					return ResponseEntity.status(HttpStatus.NOT_FOUND)
 							.header("Accept", "application/json")

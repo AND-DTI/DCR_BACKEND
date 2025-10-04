@@ -18,10 +18,14 @@ import com.dcr.api.model.projection.ResumoProjection;
 public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>{
 
 
-    @Query(value = """
-    select * from (   
-        select 
-            statusMatriz, st.dscsts, idusr, /*descStatus,*/ mt.idmatriz, 
+    @Query(value = """    
+	select st.dscsts, vw.* from (
+        select             
+			case statusMatriz
+				when 1 then case when j.cstsjob='F' then 2 else 1 end
+			    else statusMatriz
+			end as statusMatriz,
+			idusr, mt.idmatriz, 
             p.partnumpd, mt.produto, mt.modelo, mt.desccom, mt.tpprd, mt.origprd,
             j.cnrojob, j.cdtinicio, j.cdtfinal, j.cstsjob, p.status,     
             case when h.stsold is null 
@@ -39,16 +43,18 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
             )mt left join
             HD4DCDHH.DCRPROCC p on p.idmatriz= mt.idmatriz and p.tpprd= mt.tpprd left join
             HD4DCDHH.DCRPROCCH h on h.idmatriz= mt.idmatriz and h.tpprd= mt.tpprd and stsold=0 left join
-            HD4EMDHD.EMACJOB j on j.cuserid= mt.idusr
-            left join
-            (select 0 sts, 'Disponivel' dscsts from SYSIBM.SYSDUMMY1 s union 
-             select 1 sts, 'Explodindo Estrutura' dsc from SYSIBM.SYSDUMMY1 s union
-             select 2 sts, 'Processando Matriz' dsc from SYSIBM.SYSDUMMY1 s union
-             select 3 sts, 'Processando Documentos' dsc from SYSIBM.SYSDUMMY1 s union
-             select 4 sts, 'Processando Pendências' dsc from SYSIBM.SYSDUMMY1 s union
-             select 5 sts, 'Acoplando Coligada' dsc from SYSIBM.SYSDUMMY1 s 
-            )st on st.sts = mt.statusMatriz
+            HD4EMDHD.EMACJOB j on j.cuserid= mt.idusr            
         )vw
+		left join
+		(select 0 sts, 'Disponivel' dscsts from SYSIBM.SYSDUMMY1 s union 
+		 select 1 sts, 'Explodindo Estrutura' dsc from SYSIBM.SYSDUMMY1 s union
+		 select 2 sts, 'Aguardando atualização de Matriz' dsc from SYSIBM.SYSDUMMY1 s union
+		 select 3 sts, 'Processando Matriz' dsc from SYSIBM.SYSDUMMY1 s union
+		 select 4 sts, 'Aguardando Documentos' dsc from SYSIBM.SYSDUMMY1 s union
+		 select 5 sts, 'Processando Documentos' dsc from SYSIBM.SYSDUMMY1 s union
+		 select 6 sts, 'Processando Pendências' dsc from SYSIBM.SYSDUMMY1 s union
+		 select 7 sts, 'Acoplando Coligada' dsc from SYSIBM.SYSDUMMY1 s 
+		)st on st.sts = vw.statusMatriz
     where 
         statusMatriz <> 0 
 	order by idmatriz desc
@@ -72,6 +78,14 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
     """, nativeQuery = true)
     //Optional<ResumoProjection> getProcessando();
     List<JobExplosaoINT> getJobExplosao();
+
+
+	@Query(value = """
+    select distinct * 
+	from   HD4EMDHD.EMACJOB j
+	where  j.cuserid= :userid    
+    """, nativeQuery = true)    
+    List<JobExplosaoINT> getJobUsuario(String userid);
 
 
     @Transactional
@@ -117,7 +131,7 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 		rg1.preco as preco_brl, case when nvl(taxa,0)=0 then 0 else round(rg1.preco/taxa,2) end as preco_usd,
 		rg0.tpdcre, rg0.dcrant, rg0.procretif, taxa,
 		case when nvl(taxa,0)=0 then 0 else rg2.totalnac/taxa end as pre_totalnac,
-		rg3e4.totalimp as pre_totalimp, cfg.coefredu, cfg.aliqiipad,   
+		rg3e4.totalimp as pre_totalimp, cfg.coefredu, cfg.aliqiipad, cfg.coefredu as pre_coefred,  /*pre_coefred added 16.08.2025*/
 		(case when nvl(taxa,0)=0 then 0 else rg2.totalnac/taxa end) + rg3e4.totalimp as pre_custotal,
 		(rg3e4.totalimp * cfg.aliqiipad) as pre_iitotal, 
 		(rg3e4.totalimp * cfg.aliqiipad) - ((rg3e4.totalimp * cfg.aliqiipad)*cfg.coefredu) as pre_iireduzido  
@@ -209,7 +223,7 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 		ITAUDSYS, ITAUDUSR, ITAUDHST, ITAUDDT, ITAUDHR
 	)
 	select 
-		prd.idmatriz, itm.partnumpd, prd.tpprd, '0', conf.cnpjemi, '***********', ppb.ppbprd, prd.descrfb, itm.ncm, itm.undcom, 
+		prd.idmatriz, itm.partnumpd, prd.tpprd, '0', conf.cnpjemi, '-REPREENVIO', ppb.ppbprd, prd.descrfb, itm.ncm, itm.undcom, 
 		(select sum(WEGHT) from HD4DCDHH.MATRIINS x where x.idmatriz= prd.idmatriz), /* --> criar campo e salvar quando explodir estrutura */
 		0, 0, 
 		/*prd.tpdcre --> get from config*/ 'N' as tpdcre, 

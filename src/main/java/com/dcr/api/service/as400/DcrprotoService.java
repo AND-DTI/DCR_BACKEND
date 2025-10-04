@@ -2,6 +2,8 @@ package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Dcrproto;
@@ -9,6 +11,7 @@ import com.dcr.api.model.dto.DcrprotoDTO;
 import com.dcr.api.model.dto.GeraDiagnosticoDTO;
 import com.dcr.api.model.dto.GeraRegistroDTO;
 import com.dcr.api.repository.as400.DcrprotoRepository;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -23,6 +26,8 @@ public class DcrprotoService {
 
 	@Autowired
 	DcrprotoRepository repository;
+	@Autowired
+    AuditoriaService auditoriaService;
 	
 
 
@@ -53,6 +58,8 @@ public class DcrprotoService {
 		dcr.setIdmatriz(dto.idmatriz());
 		dcr.setPartnumpd(dto.partnumpd());
 		dcr.setProtdcre(dto.protdcre());
+		dcr.setResultado(dto.resultado());
+
 		dcr.setRepreenvio(dto.repreenvio());
 		dcr.setTpenvio(dto.tpenvio());
 		dcr.setTpprd(dto.tpprd());
@@ -137,7 +144,40 @@ public class DcrprotoService {
 	}
 
 	public void geraHistorico(Integer idmatriz, String partnumpd, String tpprd) {
+		
+		//remove temporario da matriz
+		repository.removeProtocoloTemporario(idmatriz, partnumpd, tpprd);
+
 		repository.setHistoricoProtocolo(idmatriz, partnumpd);
+
+	}
+
+
+	public Dcrproto geraTemporario(GeraDiagnosticoDTO dto) throws Exception {
+		
+		//remove temporario da matriz
+		repository.removeProtocoloTemporario(dto.idmatriz(), dto.partnumpd(), dto.tpprd());
+
+		Random r = new Random();		
+		int min = 100000000;
+		int max = 999999999;		
+		Integer numEntreMineMax = r.nextInt(max - min + 1) + min;
+		String protocoloTMP = "T"+numEntreMineMax.toString();
+
+		Dcrproto dcr = new Dcrproto();
+		dcr.setDtenvio(dto.dtenvio());
+		dcr.setHrenvio(dto.hrenvio());
+		dcr.setIdmatriz(dto.idmatriz());
+		dcr.setPartnumpd(dto.partnumpd());
+		dcr.setTpprd(dto.tpprd());
+		dcr.setProtdcre(protocoloTMP);
+		dcr.setTpenvio("T");
+		dcr.setRepreenvio("");				
+		dcr.setStatus("");
+		auditoriaService.preencheAuditoriaNoUser(dcr);		
+		
+		return repository.save(dcr);
+
 	}
 
 }

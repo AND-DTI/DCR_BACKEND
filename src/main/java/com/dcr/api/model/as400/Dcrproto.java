@@ -1,13 +1,12 @@
 package com.dcr.api.model.as400;
-
 import com.dcr.api.validator.TamanhoMaximo;
 import com.dcr.api.validator.TamanhoMinimo;
-
 import io.swagger.annotations.ApiModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "DCRPROTO", schema = "HD4DCDHH")
@@ -19,7 +18,11 @@ public class Dcrproto {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "char(10)")
 	private String protdcre;
-	
+
+	@TamanhoMaximo(250)
+	@Column(columnDefinition = "char(250)")
+	private String resultado;
+		
 	@TamanhoMaximo(9)
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int(9)")
@@ -75,96 +78,49 @@ public class Dcrproto {
     @Column(columnDefinition = "char(8)")
     private String itaudhr;
 
-	public String getProtdcre() {
-		return protdcre;
-	}
+	public String getProtdcre() {		return protdcre;	}
+	public void setProtdcre(String protdcre) {		this.protdcre = protdcre;	}
 
-	public void setProtdcre(String protdcre) {
-		this.protdcre = protdcre;
-	}
+	public String getResultado() {		return resultado;	}
+	public void setResultado(String resultado) {		this.resultado = resultado;	}
 
-	public Integer getIdmatriz() {
-		return idmatriz;
-	}
+	public Integer getIdmatriz() {		return idmatriz;	}
+	public void setIdmatriz(Integer idmatriz) {		this.idmatriz = idmatriz;	}
 
-	public void setIdmatriz(Integer idmatriz) {
-		this.idmatriz = idmatriz;
-	}
+	public String getPartnumpd() {		return partnumpd;	}
+	public void setPartnumpd(String partnumpd) {		this.partnumpd = partnumpd;	}
 
-	public String getPartnumpd() {
-		return partnumpd;
-	}
+	public String getTpprd() {		return tpprd;	}
+	public void setTpprd(String tpprd) {		this.tpprd = tpprd;	}
 
-	public void setPartnumpd(String partnumpd) {
-		this.partnumpd = partnumpd;
-	}
+	public String getTpenvio() {		return tpenvio;	}
+	public void setTpenvio(String tpenvio) {		this.tpenvio = tpenvio;	}
 
-	public String getTpprd() {
-		return tpprd;
-	}
+	public String getDtenvio() {		return dtenvio;	}
+	public void setDtenvio(String dtenvio) {		this.dtenvio = dtenvio;	}
 
-	public void setTpprd(String tpprd) {
-		this.tpprd = tpprd;
-	}
+	public String getHrenvio() {		return hrenvio;	}
+	public void setHrenvio(String hrenvio) {		this.hrenvio = hrenvio;	}
 
-	public String getTpenvio() {
-		return tpenvio;
-	}
+	public String getRepreenvio() {		return repreenvio;	}
+	public void setRepreenvio(String repreenvio) {		this.repreenvio = repreenvio;	}
 
-	public void setTpenvio(String tpenvio) {
-		this.tpenvio = tpenvio;
-	}
+	public String getStatus() {		return status;	}
+	public void setStatus(String status) {		this.status = status;	}
+	
+	public String getItaudsys() {		return itaudsys;	}
+	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}
 
-	public String getDtenvio() {
-		return dtenvio;
-	}
+	public String getItaudusr() {		return itaudusr;	}	
+	public void setItaudusr(String itaudusr) {		this.itaudusr = itaudusr;	}
+	
+	public String getItaudhst() {		return itaudhst;	}
+	public void setItaudhst(String itaudhst) {		this.itaudhst = itaudhst;	}
 
-	public void setDtenvio(String dtenvio) {
-		this.dtenvio = dtenvio;
-	}
-
-	public String getHrenvio() {
-		return hrenvio;
-	}
-
-	public void setHrenvio(String hrenvio) {
-		this.hrenvio = hrenvio;
-	}
-
-	public String getRepreenvio() {
-		return repreenvio;
-	}
-
-	public void setRepreenvio(String repreenvio) {
-		this.repreenvio = repreenvio;
-	}
-
-	public void setItaudsys(String itaudsys) {
-		this.itaudsys = itaudsys;
-	}
-
-	public void setItaudusr(String itaudusr) {
-		this.itaudusr = itaudusr;
-	}
-
-	public void setItaudhst(String itaudhst) {
-		this.itaudhst = itaudhst;
-	}
-
-	public void setItauddt(String itauddt) {
-		this.itauddt = itauddt;
-	}
-
-	public void setItaudhr(String itaudhr) {
-		this.itaudhr = itaudhr;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	public String getItauddt() {		return itauddt;	}
+	public void setItauddt(String itauddt) {		this.itauddt = itauddt;	}
+	
+	public String getItaudhr() {		return itaudhr;	}
+	public void setItaudhr(String itaudhr) {		this.itaudhr = itaudhr;	}
 	
 }

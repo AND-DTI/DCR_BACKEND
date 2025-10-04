@@ -28,6 +28,10 @@ public interface PendenciaProdINT {
     Double getPreco(); 
     String getNcmPrd(); 
     int getStatusProc();
+    String getDcratual(); //13.09.2025   
+    Double getVlatual(); //13.09.2025   
+    Double getVlstruc(); //13.09.2025   
+
     //Cor:    
     //String getModelo(); 
     String getCodcor();
@@ -42,6 +46,7 @@ public interface PendenciaProdINT {
     //Pend:
     int getNumpend(); 
     String getCdpend(); 
+    String getSubtipo(); //added 17.09.2025
     String getObsresol(); 
     int getStatus(); 
     String getDescpend(); 

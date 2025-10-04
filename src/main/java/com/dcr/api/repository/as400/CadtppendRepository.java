@@ -27,7 +27,8 @@ public interface CadtppendRepository extends JpaRepository<Cadtppend, String>{
     @Query(value="""    
     SELECT p.*, r.subtipo, r.cdresp, r.nmresp
     FROM   hd4dcdhh.Cadtppend p left join
-           hd4dcdhh.Pendresp r on r.cdpend= p.cdpend and r.subtipo= :subtipo 
+           hd4dcdhh.Pendresp r on r.cdpend= p.cdpend 
+           and ( r.subtipo= :subtipo or r.subtipo='')
     WHERE  p.cdpend= :cdpend     
     """, nativeQuery=true)
     List<RespPendProjection> findPendenciasAndResponsaveisByCdPend2(String cdpend, String subtipo);

@@ -326,4 +326,14 @@ public class DcrproccService {
     }
 
 
+	public List<JobExplosaoDTO> getJobUsuario(String userid){        
+		
+		List<JobExplosaoINT> lista = repository.getJobUsuario(userid);
+		
+        List<JobExplosaoDTO> procs = Arrays.asList(mapper.map(lista, JobExplosaoDTO[].class));
+        
+        return procs;
+
+    }
+
 }

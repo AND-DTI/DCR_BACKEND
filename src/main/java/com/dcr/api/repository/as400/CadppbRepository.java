@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import com.dcr.api.model.as400.Cadppb;
+import com.dcr.api.model.as400.Cadppbtp;
 import com.dcr.api.model.projection.AstecProjection;
 import com.dcr.api.model.projection.ProdsProjection;
 //import com.dcr.api.model.keys.ProdutoKey;
@@ -82,8 +83,14 @@ public interface CadppbRepository extends JpaRepository<Cadppb, String>{
 	""", nativeQuery = true)
 	int deletePRODMOD(@Param("partnumpd") String partnumpd);
 
-}
 
+
+	@Query(value = """
+	Select * from HD4DCDHH.CADPPBTP 
+	""", nativeQuery = true)
+	List<Cadppbtp> findAllCategorias();
+
+}
 
 //"call HDCR004C( CAST(:TPPRD as char(3)), CAST(:USERSYS as char(10)), CAST(:IDMATRIZ as char(10)) )"
 

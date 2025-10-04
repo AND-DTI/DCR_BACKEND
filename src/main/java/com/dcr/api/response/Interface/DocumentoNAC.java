@@ -11,5 +11,8 @@ public interface DocumentoNAC {
     Double getVlrunit();
     String getSiglaund();
     String getTemlivro();
+    String getPartdesc();
+    String getEmpdoc();
+    String getNcm();
     
 }

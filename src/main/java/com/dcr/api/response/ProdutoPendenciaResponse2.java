@@ -34,6 +34,9 @@ public class ProdutoPendenciaResponse2 {
     private int statusproc;        
     private Integer qtdependencias;
 	private Integer qtdependenciasEmAberto;
+    private String dcratual; //13.09.2025   
+    private Double vlatual; //13.09.2025   
+    private Double vlstruc; //13.09.2025   
     private CorProdutoDTO cor;    
     private List<PendenciaProdResponse> pendencias; //PendenciaResponse
 	private List<InsumosProdResponse> insumos; 
@@ -166,7 +169,7 @@ public class ProdutoPendenciaResponse2 {
     }
     public void setQtdependenciasEmAberto(Integer qtdependenciasEmAberto) {
         this.qtdependenciasEmAberto = qtdependenciasEmAberto;
-    }
+    }    
 
     public CorProdutoDTO getCor() {        return cor;    }
     public void setCor(CorProdutoDTO cor) {        this.cor = cor;    }
@@ -218,6 +221,24 @@ public class ProdutoPendenciaResponse2 {
     }
     public void setSpecial(int special) {
         this.special = special;
+    }
+    public String getDcratual() {
+        return dcratual;
+    }
+    public void setDcratual(String dcratual) {
+        this.dcratual = dcratual;
+    }
+    public Double getVlatual() {
+        return vlatual;
+    }
+    public void setVlatual(Double vlatual) {
+        this.vlatual = vlatual;
+    }
+    public Double getVlstruc() {
+        return vlstruc;
+    }
+    public void setVlstruc(Double vlstruc) {
+        this.vlstruc = vlstruc;
     }
 
 }

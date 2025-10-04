@@ -24,4 +24,14 @@ public interface DcrprotoRepository extends JpaRepository<Dcrproto, String>{
 	where idmatriz= :idmatriz and partnumpd= :partnumpd /*and tpprd= :tpprd*/
 	""", nativeQuery = true)
 	int setHistoricoProtocolo(Integer idmatriz, String partnumpd);
+
+
+	@Transactional
+	@Modifying
+	@Query(value = """
+	delete from HD4DCDHH.DCRPROTO 
+	where idmatriz= :idmatriz and partnumpd= :partnumpd and tpprd= :tpprd
+	      and tpenvio= 'T'
+	""", nativeQuery = true)
+	int removeProtocoloTemporario(Integer idmatriz, String partnumpd, String tpprd);
 }

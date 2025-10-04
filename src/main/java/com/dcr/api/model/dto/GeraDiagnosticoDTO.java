@@ -2,6 +2,7 @@ package com.dcr.api.model.dto;
 
 public record GeraDiagnosticoDTO(
     String protdcre,
+    String resultado,
     Integer idmatriz,
     String partnumpd,
     String tpprd,

@@ -103,6 +103,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/protocolo/**").permitAll()
                         .requestMatchers("/api/vigencia/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
+                        .requestMatchers("/api/rpa/**").authenticated()
                         .requestMatchers("/api/cors/**").permitAll()
                         .requestMatchers("/api/external/**").permitAll()
                         .requestMatchers("/api/securityuser/**").permitAll()

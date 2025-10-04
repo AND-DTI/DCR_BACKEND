@@ -423,12 +423,12 @@ public class MatrizProdutoController {
 				.body("Matriz bloqueada por outro processo!");
 			}
 			
-			//Chama explosão direto (HDCR004C) sem schedule (schedule somente p/ pós explosão - HDCR005C):
+			//HDCR003C/HDCR003CS:
 			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
 			service.save(matriz, request); //save atualiza Itaudusr	
 			String tpprd = matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";	
 			//@@@implement list of step..				
-			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN");
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN", " ");
 						
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
@@ -473,8 +473,8 @@ public class MatrizProdutoController {
 				.header("Accept", "application/json")
 				.body("Matriz bloqueada por outro processo!");
 			}
-			
-			//Chama explosão direto (HDCR004C) sem schedule (schedule somente p/ pós explosão - HDCR005C):
+						
+			//HDCR003C/HDCR003CS:
 			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
 			service.save(matriz, request); //save atualiza Itaudusr	
 			String tpprd = matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";
@@ -484,7 +484,7 @@ public class MatrizProdutoController {
 				procStep= step.tipo().equals("DOC") && step.processar()?"ALL":procStep;
 			}
 
-			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), procStep);
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), procStep, proc.tpDoc());
 						
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")

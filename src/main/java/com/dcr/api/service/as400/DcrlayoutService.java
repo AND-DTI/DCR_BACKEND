@@ -914,9 +914,10 @@ public class DcrlayoutService {
 			}
 
 			sb.append("\r\n");	
-		}
-		bw.write(sb.toString().replace("***********", representante));
-
+		}		
+		//System.out.println(sb.toString());
+		bw.write(sb.toString().replace("-REPREENVIO", representante)); //old "***********"
+		
 
 		//REG-1		
 		sb = new StringBuffer();

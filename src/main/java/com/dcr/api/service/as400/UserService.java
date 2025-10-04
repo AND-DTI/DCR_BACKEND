@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Accuser;
 import com.dcr.api.model.as400.User_Role;
@@ -16,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.servlet.http.HttpServletRequest;
 
 
+
 @Service
 public class UserService {
 
@@ -23,6 +27,10 @@ public class UserService {
     
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    Environment env;
+
 
     //@Autowired
     //private ModelMapper mapper;
@@ -171,6 +179,31 @@ public class UserService {
 
         return representante;
 
+    }
+
+    public void saveUserFile(String content, String fileName){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userFromSession = authentication.getName();
+
+        String appRoot = env.getProperty("storage.approot");
+
+        String userPath = appRoot+"\\log\\"+userFromSession; //Auxiliar.getResourceBasePath() +"\\log\\"+userFromSession;
+        Auxiliar.saveFile(content, fileName, userPath, "UTF-8");
+
+    }
+
+    public String getUserPath(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userFromSession = authentication.getName();
+
+        String appRoot = env.getProperty("storage.approot");
+
+        String userPath = appRoot+"\\"+userFromSession; 
+
+        return userPath;
+        
     }
 
 

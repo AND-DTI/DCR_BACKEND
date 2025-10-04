@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -396,23 +397,24 @@ public class DcrprotoController {
 	        service.create(dto, request);
 	        
 
-			//atualiza valores do processo
-	        DcrproccKey key = new DcrproccKey();
-	        key.setIdmatriz(dto.idmatriz());
-	        key.setPartnumpd(dto.partnumpd());
-	        key.setTpprd(dto.tpprd());	        
-	        Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);	       
-			if(procc.isPresent()) {
-	        	procc.get().setTaxausd(dto.taxausd());
-	        	procc.get().setTotalnac(dto.totalnac());
-	        	procc.get().setTotalimp(dto.totalimp());
-	        	procc.get().setCustotal(dto.custotal());
-	        	procc.get().setCoefred(dto.coefred());
-	        	procc.get().setIitotal(dto.iitotal());
-	        	procc.get().setIireduzido(dto.iireduzido());	        	
-	        	dcrProccservice.update(procc.get(), request);
-	        }
-	        
+			//atualiza valores do processo (se status NG - não há valores totais)
+			if(dto.status().equals("OK")){
+				DcrproccKey key = new DcrproccKey();
+				key.setIdmatriz(dto.idmatriz());
+				key.setPartnumpd(dto.partnumpd());
+				key.setTpprd(dto.tpprd());	        
+				Optional<Dcrprocc> procc = dcrProccservice.getByKey(key);	       
+				if(procc.isPresent()) {
+					procc.get().setTaxausd(dto.taxausd());
+					procc.get().setTotalnac(dto.totalnac());
+					procc.get().setTotalimp(dto.totalimp());
+					procc.get().setCustotal(dto.custotal());
+					procc.get().setCoefred(dto.coefred());
+					procc.get().setIitotal(dto.iitotal());
+					procc.get().setIireduzido(dto.iireduzido());	        	
+					dcrProccservice.update(procc.get(), request);
+				}
+			}
 
 			//Associa pendencias abertaas de diagnóstico ao protocolo (FLEX3FLW='DIAG')
 			if(dto.tpprd().equals("PC")){
@@ -433,7 +435,6 @@ public class DcrprotoController {
 		}   
 	}
 	
-
 
 	@DeleteMapping(value = "/deletaDiagnostico", produces = "application/json")
 	@Operation(summary = "Altera um protocolo")
@@ -588,6 +589,34 @@ public class DcrprotoController {
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+	}
+	
+
+
+
+	@PostMapping(value = "/geraDiagnosticoTemporario", produces = "application/json")
+	@Operation(summary = "Gera protocolo temporário - id_transmissão")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),	        
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> geraDiagnosticoTemporario(@RequestBody GeraDiagnosticoDTO dto) {
+	
+		try {
+
+	        service.geraTemporario(dto);
+
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Diagnóstico temporário gerado com sucesso!");
+					
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
 	}
 	
 

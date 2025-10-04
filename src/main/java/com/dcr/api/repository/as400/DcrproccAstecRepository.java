@@ -154,7 +154,7 @@ public interface DcrproccAstecRepository extends JpaRepository<Dcrprocc, Dcrproc
 	 ITAUDSYS, ITAUDUSR, ITAUDHST, ITAUDDT, ITAUDHR
 	)
 	select 
-		prd.idmatriz, prd.partnumpd, 'PC', '0', conf.cnpjemi, '***********', ppb.ppbprd, prd.descrfb, prd.ncm, prd.undcom, 		
+		prd.idmatriz, prd.partnumpd, 'PC', '0', conf.cnpjemi, '-REPREENVIO', ppb.ppbprd, prd.descrfb, prd.ncm, prd.undcom, 		
 		prd.peso, 0, 0, prd.tpdcre, '', '', '0400' as Vrspgd, 1 as Origdcr, 'F',
 		'DCRBACKEND', CAST(:itaudusr as char(10)), CAST(:itaudhst as char(30)), 
 		VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') dtatual,

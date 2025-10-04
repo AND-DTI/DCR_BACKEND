@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.dto.MtastecDTO;
+import com.dcr.api.model.dto.ProcPendenciaDTO;
+import com.dcr.api.model.dto.ProcPendenciaStepDTO;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.response.AstecDetailResponse;
 import com.dcr.api.response.ProdutoPendenciaAstecResponse;
@@ -500,7 +503,7 @@ public class MatrizProdutoAstecController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> reprocPendencies(@RequestParam Integer idmatriz, HttpServletRequest request) {
+	public ResponseEntity<Object> reprocPendencies(@RequestParam Integer idmatriz, @RequestParam String tpDoc, HttpServletRequest request) {
 	
 		try {
 	       
@@ -520,12 +523,12 @@ public class MatrizProdutoAstecController {
 				.body("Matriz bloqueada por outro processo!");
 			}
 			
-			//Chama explosão direto (HDCR004C) sem schedule (schedule somente p/ pós explosão - HDCR005C):
+			//HDCR003C/HDCR003CS
 			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
 			service.save(matriz, request); //save atualiza Itaudusr	
 			String tpprd = "AST"; //matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";					
 			//@@@implement list of step..
-			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN");
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN", tpDoc);
 						
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
@@ -539,6 +542,110 @@ public class MatrizProdutoAstecController {
 		}   
 
 	}
+
+
+
+	@PostMapping(value = "/reprocPendencies2", produces = "application/json")
+	@Operation(summary = "Recalcula estrutura de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "OK"),
+	        @ApiResponse(responseCode = "400", description = "Matriz não existe"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)	
+	public ResponseEntity<Object> reprocPendencies2(@RequestBody ProcPendenciaDTO proc, HttpServletRequest request) {
+	
+		try {
+	       
+						
+			Optional<Mtastec> lista = service.getByID(proc.idmatriz());
+
+			if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz de produto com este ID não encontrada!");
+	        }
+
+			Mtastec matriz = lista.get();
+			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.header("Accept", "application/json")
+				.body("Matriz bloqueada por outro processo!");
+			}
+			
+			//HDCR003C/HDCR003CS
+			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
+			service.save(matriz, request); //save atualiza Itaudusr	
+			String tpprd = "AST";
+									
+			String procStep= "PEN";
+			for(ProcPendenciaStepDTO step: proc.steps()){
+				procStep= step.tipo().equals("DOC") && step.processar()?"ALL":procStep;
+			}
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), procStep, proc.tpDoc());
+						
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Matriz enviada para reprocessamento de pendências com sucesso!");
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
+	}
+
+
+
+
+
+	@GetMapping(value = "/getElegivies", produces = "application/json")
+	@Operation(summary = "lista itens ASTEC produtivos elegíveis para DCR-e")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "OK"),
+	        @ApiResponse(responseCode = "404", description = "Sem itens elegíveis"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getElegivies() {
+	
+		try {
+	       
+			/* 
+			if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Matriz de produto com este ID não encontrada!");
+	        }
+
+			Mtastec matriz = lista.get();
+			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.header("Accept", "application/json")
+				.body("Matriz bloqueada por outro processo!");
+			}
+			
+			//HDCR003C/HDCR003CS
+			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
+			service.save(matriz, request); //save atualiza Itaudusr	
+			String tpprd = "AST"; //matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";					
+			//@@@implement list of step..
+			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN", tpDoc);
+			*/			
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Entity!");
+
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
+	}
+
 
 
 }

@@ -64,8 +64,9 @@ public class PendenciaResponse {
 	private Object modal3;
 
 	private Object itmorg; //j4 - new
+	private Object partdesc; //24.09.2025
 
-	
+		
 	public Object getIdmatriz() {
 		return idmatriz;
 	}
@@ -289,6 +290,8 @@ public class PendenciaResponse {
 		this.itmorg = itmorg;
 	}
     
+	public Object getPartdesc() {		return partdesc;	}
+	public void setPartdesc(Object partdesc) {		this.partdesc = partdesc;	}
     
 	
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Cadppb;
+import com.dcr.api.model.as400.Cadppbtp;
 import com.dcr.api.model.as400.Pstruc;
 import com.dcr.api.model.dto.CadppbComCorDTO;
 import com.dcr.api.model.dto.CadppbDTO;
@@ -280,4 +281,36 @@ public class ProdutoController {
 	}
 
 	
+
+	@GetMapping(value = "/ppb/getCategorias", produces = "application/json")
+	@Operation(summary = "Busca todas os produtos")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "404", description = "Nenhuma categoria PPB encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getCategorias() {
+	
+		try {
+
+			List<Cadppbtp> lista = service.getCategoriasPPB();
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma categoria PPB encontrado!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+
 }

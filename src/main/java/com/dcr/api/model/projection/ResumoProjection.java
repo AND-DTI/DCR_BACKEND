@@ -34,6 +34,7 @@ public interface ResumoProjection {
     String getDcrant(); 
     String getProcretif();
     Double getTaxa();
+    Double getPre_coefred();
     Double getPre_totalnac();   
     Double getPre_totalimp();
     Double getPre_custotal();

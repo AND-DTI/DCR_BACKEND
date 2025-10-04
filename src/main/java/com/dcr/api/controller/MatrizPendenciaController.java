@@ -2,6 +2,7 @@ package com.dcr.api.controller;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +22,7 @@ import com.dcr.api.model.as400.Matriitm;
 import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.as400.Partnumber;
 import com.dcr.api.model.as400.Pendprod;
+import com.dcr.api.model.dto.DCRModeloSimilarDTO;
 import com.dcr.api.model.dto.PendprodDTO;
 import com.dcr.api.model.dto.resolverPendenciaDTO;
 import com.dcr.api.model.keys.DcrproccKey;
@@ -28,6 +30,7 @@ import com.dcr.api.model.keys.MatridocKey;
 import com.dcr.api.model.keys.MatriinsKey;
 import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.model.keys.PendprodKey;
+import com.dcr.api.response.Interface.DCRModeloBase;
 import com.dcr.api.schedule.ScheduleService;
 import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.service.as400.CadppbService;
@@ -73,6 +76,9 @@ public class MatrizPendenciaController {
 	ScheduleService scheduleService;
 	@Autowired
     AuditoriaService auditoriaService;
+	
+	@Autowired
+    Environment env;
 	
 	
 
@@ -181,6 +187,67 @@ public class MatrizPendenciaController {
 	}
 	
 
+	@PutMapping(value = "/createLote", produces = "application/json")
+	@Operation(summary = "Insere uma lista de pendências da matriz")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Pendências criadas com sucesso!"),
+	        @ApiResponse(responseCode = "400", description = "Matriz não existe para vinculação de pendência!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Object> createLote(@RequestBody List<PendprodDTO> dto, HttpServletRequest request) {
+	
+		try {
+						
+			for (PendprodDTO pend : dto) {				
+				/*PendprodKey key = new PendprodKey();
+				key.setIdmatriz(pend.idmatriz());
+				key.setPartnumpd(pend.partnumpd());
+				key.setPartnum(pend.partnum());*/
+				pendprodService.create2(pend, request);
+			}
+								
+	        return ResponseEntity.status(HttpStatus.CREATED)
+		        	.header("Accept", "application/json")
+		            .body("Pendências criadas com sucesso!");
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
+	}
+
+
+	@DeleteMapping(value = "/limpaPendDiagnostico", produces = "application/json")
+	@Operation(summary = "Limpa as pendências de diagnóstico não resolvidas.")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Não existem pendência para a Matriz!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> limpaPendDiagnostico(@RequestParam Integer idmatriz, @RequestParam String partnumpd) {
+		
+		try {
+						
+	        pendprodService.limpaPendenciasDiagnostico(idmatriz, partnumpd);
+
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Pendencias de diagnóstico removidas com sucesso!");
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}  
+		 
+	}
+	
+
+	
 
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Altera uma Matriz de pendencia")
@@ -321,11 +388,61 @@ public class MatrizPendenciaController {
 
 	        
 
-			//RESOLVE PENDENCIA DE CUSTO (Atualiza preco de venda):
-			if(dto.cdpend().equals("CUS")){																				
-				matriitm.setPreco(dto.preco());					
-				matriitmService.save(matriitm);			
+			//RESOLVE PENDENCIA DE CUSTO - VARIAÇÃO (Atualiza preco de venda):
+			if(dto.cdpend().equals("CUS") && dto.subtipo().equals("VARIACAO")){
+				
+				if(!dto.agree()){ //não mantem preço estrutura
+					matriitm.setPreco(dto.similar().vl_produto());
+					matriitm.setMdlsimilar(dto.similar().modelo());
+					matriitm.setPrecobase(dto.similar().vl_produto());
+					matriitmService.save(matriitm);
+				}
 				pendprodService.resolverPendencia(pendprod, dto,  request);
+				
+			}
+			
+			//RESOLVE PENDENCIA DE CUSTO - CONFIRMAÇÃO PREÇO MODELO BASE (Atualiza preco de venda):
+			if(dto.cdpend().equals("CUS") && dto.subtipo().isEmpty()){
+				
+				matriitm.setPreco(dto.similar().vl_produto());
+				matriitm.setMdlsimilar(dto.similar().modelo());
+				matriitm.setPrecobase(dto.similar().vl_produto());
+				matriitmService.save(matriitm);
+				pendprodService.resolverPendencia(pendprod, dto,  request);
+				
+				/*//old:
+				matriitm.setPreco(dto.preco());
+				matriitmService.save(matriitm);			
+				pendprodService.resolverPendencia(pendprod, dto,  request);*/
+			}
+					
+			//RESOLVE PEDENCIA DE CUSTO DE MODELO BASE
+			if(dto.cdpend().equals("CNM")){
+				
+				//Atualiza modelo base
+				matriitm.setMdlsimilar(dto.similar().modelo());
+				matriitm.setPrecobase(dto.similar().vl_produto());	
+				matriitm.setDcrsimilar(dto.similar().dcre());
+				matriitmService.save(matriitm);
+				pendprodService.resolverPendencia(pendprod, dto,  request);	
+				
+				//Grava pendencia de confirmação de custo do modelo base
+				Pendprod pend = new Pendprod();		
+				PendprodKey key2 = new PendprodKey();
+				key2.setIdmatriz(dto.idmatriz());
+				key2.setPartnumpd(dto.partnumpd());
+				key2.setPartnum("");				
+				pend.setCdpend("CUS");
+				pend.setKey(key); //mesma key do produto		
+				pend.setObsresol(""); //"Preço base OK"
+				pend.setStatus(0);
+				pend.setFlex1flw(0L);
+				pend.setFlex2flw(0L);
+				pend.setFlex3flw("");
+				pend.setFlex4flw("");
+				pend.setFlex5flw("");
+				pendprodService.create(pend);			
+				
 			}
 
 	        	
@@ -415,6 +532,12 @@ public class MatrizPendenciaController {
 			}
 
 
+			//RESOLVE PENDENCIA DE TXT (ERRO DE LAYOUT)
+			if(dto.cdpend().equals("TXT")){
+				pendprodService.resolverPendencia(pendprod, dto,  request);				
+			}
+
+
 			//RESOLVE PENDENCIA FINAL - END (e avança p/ diagnóstico)
 			if(dto.cdpend().equals("END")){
 				pendprodService.resolverPendencia(pendprod, dto,  request);
@@ -428,7 +551,7 @@ public class MatrizPendenciaController {
 				//15.08.2025 - não finalizar - enviar p/ pendencias GX (PDCR007A) p/ converter valor unitário e finalizar por lá
 				//pendprodService.finalizaTratativa(dto.idmatriz(), dto.partnumpd(), request); //cria cdpend 'END'
 				String tpprd = dto.tpprd().trim().equals("PC")? "AST" : "PRD";
-				scheduleService.reprocessaPendencias(tpprd, dto.idmatriz().toString(), auditoriaService.getUser(), "PEN");
+				scheduleService.reprocessaPendencias(tpprd, dto.idmatriz().toString(), auditoriaService.getUser(), "PEN", " ");
 	        }else{
 				//avança p/ "em tratativa de pendência (status 2) - ao resolver primeira pendência"
 				if(dcrprocc.getStatus() == 0){
@@ -531,8 +654,157 @@ public class MatrizPendenciaController {
 	}
 	
 
+	@GetMapping(value = "/DCRModeloBaseMatriz", produces = "application/json")
+	@Operation(summary = "Busca último DCR-e do Modelo Base da Matriz")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum modelo DCR-e do modelo base encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	//public ResponseEntity<DCRModeloBase> getDCRModeloBase(@RequestParam Integer idmatriz, @RequestParam String modeloBase) {	
+	public ResponseEntity<Object> getDCRModeloBaseMatriz(@RequestParam Integer idmatriz, @RequestParam String partnumpd) {	
+		
+		try {
+
+						
+			//Pesquisa por matriz
+			//if(idmatriz != null && idmatriz > 0){			
+			Optional<Matriprd> mat = matriprdService.getByID(idmatriz);
+			if (mat.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.header("Accept", "application/json")
+						.body("Matriz informada não existe!");
+			}
+			Matriprd matriprd = mat.get();
+			
+			//Pega registro item/cor
+			MatriitmKey itmkey = new MatriitmKey();
+			itmkey.setIdmatriz(idmatriz);
+			itmkey.setPartnumpd(partnumpd);
+			itmkey.setModelo(matriprd.getModelo());					        
+			Optional<Matriitm> itm = matriitmService.getByID(itmkey);
+			if (itm.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.header("Accept", "application/json")
+						.body("Item/Cor não encontrada!");
+			}
+			Matriitm matriitm = itm.get();
+
+			//Pega modelo similar confirmado em MATRIITM:			
+			String modeloSimilar = matriitm.getMdlsimilar();			
+						
+			//Se não tem modelo alternativo informado em MATRIITM, recupera modelo base da matriz:
+			if(modeloSimilar.isBlank()){
+				String modeloBase = matriprd.getModelo().substring(0, 3);
+				DCRModeloBase dcr = partnumberService.getDCRModeloBase(modeloBase);
+				if (dcr==null || dcr.getDcre().isEmpty()) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.header("Accept", "application/json")
+							.body("Sem DCR para o modelo base "+modeloBase+".");
+				}				
+				return ResponseEntity.status(HttpStatus.OK)
+						.header("Accept", "application/json")					
+						.body(dcr);
+			}
+									
+					
+			//Pega detalhes do DCR do modelo base confirmado
+			String dcrSimilar = matriitm.getDcrsimilar();			
+			Double precoBase = matriitm.getPrecobase();
+			List<DCRModeloBase> lista = partnumberService.getDCRsModelo("", dcrSimilar, "", "");
+			if(lista.isEmpty()){
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.header("Accept", "application/json")
+						.body("DCR do modelo similar não existe (Nr. DCR: "+dcrSimilar+").");
+			}
+			
+			DCRModeloBase dcr = lista.get(0);
+			DCRModeloSimilarDTO mdlSimilar = new DCRModeloSimilarDTO();			
+			mdlSimilar.setIdmatriz(idmatriz);
+			mdlSimilar.setMdl_base(modeloSimilar.substring(0, 3));
+			mdlSimilar.setModelo(modeloSimilar);
+			mdlSimilar.setDcre(dcrSimilar);
+			mdlSimilar.setVl_produto(precoBase); //assume da matriitm, pois pode ser ajustato pelo Custos
+			mdlSimilar.setPrd_registro(dcrSimilar);
+			mdlSimilar.setTpprd(dcrSimilar);
+			mdlSimilar.setDtregistro(dcr.getDtregistro());						
+			mdlSimilar.setTaxausd(dcr.getTaxausd());
+			mdlSimilar.setTotalnac(dcr.getTotalnac());
+			mdlSimilar.setTotalimp(dcr.getTotalimp());
+			mdlSimilar.setCustotal(dcr.getCustotal());
+			mdlSimilar.setIireduzido(dcr.getIireduzido());
+            				        
+			return ResponseEntity.status(HttpStatus.OK)
+				.header("Accept", "application/json")					
+				.body(mdlSimilar);
+
+		} catch (Exception ae) {			
+			doLogErro("getDCRModeloBase()", ae.toString());
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(null);                
+		}   
+	}
+	
+
+	@GetMapping(value = "/DCRsModelo", produces = "application/json")
+	@Operation(summary = "Busca último DCR-e do Modelo Base da Matriz")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum modelo DCR-e do modelo base encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<DCRModeloBase>> getDCRsModelo(@RequestParam Integer idmatriz, @RequestParam String modeloBase, @RequestParam String dcre, @RequestParam String modeloLike, @RequestParam String partnumber) {	
+		
+		try {
+
+						
+			//Pesquisa por matriz
+			if(idmatriz != null && idmatriz > 0){			
+				Optional<Matriprd> mat = matriprdService.getByID(idmatriz);
+				if (mat.isEmpty()) {
+					return ResponseEntity.status(HttpStatus.NOT_FOUND)
+							.header("Accept", "application/json")
+							.body(null/*"Matriz não encontrada!"*/);
+				}
+				Matriprd matriprd = mat.get();
+				modeloBase = matriprd.getModelo().substring(0, 3);
+			}
+
+					
+			List<DCRModeloBase> lista = partnumberService.getDCRsModelo(modeloBase, dcre, modeloLike, partnumber);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .header("Accept", "application/json")
+	                    .body(null);
+	        }
+
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")					
+		            .body(lista);
+
+		} catch (Exception ae) {			
+			doLogErro("getDCRsModelo()", ae.toString());
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(null);                
+		}   
+	}
+	
+
+
+
+	private void doLogErro(String processo, String errorMsg){
+        		
+        Auxiliar.salvaLogErro(processo, errorMsg, env.getProperty("storage.approot"));
+        
+    }
+
 
 }
+
 
 
 /*

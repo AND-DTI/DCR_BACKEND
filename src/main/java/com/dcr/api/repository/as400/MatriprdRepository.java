@@ -21,7 +21,9 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM ncmins, ins.VLRUNIT,        /*43 ~ 54*/     
 		doc.TPDOC, doc.NUMDOC, doc.SERDOC, doc.EMIDOC, doc.CNPJFOR, doc.IE, doc.ADICAO, doc.ITADICAO, doc.VLRUNIT, doc.SIGLAUND, doc.CODINCO, doc.MODAL,  /*55 ~ 66*/   
 		doc.NUMDOC2, doc.SERDOC2, doc.EMIDOC2, doc.CNPJFOR2, doc.IE2, doc.ADICAO2, doc.ITADICAO2, doc.VLRUNIT2, doc.SIGLAUND2, doc.CODINCO2, doc.MODAL2,  /*67 ~ 77*/
-		doc.NUMDOC3, doc.SERDOC3, doc.EMIDOC3,  doc.CNPJFOR3, doc.IE3, doc.ADICAO3, doc.ITADICAO3, doc.VLRUNIT3, doc.SIGLAUND3, doc.CODINCO3, doc.MODAL3  /*78 ~ 88*/  
+		doc.NUMDOC3, doc.SERDOC3, doc.EMIDOC3,  doc.CNPJFOR3, doc.IE3, doc.ADICAO3, doc.ITADICAO3, doc.VLRUNIT3, doc.SIGLAUND3, doc.CODINCO3, doc.MODAL3,  /*78 ~ 88*/  
+		pen.flex3flw as subtipo,
+		variacao.dcratual, variacao.vlatual, variacao.vlstruc
 	FROM 
 		HD4DCDHH.MATRIPRD as PRD join   
 		HD4DCDHH.MATRIITM as ITM on itm.IDMATRIZ= prd.IDMATRIZ join 
@@ -33,7 +35,11 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		HD4DCDHH.PENDPROD as PEN on pen.IDMATRIZ= prd.IDMATRIZ and pen.PARTNUMPD= itm.PARTNUMPD left join
 		HD4DCDHH.CADTPPEND as TPE on tpe.CDPEND = pen.CDPEND left join 
 		HD4DCDHH.MATRIINS as INS on ins.IDMATRIZ= pen.IDMATRIZ and ins.PARTNUMPD= pen.PARTNUMPD and ins.partnum= pen.partnum left join  
-		HD4DCDHH.MATRIDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.PARTNUMPD= pen.PARTNUMPD and doc.partnum= pen.partnum 	
+		HD4DCDHH.MATRIDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.PARTNUMPD= pen.PARTNUMPD and doc.partnum= pen.partnum left join	
+		-- variação modelo base:
+		(select partnumpd as mdlbase, x.desccom as prdregistro, dcratual, vlatual, vlstruc, variacao, tpvariac
+		 from HD4DCDHH.RVPRODUTO x 
+		)variacao on variacao.mdlbase = substring(itm.PARTNUMPD, 6, 3)
 	""";
 
 	@Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"

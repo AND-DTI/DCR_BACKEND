@@ -34,6 +34,7 @@ public class ResumoDTO {
     private String dcrant; 
     private String procretif;
     private Double taxa;
+    private Double pre_coefred;    
     private Double pre_totalnac;
     private Double pre_totalimp;
     private Double pre_custotal;
@@ -82,6 +83,10 @@ public class ResumoDTO {
     public void setTaxausd(Double taxausd) {
         this.taxausd = taxausd;
     }
+
+    public Double getPre_coefred() {        return pre_coefred;    }
+    public void setPre_coefred(Double pre_coefred) {        this.pre_coefred = pre_coefred;    }
+
     public Double getTotalnac() {
         return totalnac;
     }

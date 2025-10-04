@@ -35,5 +35,13 @@ public interface PendprodRepository extends JpaRepository<Pendprod, PendprodKey>
 	""", nativeQuery = true)
 	int vinculaProtocolo(Integer idmatriz, String partnumpd, String protocolo);
 
+	@Transactional
+	@Modifying
+	@Query(value = """
+	DELETE from HD4DCDHH.PENDPROD 
+	where idmatriz= :idmatriz and partnumpd= :partnumpd and flex3flw= 'DIAG' and status= 0
+	""", nativeQuery = true)
+	int limpaDiagnostico(Integer idmatriz, String partnumpd);
+
 
 }

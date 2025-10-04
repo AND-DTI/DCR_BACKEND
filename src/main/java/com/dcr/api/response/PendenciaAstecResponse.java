@@ -14,7 +14,7 @@ public class PendenciaAstecResponse {
     private Object obspend;
 	private Object obsdetail;
 	private Object tpreg;
-
+		
 	private Object partsugest;
     private Object partsugdsc;
 	private Object partnew;    //j4 added
@@ -61,6 +61,7 @@ public class PendenciaAstecResponse {
 	private Object modal3;
 
 	private Object itmorg; //j4 - new
+	private Object partdesc; //24.09.2025
 
 	
 	public Object getIdmatriz() {
@@ -118,12 +119,9 @@ public class PendenciaAstecResponse {
 	public void setObsdetail(Object obsdetail) {
 		this.obsdetail = obsdetail;
 	}
-	public Object getTpreg() {
-		return tpreg;
-	}
-	public void setTpreg(Object tpreg) {
-		this.tpreg = tpreg;
-	}
+	public Object getTpreg() {		return tpreg;	}
+	public void setTpreg(Object tpreg) {		this.tpreg = tpreg;	}
+			
 	public Object getPartsugest() {
 		return partsugest;
 	}
@@ -281,6 +279,8 @@ public class PendenciaAstecResponse {
 		this.itmorg = itmorg;
 	}
 
+	public Object getPartdesc() {		return partdesc;	}
+	public void setPartdesc(Object partdesc) {		this.partdesc = partdesc;	}
 
 	
 }

@@ -3,10 +3,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,9 @@ import com.dcr.api.utils.FileUtil;
 import com.dcr.api.utils.Log;
 import com.dcr.api.model.dto.Dcrcoli0DTO;
 import com.dcr.api.model.dto.Dcrcoli1DTO;
-import com.dcr.api.model.dto.Dcrcoli2DTO;
+//import com.dcr.api.model.dto.Dcrcoli2DTO;
+//import java.util.Arrays;
+//import org.modelmapper.ModelMapper;
 
 
 
@@ -38,8 +38,8 @@ public class ScheduleService {
 	@Autowired
 	ColigadaService coligadaService;
 
-	@Autowired
-	private ModelMapper mapper;
+	//@Autowired
+	//private ModelMapper mapper;
 
 	
 	public List<Object[]> getMatriprdWithNotInDcrprocc() {
@@ -74,17 +74,29 @@ public class ScheduleService {
 	}
 
 	
-	public int reprocessaPendencias(String TpPrd, String idMatriz, String usersys, String step){
+	public int reprocessaPendencias(String TpPrd, String idMatriz, String usersys, String step, String tpDoc){
 		
 		idMatriz = StringUtils.rightPad(idMatriz, 10);
 		usersys  = StringUtils.rightPad(usersys, 10);
 		//return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, "PEN");
 		
 		if(step.equals("PEN")){ //call if just PEN / else submit			
-			return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, step);
+			return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, step, tpDoc);
 		}
 		
-		return repositorySchedule.reprocessaPendenciasSubmit(TpPrd, idMatriz, usersys, step);
+		return repositorySchedule.reprocessaPendenciasSubmit(TpPrd, idMatriz, usersys, step, tpDoc);
+				
+	}	
+
+	public int reprocessaPendenciasGeral(String tpprd, String step, String tpDoc){
+		
+		//Checa se tem alguma pendencia em processamento antes de dar submit
+		Boolean lock = false;
+		if(lock) {return 0;};
+		
+		String usersys = tpprd.equals("PRD")?"SCHEDULPRD":"SCHEDULAST";
+		return repositorySchedule.reprocessaPendenciasSubmit(tpprd, "0000000000", usersys, step, tpDoc);
+		//return repositorySchedule.reprocessaPendencias(TpPrd, idMatriz, usersys, step);
 				
 	}	
 

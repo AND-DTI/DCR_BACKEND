@@ -574,4 +574,40 @@ public class ProcessoController {
 	}
 
 
+
+	@GetMapping(value = "/getJobUsuario", produces = "application/json")
+	@Operation(summary = "Busca job explosão de usuário")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "OK!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum job de explosão encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getJobUsuario(@RequestParam String userid) {
+
+		try {
+		
+            List<JobExplosaoDTO> procs = service.getJobUsuario(userid);
+			
+					
+			if(procs.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.header("Accept", "application/json")
+						.body("Nenhum job de explosão encontrado!");
+		    }
+					
+            Auxiliar.formatResponseList2(procs);
+			return ResponseEntity.status(HttpStatus.OK)
+			        .header("Accept", "application/json")
+			            .body(procs.get(0)); 
+	       
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	
+	}
+
+
 }

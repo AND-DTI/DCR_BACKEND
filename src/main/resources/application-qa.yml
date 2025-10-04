@@ -6,7 +6,8 @@ app:
     interfaces:
         user: SYSINTUSER
 env:    
-    source: hda
+    so: linux
+    source: hda    
 server:
     port: 3001      
 
@@ -47,19 +48,29 @@ as400:
         hibernate.ddl-auto: validate
 
 schedule:
-    atualizaPRD: true
-    reprocMatrizPRD: false
-    reprocMatrizAST: false
-    procTXTShowa: true
+    reprocPendencyCAD_PRD: 0
+    reprocPendencyCAD_AST: 0
+    #Reproc docs de 2 em 2 horas 120 ->
+    reprocPendencyALL_PRD: 0
+    reprocPendencyALL_AST: 0
+    atualizaPRD: 15
+    reprocMatrizPRD: 0
+    reprocMatrizAST: 0
+    procTXTShowa: 15
 
+    #reprocPendenciaPRD: true
+    #reprocPendenciaAST: false
+    #atualizaPRD: true
+    ##reprocMatrizPRD: false
+    #reprocMatrizAST: false
+    #procTXTShowa: true
+    
 interface:
     txt_showa:
         dirIN: /tmp/dcr/in_out/in
         dirOUT: /tmp/dcr/in_out/out
         dirTMP: /tmp/dcr/in_out/tmp
-        dirPROC: /tmp/dcr/in_out/processado    
-        #Windows:
-        #dirIN: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/in
-        #dirOUT: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/out
-        #dirTMP: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/tmp
-        #dirPROC: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/processado
+        dirPROC: /tmp/dcr/in_out/processado  
+fileserver:
+    root: /tmp/dcr/
+    approot: /tmp/sistemas/dcr-backend

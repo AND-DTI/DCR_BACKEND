@@ -49,6 +49,16 @@ public class Matriitm {
 	@TamanhoMinimo(1)
 	@Column(columnDefinition = "int")
 	private Integer priocor;
+
+	@TamanhoMaximo(10)	
+	@Column(columnDefinition = "char(10)")
+	private String mdlsimilar;
+		
+	@Column(columnDefinition = "decimal(15,2)")
+	private Double precobase;
+
+	@Column(columnDefinition = "char(10)")
+	private String dcrsimilar;
 	
 	@Column(columnDefinition = "char(40)")
     private String itaudsys;	
@@ -83,6 +93,15 @@ public class Matriitm {
 
 	public String getUndcom() {		return undcom;	}
 	public void setUndcom(String undcom) {		this.undcom = undcom;	}
+
+	public String getMdlsimilar() {		return mdlsimilar;	}
+	public void setMdlsimilar(String mdlsimilar) {		this.mdlsimilar = mdlsimilar;	}
+	
+	public Double getPrecobase() {		return precobase;	}
+	public void setPrecobase(Double precobase) {		this.precobase = precobase;	}
+
+	public String getDcrsimilar() {		return dcrsimilar;	}
+	public void setDcrsimilar(String dcrsimilar) {		this.dcrsimilar = dcrsimilar;	}
 
 	public String getItaudsys() {		return itaudsys;	}
 	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}

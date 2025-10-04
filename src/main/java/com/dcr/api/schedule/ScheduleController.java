@@ -31,24 +31,48 @@ public class ScheduleController {
 	public void startSchedule() {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-        Boolean atualizaProduto = Boolean.valueOf(env.getProperty("schedule.atualizaPRD"));
-        Boolean reprocessaMatrizPRD = Boolean.valueOf(env.getProperty("schedule.reprocMatrizPRD"));
-        Boolean reprocessaMatrizAST = Boolean.valueOf(env.getProperty("schedule.reprocMatrizAST"));
-		Boolean processaTXTShowa = Boolean.valueOf(env.getProperty("schedule.procTXTShowa"));
+		Integer reprocPendencyCAD_PRD = Integer.valueOf(env.getProperty("schedule.reprocPendencyCAD_PRD"));
+		Integer reprocPendencyCAD_AST = Integer.valueOf(env.getProperty("schedule.reprocPendencyCAD_AST"));
+		Integer reprocPendencyALL_PRD = Integer.valueOf(env.getProperty("schedule.reprocPendencyALL_PRD"));
+		Integer reprocPendencyALL_AST = Integer.valueOf(env.getProperty("schedule.reprocPendencyALL_AST"));
+		Integer atualizaProduto = Integer.valueOf(env.getProperty("schedule.atualizaPRD"));
+        Integer reprocessaMatrizPRD = Integer.valueOf(env.getProperty("schedule.reprocMatrizPRD"));
+        Integer reprocessaMatrizAST = Integer.valueOf(env.getProperty("schedule.reprocMatrizAST"));
+		Integer processaTXTShowa = Integer.valueOf(env.getProperty("schedule.procTXTShowa"));
+		//Old Boolean
+		//Boolean atualizaProduto = Boolean.valueOf(env.getProperty("schedule.atualizaPRD"));
+        //Boolean reprocessaMatrizPRD = Boolean.valueOf(env.getProperty("schedule.reprocMatrizPRD"));
+        //Boolean reprocessaMatrizAST = Boolean.valueOf(env.getProperty("schedule.reprocMatrizAST"));
+		//Boolean processaTXTShowa = Boolean.valueOf(env.getProperty("schedule.procTXTShowa"));
 
-        if(atualizaProduto){
-            scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, 15, TimeUnit.MINUTES);
+
+		if(reprocPendencyCAD_PRD > 0){ 
+            scheduler.scheduleAtFixedRate(this::reprocessaPendenciasCAD_PRD, 0, reprocPendencyCAD_PRD, TimeUnit.MINUTES);
+        }
+		if(reprocPendencyCAD_AST > 0){ 
+            //scheduler.scheduleAtFixedRate(this::reprocessaPendenciasCAD_AST, 0, reprocPendencyCAD_AST, TimeUnit.MINUTES);
+        }
+		if(reprocPendencyALL_PRD > 0){ 
+            //scheduler.scheduleAtFixedRate(this::reprocessaPendenciasALL_PRD, 0, reprocPendencyALL_PRD, TimeUnit.MINUTES);
+        }
+		if(reprocPendencyALL_AST > 0){ 
+            //scheduler.scheduleAtFixedRate(this::reprocessaPendenciasALL_AST, 0, reprocPendencyALL_AST, TimeUnit.MINUTES);
         }
 
-        if(reprocessaMatrizPRD){
-            scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_PRD, 0, 15, TimeUnit.MINUTES);
+
+        if(atualizaProduto > 0){ // if(atualizaProduto)
+            scheduler.scheduleAtFixedRate(this::atualizaProduto, 0, atualizaProduto, TimeUnit.MINUTES);
         }
 
-        if(reprocessaMatrizAST){
-            scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_ASTEC, 0, 15, TimeUnit.MINUTES);
+        if(reprocessaMatrizPRD > 0){
+            scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_PRD, 0, reprocessaMatrizPRD, TimeUnit.MINUTES);
         }
 
-		if(processaTXTShowa){
+        if(reprocessaMatrizAST > 0){
+            scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_ASTEC, 0, reprocessaMatrizAST, TimeUnit.MINUTES);
+        }
+
+		if(processaTXTShowa > 0){
             scheduler.scheduleAtFixedRate(this::procINT_TXT_Showa, 0, 15, TimeUnit.MINUTES);
         }
          		
@@ -151,21 +175,42 @@ public class ScheduleController {
 	}
 	
 
-
-	public void reprocessaPendencias() { 
+	public void reprocessaPendenciasCAD_PRD() { 
 		
 		try {
-
 			
-			FileWriter fws = new FileWriter("logs/reprocessamentoPendencias-PRODUTO.txt");
+			FileWriter fws = new FileWriter("logs/reprocessamentoPendencias_PRD-PEN.txt");
 	        BufferedWriter bws = new BufferedWriter(fws); 
 	        StringBuffer sbs = new StringBuffer();
 			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
+			
+			sbs.append("\n Calling HDCR003CS('PRD' '0000000000' 'PEN')...");
+			service.reprocessaPendenciasGeral("PRD", "PEN", " "); //criar param in  HDCR003C p/ reprocessar todas as matrizes compendêcia - diariamente 2x dia			
+			
+	        bws.write(sbs.toString());
+	        bws.close();
+	        System.out.println("Schedule Reprocessamento de Pendências executado com sucesso!");
 
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+
+	}
+
+
+	public void reprocessaPendencias(String tp, String step) { 
+		
+		try {
+			
+			FileWriter fws = new FileWriter("logs/reprocessamentoPendencias-"+tp+".txt");
+	        BufferedWriter bws = new BufferedWriter(fws); 
+	        StringBuffer sbs = new StringBuffer();
+			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
 			
 			sbs.append("\n Calling HDCR003C...");
-			//service.reprocessaPendencias("PRD", null, "DCRMODELO"); //criar param in  HDCR003C p/ reprocessar todas as matrizes compendêcia - diariamente 2x dia
-							    
+			service.reprocessaPendenciasGeral(tp, step, " "); //criar param in  HDCR003C p/ reprocessar todas as matrizes compendêcia - diariamente 2x dia
+			//scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), procStep);
+			
 	        bws.write(sbs.toString());
 	        bws.close();
 	        System.out.println("Schedule Reprocessamento de Pendências executado com sucesso!");

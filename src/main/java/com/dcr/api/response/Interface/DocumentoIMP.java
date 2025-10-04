@@ -35,6 +35,9 @@ public interface DocumentoIMP {
     Double getCdmofr(); 
     Double getCdmdse(); 
     Double getVldimo();
+    String getPartdesc();
+    String getEmpdoc();
+    String getNcm();
     
 }
 

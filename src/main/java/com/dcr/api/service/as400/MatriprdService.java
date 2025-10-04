@@ -695,6 +695,7 @@ public class MatriprdService {
 			String _Partsugdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partnew    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partnewdsc = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //42
+			String _PartdescIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //24.09.2025
 			
 			/* Insumos - não usado na lista geral
 			String _PartdescIns = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
@@ -795,6 +796,7 @@ public class MatriprdService {
 			pend.setPartsugdsc( _Partsugdsc);
 			pend.setPartnew( _Partnew );
 			pend.setPartnewdsc( _Partnewdsc );
+			pend.setPartdesc(_PartdescIns);
 
 			//Documentos insumo  
 			doc.setIdmatriz(produto.getIdMatriz());

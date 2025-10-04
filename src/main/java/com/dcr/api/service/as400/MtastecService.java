@@ -648,6 +648,7 @@ public class MtastecService {
 			String _Partsugdsc= (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partnew   = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Partnewdsc= (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //30
+			String _Partdesc  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //24.09.2025
 
 			//insumos
 			//ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM, ins.VLRUNIT, /*31 ~ 42*/  
@@ -688,7 +689,7 @@ public class MtastecService {
 			String _Vlrunit3  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Siglaund3 = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
 			String _Codinco3  = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++;
-			String _Modal3    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //76
+			String _Modal3    = (resultado[i] != null) ? resultado[i].toString().trim() : ""; i++; //76			
 			
 
         	produto.setIdMatriz( _IdMatriz );
@@ -735,6 +736,8 @@ public class MtastecService {
 			pend.setNumdoc2( _Numdoc2 );
 			pend.setSerdoc2( _Serdoc2 );
 			pend.setEmidoc2( _Emidoc2 );
+			pend.setPartdesc( _Partdesc ); //24.09.2025
+			
 			
 			//insumo.set...:
 			//ins.PARTDESC, ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.ESPEC, ins.UNDCOM, ins.NCM, ins.VLRUNIT

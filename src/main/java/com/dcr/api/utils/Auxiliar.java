@@ -1,11 +1,16 @@
 package com.dcr.api.utils;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,11 +27,11 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.apache.bcel.generic.ObjectType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import com.dcr.api.model.as400.Dcrlayout;
 import com.dcr.api.service.TokenService;
 import com.dcr.api.validator.Validator;
@@ -51,7 +56,93 @@ public class Auxiliar {
 	private static final String hrFormat = "HH:mm:ss";
 	private static final String hrFormatSemSegundo = "HH:mm";
 	private static final String dtHrFormat = "dd MMM yyyy hh:mm:ss";
+
+
+
+    public static String getResourceBasePath() {
+
+        // Get the directory
+        File path = null;
+        try {
+            path = new File(ResourceUtils.getURL("classpath:").getPath());
+        } catch (FileNotFoundException e) {
+            // nothing to do
+        }
+        if (path == null || !path.exists()) {
+            path = new File("");
+        }
+
+        String pathStr = path.getAbsolutePath();
+        // If it is running in eclipse, it will be in the same level as the target. If the jar is deployed to the server, the default is the same as the jar package.
+        pathStr = pathStr.replace("\\target\\classes", "");
+
+        return pathStr;
+
+    }
 	
+
+    public static void saveFile(String content, String name_and_extension, String path, String encode) /*throws IOException*/{
+
+        try {
+            
+
+            Path dirPath = Paths.get(path);
+            if (!Files.exists(dirPath)) {
+                Files.createDirectories(dirPath);
+            }
+
+            String finalFile = path+"\\"+name_and_extension;
+            PrintStream ps = new PrintStream(finalFile, encode);
+            ps.print(content);        
+            ps.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }  
+
+
+    public static void saveFileDebug(String content, String name_and_extension ) {
+
+        try {
+                    
+            Path dirPath = Paths.get(getResourceBasePath()+"\\log");
+            if (!Files.exists(dirPath)) {
+                Files.createDirectories(dirPath);
+            }
+
+            String finalFile = getResourceBasePath()+"\\log"+"\\"+name_and_extension;
+            PrintStream ps = new PrintStream(finalFile, "UTF-8");
+            ps.print(content);        
+            ps.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    } 
+
+    public static void saveFileDebug(String content, String name_and_extension, String apPRoot ) {
+
+        try {
+                    
+            Path dirPath = Paths.get(apPRoot+"\\log");
+            if (!Files.exists(dirPath)) {
+                Files.createDirectories(dirPath);
+            }
+
+            String finalFile = apPRoot+"\\log"+"\\"+name_and_extension;
+            PrintStream ps = new PrintStream(finalFile, "UTF-8");
+            ps.print(content);        
+            ps.close();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+    } 
+        
 
     public static String trimNull(String field) {
         return field == null ? "" : field.trim();
@@ -622,12 +713,21 @@ public class Auxiliar {
 
     public static String removeSpecialChar(String text){
 
-        String newText = text.replace("º", "r");
+        String newText = text.replace("º", "r"); //Nº --> Nr
+        newText = StringUtils.stripAccents(text);
+        newText = newText.replaceAll("[^a-zA-Z0-9,-_\"\\s]", " ");
 
-        newText = StringUtils.stripAccents(newText);
-        //newText = newText.replaceAll("[^a-zA-Z0-9]", "");
+        /*if(text.indexOf("38120K1Z J111 M1") >= 0){ tst OK - remove special except regex!
+            System.out.println(newText);
+            newText = newText+"\"-\""+";";
+            System.out.println(newText);            
+            String newT = newText.replaceAll("[^a-zA-Z0-9,-_\"\\s]", " ");
+            System.out.println(newT);
+        }*/
 
         return newText;
+
+        //Special found: º ±        
 
     }
     
@@ -754,5 +854,35 @@ public class Auxiliar {
         return erros;
 
     }
+
+
+    public static String formataCNPJ(String cnpj){
+
+        return String.format("%s.%s.%s/%s-%s",
+            cnpj.substring(0, 2),
+            cnpj.substring(2, 5),
+            cnpj.substring(5, 8),
+            cnpj.substring(8, 12),
+            cnpj.substring(12, 14));
+            
+    }
+
+
+    public static void salvaLogErro(String processName, String msg){
+
+        String message= "Falha na rotina "+processName+". [Erro: ]"+msg+"]";
+        String errorPath = getResourceBasePath() +"\\log\\erro";
+        saveFile(message, processName+".log", errorPath, "UTF-8");
+        
+    }
+
+    public static void salvaLogErro(String processName, String msg, String apPRoot){
+
+        String message= "Falha na rotina "+processName+". [Erro: ]"+msg+"]";
+        String errorPath = apPRoot+"\\log\\erro";
+        saveFile(message, processName+".log", errorPath, "UTF-8");
+        
+    }
+
 
 }

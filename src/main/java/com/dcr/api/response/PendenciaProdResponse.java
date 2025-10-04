@@ -9,6 +9,7 @@ public class PendenciaProdResponse {
 	private Integer numpend;   //key
 
     private String cdpend;
+	private String subtipo; //flex3flw 17.09.2025	
 	private String obsresol;
 	private int status;
 	private String descpend;
@@ -85,6 +86,10 @@ public class PendenciaProdResponse {
 	public void setCdpend(String cdpend) {
 		this.cdpend = cdpend;
 	}
+
+	public String getSubtipo() {		return subtipo;	}
+	public void setSubtipo(String subtipo) {		this.subtipo = subtipo;	}
+
 	public String getObsresol() {
 		return obsresol;
 	}

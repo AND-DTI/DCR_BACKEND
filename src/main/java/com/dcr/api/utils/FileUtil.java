@@ -120,7 +120,7 @@ public class FileUtil {
             }
 
         }catch(IOException e){
-            log.saveLog("Erro ao mover arqruivo "+fileName+" (origem/destino: "+origem+"; "+destino+")! ["+e+"]"); 
+            log.saveLog("Erro ao mover arquivo "+fileName+" (origem/destino: "+origem+"; "+destino+")! ["+e+"]"); 
             erros++;
         }
 
@@ -147,7 +147,7 @@ public class FileUtil {
            
 
         }catch(IOException e){
-            log.saveLog("Erro ao mover arqruivo "+fileName+" (origem/destino: "+origem+"; "+destino+")! ["+e+"]"); 
+            log.saveLog("Erro ao mover arquivo "+fileName+" (origem/destino: "+origem+"; "+destino+")! ["+e+"]"); 
             erros++;
         }
 
@@ -186,7 +186,7 @@ public class FileUtil {
             fp.setOwner(user_file);
 
         }catch(Exception e){
-            //logAUX.saveLog("Erro ao pegar propriedades do arqruivo ("+file_name+")! ["+e+"]"); 
+            //logAUX.saveLog("Erro ao pegar propriedades do arquivo ("+file_name+")! ["+e+"]"); 
         }        
 
         return fp;

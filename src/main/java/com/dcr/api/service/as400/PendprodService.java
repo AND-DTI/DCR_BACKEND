@@ -9,6 +9,7 @@ import com.dcr.api.model.dto.PendprodDTO;
 import com.dcr.api.model.dto.resolverPendenciaDTO;
 import com.dcr.api.model.keys.PendprodKey;
 import com.dcr.api.repository.as400.PendprodRepository;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -22,6 +23,8 @@ public class PendprodService {
 
 	@Autowired
 	PendprodRepository repository;
+	@Autowired
+    AuditoriaService auditoriaService;
 
 
 	
@@ -100,6 +103,14 @@ public class PendprodService {
 
 	}
 	
+	public Pendprod create(Pendprod pend) throws Exception{
+		
+		pend.getKey().setNumpend(repository.getLastPend(pend.getKey().getIdmatriz(), pend.getKey().getPartnumpd()) +1); //get Max + 1
+		auditoriaService.preencheAuditoria(pend);		
+		return repository.save(pend);		
+
+	}
+
 	public Pendprod update(Pendprod pend,  PendprodDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 		
 		pend.setCdpend(dto.cdpend());
@@ -160,6 +171,13 @@ public class PendprodService {
 	public void vinculaProtocolo(Integer idmatriz, String partnumpd, String protocolo) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
 								
 		repository.vinculaProtocolo(idmatriz, partnumpd, protocolo);
+
+	}
+
+
+	public void limpaPendenciasDiagnostico(Integer idmatriz, String partnumpd) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+								
+		repository.limpaDiagnostico(idmatriz, partnumpd);
 
 	}
 
