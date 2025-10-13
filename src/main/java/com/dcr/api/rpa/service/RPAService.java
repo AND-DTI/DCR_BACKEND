@@ -1,6 +1,8 @@
 package com.dcr.api.rpa.service;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,6 +58,14 @@ public class RPAService {
 
         //java.awt.Toolkit toolkit = Toolkit.getDefaultToolkit();
         //java.awt.Dimension screenSize = toolkit.getScreenSize();
+
+
+        System.setProperty("PLAYWRIGHT_BROWSERS_PATH", "C:\\sistemas\\rpa\\playwright");
+        System.setProperty("playwright.driver.tmpdir", "C:\\sistemas\\rpa\\playwright");
+        // Then proceed with Playwright.create()
+        //Playwright.create(); // Isso instala os navegadores
+    
+
         
         this.playwright = Playwright.create();//playwright;
         this.browser = playwright.chromium().launch(
@@ -115,10 +125,171 @@ public class RPAService {
             /********************************************************************************************/
             /* 1.3. Submit form                                                                         */
             /********************************************************************************************/        
-            page.locator("form[name='formulario']").evaluate("form => form.submit()"); 
-            String htmlContent = page.content(); //resposta submit
-            traceDebug(htmlContent.trim(), "responseEnvioTXTparaDiagnostico.htm");
+            page.locator("form[name='formulario']").evaluate("form => form.submit()");                        
+            String htmlContent = loadPageContent(page, URL);
+                        
+
+            /********************************************************************************************/
+            /* 1.4. Get data e hora transmissao                                                         */
+            /********************************************************************************************/            
+            Document doc = Jsoup.parse(htmlContent);
+            RequestUtil.cleanDefault(doc);   
+            doc.getElementsByTag("input").remove();             
+            doc.getElementsByTag("a").remove();
+            traceDebug(doc.html().trim(), "responseEnvioTXTparaDiagnostico-Clean.htm");
+
+            Element table = doc.select("table:contains(Data da Transmissão:)").first();
+            String lastValue="-";
+            String dataTransmissao="", horaTransmissao="";            
+            if (table != null) {
+                Elements rows = table.select("tr");//table.select("tr:contains(Data da Transmissão:)");
+                for (Element row : rows) {
+                    Elements cells = row.select("td"); 
+                    for (Element cell : cells) {                                                                        
+                        if(dataTransmissao.length()> 1 && horaTransmissao.length() > 1){ break; }
+                        dataTransmissao = lastValue.equals("Data da Transmissão:")?cell.text():dataTransmissao;
+                        horaTransmissao = lastValue.equals("Hora da Transmissão:")?cell.text():horaTransmissao;
+                        lastValue = cell.text();                        
+                    }
+                    if(dataTransmissao.length()> 1 && horaTransmissao.length() > 1){ break; }
+                }
+                if(dataTransmissao.length()+horaTransmissao.length() > 2){
+                    //save temp DCRPROTO? frontend allready save!
+                    //System.out.println("Data: "+dataTransmissao+ "; Hora: "+horaTransmissao);                    
+                    response.setStatusCode(200);
+                    response.setMsg("Data / hora transmissão: "+dataTransmissao+' '+horaTransmissao);
+                    response.setRecordKey(horaTransmissao);
+                    String entity = "{ \"data\": \""+dataTransmissao+", \"hora\": \""+horaTransmissao+"\" }";
+                    System.out.println(entity);
+                    response.setReponseEntity(entity);
+                    return response; 
+                }            
+            }
+
+
+            /********************************************************************************************/
+            /* 1.5. Pega Erros de layout/dados do arqurivo                                              */
+            /********************************************************************************************/            
+            if(dataTransmissao.length()<2 || horaTransmissao.length() < 2){
+				
+                List<ErroLayoutTXT> erros = new ArrayList<>();
+                DiagnosticoLayout diagnostico = new DiagnosticoLayout();            
+                int qtdErros=0;
+                Element table1 = doc.select("table:contains(Erros na transmissão do arquivo)").first();
+                if (table1 == null) {
+                    response.setStatusCode(500);
+                    response.setMsg("Falha ao ler erros do envio [tabela 'Erros na transmissão do arquivo' não encontrada]");
+                    return response;
+                }                
+                diagnostico.setResultado("Erros na transmissão do arquivo");
+
+				Elements rows = doc.getElementsByClass("tablinhadados"); //doc.select("tablinhadados");                
+				if (rows != null) {                
+					for (Element row : rows) {
+						Elements cells = row.select("td"); 
+                        for (Element cell : cells) { 
+                            Element link = cell.select("a").first();
+                            if(link == null){ //not read link - last line with button "retornar"
+                                String v = cell.text();                                
+                                String registro = v.substring(6,7);//v.substring(v.indexOf(" ")+1, 1); //reg. após primeiro espaço
+                                String origem = registro.contains("3 4")?"Importado": (registro.equals("2")?"Nacional":"N/A");
+                                String sequencia = v.substring(0, 5);
+                                String observacao = v.substring(8, v.length());                                              
+                                ErroLayoutTXT diagnosticoLinha = new ErroLayoutTXT(registro, origem, sequencia, observacao.trim());                        
+                                erros.add(diagnosticoLinha);
+                                qtdErros++;
+                            }                                                      
+                        }
+					}                    
+                    diagnostico.setErros(erros);
+                    diagnostico.setQtdeErros(qtdErros);
+                    
+				} else {
+                    response.setStatusCode(500);                    
+                    response.setMsg("Falha ao ler erros do envio [linhas da tabela 'tablinhadados' não encontradas]");
+                    return response;
+				}
+
+                if(!diagnostico.getErros().isEmpty() || !diagnostico.getResultado().isBlank()){                     
+                    //System.out.println("Diagnostico layout: "+diagnostico);
+					traceDebug(diagnostico.toString(), "Diagnostico erro layout.log");
+					response.setStatusCode(200);
+					response.setMsg("Erros de layout/dados encontrados no arquivo "+txtFile);					
+                    response.setReponseEntity(diagnostico);                    
+                    response.setRecordKey(txtFile);
+					return response;
+                }
+
+                response.setStatusCode(500);
+                response.setMsg("Falha ao enviar Arquivo para diagnóstico [Erros no arquivo]");				
+                return response;
+            }
+
+          
+        } catch (Exception e) {
+            System.out.println(e);
+            doLogErro("TransmiteTXT()", e.toString()); 
+            response.setStatusCode(500);
+            response.setMsg("Falha ao enviar Arquivo para diagnóstico [Erro: "+e+"]");				
+            return response;			
+        }
+
+        response.setStatusCode(500);
+        response.setMsg("Falha ao executar rotina TransmiteTXTP().");
+        return response; 
+        
+    }            
+
+
+    public RPAResponse TransmiteTXT2(SessionResponse session, String txtFile){ 
+
+        
+        RPAResponse response = new RPAResponse();
+
+        try {
+                 
+            //////////////////////////////////////////////////////////////////////////////////////////////
+            // 1. ENVIA TXT //////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////
             
+            /********************************************************************************************/
+            /* 1.1. Open page to upload file                                                            */
+            /********************************************************************************************/
+            Page page = session.getPage();
+            String URL = session.getHost()+"/g36162/navDCRE?transacao=TR-DECL&etapa=Preparo";
+            //****page.navigate(URL);
+            URL = session.getHost()+"/g36162/navEnviarDCRE"; //url to set payload with memory
+            //Dados do formulário:
+			//transacao		TR-DECL - fixo no html
+			//etapa			Envio   - fixo no html
+			//arquivo		(binário)
+            
+            
+            /********************************************************************************************/
+            /* 1.2. Upload File                                                                         */
+            /********************************************************************************************/            
+            //1.2.1. Save file to  
+            String fileServerPath = env.getProperty("storage.fileserver"); 
+            String uplaodFile = fileServerPath+"\\"+txtFile; //"MN30053_MLGB140RZA.txt"
+            byte[] fileContentBytes = "This is some sample text content.".getBytes();
+            // Define the target Path where the file will be created
+            Path outputPath = Paths.get(uplaodFile);
+            Files.write(outputPath, fileContentBytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+            
+            
+            Locator fileInput = page.locator("input[type='file']"); //or page.getByLabel("Upload file")            
+            fileInput.setInputFiles(Paths.get(uplaodFile));            
+            
+
+            
+            
+            /********************************************************************************************/
+            /* 1.3. Submit form                                                                         */
+            /********************************************************************************************/        
+            page.locator("form[name='formulario']").evaluate("form => form.submit()");                        
+            String htmlContent = loadPageContent(page, URL);
+                        
 
             /********************************************************************************************/
             /* 1.4. Get data e hora transmissao                                                         */
@@ -382,7 +553,8 @@ public class RPAService {
             URL+= "&hidCnpj="+cnpj;
             URL+= "&txtCNPJ="+Auxiliar.formataCNPJ(cnpj);
             page.navigate(URL);
-            String htmlContent = page.content();
+            String htmlContent = loadPageContent(page, URL);
+            //String htmlContent = page.content();
             traceDebug(htmlContent.trim(), "responseConsultaLinksProtocolos.htm"); //responseConsultaDiagnostico
             
             //1.3. Get protocolo (pela data-hora)			
@@ -434,7 +606,8 @@ public class RPAService {
             String URL2= session.getHost()+"/g36162/navDCRE?transacao=CO-DIAG&etapa=Consulta";             
             URL2+= "&txtNumero="+protocolo.replaceAll("[^0-9]", "");
             page.navigate(URL2);
-            htmlContent = page.content();
+            //htmlContent = page.content();
+            htmlContent = loadPageContent(page, URL2);
             traceDebug(htmlContent.trim(), "responseConsultaDiagnostico-Link-Detalhado.htm"); 
             
             //2.2. Pega resultado do protocolo - Erros ou Resumo pronto para registro
@@ -665,7 +838,8 @@ public class RPAService {
             URL+= "&hidCnpj="+cnpj;
             URL+= "&txtCNPJ="+Auxiliar.formataCNPJ(cnpj);
             page.navigate(URL);
-            String htmlContent = page.content();
+            //String htmlContent = page.content();
+            String htmlContent = loadPageContent(page, URL);
             traceDebug(htmlContent.trim(), "responseConsultaLinksProtocolos.htm"); 
             
             //1.2. Entra na página de apresentação do protocolo (com os botões resumo, salvar, registar) 
@@ -678,7 +852,8 @@ public class RPAService {
             URL+= "&txtNumero="+protocolo;
             page.navigate(URL);
             
-            htmlContent = page.content();            
+            //htmlContent = page.content();            
+            htmlContent = loadPageContent(page, URL);
             Document doc = Jsoup.parse(htmlContent);
             RequestUtil.cleanDefault(doc);
             traceDebug(doc.html().trim(), "responseResumoDiagnostico-Clean.htm");
@@ -920,6 +1095,24 @@ public class RPAService {
         }
         
         
+    }
+
+
+    private String loadPageContent(Page page, String URL){
+
+        String htmlContent = "";
+
+        page.waitForURL(URL);            
+        try {
+            htmlContent = page.content(); 
+        } catch (Exception e) {
+            String msg = "Except by navigating and changing the content ["+e.getMessage()+"]";
+            traceDebug(msg, "LoadContent-TXTparaDiagnostico.log");
+            page.waitForTimeout(6000);
+            htmlContent = page.content();   
+        }
+
+        return htmlContent;
     }
 
 

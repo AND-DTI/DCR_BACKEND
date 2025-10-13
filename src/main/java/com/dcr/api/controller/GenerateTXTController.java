@@ -50,7 +50,7 @@ public class GenerateTXTController {
 		try {
 			String fileName = txtService.gerarArquivoTXT2(idmatriz, partnumpd, tpprd, "diagnostico"); //old .gerarArquivoTXT(
 			var file = new File(fileName);//old "arquivoTeste2.txt"
-	        var path = Paths.get(file.getAbsolutePath()); //fail on linux - set fileserver directory			
+	        var path = Paths.get(file.getAbsolutePath()); //fail on linux - set file-server directory			
 	        //var resource = new ByteArrayResource(Files.readAllBytes(path));			
 			String content = new String(Files.readAllBytes(path), StandardCharsets.ISO_8859_1);
 			//byte[] resource2 = Files.readAllBytes(path);

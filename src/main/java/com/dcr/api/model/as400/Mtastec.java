@@ -91,8 +91,8 @@ public class Mtastec {
 	@Column(columnDefinition = "char(8)")
     private String priodtmnt;
 	
-	@TamanhoMaximo(5)
-	@Column(columnDefinition = "char(5)")
+	@TamanhoMaximo(8)
+	@Column(columnDefinition = "char(8)")
     private String priohrmnt;
 	
 	@Column(columnDefinition = "char(40)")
@@ -297,20 +297,14 @@ public class Mtastec {
 		this.itaudhr = itaudhr;
 	}
 
-	public Long getFlex1flw() {
-		return flex1flw;
+	public Long getFlex1flw() {		return flex1flw;	}
+	public void setFlex1flw(Long flex1flw) {		
+		this.flex1flw = flex1flw==null? 0 : flex1flw;
 	}
 
-	public void setFlex1flw(Long flex1flw) {
-		this.flex1flw = flex1flw;
-	}
-
-	public String getFlex4flw() {
-		return flex4flw;
-	}
-
-	public void setFlex4flw(String flex4flw) {
-		this.flex4flw = flex4flw;
+	public String getFlex4flw() {		return flex4flw;	}
+	public void setFlex4flw(String flex4flw) {		
+		this.flex4flw = flex4flw==null? "" : flex4flw;
 	}
 
 }

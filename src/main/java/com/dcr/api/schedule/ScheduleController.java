@@ -29,8 +29,8 @@ public class ScheduleController {
 
 	@PostConstruct
 	public void startSchedule() {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		Integer reprocPendencyCAD_PRD = Integer.valueOf(env.getProperty("schedule.reprocPendencyCAD_PRD"));
 		Integer reprocPendencyCAD_AST = Integer.valueOf(env.getProperty("schedule.reprocPendencyCAD_AST"));
 		Integer reprocPendencyALL_PRD = Integer.valueOf(env.getProperty("schedule.reprocPendencyALL_PRD"));
@@ -82,7 +82,6 @@ public class ScheduleController {
 	}
 
 
-
 	public void atualizaProduto() { //add call online - when create new ppb - set this to 1 hour to correct the ones not updated/called
 		
 		try {
@@ -109,7 +108,6 @@ public class ScheduleController {
 			System.out.println(e.getMessage());
 		}
 	}
-
 
 
 	public void explodeMatrizAvulsa() { //add call online - when create new ppb - set this to 1 hour to correct the ones not updated/called
@@ -146,7 +144,6 @@ public class ScheduleController {
 			System.out.println(e.getMessage());
 		}
 	}
-
 
 
 	//recalcula avulsas apos explosao:
@@ -221,18 +218,15 @@ public class ScheduleController {
 	}
 
 
-
 	public void reprocessaMatrizAvulsa_ASTEC() { 
 		
 		try {
 
-			
 			FileWriter fws = new FileWriter("logs/processamentoMatrizAvulsa-ASTEC.txt");
 	        BufferedWriter bws = new BufferedWriter(fws); 
 	        StringBuffer sbs = new StringBuffer();
 			sbs.append(" Arquivo gerado em " + Auxiliar.getDtHrFormated() );
 
-			
 			sbs.append("\n Calling HDCR005C...");
 			service.reprocessaMatrizAvulsa("AST"); 
 							    
@@ -243,8 +237,8 @@ public class ScheduleController {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-	}
 
+	}
 
 
 	public void verificarPendencias() {
@@ -283,6 +277,7 @@ public class ScheduleController {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+
 	}
 
 
@@ -290,7 +285,6 @@ public class ScheduleController {
 		
 		try {
 
-			
 			FileWriter fws = new FileWriter("logs/interfaceTXT_Showa.txt");
 	        BufferedWriter bws = new BufferedWriter(fws); 
 	        StringBuffer sbs = new StringBuffer();

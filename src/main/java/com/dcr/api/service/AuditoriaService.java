@@ -1,6 +1,8 @@
 package com.dcr.api.service;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -87,6 +89,18 @@ public class AuditoriaService {
         String logedUser = (String) authentication.getPrincipal();
         
         return logedUser;
+
+    }
+
+    public String getSysname() {
+                
+        return systemAudit;
+
+    }
+
+    public String getHostname() throws UnknownHostException {
+                
+        return InetAddress.getLocalHost().getHostName();
 
     }
 

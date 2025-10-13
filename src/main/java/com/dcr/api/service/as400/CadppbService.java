@@ -22,6 +22,7 @@ import com.dcr.api.model.projection.TipoProjection2;
 import com.dcr.api.model.projection.TpprdProjection;
 import com.dcr.api.repository.as400.CadppbRepository;
 import com.dcr.api.repository.as400.CadppbtpRepository;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -38,6 +39,9 @@ public class CadppbService {
 
 	@Autowired
 	CadppbtpRepository cadppbtpRepo;
+
+	@Autowired
+	AuditoriaService auditoria;
 	
 
 	public List<Cadppb> getAll() {
@@ -269,6 +273,24 @@ public class CadppbService {
 	
 		//return repository.findAllCategorias();
 		return cadppbtpRepo.findAll();
+
+	}
+
+	public List<Cadppbtp> getCategoriaVigente(String tpprd) {
+			
+		return cadppbtpRepo.findPPBVigente(tpprd);
+
+	}
+
+
+	public int associaProdutoPPB(String partnumpd, String tpprd, String desccom, String descrfb) throws UnknownHostException, Exception {
+		
+		
+		//String sysname, String usrint, String host
+		return cadppbtpRepo.associaProdutoPPB(
+			partnumpd, tpprd, desccom, descrfb, 
+			auditoria.getSysname(), auditoria.getUser(), auditoria.getHostname()
+		);
 
 	}
 

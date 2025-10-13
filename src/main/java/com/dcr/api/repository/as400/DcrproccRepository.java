@@ -272,35 +272,39 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 	@Transactional
 	@Modifying
 	@Query(value = """		
-	insert into HD4DCDHH.DCRREG2
+	INSERT into HD4DCDHH.DCRREG2
 	(IDMATRIZ, PARTNUMPD, TPPRD, PARTNUM, IDREG, NUMCOMP, 
 		NUMNF, SERNF, CNPJFOR, IE, EMINF, ESPEC, UNDCOM, NCM, QTDE, VLRUNIT,
 		ITAUDSYS, ITAUDUSR, ITAUDHST, ITAUDDT, ITAUDHR
 	)
-	select 
+	SELECT 
 		prd.idmatriz, itm.partnumpd, prd.tpprd, ins.partnum, '2' reg,
 		Rownumber() Over(Partition by doc.partnumpd) as numcomp,
-		case when NUMDOC3='' then NUMDOC else NUMDOC3 end as NUMNF,
-		case when NUMDOC3='' then SERDOC else SERDOC3 end as SERNF,
-		case when NUMDOC3='' then CNPJFOR else CNPJFOR3 end as CNPJ, 
-		case when NUMDOC3='' then IE else IE3 end as IE,
-		case when NUMDOC3='' then EMIDOC else EMIDOC3 end as EMINF,		
+		doc.NUMNF, doc.SERNF, doc.CNPJ, doc.IE, doc.EMINF,				
 		substr(ins.partnum ||
 		case replace(ins.espec, trim(ins.partnum)||' - ', '') 
 		  when '' then ins.partdesc 
 		  else replace(ins.espec, trim(ins.partnum)||' - ', '') 
 		end, 1, 80) as ESPEC, 
-		ins.UNDCOM, ins.NCM, ins.NECFIL, ins.VLRUNIT, /*vlrunit - update when set NUMDOC3*/  
+		ins.UNDCOM, ins.NCM, ins.NECFIL, doc.vlrunit,
+		/* #09.10.2025: replaced by "doc.vlrunit" ins.VLRUNIT, --> update when set NUMDOC3 */		
 		'DCRBACKEND',  CAST(:itaudusr as char(10)), CAST(:itaudhst as char(30)), 
 		VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') dtatual,
 		CHAR(TIME(CURRENT TIMESTAMP),JIS) hratual 
-	from 
+	FROM 
 		HD4DCDHH.MATRIPRD as PRD join
 		HD4DCDHH.MATRIITM as ITM on itm.IDMATRIZ= prd.IDMATRIZ join 
-		HD4DCDHH.MATRIINS as INS on ins.IDMATRIZ= prd.IDMATRIZ and ins.PARTNUMPD= itm.PARTNUMPD 
-		join /*join - ver se permite exclusão de item sem doc - INS ficará maior que DOC*/
-		HD4DCDHH.MATRIDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.PARTNUMPD= itm.PARTNUMPD and doc.partnum= ins.partnum 	
-	where 
+		HD4DCDHH.MATRIINS as INS on ins.IDMATRIZ= prd.IDMATRIZ and ins.PARTNUMPD= itm.PARTNUMPD join 
+		(Select idmatriz, partnumpd, partnum,
+                case when NUMDOC3='' then NUMDOC else NUMDOC3 end as NUMNF,
+		        case when NUMDOC3='' then SERDOC else SERDOC3 end as SERNF,
+		        case when NUMDOC3='' then CNPJFOR else CNPJFOR3 end as CNPJ, 
+		        case when NUMDOC3='' then IE else IE3 end as IE,
+		        case when NUMDOC3='' then EMIDOC else EMIDOC3 end as EMINF,		    
+                case when NUMDOC3='' then VLRUNIT else VLRUNIT3 end as vlrunit
+		 From   HD4DCDHH.MATRIDOC
+		)as DOC on doc.idmatriz= prd.idmatriz and doc.partnumpd= itm.partnumpd and doc.partnum= ins.partnum			
+	WHERE 
 		prd.IDMATRIZ= :idmatriz and itm.PARTNUMPD= :partnumpd and 
 		ins.ITMORG in('1', '4')   /* <> '3' */
 	""", nativeQuery = true)
@@ -323,16 +327,14 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 		prd.idmatriz, itm.partnumpd, prd.tpprd, ins.partnum, '3' reg,
 		/*reg2.numcomp as sub, Rownumber() Over(Partition by doc.partnumpd) as numcomp, OLD 04.08.2025 */ 
 		Rownumber() Over(Partition by doc.partnumpd) as sub, reg2.numcomp,
-		'S', 'S', 'S', 'N' as indii,
-		case when NUMDOC3='' then NUMDOC else NUMDOC3 end as DI,
-		case when NUMDOC3='' then ADICAO else ADICAO3 end as ADICAO,
-		case when NUMDOC3='' then ITADICAO else ITADICAO3 end as ITADICAO, 		 
+		'S', 'S', 'S', 'N' as indii, doc.DI, doc.ADICAO, doc.ITADICAO,		
 		substr(ins.partnum ||
 		case ins.ESPEC  /* --> update with doc - DI*/
 		  when '' then ins.partdesc 
 		  else replace(ins.espec, trim(ins.partnum)||' - ', '') 
 		end, 1, 80) as ESPEC, 
-		ins.UNDCOM, ins.NCM, ins.NECFIL, ins.VLRUNIT, /*vlrunit - update when set NUMDOC3*/  
+		ins.UNDCOM, ins.NCM, ins.NECFIL, doc.vlrunit,	
+		/* #09.10.2025: replaced by "doc.vlrunit" ins.VLRUNIT, --> update when set NUMDOC3 */
 		'DCRBACKEND',  CAST(:itaudusr as char(10)), CAST(:itaudhst as char(30)), 
 		VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') dtatual,
 		CHAR(TIME(CURRENT TIMESTAMP),JIS) hratual
@@ -341,8 +343,14 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 		HD4DCDHH.MATRIPRD as PRD join
 		HD4DCDHH.MATRIITM as ITM on itm.IDMATRIZ= prd.IDMATRIZ join 
 		HD4DCDHH.MATRIINS as INS on ins.IDMATRIZ= prd.IDMATRIZ and ins.PARTNUMPD= itm.PARTNUMPD 
-		join /*join - ver se permite exclusão de item sem doc - INS ficará maior que DOC*/
-		HD4DCDHH.MATRIDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.PARTNUMPD= itm.PARTNUMPD and doc.partnum= ins.partnum 
+		join /* ver se permite exclusão de item sem doc - INS ficará maior que DOC */		
+		(Select idmatriz, partnumpd, partnum,
+		        case when NUMDOC3='' then NUMDOC else NUMDOC3 end as DI,
+		        case when NUMDOC3='' then ADICAO else ADICAO3 end as ADICAO,
+		        case when NUMDOC3='' then ITADICAO else ITADICAO3 end as ITADICAO,
+                case when NUMDOC3='' then VLRUNIT else VLRUNIT3 end as vlrunit
+		 From   HD4DCDHH.MATRIDOC
+		)as DOC on doc.idmatriz= prd.idmatriz and doc.partnumpd= itm.partnumpd and doc.partnum= ins.partnum		        
 		join --> itens pai com filho importado
 		(select UITMPAI, nac.partdesc descpai, nac.itmorg orig_pai, nac.emcomp emp_pai, nac.partnew, 
 				uidmaq, uempfil, uitmfil, uitdsc, uittyp, uitmorg, uunmsr, unecfil, uweght, 
@@ -374,25 +382,29 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 	SELECT 
 		prd.idmatriz, itm.partnumpd, prd.tpprd, ins.partnum, '4' reg,
 		Rownumber() Over(Partition by doc.partnumpd) + nvl(lastcomp,0) as numcomp,
-		'S', 'S', 'N' as indii,
-		case when NUMDOC3='' then NUMDOC else NUMDOC3 end as DI,
-		case when NUMDOC3='' then ADICAO else ADICAO3 end as ADICAO,
-		case when NUMDOC3='' then ITADICAO else ITADICAO3 end as ITADICAO, 
+		'S', 'S', 'N' as indii, doc.DI, doc.ADICAO, doc.ITADICAO,
 		substr(ins.partnum ||
 		case ins.ESPEC  /* --> update with doc - DI*/
 		  when '' then ins.partdesc 
 		  else replace(ins.espec, trim(ins.partnum)||' - ', '') 
 		end, 1, 80) as ESPEC,  
-		ins.UNDCOM, ins.NCM, ins.NECFIL, ins.VLRUNIT, /*vlrunit - update when set NUMDOC3*/  
-		'DCRBACKEND',  CAST(:itaudusr as char(10)), CAST(:itaudhst as char(30)), 
+		ins.UNDCOM, ins.NCM, ins.NECFIL, doc.vlrunit,
+		/* #09.10.2025: replaced by "doc.vlrunit" ins.VLRUNIT, --> update when set NUMDOC3 */  
+		'DCRBACKEND', CAST(:itaudusr as char(10)), CAST(:itaudhst as char(30)), 
 		VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') dtatual,
 		CHAR(TIME(CURRENT TIMESTAMP),JIS) hratual 
 	FROM 
 		HD4DCDHH.MATRIPRD as PRD join
 		HD4DCDHH.MATRIITM as ITM on itm.IDMATRIZ= prd.IDMATRIZ join 
 		HD4DCDHH.MATRIINS as INS on ins.IDMATRIZ= prd.IDMATRIZ and ins.PARTNUMPD= itm.PARTNUMPD 
-		join /*join - ver se permite exclusão de item sem doc - INS ficará maior que DOC*/
-		HD4DCDHH.MATRIDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.PARTNUMPD= itm.PARTNUMPD and doc.partnum= ins.partnum 
+		join /* ver se permite exclusão de item sem doc - INS ficará maior que DOC */
+		(Select idmatriz, partnumpd, partnum,
+		        case when NUMDOC3='' then NUMDOC else NUMDOC3 end as DI,
+		        case when NUMDOC3='' then ADICAO else ADICAO3 end as ADICAO,
+		        case when NUMDOC3='' then ITADICAO else ITADICAO3 end as ITADICAO,
+                case when NUMDOC3='' then VLRUNIT else VLRUNIT3 end as vlrunit
+		 From   HD4DCDHH.MATRIDOC
+		)as DOC on doc.idmatriz= prd.idmatriz and doc.partnumpd= itm.partnumpd and doc.partnum= ins.partnum 		
 		left join
 		(select idmatriz, partnumpd, max(numsubcomp) lastcomp /*old max(numcomp)*/
 		 from HD4DCDHH.DCRREG3 group by idmatriz, partnumpd
@@ -409,7 +421,8 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 	int geraRegistro_4(@Param("idmatriz") Integer idmatriz, @Param("partnumpd") String partnumpd,
 					   @Param("itaudusr") String itaudusr, @Param("itaudhst") String itaudhst);	
 		
-		
+	
+	// CREATE REG-9
 	@Transactional
 	@Modifying
 	@Query(value = """		

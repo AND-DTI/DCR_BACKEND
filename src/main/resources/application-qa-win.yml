@@ -53,10 +53,10 @@ schedule:
     #Reproc docs de 2 em 2 horas 120 ->
     reprocPendencyALL_PRD: 0
     reprocPendencyALL_AST: 0
-    atualizaPRD: 15
+    atualizaPRD: 0
     reprocMatrizPRD: 0
     reprocMatrizAST: 0
-    procTXTShowa: 15
+    procTXTShowa: 0
 
 
 
@@ -67,5 +67,5 @@ interface:
         dirTMP: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/tmp
         dirPROC: //hdamdt6196/C$/_DEV/GITL/dcr-backend/in_out/processado
 storage:
-    fileserver: C:/sistemas/new-dcr
+    fileserver: //sahdamvqweb001/c$/fileserver/new-dcr
     approot: C:/sistemas/dcr-backend

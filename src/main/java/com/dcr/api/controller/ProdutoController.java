@@ -313,4 +313,38 @@ public class ProdutoController {
 	}
 	
 
+
+	@GetMapping(value = "/ppb/getCategoriaVigente", produces = "application/json")
+	@Operation(summary = "Busca PPB vigente por tipo de produto")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "404", description = "Nenhuma categoria PPB vigente encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getCategoriaVigente(@RequestParam String tpprd) {
+	
+		try {
+
+			List<Cadppbtp> lista = service.getCategoriaVigente(tpprd);
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma categoria PPB vigente encontrado!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista.get(0));
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+	
+
+
+
 }

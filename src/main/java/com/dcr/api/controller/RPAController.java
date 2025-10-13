@@ -81,8 +81,9 @@ public class RPAController {
 		
 		try {
 
-			//Gera arquivo - already requested by front
-			//String fileName = txtService.gerarArquivoTXT_Linux(idmatriz, partnumpd, tpprd, path); 			
+			//Gera arquivo - already requested by front to save on Linux - generate to RPA server			
+			String fileName2 = txtService.gerarArquivoTXT_Linux(idmatriz, partnumpd, tpprd, env.getProperty("storage.fileserver"));
+			if(fileName2.equals(fileName)){ }
 			//var file = new File(fileName);
 	        //var path0 = Paths.get(file.getAbsolutePath()); 	        
 			//String content = new String(Files.readAllBytes(path0), StandardCharsets.UTF_8);	

@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.as400.Pendastec;
+import com.dcr.api.model.dto.INT.ElegiveisAstecINT;
+import com.dcr.api.model.dto.INT.MtastecComPPBINT;
 import com.dcr.api.response.Interface.PendenciaASTEC;
 
 
@@ -148,6 +150,60 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 	  
 	@Query(value = "SELECT * FROM HD4DCDHH.PENDASTEC a WHERE a.idmatriz = :idmatriz and a.partnumpd = :partnumpd and a.status = 0", nativeQuery = true)
 	List<Pendastec> findPendenciasZero(Long idmatriz, String partnumpd);
+
+
+	@Query(value = """
+	select 
+	  vw.*, matriz.idmatriz, matriz.origprd, matriz.tpdcre, matriz.status,  
+	  nvl(matriz.dcre,'') dcre, matriz.matriz_dcre, matriz.dtregistro, matriz.dtvigini, matriz.dtvigfim 
+	from (
+	SELECT    
+	  g.itmavo partnumpd, g.itdsc as desccom, g.edatm as cutin, g.edato as cutof,
+	  g.unmsr, count(it.itmfil) qtItmStruc 
+	FROM 
+	  hd4gmdhh.GMSTRU g left join  
+	  hd4gmdhh.GMSTRU it on it.itmavo= g.itmavo and it.nivfil > 0 
+	WHERE  
+	  g.nivfil= 0 and substring(g.itmavo, 1, 5) <> '00000'
+	  /* apenas conjuntos com item importado não cutofado na estrutura: */
+	  and exists (                                                 
+		select * from HD4GMDHH.GMSTRU x
+		where x.itmavo= g.itmavo and x.itmorg= '3' and x.edato= 0
+	  )
+	GROUP by g.itmavo, g.itdsc, g.edatm, g.edato, g.unmsr
+	)vw
+	left join /* status matriz mais recente: */
+	(select a.idmatriz, a.partnumpd, a.origprd, b.tpdcre, b.status, 
+			ROW_NUMBER() Over(Partition by a.partnumpd order by b.idmatriz desc) as ln_status,
+			c.dcre, c.idmatriz matriz_dcre, c.dtregistro, c.dtvigini, c.dtvigfim       
+	from   HD4DCDHH.MTASTEC a left join
+			HD4DCDHH.DCRPROCC b on b.idmatriz= a.idmatriz and b.tpprd= 'PC' left join
+			HD4DCDHH.DCRVIGEN c on c.partnumpd= a.partnumpd
+	)matriz on matriz.partnumpd = vw.partnumpd and ln_status= 1
+	""", nativeQuery = true)
+	List<ElegiveisAstecINT> findElegiveis();
+
+
+	@Query(value = """
+	SELECT 
+	  a.*, p.ppbprd, p.prddest, tp.descppb, tp.viginippb 
+	FROM   
+	  HD4DCDHH.MTASTEC a join
+	  HD4DCDHH.CADPPB p on p.partnumpd = a.partnumpd left join 
+	  /* Tipo vigente: */
+	  (select x.*,  	       
+	          rownumber() over(partition by tpprd order by int(viginippb) desc) as ln_ppb  
+		from  HD4DCDHH.CADPPBTP x
+	  )tp on tp.tpprd= 'PC' and ln_ppb= 1
+	ORDER BY idmatriz desc
+    """, nativeQuery = true)
+	List<MtastecComPPBINT> findAllComPPB();
+
+
+	/*@Query(value = "SELECT * FROM HD4DCDHH.DCRVIGENPENDASTEC ...", 
+	nativeQuery = true)
+	Boolean temDCRe(String partnumpd);*/
+
 
 }
 

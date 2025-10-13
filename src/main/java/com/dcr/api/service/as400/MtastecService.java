@@ -1,15 +1,22 @@
 package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Mtastec;
 import com.dcr.api.model.as400.Pendastec;
+import com.dcr.api.model.dto.ElegiveisAstecDTO;
+import com.dcr.api.model.dto.MtastecAvulsaDTO;
+import com.dcr.api.model.dto.MtastecComPPB;
 import com.dcr.api.model.dto.MtastecDTO;
+import com.dcr.api.model.dto.INT.ElegiveisAstecINT;
+import com.dcr.api.model.dto.INT.MtastecComPPBINT;
 import com.dcr.api.repository.as400.MtastecRepository;
 import com.dcr.api.response.AstecDetailResponse;
 import com.dcr.api.response.AstecPendenciaResponse;
@@ -23,10 +30,12 @@ import com.dcr.api.response.PendenciaSemListaAstecResponse;
 import com.dcr.api.response.ProdutoPendenciaAstecResponse;
 import com.dcr.api.response.ProdutoSemListaAstecResponse;
 import com.dcr.api.response.Interface.PendenciaASTEC;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Sort;
 
 
 
@@ -38,10 +47,29 @@ public class MtastecService {
 	@Autowired
 	MtastecRepository repository;
 
+	@Autowired
+	private ModelMapper mapper;
+
+	@Autowired
+	AuditoriaService auditoria;
+
 	
 	public List<Mtastec> getAll() {
 		
-		return repository.findAll();
+		//return repository.findAll();
+		Sort sortByPropertyDesc = Sort.by(Sort.Direction.DESC, "idmatriz");
+		return repository.findAll(sortByPropertyDesc);
+
+	}
+
+	public List<MtastecComPPB> getAllComPPB() {
+				
+		List<MtastecComPPBINT> lista = repository.findAllComPPB();
+
+		List<MtastecComPPB> dto = Arrays.asList(mapper.map(lista, MtastecComPPB[].class));
+
+		return dto;
+
 	}
 
 
@@ -930,6 +958,45 @@ public class MtastecService {
     }
 	
 	
+	public List<ElegiveisAstecDTO> getElegiveis(){
+		
+		List<ElegiveisAstecINT> lista = repository.findElegiveis();
+		
+        List<ElegiveisAstecDTO> elegiveis = Arrays.asList(mapper.map(lista, ElegiveisAstecDTO[].class));
+        
+        return elegiveis;
+
+    }
+
+
+	public Mtastec createAvulsa(MtastecAvulsaDTO dto) throws Exception {
+		
+		Mtastec astec = new Mtastec();
+		astec.setPartnumpd(dto.partnumpd());
+		astec.setDesccom(dto.desccom());
+		astec.setDescrfb(dto.descrfb());
+		astec.setUnmed(dto.unmed());
+		astec.setTpdcre(dto.tpdcre());
+		astec.setDcrant(dto.dcrant());
+		astec.setOrigprd(dto.origprd());
+		astec.setItgarantia(dto.itgarantia());
+		astec.setObsprio(dto.obsprio());
+		astec.setDtneci(dto.dtneci());
+		astec.setPriourgen(dto.priourgen());
+		astec.setPrevfat(dto.prevfat());				
+		auditoria.preencheAuditoria(astec);
+		astec.setPrioresp(auditoria.getUser());
+		astec.setPriodtmnt(astec.getItauddt());
+		astec.setPriohrmnt(astec.getItaudhr());		
+			
+		Auxiliar.formatResponse(astec); //remove nulos
+ 		//Validator.validarTamanhos(astec);
+
+		return repository.save(astec);
+	
+	}
+
+
 }
 
 //old for each object in getProdutoPendencia:

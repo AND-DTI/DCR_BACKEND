@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.as400.Mtastec;
+import com.dcr.api.model.dto.ElegiveisAstecDTO;
+import com.dcr.api.model.dto.MtastecAvulsaDTO;
+import com.dcr.api.model.dto.MtastecComPPB;
 import com.dcr.api.model.dto.MtastecDTO;
 import com.dcr.api.model.dto.ProcPendenciaDTO;
 import com.dcr.api.model.dto.ProcPendenciaStepDTO;
@@ -24,6 +27,7 @@ import com.dcr.api.response.AstecDetailResponse;
 import com.dcr.api.response.ProdutoPendenciaAstecResponse;
 import com.dcr.api.response.ProdutoSemListaAstecResponse;
 import com.dcr.api.schedule.ScheduleService;
+import com.dcr.api.service.as400.CadppbService;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MtastecService;
 import com.dcr.api.utils.Auxiliar;
@@ -49,6 +53,9 @@ public class MatrizProdutoAstecController {
 	@Autowired
 	ScheduleService scheduleService;
 
+	@Autowired
+	CadppbService ppbService;
+
 
 	
 	@GetMapping(value = "/getAll", produces = "application/json")
@@ -69,6 +76,37 @@ public class MatrizProdutoAstecController {
 	                    .body("Nenhuma matriz encontrada!");
 	        }
 	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		} 
+
+	}
+	
+
+
+	@GetMapping(value = "/getAllComPPB", produces = "application/json")
+	@Operation(summary = "Busca todas as Matrizes de produto ASTEC")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma Matriz de produto ASTEC encontrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getAllComPPB() {
+	
+		try {
+			List<MtastecComPPB> lista = service.getAllComPPB();
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhuma matriz encontrada!");
+	        }
+	        Auxiliar.formatResponseList2(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
@@ -164,6 +202,38 @@ public class MatrizProdutoAstecController {
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
 		            .body("OK");
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+
+
+	@PutMapping(value = "/createAvulsa", produces = "application/json")
+	@Operation(summary = "Cria uma matriz de produto ASTEC")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Ok"),	        
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Object> createAvulsa(@RequestBody MtastecAvulsaDTO dto) {
+	
+		try {
+
+	        Mtastec matriz = service.createAvulsa(dto);
+
+			Integer result = ppbService.associaProdutoPPB(dto.partnumpd(), dto.tpprd(), dto.desccom(), dto.descrfb());
+			if(result < 1){ }
+
+			//Envia p/ explosão de estrutura
+			matriz.setFlex4flw("MATRIZ PENDENTE REPROCESSAMENTO");			
+			scheduleService.explodeMatrizAvulsa("AST",  matriz.getItaudusr(), matriz.getIdmatriz().toString());
+
+	        return ResponseEntity.status(HttpStatus.CREATED)
+		        	.header("Accept", "application/json")
+		            .body("matriz");
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
@@ -314,8 +384,6 @@ public class MatrizProdutoAstecController {
 		}   
 
 	}
-
-
 
 
 
@@ -598,8 +666,6 @@ public class MatrizProdutoAstecController {
 
 
 
-
-
 	@GetMapping(value = "/getElegivies", produces = "application/json")
 	@Operation(summary = "lista itens ASTEC produtivos elegíveis para DCR-e")
 	@ApiResponses(value = {
@@ -612,32 +678,19 @@ public class MatrizProdutoAstecController {
 	
 		try {
 	       
-			/* 
+			List<ElegiveisAstecDTO> lista = service.getElegiveis();
+
 			if (lista.isEmpty()) {
-	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
 	                    .header("Accept", "application/json")
-	                    .body("Matriz de produto com este ID não encontrada!");
+	                    .body("Sem itens ASTEC elegíveis na estrutura de produto!");
 	        }
 
-			Mtastec matriz = lista.get();
-			if(matriz.getFlex1flw() != 0 || matriz.getFlex4flw().equals("MATRIZ PENDENTE REPROCESSAMENTO")) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			Auxiliar.formatResponseList2(lista);
+			return ResponseEntity.status(HttpStatus.OK)
 				.header("Accept", "application/json")
-				.body("Matriz bloqueada por outro processo!");
-			}
-			
-			//HDCR003C/HDCR003CS
-			matriz.setFlex4flw("MATRIZ EM PROCESSANMENTO DE PENDENCIAS");
-			service.save(matriz, request); //save atualiza Itaudusr	
-			String tpprd = "AST"; //matriz.getTpprd().trim().equals("PC")? "AST" : "PRD";					
-			//@@@implement list of step..
-			scheduleService.reprocessaPendencias(tpprd, matriz.getIdmatriz().toString(), matriz.getItaudusr(), "PEN", tpDoc);
-			*/			
-	        return ResponseEntity.status(HttpStatus.OK)
-		        	.header("Accept", "application/json")
-		            .body("Entity!");
-
-
+				.body(lista);
+      
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
