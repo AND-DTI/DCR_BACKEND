@@ -186,7 +186,7 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 
 	@Query(value = """
 	SELECT 
-	  a.*, p.ppbprd, p.prddest, tp.descppb, tp.viginippb 
+	  a.*, p.ppbprd, p.prddest, tp.descppb, tp.viginippb, u.name as respname 
 	FROM   
 	  HD4DCDHH.MTASTEC a join
 	  HD4DCDHH.CADPPB p on p.partnumpd = a.partnumpd left join 
@@ -195,6 +195,8 @@ public interface MtastecRepository extends JpaRepository<Mtastec, Integer>{
 	          rownumber() over(partition by tpprd order by int(viginippb) desc) as ln_ppb  
 		from  HD4DCDHH.CADPPBTP x
 	  )tp on tp.tpprd= 'PC' and ln_ppb= 1
+	  left join
+	  HD4DCDHH.ACCUSER u on u.username= a.prioresp
 	ORDER BY idmatriz desc
     """, nativeQuery = true)
 	List<MtastecComPPBINT> findAllComPPB();

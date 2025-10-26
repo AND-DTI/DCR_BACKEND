@@ -3,6 +3,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import com.dcr.api.model.as400.Matriprd;
+import com.dcr.api.model.dto.INT.MatriprdComPPBINT;
 import com.dcr.api.response.Interface.PendenciaINT;
 import com.dcr.api.response.Interface.PendenciaProdINT;
 
@@ -75,6 +76,29 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 	order by prd.IDMATRIZ
 	""", nativeQuery = true)
 	List<Object[]> consultaByTpprd(List<String> tpprdList);
+
+
+	@Query(value = """						
+		SELECT  
+		  prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, 
+		  prd.TPDCRE, prd.DCRANT, prd.ORIGPRD, prd.itgarantia, prd.obsprio, prd.DTNECI, 
+		  prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, usr.name as respname, prd.PRIODTMNT, prd.PRIOHRMNT, 
+		  prd.flex1flw, prd.flex4flw,
+		  itm.PARTNUMPD, itm.MODELO modeloItm, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRECO, itm.NCM, itm.undcom, itm.PRIOCOR, 
+		  itm.mdlsimilar, itm.precobase, itm.dcrsimilar, 
+		  cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, 
+		  tpprd.DSCPOR, tpprd.DSCING
+		FROM  
+		  HD4DCDHH.MATRIPRD prd join 
+		  HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ left join
+		  HD4DCDHH.ACCUSER usr ON prd.prioresp = usr.username left join
+		  HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR left join
+		  HD4DCDHH.CADTPPRD tpprd ON prd.TPPRD = tpprd.TPPRD 		  
+		WHERE 
+		  prd.TPPRD IN :tpprdList 
+		order by prd.IDMATRIZ
+		""", nativeQuery = true)
+		List<MatriprdComPPBINT> consultaByTpprd2(List<String> tpprdList);
 	  
 	  
 	@Query(value = 

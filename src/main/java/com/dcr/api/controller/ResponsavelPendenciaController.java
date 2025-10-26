@@ -144,11 +144,15 @@ public class ResponsavelPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> delete(@RequestBody List<PendrespDeleteDTO> listaDto, HttpServletRequest request) {
+	public ResponseEntity<Object> delete(@RequestBody List<PendrespDeleteDTO> listaDto) {
 	//public ResponseEntity<Object> delete(@RequestParam List<PendrespDeleteDTO> listaDto, HttpServletRequest request) {
+
 		List<PendrespDeleteDTO> listaErro = new ArrayList<>();
+
 		try {
+
 			for (PendrespDeleteDTO dto : listaDto) {
+
 				PendenciaKey key = new PendenciaKey();
 				key.setCdpend(dto.cdpend());
 				key.setCdresp(dto.cdresp());
@@ -159,26 +163,60 @@ public class ResponsavelPendenciaController {
 		        }else {
 		        	service.delete(lista.get());
 		        }
-			
-		        
-		       
+					        		    
 			}
+
 			if(listaErro.size() > 0) {
 				PendrespDeleteResponse resp = new PendrespDeleteResponse();
 				resp.setErros(listaErro);
 				resp.setMsgErro("Associações não encontradas!");
-				return ResponseEntity.status(HttpStatus.OK)
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 			        	.header("Accept", "application/json")
 			            .body(resp);
 			}
+
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body("Associação deletada com sucesso!");
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
-		}   
+		}  
+
+	}
+
+
+
+	@PostMapping(value = "/delete2", produces = "application/json") //j4 - DeleteMapping error - body missing
+	@Operation(summary = "Remove a lista de responsáveis por pendência")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum responsável encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> delete2(@RequestBody List<PendrespDeleteDTO> listaDto) {
+			
+		try {
+
+			for (PendrespDeleteDTO dto : listaDto) {				
+								
+		        service.delete2(dto.cdpend(), dto.cdresp());
+		        					        		    
+			}
+			
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Associação removida com sucesso!");
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}  
+
 	}
 	
 
@@ -191,16 +229,15 @@ public class ResponsavelPendenciaController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	//public ResponseEntity<Object> create(@RequestBody List<PendrespDTO> listaDto, HttpServletRequest request) {
-    public ResponseEntity<Object> create(@RequestBody PendrespDTO2 listaDto, HttpServletRequest request) {
+  //public ResponseEntity<Object> create(@RequestBody List<PendrespDTO> listaDto, HttpServletRequest request) {
+    public ResponseEntity<Object> create(@RequestBody PendrespDTO2 listaDto) {
 		
         List<PendrespDTO> listaErro = new ArrayList<>();
 
 		try {
 			//for (PendrespDTO dto : listaDto) {
             for (PendrespDTO dto : listaDto.responsaveis()) {
-				
-                
+				                
                 if( listaDto.subtipos().size() > 0){
                     for (String subtp : listaDto.subtipos()) {
 
@@ -213,7 +250,7 @@ public class ResponsavelPendenciaController {
                         if (!lista.isEmpty()) {
                             listaErro.add(dto);
                         }else {                            
-                            service.create2(dto, subtp, request);
+                            service.create2(dto, subtp);
                         }
                                                
                     }
@@ -227,9 +264,8 @@ public class ResponsavelPendenciaController {
                     Optional<Pendresp> lista = service.getByID(key);
                     if (!lista.isEmpty()) {
                         listaErro.add(dto);
-                    }else {
-                        //service.create(dto, request);
-                        service.create2(dto, "", request);
+                    }else {                        
+                        service.create2(dto, "");
                     }
                 }
 
@@ -252,6 +288,7 @@ public class ResponsavelPendenciaController {
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
+
 	}
 	
 

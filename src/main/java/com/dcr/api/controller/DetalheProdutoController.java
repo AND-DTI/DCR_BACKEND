@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.dcr.api.response.MatriprdByTpprdResponse;
+import com.dcr.api.response.MatriprdByTpprdResponse2;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse2;
@@ -75,24 +75,27 @@ public class DetalheProdutoController {
 	public ResponseEntity<Object> getDetail(@RequestParam List<String> listaTpprd) {
 	
 		try {
+			
+			List<MatriprdByTpprdResponse2> lista = service.getDetailByTpprd2(listaTpprd); //old MatriprdByTpprdResponse2/getDetailByTpprd
+			if (lista.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.header("Accept", "application/json")
+						.body("Nenhum produto encontrado!");
+			}
 
-			List<MatriprdByTpprdResponse> lista = service.getDetailByTpprd(listaTpprd);
-			  if (lista.isEmpty()) {
-		            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-		                    .header("Accept", "application/json")
-		                    .body("Nenhum produto encontrado!");
-		        }
-			Auxiliar.formatResponse(lista);
+			//Auxiliar.formatResponse(lista);
+			Auxiliar.formatResponseList2(lista);
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")
 		            .body(lista);
+
 		} catch (Exception ae) {
 		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
 		    			.header("Accept", "application/json")
 		        		.body(ae.getMessage());                
 		}   
-	}
 
+	}
 	
 
 	@GetMapping(value = "/getProdutoPendencia", produces = "application/json")

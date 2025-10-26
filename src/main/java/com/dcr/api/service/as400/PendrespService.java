@@ -8,6 +8,7 @@ import com.dcr.api.model.as400.Pendresp;
 import com.dcr.api.model.dto.PendrespDTO;
 import com.dcr.api.model.keys.PendenciaKey;
 import com.dcr.api.repository.as400.PendrespRepository;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -20,6 +21,10 @@ public class PendrespService {
 
 	@Autowired
 	PendrespRepository repository;
+
+	@Autowired
+	AuditoriaService auditoria;
+
 	
 	public List<Pendresp> getAll() {
 		
@@ -40,6 +45,13 @@ public class PendrespService {
 	public void delete(Pendresp pend) {
 		
 		repository.delete(pend);
+
+	}
+
+	public void delete2(String cdpend, String responsavel) {
+		
+		repository.removeResponsavel(cdpend, responsavel);
+		
 	}
 	
 	public Pendresp create(PendrespDTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -55,7 +67,7 @@ public class PendrespService {
 		return repository.save(pend);
 	}
 
-    public Pendresp create2(PendrespDTO responsavel, String subtipo, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    public Pendresp create2(PendrespDTO responsavel, String subtipo) throws Exception{ 	
 		
         PendenciaKey key = new PendenciaKey();
 		key.setCdpend(responsavel.cdpend());		
@@ -64,8 +76,8 @@ public class PendrespService {
     		
 		Pendresp pend = new Pendresp();
 		pend.setKey(key);
-		pend.setNmresp(responsavel.nmresp());		
-		Auxiliar.preencheAuditoria(pend, request);
+		pend.setNmresp(responsavel.nmresp());
+		auditoria.preencheAuditoria(pend);				
 
 		return repository.save(pend);
 

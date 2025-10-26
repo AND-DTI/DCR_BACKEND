@@ -14,12 +14,15 @@ import com.dcr.api.model.dto.CorProdutoDTO;
 import com.dcr.api.model.dto.MatriprdComCorDTO;
 import com.dcr.api.model.dto.MatriprdComCorIdDTO;
 import com.dcr.api.model.dto.MatriprdDTO;
+import com.dcr.api.model.dto.INT.MatriprdComPPBINT;
 import com.dcr.api.repository.as400.MatriprdRepository;
 import com.dcr.api.response.CoresResponse;
 import com.dcr.api.response.DocumentosProdResponse;
 import com.dcr.api.response.DocumentosResponse;
 import com.dcr.api.response.InsumosProdResponse;
+import com.dcr.api.response.MatriprdByTpprdCorResponse;
 import com.dcr.api.response.MatriprdByTpprdResponse;
+import com.dcr.api.response.MatriprdByTpprdResponse2;
 import com.dcr.api.response.MatriprdByTpprdResponseList;
 import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.MatriprdResponseList;
@@ -212,6 +215,79 @@ public class MatriprdService {
 		return listaResponse;
 	}
 	
+
+	public List<MatriprdByTpprdResponse2> getDetailByTpprd2(List<String> tpprdList) {
+
+		List<MatriprdComPPBINT> resultados = repository.consultaByTpprd2(tpprdList);		
+		List<MatriprdByTpprdResponse2> listaResponse = new ArrayList<MatriprdByTpprdResponse2>();
+		List<MatriprdByTpprdCorResponse> lista = new ArrayList<MatriprdByTpprdCorResponse>(); 
+		
+		Integer matriz_anterior = 0;
+        for (MatriprdComPPBINT res : resultados) {
+
+        	MatriprdByTpprdResponse2 produto = new MatriprdByTpprdResponse2();
+			MatriprdByTpprdCorResponse cor = new MatriprdByTpprdCorResponse();    
+			
+			produto.setIdmatriz(res.getIdmatriz());
+			produto.setProduto(res.getProduto());
+			produto.setModelo(res.getModelo());
+			produto.setAnomdl(res.getAnomdl());
+			produto.setDesccom(res.getDesccom());
+			produto.setDescrfb(res.getDescrfb());
+			produto.setTpprd(res.getTpprd());
+			produto.setProtot(res.getProtot());
+			produto.setSpecial(res.getSpecial());
+			produto.setTpdcre(res.getTpdcre());
+			produto.setDcrant(res.getDcrant());
+			produto.setOrigprd(res.getOrigprd());
+			produto.setItgarantia(res.getItgarantia());
+			produto.setObsprio(res.getObsprio());
+			produto.setDtneci(res.getDtneci());
+			produto.setPriourgen(res.getPriourgen());
+			produto.setPrevfat(res.getPrevfat());
+			produto.setPrioresp(res.getPrioresp());
+			produto.setRespname(res.getRespname());
+			produto.setPriodtmnt(res.getPriodtmnt());
+			produto.setPriohrmnt(res.getPriohrmnt());
+			produto.setFlex1flw(res.getFlex1flw());
+			produto.setFlex4flw(res.getFlex4flw());			
+			produto.setDscpor(res.getDscpor()); //PPB / Dsc. TPPRD
+			produto.setDscing(res.getDscing()); //PPB / Dsc. TPPRD
+
+			cor.setPartnumpd(res.getPartnumpd());
+			cor.setModelo(res.getModelo());
+			cor.setCodcor(res.getCodcor());
+			cor.setPartdesc(res.getPartdesc());
+			cor.setUnmed(res.getUnmed());
+			cor.setPreco(res.getPreco());
+			cor.setNcm(res.getNcm()); 
+			cor.setUndcom(res.getUndcom()); 
+			cor.setPriocor(res.getPriocor());
+			cor.setMdlsimilar(res.getMdlsimilar());
+			cor.setPrecobase(res.getPrecobase());
+			cor.setDcrsimilar(res.getDcrsimilar());
+			cor.setCdbej(res.getCdbej()); 
+			cor.setCorpt(res.getCorpt());
+			cor.setCoreng(res.getCoreng());
+			cor.setTppin(res.getTppin());
+        	        				
+			//Só funciona com order by em IDMATRIZ:			
+			Boolean novoProduto = matriz_anterior != produto.getIdmatriz();
+			matriz_anterior = produto.getIdmatriz();						
+			if(novoProduto){
+				lista = new ArrayList<MatriprdByTpprdCorResponse>();
+				produto.setItens(lista);
+				listaResponse.add(produto);											
+			}
+			Auxiliar.formatResponse(cor);
+			lista.add(cor); 
+      	
+        }
+       
+		return listaResponse;
+	}
+	
+
 
 	public PendenciaResponse complementaPendencia(PendenciaResponse pend, ProdutoPendenciaSimplesResponse resp) {
 		

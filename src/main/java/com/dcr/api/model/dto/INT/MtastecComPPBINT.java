@@ -19,6 +19,7 @@ public interface MtastecComPPBINT {
     Integer getPriourgen();	
     String getPrevfat();
     String getPrioresp();
+    String getRespname();
     String getPriodtmnt();
     String getPriohrmnt();
     String getItaudsys();		

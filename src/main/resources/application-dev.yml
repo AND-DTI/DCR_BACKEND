@@ -6,7 +6,7 @@ app:
     interfaces:
         user: SYSINTUSER
 env:        
-    so: windows
+    so: windows1
     source: hda
 server:
     port: 3001      
@@ -23,7 +23,7 @@ spring:
         add-properties: false  
     datasource:
         #url: jdbc:as400://hsa0014;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=SB037635;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
-        url: jdbc:as400://10.146.0.5;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=manaus@04;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
+        url: jdbc:as400://10.146.0.5;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=ADTDTI1B;password=loecfxjd;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
 
 data:
     proxy:

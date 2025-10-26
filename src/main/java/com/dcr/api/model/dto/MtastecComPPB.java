@@ -20,6 +20,7 @@ public class MtastecComPPB {
     private Integer priourgen;	
     private String prevfat;
 	private String prioresp;
+    private String respname;    
     private String priodtmnt;
     private String priohrmnt;
     private String itaudsys;		
@@ -130,12 +131,13 @@ public class MtastecComPPB {
     public void setPrevfat(String prevfat) {
         this.prevfat = prevfat;
     }
-    public String getPrioresp() {
-        return prioresp;
-    }
-    public void setPrioresp(String prioresp) {
-        this.prioresp = prioresp;
-    }
+    
+    public String getPrioresp() {        return prioresp;    }
+    public void setPrioresp(String prioresp) {        this.prioresp = prioresp;    }
+
+    public String getRespname() {        return respname;    }
+    public void setRespname(String respname) {        this.respname = respname;    }
+
     public String getPriodtmnt() {
         return priodtmnt;
     }

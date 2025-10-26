@@ -21,8 +21,8 @@ spring:
             matching-strategy: ANT_PATH_MATCHER    
     devtools:
         add-properties: false  
-    datasource:
-        url: jdbc:as400://10.146.0.5;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=manaus@04;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
+    datasource:       
+        url: jdbc:as400://10.146.0.5;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=ADTDTI1B;password=loecfxjd;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
 
 data:
     proxy:
@@ -65,12 +65,25 @@ schedule:
     #reprocMatrizAST: false
     #procTXTShowa: true
     
+
+
 interface:
     txt_showa:
-        dirIN: /tmp/dcr/in_out/in
-        dirOUT: /tmp/dcr/in_out/out
-        dirTMP: /tmp/dcr/in_out/tmp
-        dirPROC: /tmp/dcr/in_out/processado  
-fileserver:
-    root: /tmp/dcr/
-    approot: /tmp/sistemas/dcr-backend
+        dirIN: /home/sv_hmlnpi/dcr/in_out/in
+        dirOUT: /home/sv_hmlnpi/dcr/in_out/out
+        dirTMP: /home/sv_hmlnpi/dcr/in_out/tmp
+        dirPROC: /home/sv_hmlnpi/dcr/in_out/processado  
+
+storage:
+    fileserver: /home/sv_hmlnpi/dcr
+    approot: /home/sv_hmlnpi/sistemas/dcr-backend
+
+#interface:
+#    txt_showa:
+#        dirIN: /tmp/dcr/in_out/in
+#        dirOUT: /tmp/dcr/in_out/out
+#        dirTMP: /tmp/dcr/in_out/tmp
+#        dirPROC: /tmp/dcr/in_out/processado  
+#storage:
+#    fileserver: /tmp/dcr/
+#    approot: /tmp/sistemas/dcr-backend
