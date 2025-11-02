@@ -38,7 +38,6 @@ import com.dcr.api.service.as400.PartnumberService;
 import com.dcr.api.service.as400.PendastecService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -60,7 +59,6 @@ public class MatrizPendenciaAstecController {
 	MtastecService mtastecService;
 	@Autowired
 	MtasteinsService mtasteinsService;
-
 	@Autowired
 	DcrproccService processoservice;	
 	@Autowired
@@ -144,7 +142,7 @@ public class MatrizPendenciaAstecController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> create(@RequestBody PendastecDTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> create(@RequestBody PendastecDTO dto) {
 	
 		try {
 
@@ -154,7 +152,7 @@ public class MatrizPendenciaAstecController {
 			key.setPartnum(dto.partnum());			
 			//key.setNumpend(dto.numpend()); sequencial controlado pelo service
 
-	        pendastecService.create2(dto, request);
+	        pendastecService.create2(dto);
 
 	        return ResponseEntity.status(HttpStatus.CREATED)
 		        	.header("Accept", "application/json")
@@ -168,6 +166,67 @@ public class MatrizPendenciaAstecController {
 
 	}
 	
+
+
+@PutMapping(value = "/createLote", produces = "application/json")
+	@Operation(summary = "Insere uma lista de pendências da matriz")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Pendências criadas com sucesso!"),
+	        @ApiResponse(responseCode = "400", description = "Matriz não existe para vinculação de pendência!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Object> createLote(@RequestBody List<PendastecDTO> dto) {
+	
+		try {
+						
+			for (PendastecDTO pend : dto) {				
+				pendastecService.create2(pend);
+			}
+								
+	        return ResponseEntity.status(HttpStatus.CREATED)
+		        	.header("Accept", "application/json")
+		            .body("Pendências criadas com sucesso!");
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+
+	}
+
+	
+
+	@DeleteMapping(value = "/limpaPendDiagnostico", produces = "application/json")
+	@Operation(summary = "Limpa as pendências de diagnóstico não resolvidas.")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Não existem pendência para a Matriz!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> limpaPendDiagnostico(@RequestParam Integer idmatriz) {
+		
+		try {
+						
+	        pendastecService.limpaPendenciasDiagnostico(idmatriz);
+
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body("Pendencias de diagnóstico removidas com sucesso!");
+
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}  
+		 
+	}
+	
+
+
+
 
 
 	@PutMapping(value = "/update", produces = "application/json")

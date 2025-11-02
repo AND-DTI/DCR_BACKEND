@@ -65,7 +65,6 @@ public class MatrizPendenciaController {
 	MatriitmService matriitmService;
 	@Autowired
 	MatriinsService matriinsService;
-	
 	@Autowired
 	DcrproccService processoservice;	
 	@Autowired
@@ -76,7 +75,6 @@ public class MatrizPendenciaController {
 	ScheduleService scheduleService;
 	@Autowired
     AuditoriaService auditoriaService;
-	
 	@Autowired
     Environment env;
 	
@@ -187,6 +185,7 @@ public class MatrizPendenciaController {
 	}
 	
 
+
 	@PutMapping(value = "/createLote", produces = "application/json")
 	@Operation(summary = "Insere uma lista de pendências da matriz")
 	@ApiResponses(value = {
@@ -219,6 +218,7 @@ public class MatrizPendenciaController {
 
 	}
 
+	
 
 	@DeleteMapping(value = "/limpaPendDiagnostico", produces = "application/json")
 	@Operation(summary = "Limpa as pendências de diagnóstico não resolvidas.")

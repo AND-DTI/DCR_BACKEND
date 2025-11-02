@@ -1,11 +1,16 @@
 package com.dcr.api.service.as400;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dcr.api.model.as400.Dcrreg4;
 import com.dcr.api.model.dto.Dcrreg4DTO;
+import com.dcr.api.model.dto.Dcrreg4DTO2;
+import com.dcr.api.model.dto.INT.Dcrreg4INT;
 import com.dcr.api.model.keys.Dcrreg4Key;
 import com.dcr.api.repository.as400.Dcrreg4Repository;
 import com.dcr.api.utils.Auxiliar;
@@ -22,6 +27,8 @@ public class Dcrreg4Service {
 
 	@Autowired
 	Dcrreg4Repository repository;
+	@Autowired
+	private ModelMapper mapper;
 	
 	
 	public Dcrreg4 create(Dcrreg4DTO dto, HttpServletRequest request) throws UnknownHostException, JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -99,4 +106,16 @@ public class Dcrreg4Service {
 		return lista;
 
 	}
+
+	public List<Dcrreg4DTO2> getByIds2(Integer idmatriz, String partnumpd, String tpprd) {
+				
+		List<Dcrreg4INT> lista0 = repository.consultaByIds2(idmatriz, partnumpd, tpprd);		
+		List<Dcrreg4DTO2> lista = Arrays.asList(mapper.map(lista0, Dcrreg4DTO2[].class));
+		Auxiliar.formatResponseList2(lista);
+
+		return lista;
+
+	}
+
+
 }

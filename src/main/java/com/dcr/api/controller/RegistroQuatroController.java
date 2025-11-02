@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.dcr.api.model.as400.Dcrreg4;
 import com.dcr.api.model.dto.Dcrreg4DTO;
+import com.dcr.api.model.dto.Dcrreg4DTO2;
 import com.dcr.api.model.keys.Dcrreg4Key;
 import com.dcr.api.service.as400.Dcrreg4Service;
 import com.dcr.api.utils.Auxiliar;
@@ -162,6 +163,36 @@ public class RegistroQuatroController {
 						.body("Nenhum registro encontrado!");
 		    }
 			Auxiliar.formatResponse(dcr);
+			return ResponseEntity.status(HttpStatus.OK)
+			        .header("Accept", "application/json")
+			            .body(dcr);
+	       
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
+
+	@GetMapping(value = "/getByKey2", produces = "application/json")
+	@Operation(summary = "Busca o registro ativo")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "OK!"),
+	        @ApiResponse(responseCode = "400", description = "Nenhum registro encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getByKey2(@RequestParam Integer idmatriz, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
+	
+		try {
+			List<Dcrreg4DTO2> dcr = service.getByIds2(idmatriz, partnumpd, tpprd);
+					
+			if (dcr.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.header("Accept", "application/json")
+						.body("Nenhum registro encontrado!");
+		    }
+			
 			return ResponseEntity.status(HttpStatus.OK)
 			        .header("Accept", "application/json")
 			            .body(dcr);

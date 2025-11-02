@@ -39,8 +39,15 @@ public class ResumoDTO {
     private Double pre_totalimp;
     private Double pre_custotal;
     private Double pre_iitotal; 
-    private Double pre_iireduzido; 
+    private Double pre_iireduzido;
+    private String resultado; 
 
+    public String getResultado() {
+        return resultado;
+    }
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
+    }
     public Long getIdmatriz() {
         return idmatriz;
     }

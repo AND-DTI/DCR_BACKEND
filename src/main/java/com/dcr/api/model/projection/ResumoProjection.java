@@ -40,4 +40,5 @@ public interface ResumoProjection {
     Double getPre_custotal();
     Double getPre_iitotal(); 
     Double getPre_iireduzido(); 
+    String getResultado();
 }

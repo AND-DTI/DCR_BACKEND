@@ -134,7 +134,8 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 		rg3e4.totalimp as pre_totalimp, cfg.coefredu, cfg.aliqiipad, cfg.coefredu as pre_coefred,  /*pre_coefred added 16.08.2025*/
 		(case when nvl(taxa,0)=0 then 0 else rg2.totalnac/taxa end) + rg3e4.totalimp as pre_custotal,
 		(rg3e4.totalimp * cfg.aliqiipad) as pre_iitotal, 
-		(rg3e4.totalimp * cfg.aliqiipad) - ((rg3e4.totalimp * cfg.aliqiipad)*cfg.coefredu) as pre_iireduzido  
+		(rg3e4.totalimp * cfg.aliqiipad) - ((rg3e4.totalimp * cfg.aliqiipad)*cfg.coefredu) as pre_iireduzido,
+		pro.resultado 
 	  FROM
 		HD4DCDHH.DCRPROCC as PRC join
 		HD4DCDHH.DCRREG0  as RG0 on rg0.idmatriz= prc.idmatriz and rg0.partnumpd= prc.partnumpd and rg0.tpprd= prc.tpprd left join			

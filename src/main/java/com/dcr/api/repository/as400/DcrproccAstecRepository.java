@@ -29,7 +29,8 @@ public interface DcrproccAstecRepository extends JpaRepository<Dcrprocc, Dcrproc
 		rg3e4.totalimp as pre_totalimp, cfg.coefredu, cfg.aliqiipad,   
 		(case when nvl(taxa,0)=0 then 0 else rg2.totalnac/taxa end) + rg3e4.totalimp as pre_custotal,
 		(rg3e4.totalimp * cfg.aliqiipad) as pre_iitotal, 
-		(rg3e4.totalimp * cfg.aliqiipad) - ((rg3e4.totalimp * cfg.aliqiipad)*cfg.coefredu) as pre_iireduzido  
+		(rg3e4.totalimp * cfg.aliqiipad) - ((rg3e4.totalimp * cfg.aliqiipad)*cfg.coefredu) as pre_iireduzido,
+		pro.resultado
 	  FROM
 		HD4DCDHH.DCRPROCC as PRC join
 		HD4DCDHH.DCRREG0  as RG0 on rg0.idmatriz= prc.idmatriz and rg0.partnumpd= prc.partnumpd and rg0.tpprd= prc.tpprd left join			
@@ -292,6 +293,7 @@ public interface DcrproccAstecRepository extends JpaRepository<Dcrprocc, Dcrproc
 	insert into HD4DCDHH.DCRREG4(
 		IDMATRIZ, PARTNUMPD, TPPRD, PARTNUM, IDREG, NUMCOMP, 
 		IMPDIRETA, SUSPENS, INDREDUCII, DI, ADICAO, ITEMADICAO, ESPEC, UNDCOM, NCM, QTDE, VLRUNIT,
+		ITMCOLI,
 		ITAUDSYS, ITAUDUSR, ITAUDHST, ITAUDDT, ITAUDHR
 	)
 	SELECT 
@@ -307,6 +309,7 @@ public interface DcrproccAstecRepository extends JpaRepository<Dcrprocc, Dcrproc
 		else replace(ins.espec, trim(ins.partnum)||' - ', '') 
 		end, 1, 80) as ESPEC,  
 		ins.UNDCOM, ins.NCM, ins.NECFIL, ins.VLRUNIT, /*vlrunit - update when set NUMDOC3*/  
+		case when doc.flex3flw= 'COLIGADA' then 'S' else 'N' end as coli,
 		'DCRBACKEND',  CAST(:itaudusr as char(10)), CAST(:itaudhst as char(30)), 
 		VARCHAR_FORMAT(CURRENT TIMESTAMP, 'YYYYMMDD') dtatual,
 		CHAR(TIME(CURRENT TIMESTAMP),JIS) hratual 

@@ -36,4 +36,13 @@ public interface PendastecRepository extends JpaRepository<Pendastec, PendastecK
 	""", nativeQuery = true)
 	int vinculaProtocolo(Integer idmatriz, String protocolo);
 
+
+	@Transactional
+	@Modifying
+	@Query(value = """
+	DELETE from HD4DCDHH.PENDASTEC 
+	where idmatriz= :idmatriz and flex3flw= 'DIAG' and status= 0
+	""", nativeQuery = true)
+	int limpaDiagnostico(Integer idmatriz);
+
 }

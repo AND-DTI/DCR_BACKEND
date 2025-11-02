@@ -73,7 +73,10 @@ public class Dcrreg4 {
 	
 	@Column(columnDefinition = "decimal(15,6)")
 	private Double vlrunit;
-	
+
+	@Column(columnDefinition = "char(1")
+	private String itmcoli;		
+
 	@Column(columnDefinition = "char(40)")
 	private String itaudsys;
 
@@ -205,21 +208,14 @@ public class Dcrreg4 {
 		this.indreducii = indreducii;
 	}
 
-	public Double getVlrunit() {
-		return vlrunit;
-	}
+	public Double getVlrunit() {		return vlrunit;	}
+	public void setVlrunit(Double vlrunit) {		this.vlrunit = vlrunit;	}
 
-	public void setVlrunit(Double vlrunit) {
-		this.vlrunit = vlrunit;
-	}
+	public String getItmcoli() {		return itmcoli;	}
+	public void setItmcoli(String itmcoli) {		this.itmcoli = itmcoli;	}
 
-	public String getItaudsys() {
-		return itaudsys;
-	}
-
-	public void setItaudsys(String itaudsys) {
-		this.itaudsys = itaudsys;
-	}
+	public String getItaudsys() {		return itaudsys;	}
+	public void setItaudsys(String itaudsys) {		this.itaudsys = itaudsys;	}
 
 	public String getItaudusr() {
 		return itaudusr;

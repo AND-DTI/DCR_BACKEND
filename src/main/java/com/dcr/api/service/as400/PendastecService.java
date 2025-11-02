@@ -10,6 +10,7 @@ import com.dcr.api.model.dto.PendastecDTO3;
 import com.dcr.api.model.dto.resolverPendenciaDTO;
 import com.dcr.api.model.keys.PendastecKey;
 import com.dcr.api.repository.as400.PendastecRepository;
+import com.dcr.api.service.AuditoriaService;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -24,6 +25,8 @@ public class PendastecService {
 
 	@Autowired
 	PendastecRepository repository;
+	@Autowired
+    AuditoriaService auditoriaService;
 	
 	
 	public List<Pendastec> getAll() {
@@ -67,7 +70,7 @@ public class PendastecService {
 		return repository.save(pend);
 	}
 	
-	public Pendastec create2(PendastecDTO dto, HttpServletRequest request) throws JsonMappingException, JsonProcessingException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, UnknownHostException {
+	public Pendastec create2(PendastecDTO dto) throws Exception {
 		
 		Pendastec pend = new Pendastec();		
 		PendastecKey key = new PendastecKey();
@@ -86,7 +89,8 @@ public class PendastecService {
 		pend.setFlex4flw(dto.flex4flw());
 		pend.setFlex5flw(dto.flex5flw());
 		
-		Auxiliar.preencheAuditoria(pend, request);
+		//Auxiliar.preencheAuditoria(pend, request);
+		auditoriaService.preencheAuditoria(pend);
 		return repository.save(pend);
 
 	}
@@ -176,6 +180,11 @@ public class PendastecService {
 	}
 
 
+	public void limpaPendenciasDiagnostico(Integer idmatriz) {
+								
+		repository.limpaDiagnostico(idmatriz);
+
+	}
 
 	
 }

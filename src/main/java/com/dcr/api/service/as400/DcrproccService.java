@@ -174,8 +174,7 @@ public class DcrproccService {
 		}
 		
 		ResumoDTO resumo = null;
-		if (!projection.isEmpty()) {
-			//Ctpcomp componente = mapper.map(compDTO, Ctpcomp.class); 
+		if (!projection.isEmpty()) {			
 			resumo = mapper.map(projection.get(), ResumoDTO.class);
 			Auxiliar.formatResponse(resumo); 
 		}
