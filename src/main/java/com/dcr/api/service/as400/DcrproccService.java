@@ -12,9 +12,12 @@ import com.dcr.api.model.dto.DCReDTO;
 import com.dcr.api.model.dto.DcrproccDTO;
 import com.dcr.api.model.dto.JobExplosaoDTO;
 import com.dcr.api.model.dto.ProcessamentoMatrizDTO;
+import com.dcr.api.model.dto.RegistradoDTO;
 import com.dcr.api.model.dto.ResumoDTO;
 import com.dcr.api.model.dto.INT.JobExplosaoINT;
 import com.dcr.api.model.dto.INT.ProcessamentoMatrizINT;
+import com.dcr.api.model.dto.INT.RegistradosAstecINT;
+import com.dcr.api.model.dto.INT.RegistradosModeloINT;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.projection.DCReProjection;
 import com.dcr.api.model.projection.ResumoProjection;
@@ -184,18 +187,38 @@ public class DcrproccService {
 	}
 
 
-    public DCReDTO getDCRe(Long idmatriz, String partnumpd, String tpprd) {
+	public List<RegistradoDTO> getRegistrados(String tpprd) {
+		
+		List<RegistradoDTO> listaDto = null;
+				
+		if(tpprd.equals("AST")){
+			List<RegistradosAstecINT> listaAstec = repositoryAstec.getRegistrados();
+			listaDto = Arrays.asList(mapper.map(listaAstec, RegistradoDTO[].class));
+			Auxiliar.formatResponseList(listaDto);
+		}else{
+			List<RegistradosModeloINT> listaModelo = repository.getRegistrados();
+			listaDto = Arrays.asList(mapper.map(listaModelo, RegistradoDTO[].class));
+			Auxiliar.formatResponseList(listaDto);			
+		}		
+
+		return listaDto;				
+		
+	}
+
+
+    //public DCReDTO getDCRe(Long idmatriz, String partnumpd, String tpprd) {
+	public DCReDTO getDCRe(String num_dcre, String tpprd) {
 		
 		Optional<DCReProjection> projection = null;
                
 		if(tpprd.equals("PC")){
-			projection = repositoryAstec.getRegistroDCRe(idmatriz, partnumpd);
+			projection = repositoryAstec.getRegistroDCRe(num_dcre);
 		}else{
-			//dcre = repository.getResumo(idmatriz, partnumpd);//@@@implement for PRD
+			projection = repository.getRegistroDCRe(num_dcre);
 		}
 		
 		DCReDTO dcre = null;
-		if (!projection.isEmpty()) {			
+		if (projection!=null && !projection.isEmpty()) {			
 			dcre = mapper.map(projection.get(), DCReDTO.class);
 			Auxiliar.formatResponse(dcre); 
 		}
@@ -319,9 +342,7 @@ public class DcrproccService {
         }else{
             return repository.liberaMatriz(idmatriz);
         }
-
         
-
     }
 
 
@@ -332,6 +353,12 @@ public class DcrproccService {
         List<JobExplosaoDTO> procs = Arrays.asList(mapper.map(lista, JobExplosaoDTO[].class));
         
         return procs;
+
+    }
+
+	public int desativaAnterior(String partnumpd){
+
+        return repository.desativaDcreAnterior(partnumpd);		
 
     }
 

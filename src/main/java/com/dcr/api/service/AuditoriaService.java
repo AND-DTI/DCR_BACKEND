@@ -17,7 +17,7 @@ public class AuditoriaService {
 
     @Value("${app.code}")
     private String systemAudit;
-    @Value("${as400.datasource.username}")
+    @Value("${env.service.db_username:ERR_DBUSER}") //@Value("${as400.datasource.username}")
     private String DB_USERSERVICE;
     
 

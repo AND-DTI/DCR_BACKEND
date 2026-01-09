@@ -2,52 +2,29 @@ app:
     name: NEWDCR-E.COM
     code: DCRE-BACK
     exe: DCRE_BACKEND.JAR
-    host: BACKENDSERVER
-    interfaces:
-        user: SYSINTUSER
+    host: BACKENDSERVER    
 env:        
     so: windows1
     source: hda
+    service:
+        db_username: ${DB_USER}
+        int_username: ${INTERACE_USER}
 server:
     port: 3001      
 
-spring:
-    #datasource:
-    #    password: password
-    #    url: jdbc:h2:dev
-    #    username: SA    
+spring:    
     mvc:
         pathmatch:
             matching-strategy: ANT_PATH_MATCHER    
     devtools:
         add-properties: false  
     datasource:
-        #url: jdbc:as400://hsa0014;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=SB037635;password=SB037635;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
-        url: jdbc:as400://10.146.0.5;naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=ADTDTI1B;password=loecfxjd;driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
+        url: jdbc:as400://${DB_HOST};naming=system;translate binary=true;libraries=,HD4DCDHH,LPDPGICE;user=${DB_USER};password=${DB_PASSWORD};driverClassName=com.ibm.as400.access.AS400JDBCDriver;hibernate.ddl-auto=validate
 
 data:
-    proxy:
-        host: gateway.zscloud.net
-        port: 443
     token_pass: SUPER_SECRET_WORD
     token_expire: 280000000
-    api_se:
-        api_gateway: eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTc4OTQ4ODksImV4cCI6MTc2NzIyNTU0MCwiaWRsb2dpbiI6IlNCSU5UMDAxIiwicmF0ZWxpbWl0IjoxMjAsInF1b3RhbGltaXQiOjEwMDAwMH0.DIJUeK6NyEmgZV9i6JBDKcIVoFw6kUBk3gSoILYxZGA
-        base_url: https://motohonda-test.softexpert.com/apigateway
-        adm: https://motohonda-test.softexpert.com/apigateway/se/ws/adm_ws.php
-        form:
-        workflow:    
-      
-
-as400:
-    datasource:
-        jdbcUrl:            jdbc:as400://HSA0014;naming=system;libraries=,PTDHD,LPDDBICE:sslConnection=true;
-        driver-class-name:  com.ibm.as400.access.AS400JDBCDriver
-        username:           SB037635
-        password:           SB037635
-        database-platform:  org.hibernate.dialect.DB2400Dialect
-        hibernate.ddl-auto: validate
-
+          
 schedule:
     reprocPendencyCAD_PRD: 0
     reprocPendencyCAD_AST: 0
@@ -55,21 +32,14 @@ schedule:
     reprocPendencyALL_PRD: 0
     reprocPendencyALL_AST: 0
     atualizaPRD: 0
-    reprocMatrizPRD: 10
-    reprocMatrizAST: 10
+    reprocMatrizPRD: 0
+    reprocMatrizAST: 0
     procTXTShowa: 120
-
-    #old config:
+    #config in PD:
     #atualizaPRD: 15
     #procTXTShowa: 15
-
-    #reprocPendenciaPRD: true
-    #reprocPendenciaAST: false
-    #atualizaPRD: true
-    ##reprocMatrizPRD: false
-    #reprocMatrizAST: false
-    #procTXTShowa: true
-
+    #reprocMatrizPRD: 10
+    #reprocMatrizAST: 10
 
 interface:
     txt_showa:                

@@ -12,6 +12,7 @@ public class LoginResponse {
 	private String token;
 	private String name;
 	private String idArea;
+	private String hostname; //@@ 09.11.2025	
 	private List<RoleResponse> roles;
 	
 	public String getUsername() {
@@ -44,4 +45,8 @@ public class LoginResponse {
 	public void setIdArea(String idArea) {
 		this.idArea = idArea;
 	}
+
+	public String getHostname() {		return hostname;	}
+	public void setHostname(String hostname) {		this.hostname = hostname;	}
+	
 }

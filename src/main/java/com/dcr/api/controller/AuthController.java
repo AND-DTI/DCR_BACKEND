@@ -1,4 +1,5 @@
 package com.dcr.api.controller;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class AuthController {
 
     })
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> authenticateSimples(@RequestBody Login login) {
+    public ResponseEntity<Object> authenticateSimples(@RequestBody Login login) throws UnknownHostException {
 
         Optional<Accuser> optUser = userService.getByUsernameOptional(login.username());
         if (optUser.isEmpty()) {
@@ -96,6 +97,8 @@ public class AuthController {
 	        response.setUsername(usuario.getUsername().trim());
 	        response.setIdArea(usuario.getIdarea().trim());
 	        response.setName(Auxiliar.formatName(usuario.getName()));
+                //response.setHostname(Auxiliar.getClientHost(null));
+                response.setHostname(Auxiliar.getHostname()); //@ 09.11.2025
 	        
 	        Auxiliar.formatResponse(response);
 	        return ResponseEntity.status(HttpStatus.OK) 

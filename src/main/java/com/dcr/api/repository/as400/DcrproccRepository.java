@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dcr.api.model.as400.Dcrprocc;
 import com.dcr.api.model.dto.INT.JobExplosaoINT;
 import com.dcr.api.model.dto.INT.ProcessamentoMatrizINT;
+import com.dcr.api.model.dto.INT.RegistradosModeloINT;
 import com.dcr.api.model.keys.DcrproccKey;
+import com.dcr.api.model.projection.DCReProjection;
 import com.dcr.api.model.projection.ResumoProjection;
 
 
@@ -171,6 +173,71 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 		prc.idmatriz = :idmatriz and prc.partnumpd= :partnumpd		
 	""", nativeQuery = true)
 	Optional<ResumoProjection> getResumo(Long idmatriz, String partnumpd);
+
+
+	@Query(value = """
+	SELECT 
+	  nvl(dcr.dcre, '0000000000') dcre, prc.idmatriz, prc.partnumpd, prc.tpprd, prc.status, 
+	  prc.taxausd, prc.totalnac, prc.totalimp, prc.custotal, prc.coefred, prc.iitotal, prc.iireduzido,  		
+	  rg0.ppb as ppbprd, rg0.denom as descrfb, rg0.ncm, rg0.undcom, rg0.salarios, rg0.encargos, rg0.peso,
+	  rg1.preco as preco_brl, rg0.tpdcre, rg0.dcrant, rg0.procretif, 
+	  ppb.prddest, mat.modelo, mat.anomdl, mat.produto, mat.prevfat,
+      itm.codcor, cor.corpt, cor.coreng,
+	  dcr.dtvigini, dcr.dtvigfim
+	FROM
+	  HD4DCDHH.MATRIPRD  as MAT join	
+	  HD4DCDHH.MATRIITM  as ITM on itm.idmatriz= mat.idmatriz join
+	  HD4DCDHH.DCRPROCC  as PRC on prc.idmatriz= mat.idmatriz and prc.partnumpd= itm.partnumpd join
+	  HD4DCDHH.DCRREG0   as RG0 on rg0.idmatriz= prc.idmatriz and rg0.partnumpd= prc.partnumpd and rg0.tpprd= prc.tpprd join			
+	  HD4DCDHH.DCRREG1   as RG1 on rg1.idmatriz= prc.idmatriz and rg1.partnumpd= prc.partnumpd and rg1.tpprd= prc.tpprd left join
+	  HD4DCDHH.CADPPB    as PPB on ppb.partnumpd = itm.partnumpd
+	  left join /* mudar p/ join */
+	  HD4DCDHH.DCRVIGEN  as DCR on dcr.idmatriz= prc.idmatriz and rg1.partnumpd= prc.partnumpd left join
+	  HD4DCDHH.CADCOR    as COR on cor.codcor = itm.codcor
+	--WHERE
+    --  status= 6 	
+    """, nativeQuery = true)
+    List<RegistradosModeloINT> getRegistrados();
+
+
+    @Query(value = """
+    SELECT  
+	  dcr.dcre, dcr.dtregistro, dcr.hrregistro, dcr.dtvigini, dcr.hrvigini, dcr.dtvigfim, dcr.hrvigfim,  
+      prc.idmatriz, prc.partnumpd, prc.tpprd, prc.status, cfg.cnpjemi, cfg.razsoc,
+      prc.taxausd, /*dcr.taxausd,*/ prc.totalnac, prc.totalimp, prc.custotal, -- <- updated by diagnostic (DCRPROTO)
+      prc.coefred, prc.iitotal, prc.iireduzido, pro.protdcre, 
+      pro.tpenvio, pro.dtenvio, pro.hrenvio, pro.repreenvio, pro.status as protostatus,
+      rg0.ppb, rg0.denom, rg0.ncm, rg0.undcom, rg0.salarios, rg0.encargos, rg0.peso,
+      rg1.preco as preco_brl, case when nvl(taxa,0)=0 then 0 else round(rg1.preco/taxa,2) end as preco_usd,
+      rg0.tpdcre, rg0.dcrant, rg0.procretif, taxa as taxa_dia
+    FROM
+      HD4DCDHH.DCRPROCC as PRC join
+      HD4DCDHH.DCRREG0  as RG0 on rg0.idmatriz= prc.idmatriz and rg0.partnumpd= prc.partnumpd and rg0.tpprd= prc.tpprd left join			
+      HD4DCDHH.DCRREG1  as RG1 on rg1.idmatriz= prc.idmatriz and rg1.partnumpd= prc.partnumpd and rg1.tpprd= prc.tpprd left join
+      HD4DCDHH.DCRREGRA as CFG on cfg.stsconfig = 1 join
+	  --> REGISTRO DCR-E         
+      HD4DCDHH.DCRVIGEN DCR on dcr.idmatriz= prc.idmatriz and dcr.partnumpd= prc.partnumpd and dcr.tpprd= prc.tpprd
+	  left join
+      --> TAXA   
+      (select * from HD4DCDHH.CADTAXA  where CDMOED = 'USD' and
+       vigini = year(CURRENT TIMESTAMP)||right('00'||month(CURRENT TIMESTAMP),2)||right('00'||day(CURRENT TIMESTAMP),2)
+       Fetch first 1 row only
+      )tax on tax.taxa > 0   
+	  left join   
+      --> PROTOCOLO		
+	  (select pro0.*, ROWNUMBER() Over(Partition by idmatriz, partnumpd Order by dthr desc) as ln_proto
+	   from
+         (select  x.*, TIMESTAMP_FORMAT(ITAUDDT||' '||ITAUDHR, 'YYYYMMDD HH24:MI:SS') dthr                 
+          from    HD4DCDHH.DCRPROTO x  where tpenvio <> 'H' )pro0
+      ) as PRO 
+          on pro.idmatriz= prc.idmatriz and pro.partnumpd= dcr.partnumpd and pro.ln_proto= 1       
+    WHERE
+	  dcr.dcre = :num_dcre and prc.tpprd <> 'PC'      
+      /*prc.idmatriz = :idmatriz and prc.partnumpd= :partnumpd and prc.tpprd <> 'PC'*/
+    """, nativeQuery = true)
+    //Optional<DCReProjection> getRegistroDCRe(Long idmatriz, String partnumpd);
+	Optional<DCReProjection> getRegistroDCRe(String num_dcre);
+
 
 
 	@Transactional
@@ -450,6 +517,52 @@ public interface DcrproccRepository extends JpaRepository<Dcrprocc, DcrproccKey>
 					   @Param("itaudusr") String itaudusr, @Param("itaudhst") String itaudhst);	
 
 	
+
+
+	@Transactional
+	@Modifying
+	@Query(value = """
+	MERGE INTO HD4DCDHH.DCRVIGEN AS x
+	USING
+	(
+	select                                                                  
+	  ln_itm, partnumpd, dcre, dtregistro, dtvigini, dtvigfim,              
+	  year(DTFIM)||right('00'||month(DTFIM), 2)||right('00'||day(DTFIM), 2) as VIG_FIM_CALCULADA,                                                 
+	  new.dcre_new, registro_new, vigini_new, vigfim_new, idmatriz, matriz_new                                                            
+	from (                                                                                                                       
+	SELECT                                                                  
+		rownumber() over(partition by partnumpd order by int(dtregistro) desc) as ln_itm,                                                            
+		partnumpd, idmatriz, dcre, tpprd, dtregistro, dtvigini, dtvigfim,     
+		taxausd, totalnac, totalimp, custotal, iitotal, iireduzido, itaudsys, 
+		/*Novo DCR mais próximo -> */
+		/* Obs.: **replicação do antigo (HDCR010Q) usa número dcre porque tem muitas datas erradas */
+		(select x.dcre from HD4DCDHH.DCRVIGEN x                               
+		where  x.partnumpd= old.partnumpd and  
+				cast(x.dtregistro as int) > cast(old.dtregistro as int)
+				/*cast(x.dcre as decimal(10)) > cast(old.dcre as decimal(10)) **em HDCR010Q*/     
+		order by int(x.dtregistro) fetch first 1 rows only                              
+	) as new_dcr                                                          
+	FROM                                                                    
+		HD4DCDHH.DCRVIGEN old
+	WHERE
+		partnumpd= :partnumpd
+	)vw                                                                      
+	left join                                                                
+	(select partnumpd itm_new, dtregistro registro_new, idmatriz matriz_new, 
+			dcre dcre_new, dtvigini vigini_new, dtvigfim vigfim_new,         
+			to_date(dtvigini,'YYYYMMDD') -1 day as DTFIM                     
+	from   HD4DCDHH.DCRVIGEN                                                
+	)new on itm_new= vw.partnumpd and dcre_new= vw.new_dcr                   
+	where                                                                    
+	new.dcre_new is not null                                               
+	and DTVIGFIM = ''  
+	
+	) AS y                                                                      
+	ON x.DCRE = y.DCRE                                           
+	WHEN MATCHED THEN UPDATE SET        
+		x.DTVIGFIM = y.VIG_FIM_CALCULADA 			
+    """, nativeQuery = true)
+	int desativaDcreAnterior(String partnumpd);
 
 
 }

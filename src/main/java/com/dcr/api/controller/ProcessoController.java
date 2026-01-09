@@ -26,6 +26,7 @@ import com.dcr.api.model.dto.DcrproccKeyDTO;
 import com.dcr.api.model.dto.DcrproccStatusNew;
 import com.dcr.api.model.dto.JobExplosaoDTO;
 import com.dcr.api.model.dto.ProcessamentoMatrizDTO;
+import com.dcr.api.model.dto.RegistradoDTO;
 import com.dcr.api.model.dto.RegistroLoteDTO;
 import com.dcr.api.model.dto.ResumoDTO;
 import com.dcr.api.model.keys.DcrproccKey;
@@ -314,6 +315,41 @@ public class ProcessoController {
 	}
 
 
+	@GetMapping(value = "/getRegistrados", produces = "application/json")
+	@Operation(summary = "Busca matriz registrada")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "201", description = "Processo criado!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhuma Matriz registrada!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getRegistrados(@RequestParam String tpprd) {
+	
+		try {
+		
+			//Optional<ResumoProjection> dcr = service.getResumo(idmatriz, partnumpd);
+			//List<ResumoDTO> lista = service.getRegistrados();
+			List<RegistradoDTO> lista = service.getRegistrados(tpprd);
+					
+			if(lista == null || lista.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.header("Accept", "application/json")
+						.body("Nenhuma Matriz registrada!");
+		    }
+						
+			return ResponseEntity.status(HttpStatus.OK)
+			        .header("Accept", "application/json")
+			        .body(lista);
+	       
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    		.header("Accept", "application/json")
+		        	.body(ae.getMessage());                
+		}   
+	
+	}
+
+
 
 	@GetMapping(value = "/geraRegistros", produces = "application/json") //"text/plain" causes error in axios requisition
 	@Operation(summary = "Gera registros da matriz (0 a 9)")
@@ -416,23 +452,24 @@ public class ProcessoController {
 
     
 	@GetMapping(value = "/getDCRe", produces = "application/json")
-	@Operation(summary = "Busca o Processo ativo")
+	@Operation(summary = "Busca DCR-e do produto")
 	@ApiResponses(value = {
-	        @ApiResponse(responseCode = "201", description = "Processo criado!"),
-	        @ApiResponse(responseCode = "404", description = "Nenhum Processo encontrado!"),
+	        @ApiResponse(responseCode = "200", description = "OK!"),
+	        @ApiResponse(responseCode = "404", description = "Nenhum Registro DCR-e para o produto!"),
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getDCRe(@RequestParam Long idmatriz, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
+	//public ResponseEntity<Object> getDCRe(@RequestParam Long idmatriz, @RequestParam String partnumpd, @RequestParam String tpprd, HttpServletRequest request) {
+		public ResponseEntity<Object> getDCRe(@RequestParam String num_dcre, @RequestParam String tpprd) {
 	
 		try {
 		
-			DCReDTO dcr = service.getDCRe(idmatriz, partnumpd, tpprd);
+			DCReDTO dcr = service.getDCRe(num_dcre, tpprd);
 					
 			if(dcr == null) {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.header("Accept", "application/json")
-						.body("Nenhum Processo encontrado!");
+						.body("Nenhum Registro DCR-e para o produto!");
 		    }
 						
 			return ResponseEntity.status(HttpStatus.OK)

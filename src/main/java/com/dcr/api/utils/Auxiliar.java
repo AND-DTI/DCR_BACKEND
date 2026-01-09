@@ -237,6 +237,12 @@ public class Auxiliar {
     }   
     
 
+    public static String getHostname() throws UnknownHostException {
+                
+        return InetAddress.getLocalHost().getHostName();
+
+    }
+
     //for web app
     public static String getClientIP(HttpServletRequest request) {
         String ip = request.getHeader("X-FORWARDED-FOR");

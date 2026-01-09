@@ -579,6 +579,8 @@ public class DcrprotoController {
 	        	dcrProccservice.update(procc.get(), request);
 	        }
 			
+			//Desativa dcr-e anterior associado ao item
+			dcrProccservice.desativaAnterior(dto.partnumpd());
 
 	        return ResponseEntity.status(HttpStatus.OK)
 		        	.header("Accept", "application/json")

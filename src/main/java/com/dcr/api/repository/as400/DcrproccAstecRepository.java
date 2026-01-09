@@ -1,4 +1,5 @@
 package com.dcr.api.repository.as400;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -6,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import com.dcr.api.model.as400.Dcrprocc;
+import com.dcr.api.model.dto.INT.RegistradosAstecINT;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.projection.DCReProjection;
 import com.dcr.api.model.projection.ResumoProjection;
@@ -69,39 +71,66 @@ public interface DcrproccAstecRepository extends JpaRepository<Dcrprocc, Dcrproc
 
 
     @Query(value = """
-    SELECT  dcr.dcre, dcr.dtregistro, dcr.hrregistro, dcr.dtvigini, dcr.hrvigini, dcr.dtvigfim, dcr.hrvigfim,  
-        prc.idmatriz, prc.partnumpd, prc.tpprd, prc.status, cfg.cnpjemi, cfg.razsoc,
-        prc.taxausd, /*dcr.taxausd,*/ prc.totalnac, prc.totalimp, prc.custotal, -- <- updated by diagnostic (DCRPROTO)
-        prc.coefred, prc.iitotal, prc.iireduzido, pro.protdcre, 
-        pro.tpenvio, pro.dtenvio, pro.hrenvio, pro.repreenvio, pro.status as protostatus,
-        rg0.ppb, rg0.denom, rg0.ncm, rg0.undcom, rg0.salarios, rg0.encargos, rg0.peso,
-        rg1.preco as preco_brl, case when nvl(taxa,0)=0 then 0 else round(rg1.preco/taxa,2) end as preco_usd,
-        rg0.tpdcre, rg0.dcrant, rg0.procretif, taxa as taxa_dia
+    SELECT  
+	  dcr.dcre, dcr.dtregistro, dcr.hrregistro, dcr.dtvigini, dcr.hrvigini, dcr.dtvigfim, dcr.hrvigfim,  
+      prc.idmatriz, prc.partnumpd, prc.tpprd, prc.status, cfg.cnpjemi, cfg.razsoc,
+      prc.taxausd, /*dcr.taxausd,*/ prc.totalnac, prc.totalimp, prc.custotal, -- <- updated by diagnostic (DCRPROTO)
+      prc.coefred, prc.iitotal, prc.iireduzido, pro.protdcre, 
+      pro.tpenvio, pro.dtenvio, pro.hrenvio, pro.repreenvio, pro.status as protostatus,
+      rg0.ppb, rg0.denom, rg0.ncm, rg0.undcom, rg0.salarios, rg0.encargos, rg0.peso,
+      rg1.preco as preco_brl, case when nvl(taxa,0)=0 then 0 else round(rg1.preco/taxa,2) end as preco_usd,
+      rg0.tpdcre, rg0.dcrant, rg0.procretif, taxa as taxa_dia
     FROM
-        HD4DCDHH.DCRPROCC as PRC join
-        HD4DCDHH.DCRREG0  as RG0 on rg0.idmatriz= prc.idmatriz and rg0.partnumpd= prc.partnumpd and rg0.tpprd= prc.tpprd left join			
-        HD4DCDHH.DCRREG1  as RG1 on rg1.idmatriz= prc.idmatriz and rg1.partnumpd= prc.partnumpd and rg1.tpprd= prc.tpprd left join
-        HD4DCDHH.DCRREGRA as CFG on cfg.stsconfig = 1 left join		
-        --> TAXA   
-        (select * from HD4DCDHH.CADTAXA  
-        where  CDMOED = 'USD' and
-                vigini = year(CURRENT TIMESTAMP)||right('00'||month(CURRENT TIMESTAMP),2)||right('00'||day(CURRENT TIMESTAMP),2)
-        Fetch first 1 row only
-        )tax on tax.taxa > 0   left join     
-        --> PROTOCOLO		
-        (select pro.* from 
-        HD4DCDHH.DCRPROTO pro join
-        HD4DCDHH.DCRPROCC prc on pro.idmatriz= prc.idmatriz and pro.partnumpd= prc.partnumpd and pro.tpprd= prc.tpprd
-        where pro.idmatriz = :idmatriz and pro.partnumpd= :partnumpd and pro.tpenvio <> 'H'    
-        order by TIMESTAMP_FORMAT(pro.ITAUDDT || ' ' || pro.ITAUDHR, 'YYYYMMDD HH24:MI:SS') desc
-        fetch first 1 row only
-        ) as PRO on pro.idmatriz = prc.idmatriz left join  
-        --> REGISTRO DCR-E 
-        HD4DCDHH.DCRVIGEN DCR on dcr.idmatriz= prc.idmatriz and dcr.partnumpd= prc.partnumpd and dcr.tpprd= prc.tpprd
+      HD4DCDHH.DCRPROCC as PRC join
+      HD4DCDHH.DCRREG0  as RG0 on rg0.idmatriz= prc.idmatriz and rg0.partnumpd= prc.partnumpd and rg0.tpprd= prc.tpprd left join			
+      HD4DCDHH.DCRREG1  as RG1 on rg1.idmatriz= prc.idmatriz and rg1.partnumpd= prc.partnumpd and rg1.tpprd= prc.tpprd left join
+      HD4DCDHH.DCRREGRA as CFG on cfg.stsconfig = 1 join
+	  --> REGISTRO DCR-E         
+      HD4DCDHH.DCRVIGEN DCR on dcr.idmatriz= prc.idmatriz and dcr.partnumpd= prc.partnumpd and dcr.tpprd= prc.tpprd
+	  left join
+      --> TAXA   
+      (select * from HD4DCDHH.CADTAXA  where CDMOED = 'USD' and
+       vigini = year(CURRENT TIMESTAMP)||right('00'||month(CURRENT TIMESTAMP),2)||right('00'||day(CURRENT TIMESTAMP),2)
+       Fetch first 1 row only
+      )tax on tax.taxa > 0   
+	  left join   
+      --> PROTOCOLO		
+	  (select pro0.*, ROWNUMBER() Over(Partition by idmatriz, partnumpd Order by dthr desc) as ln_proto
+	   from
+         (select  x.*, TIMESTAMP_FORMAT(ITAUDDT||' '||ITAUDHR, 'YYYYMMDD HH24:MI:SS') dthr                 
+          from    HD4DCDHH.DCRPROTO x  where tpenvio <> 'H' )pro0
+      ) as PRO 
+          on pro.idmatriz= prc.idmatriz and pro.partnumpd= dcr.partnumpd and pro.ln_proto= 1       
     WHERE
-        prc.idmatriz = :idmatriz and prc.partnumpd= :partnumpd and prc.tpprd= 'PC'
+	  dcr.dcre = :num_dcre and prc.tpprd= 'PC'
+      /*prc.idmatriz = :idmatriz and prc.partnumpd= :partnumpd and prc.tpprd= 'PC'*/
     """, nativeQuery = true)
-    Optional<DCReProjection> getRegistroDCRe(Long idmatriz, String partnumpd);
+    //Optional<DCReProjection> getRegistroDCRe(Long idmatriz, String partnumpd);
+	Optional<DCReProjection> getRegistroDCRe(String num_dcre);
+
+
+
+	@Query(value = """
+	SELECT 
+	  nvl(dcr.dcre, '0000000000') dcre, prc.idmatriz, prc.partnumpd, prc.tpprd, prc.status, 
+	  prc.taxausd, prc.totalnac, prc.totalimp, prc.custotal, prc.coefred, prc.iitotal, prc.iireduzido,  		
+	  rg0.ppb as ppbprd, rg0.denom as descrfb, rg0.ncm, rg0.undcom, rg0.salarios, rg0.encargos, rg0.peso,
+	  rg1.preco as preco_brl, rg0.tpdcre, rg0.dcrant, rg0.procretif, ppb.prddest,
+	  dcr.dtvigini, dcr.dtvigfim
+	FROM
+	  HD4DCDHH.MTASTEC  as MAT join	
+	  HD4DCDHH.DCRPROCC as PRC on prc.idmatriz= mat.idmatriz and prc.tpprd= 'PC' join
+	  HD4DCDHH.DCRREG0  as RG0 on rg0.idmatriz= prc.idmatriz and rg0.partnumpd= prc.partnumpd and rg0.tpprd= prc.tpprd join			
+	  HD4DCDHH.DCRREG1  as RG1 on rg1.idmatriz= prc.idmatriz and rg1.partnumpd= prc.partnumpd and rg1.tpprd= prc.tpprd left join
+	  HD4DCDHH.CADPPB   as PPB on ppb.partnumpd = mat.partnumpd		
+	  left join /* mudar p/ join */
+	  HD4DCDHH.DCRVIGEN as DCR on dcr.idmatriz= prc.idmatriz and rg1.partnumpd= prc.partnumpd		       
+	WHERE
+      prc.tpprd= 'PC' --and status= 6
+	Order by int(nvl(dcr.dtvigini, 0)) desc
+    """, nativeQuery = true)
+    List<RegistradosAstecINT> getRegistrados();
+
 
 
 	@Transactional
