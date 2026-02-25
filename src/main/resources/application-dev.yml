@@ -34,7 +34,7 @@ schedule:
     atualizaPRD: 0
     reprocMatrizPRD: 0
     reprocMatrizAST: 0
-    procTXTShowa: 120
+    #procTXTShowa: 120 desativado - saída coligada 2026
     #config in PD:
     #atualizaPRD: 15
     #procTXTShowa: 15
