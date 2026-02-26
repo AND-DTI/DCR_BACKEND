@@ -18,6 +18,11 @@ cd existing_repo
 git remote add origin https://gitlab.honda.com.br/new-dcr/dcr-backend.git
 git branch -M main
 git push -uf origin main
+
+git config --global --list
+git config --global http.proxy http://127.0.0.1:9000
+git config --global --unset http.proxy
+ssh -T git@gitlab.dev.hondacloud.net:hda/web/fiscal/dcr-e/backend.git
 ```
 
 ## Integrate with your tools
