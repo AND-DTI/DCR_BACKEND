@@ -1,8 +1,6 @@
-package com.dcr.api.controller;
-
+package com.dcr.api.controller.desativados;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,26 +11,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.dcr.api.model.as400.Dcrcoli0;
-import com.dcr.api.model.dto.Dcrcoli0DTO;
-import com.dcr.api.model.keys.Dcrcoli0Key;
-import com.dcr.api.service.as400.Dcrcoli0Service;
+import com.dcr.api.model.as400.Dcrcoli2;
+import com.dcr.api.model.dto.Dcrcoli2DTO;
+import com.dcr.api.model.keys.Dcrcoli2Key;
+import com.dcr.api.service.as400.Dcrcoli2Service;
 import com.dcr.api.utils.Auxiliar;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 
+
+
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/coligado/zero")
-public class ColigadoZeroController {
+@RequestMapping("/api/coligado/dois")
+public class ColigadoDoisController {
+
 
 	@Autowired
-	Dcrcoli0Service service;
+	Dcrcoli2Service service;
 	
+
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os Registros")
 	@ApiResponses(value = {
@@ -44,7 +44,7 @@ public class ColigadoZeroController {
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Dcrcoli0> lista = service.getAll();
+			List<Dcrcoli2> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -70,14 +70,14 @@ public class ColigadoZeroController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> createRegistro(@RequestBody Dcrcoli0DTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> createRegistro(@RequestBody Dcrcoli2DTO dto, HttpServletRequest request) {
 	
 		try {
-			Dcrcoli0Key key = new Dcrcoli0Key();
-			key.setDenom(dto.denom());
+			Dcrcoli2Key key = new Dcrcoli2Key();
 			key.setDcre(dto.dcre());
+			key.setNumcomp(dto.numcomp());
 			
-			Optional<Dcrcoli0> dcr = service.getByKey(key);
+			Optional<Dcrcoli2> dcr = service.getByKey(key);
 			
 			if (!dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -97,6 +97,7 @@ public class ColigadoZeroController {
 		}   
 	}
 	
+
 	@PutMapping(value = "/update", produces = "application/json")
 	@Operation(summary = "Cria um Registro")
 	@ApiResponses(value = {
@@ -105,14 +106,14 @@ public class ColigadoZeroController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> update(@RequestBody Dcrcoli0DTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody Dcrcoli2DTO dto, HttpServletRequest request) {
 	
 		try {
-			Dcrcoli0Key key = new Dcrcoli0Key();
-			key.setDenom(dto.denom());
+			Dcrcoli2Key key = new Dcrcoli2Key();
 			key.setDcre(dto.dcre());
+			key.setNumcomp(dto.numcomp());
 			
-			Optional<Dcrcoli0> dcr = service.getByKey(key);
+			Optional<Dcrcoli2> dcr = service.getByKey(key);
 			
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -132,6 +133,7 @@ public class ColigadoZeroController {
 		}   
 	}
 	
+	
 	@GetMapping(value = "/getByKey", produces = "application/json")
 	@Operation(summary = "Busca o Registro ativo")
 	@ApiResponses(value = {
@@ -140,14 +142,13 @@ public class ColigadoZeroController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getByKey(@RequestBody Dcrcoli0DTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> getByKey(@RequestBody Dcrcoli2DTO dto, HttpServletRequest request) {
 	
 		try {
-			Dcrcoli0Key key = new Dcrcoli0Key();
-			key.setDenom(dto.denom());
+			Dcrcoli2Key key = new Dcrcoli2Key();
 			key.setDcre(dto.dcre());
-			
-			Optional<Dcrcoli0> dcr = service.getByKey(key);
+			key.setNumcomp(dto.numcomp());
+			Optional<Dcrcoli2> dcr = service.getByKey(key);
 					
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)

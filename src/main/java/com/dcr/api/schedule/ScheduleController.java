@@ -38,7 +38,7 @@ public class ScheduleController {
 		Integer atualizaProduto = Integer.valueOf(env.getProperty("schedule.atualizaPRD"));
         Integer reprocessaMatrizPRD = Integer.valueOf(env.getProperty("schedule.reprocMatrizPRD"));
         Integer reprocessaMatrizAST = Integer.valueOf(env.getProperty("schedule.reprocMatrizAST"));
-		Integer processaTXTShowa = Integer.valueOf(env.getProperty("schedule.procTXTShowa"));
+		//Integer processaTXTShowa = Integer.valueOf(env.getProperty("schedule.procTXTShowa")); #desativado - saída coligada 2026
 		//Old Boolean
 		//Boolean atualizaProduto = Boolean.valueOf(env.getProperty("schedule.atualizaPRD"));
         //Boolean reprocessaMatrizPRD = Boolean.valueOf(env.getProperty("schedule.reprocMatrizPRD"));
@@ -72,9 +72,9 @@ public class ScheduleController {
             scheduler.scheduleAtFixedRate(this::reprocessaMatrizAvulsa_ASTEC, 0, reprocessaMatrizAST, TimeUnit.MINUTES);
         }
 
-		if(processaTXTShowa > 0){
+		/*if(processaTXTShowa > 0){ #desativado - saída coligada 2026
             scheduler.scheduleAtFixedRate(this::procINT_TXT_Showa, 0, 15, TimeUnit.MINUTES);
-        }
+        }*/
          		
         //scheduler.scheduleAtFixedRate(this::explodeMatrizAvulsa, 0, 10, TimeUnit.MINUTES);		
         //scheduler.scheduleAtFixedRate(this::verificarPendencias, 0, 30, TimeUnit.MINUTES);

@@ -28,13 +28,17 @@ import com.dcr.api.response.MatriprdResponse;
 import com.dcr.api.response.MatriprdResponseList;
 import com.dcr.api.response.PendenciaProdResponse;
 import com.dcr.api.response.PendenciaResponse;
+import com.dcr.api.response.ProdutoDCReCopy;
+import com.dcr.api.response.ProdutoDCReSugest;
 import com.dcr.api.response.ProdutoPendenciaResponse;
 import com.dcr.api.response.ProdutoPendenciaResponse2;
 import com.dcr.api.response.ProdutoPendenciaResponseList;
 import com.dcr.api.response.ProdutoPendenciaSimplesResponse;
+import com.dcr.api.response.ProdutoResponse;
 import com.dcr.api.response.ProdutoSemListaResponse;
 import com.dcr.api.response.Interface.PendenciaINT;
 import com.dcr.api.response.Interface.PendenciaProdINT;
+import com.dcr.api.response.Interface.ProdutoINT;
 import com.dcr.api.utils.Auxiliar;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -1471,7 +1475,37 @@ public class MatriprdService {
 
     }
 
-    
+
+	public List<ProdutoResponse> listProdutoDcreCopy(){
+
+		List<ProdutoResponse> lista = new ArrayList<>(); 
+		List<ProdutoINT> resultados = repository.consultaPrototipos();
+
+
+		if(resultados.isEmpty()){
+			return lista;
+		}
+
+		for (ProdutoINT result : resultados) {
+
+			ProdutoResponse prod = mapper.map(result, ProdutoResponse.class);
+			ProdutoDCReCopy copy = mapper.map(result, ProdutoDCReCopy.class);	
+			ProdutoDCReSugest sugest = mapper.map(result, ProdutoDCReSugest.class);
+			Auxiliar.formatResponse(copy);
+			Auxiliar.formatResponse(sugest);
+			prod.setDcreCopy(copy);
+			prod.setDcreSugest(sugest);
+			lista.add(prod);
+
+		}
+
+		//lista = Arrays.asList(mapper.map(resultados, ProdutoResponse[].class));
+
+
+		return lista;
+
+
+	}
 
 }
 

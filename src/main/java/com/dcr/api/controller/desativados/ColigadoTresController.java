@@ -1,4 +1,4 @@
-package com.dcr.api.controller;
+package com.dcr.api.controller.desativados;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import com.dcr.api.model.as400.Dcrcoli2;
-import com.dcr.api.model.dto.Dcrcoli2DTO;
-import com.dcr.api.model.keys.Dcrcoli2Key;
-import com.dcr.api.service.as400.Dcrcoli2Service;
+import com.dcr.api.model.as400.Dcrcoli3;
+import com.dcr.api.model.dto.Dcrcoli3DTO;
+import com.dcr.api.model.keys.Dcrcoli3Key;
+import com.dcr.api.service.as400.Dcrcoli3Service;
 import com.dcr.api.utils.Auxiliar;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,14 +25,13 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/api/coligado/dois")
-public class ColigadoDoisController {
+@RequestMapping("/api/coligado/tres")
+public class ColigadoTresController {
 
 
 	@Autowired
-	Dcrcoli2Service service;
+	Dcrcoli3Service service;
 	
-
 	@GetMapping(value = "/getAll", produces = "application/json")
 	@Operation(summary = "Busca todos os Registros")
 	@ApiResponses(value = {
@@ -44,7 +43,7 @@ public class ColigadoDoisController {
 	public ResponseEntity<Object> getAll() {
 	
 		try {
-			List<Dcrcoli2> lista = service.getAll();
+			List<Dcrcoli3> lista = service.getAll();
 	        if (lista.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .header("Accept", "application/json")
@@ -70,14 +69,15 @@ public class ColigadoDoisController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> createRegistro(@RequestBody Dcrcoli2DTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> createRegistro(@RequestBody Dcrcoli3DTO dto, HttpServletRequest request) {
 	
 		try {
-			Dcrcoli2Key key = new Dcrcoli2Key();
+			Dcrcoli3Key key = new Dcrcoli3Key();
 			key.setDcre(dto.dcre());
 			key.setNumcomp(dto.numcomp());
+			key.setNumsubcomp(dto.numsubcomp());
 			
-			Optional<Dcrcoli2> dcr = service.getByKey(key);
+			Optional<Dcrcoli3> dcr = service.getByKey(key);
 			
 			if (!dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -106,14 +106,15 @@ public class ColigadoDoisController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Object> update(@RequestBody Dcrcoli2DTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> update(@RequestBody Dcrcoli3DTO dto, HttpServletRequest request) {
 	
 		try {
-			Dcrcoli2Key key = new Dcrcoli2Key();
+			Dcrcoli3Key key = new Dcrcoli3Key();
 			key.setDcre(dto.dcre());
 			key.setNumcomp(dto.numcomp());
+			key.setNumsubcomp(dto.numsubcomp());
 			
-			Optional<Dcrcoli2> dcr = service.getByKey(key);
+			Optional<Dcrcoli3> dcr = service.getByKey(key);
 			
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -142,13 +143,14 @@ public class ColigadoDoisController {
 	        @ApiResponse(responseCode = "500", description = "Error!")
 	})
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<Object> getByKey(@RequestBody Dcrcoli2DTO dto, HttpServletRequest request) {
+	public ResponseEntity<Object> getByKey(@RequestBody Dcrcoli3DTO dto, HttpServletRequest request) {
 	
 		try {
-			Dcrcoli2Key key = new Dcrcoli2Key();
+			Dcrcoli3Key key = new Dcrcoli3Key();
 			key.setDcre(dto.dcre());
 			key.setNumcomp(dto.numcomp());
-			Optional<Dcrcoli2> dcr = service.getByKey(key);
+			key.setNumsubcomp(dto.numsubcomp());
+			Optional<Dcrcoli3> dcr = service.getByKey(key);
 					
 			if (dcr.isEmpty()) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)

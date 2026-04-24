@@ -1,4 +1,4 @@
-package com.dcr.api.controller;
+package com.dcr.api.controller.desativados;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

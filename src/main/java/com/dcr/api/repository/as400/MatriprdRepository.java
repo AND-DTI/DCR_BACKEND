@@ -6,6 +6,7 @@ import com.dcr.api.model.as400.Matriprd;
 import com.dcr.api.model.dto.INT.MatriprdComPPBINT;
 import com.dcr.api.response.Interface.PendenciaINT;
 import com.dcr.api.response.Interface.PendenciaProdINT;
+import com.dcr.api.response.Interface.ProdutoINT;
 
 
 
@@ -39,22 +40,48 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 		HD4DCDHH.MATRIDOC as DOC on doc.IDMATRIZ= prd.IDMATRIZ and doc.PARTNUMPD= pen.PARTNUMPD and doc.partnum= pen.partnum left join	
 		-- variação modelo base:
 		(select partnumpd as mdlbase, x.desccom as prdregistro, dcratual, vlatual, vlstruc, variacao, tpvariac
-		 from HD4DCDHH.RVPRODUTO x 
+		 from   HD4DCDHH.RVPRODUTO x 
 		)variacao on variacao.mdlbase = substring(itm.PARTNUMPD, 6, 3)
 	""";
 
-	@Query(value = "SELECT prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, \r\n"
-		+ "	  							 prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,\r\n"
-		+ "	  				itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,\r\n"
-		+ "	  				cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN,\r\n"
-		+ "	  				tpprd.DSCPOR, tpprd.DSCING,\r\n"
-		+ "	  				ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC, ins.PARTDESC\r\n"
-		+ "            FROM HD4DCDHH.MATRIPRD prd \r\n"
-		+ "            LEFT JOIN HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ\r\n"
-		+ "            LEFT JOIN HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR \r\n"
-		+ "            LEFT JOIN HD4DCDHH.MATRIINS AS INS ON ITM.IDMATRIZ = INS.IDMATRIZ\r\n"
-		+ "            LEFT JOIN HD4DCDHH.CADTPPRD tpprd ON prd.TPPRD = tpprd.TPPRD \r\n"
-		+ "            WHERE prd.IDMATRIZ = :idmatriz", nativeQuery = true)
+	String sqlbase_ListJustProd = """	
+	(SELECT 		
+		prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, 
+		ppb.PPBPRD, ppb.prddest, prd.TPPRD, /*prd.PROTOT*/1 as protot, prd.SPECIAL, prd.TPDCRE, prd.ORIGPRD, 
+		prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT,
+		itm.PARTNUMPD, itm.CODCOR, cor.CORPT, itm.PARTDESC, itm.UNMED, itm.PRECO, itm.NCM ncmprd, 
+		itm.PRIOCOR, prc.status statusproc, cor.CDBEJ, cor.CORENG, cor.TPPIN,
+		var.dcratual, var.vlatual, var.vlstruc, substring(prd.modelo, 1, 3) mdl_base
+	FROM 
+		HD4DCDHH.MATRIPRD as PRD join   
+		HD4DCDHH.MATRIITM as ITM on itm.IDMATRIZ= prd.IDMATRIZ join 
+		HD4DCDHH.DCRPROCC as PRC on prc.IDMATRIZ= prd.IDMATRIZ and prc.PARTNUMPD= itm.PARTNUMPD left join
+		HD4DCDHH.CADCOR   as COR on cor.CODCOR= itm.CODCOR left join
+		HD4DCDHH.CADPPB   as PPB on ppb.PARTNUMPD= itm.PARTNUMPD left join		
+		-- variação modelo base:
+		(select partnumpd as mdlbase, x.desccom as prdregistro, dcratual, vlatual, vlstruc, variacao, tpvariac
+		 from   HD4DCDHH.RVPRODUTO x 
+		)var on var.mdlbase = substring(itm.PARTNUMPD, 6, 3)
+	WHERE prc.status = 9 /* replace by protop param */
+	)vw
+	""";
+
+	@Query(value = """							
+	SELECT 
+	  	prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, 
+	  	prd.TPDCRE, prd.ORIGPRD, prd.DTNECI, prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, prd.PRIODTMNT, prd.PRIOHRMNT, 
+		itm.PARTNUMPD, itm.MODELO, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRIOCOR,
+		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN,
+		tpprd.DSCPOR, tpprd.DSCING,
+		ins.ITMORG, ins.ITTYP, ins.UNMSR, ins.NECFIL, ins.CDSPN, ins.WEGHT, ins.EMCOMP, ins.PARTSUGEST, ins.PARTSUGDSC, ins.PARTNEW, ins.PARTNEWDSC, ins.PARTDESC
+	FROM 
+	    HD4DCDHH.MATRIPRD prd 
+		LEFT JOIN HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ
+		LEFT JOIN HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR 
+		LEFT JOIN HD4DCDHH.MATRIINS AS INS ON ITM.IDMATRIZ = INS.IDMATRIZ
+		LEFT JOIN HD4DCDHH.CADTPPRD tpprd ON prd.TPPRD = tpprd.TPPRD 
+		WHERE prd.IDMATRIZ = :idmatriz
+    """, nativeQuery = true)		
 	List<Object[]> consultaJoin(Integer idmatriz);
 	  
 	  
@@ -79,26 +106,67 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 
 
 	@Query(value = """						
-		SELECT  
-		  prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, 
-		  prd.TPDCRE, prd.DCRANT, prd.ORIGPRD, prd.itgarantia, prd.obsprio, prd.DTNECI, 
-		  prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, usr.name as respname, prd.PRIODTMNT, prd.PRIOHRMNT, 
-		  prd.flex1flw, prd.flex4flw,
-		  itm.PARTNUMPD, itm.MODELO modeloItm, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRECO, itm.NCM, itm.undcom, itm.PRIOCOR, 
-		  itm.mdlsimilar, itm.precobase, itm.dcrsimilar, 
-		  cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, 
-		  tpprd.DSCPOR, tpprd.DSCING
-		FROM  
-		  HD4DCDHH.MATRIPRD prd join 
-		  HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ left join
-		  HD4DCDHH.ACCUSER usr ON prd.prioresp = usr.username left join
-		  HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR left join
-		  HD4DCDHH.CADTPPRD tpprd ON prd.TPPRD = tpprd.TPPRD 		  
-		WHERE 
-		  prd.TPPRD IN :tpprdList 
-		order by prd.IDMATRIZ
-		""", nativeQuery = true)
-		List<MatriprdComPPBINT> consultaByTpprd2(List<String> tpprdList);
+	SELECT  
+		prd.IDMATRIZ, prd.PRODUTO, prd.MODELO, prd.ANOMDL, prd.DESCCOM, prd.DESCRFB, prd.TPPRD, prd.PROTOT, prd.SPECIAL, 
+		prd.TPDCRE, prd.DCRANT, prd.ORIGPRD, prd.itgarantia, prd.obsprio, prd.DTNECI, 
+		prd.PRIOURGEN, prd.PREVFAT, prd.PRIORESP, usr.name as respname, prd.PRIODTMNT, prd.PRIOHRMNT, 
+		prd.flex1flw, prd.flex4flw,
+		itm.PARTNUMPD, itm.MODELO modeloItm, itm.CODCOR, itm.PARTDESC, itm.UNMED, itm.PRECO, itm.NCM, itm.undcom, itm.PRIOCOR, 
+		itm.mdlsimilar, itm.precobase, itm.dcrsimilar, 
+		cor.CDBEJ, cor.CORPT, cor.CORENG, cor.TPPIN, 
+		tpprd.DSCPOR, tpprd.DSCING
+	FROM  
+		HD4DCDHH.MATRIPRD prd join 
+		HD4DCDHH.MATRIITM itm ON prd.IDMATRIZ = itm.IDMATRIZ left join
+		HD4DCDHH.ACCUSER usr ON prd.prioresp = usr.username left join
+		HD4DCDHH.CADCOR cor ON itm.CODCOR = cor.CODCOR left join
+		HD4DCDHH.CADTPPRD tpprd ON prd.TPPRD = tpprd.TPPRD 		  
+	WHERE 
+		prd.TPPRD IN :tpprdList 
+	order by prd.IDMATRIZ
+	""", nativeQuery = true)
+	List<MatriprdComPPBINT> consultaByTpprd2(List<String> tpprdList);
+
+
+	@Query(value = """
+	select 
+ 	  vw.*,
+ 	  dcr.prd_registro as sugest, dcr.cdprd as prdSugest, dcr.anofat as fatSugest,
+   	  dcr.modelo as mdlSugest, dcr.anomod as anoSugest, dcr.dstarif as descSugest,
+ 	  dcr.dcre as dcrSugest, dcr.dtregistro as regSugest,
+ 	  dcr.vl_produto as prcSugest, dcr.iireduzido as iiSugest,
+ 	  copy.prtncopy, copy.prdcopy, copy.fatcopy, 
+ 	  copy.mdlcopy, copy.anocopy, copy.desccopy,
+ 	  copy.dcrecopy, copy.regcopy, copy.prccopy, copy.iicopy,
+ 	  copy.respcopy, dtcopy, hrcopy 	  
+ 	from  			
+    """ +					
+	sqlbase_ListJustProd + """
+	/* DCR-e modelo similar sugerido (> valor): */
+	left join   
+	(SELECT 
+		ROWNUMBER() OVER(Partition by substring(partnumpd,6,3) order by totalimp desc) as ln_vlmax,
+		case when p.partnum is not null 
+		  then ROWNUMBER() OVER(Partition by p.partnum order by p.cutinpro desc) else 1
+		end as ln_fat,	
+		substring(partnumpd,6,3) mdl_base, substring(partnumpd, 6, 9) as modelo,  
+		partnumpd prd_registro, p.cdprd, p.anomod, last_anofab as anofat, p.cutinpro, p.modelo_sug,     
+		x.tpprd, idmatriz, dcre, dtregistro, taxausd, totalnac, totalimp, custotal, 
+		iireduzido, round((totalnac+totalimp)*taxausd,2) as vl_produto,          
+		p.dstarif, p.dspor, p.dspro, p.adahcd, p.agatcd, p.potencia, p.capacidade, p.tpcmb, p.destinacao
+	FROM   
+		HD4DCDHH.DCRVIGEN x left join
+		HD4DCDHH.VW_PRODUTOS p on p.partnum= x.partnumpd
+	WHERE  
+		x.tpprd <> 'PC'
+	)DCR ON dcr.mdl_base = vw.mdl_base and dcr.ln_vlmax = 1         		
+	/* Cópia de DCR-E: */
+	left join
+	HD4DCDHH.DCRCOPY COPY on copy.prtnorig= vw.partnumpd
+	where PROTOT = 1
+	and vw.idmatriz in(30002, 30020)
+	""", nativeQuery = true)
+	List<ProdutoINT> consultaPrototipos();
 	  
 	  
 	@Query(value = 
@@ -126,7 +194,6 @@ public interface MatriprdRepository  extends JpaRepository<Matriprd, Integer>{
 	List<PendenciaINT> consultaProdutoPendenciaBySubtype(Integer idmatriz, String partnumpd, String subtype, int status);
 
 	
-
 	@Query(value = 
 	sqlbase_listProd + """
 	WHERE 

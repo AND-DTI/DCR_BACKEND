@@ -1,4 +1,4 @@
-package com.dcr.api.controller;
+package com.dcr.api.controller.desativados;
 
 import java.util.List;
 import java.util.Optional;

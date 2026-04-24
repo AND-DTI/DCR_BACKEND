@@ -26,6 +26,7 @@ import com.dcr.api.model.dto.ProcPendenciaStepDTO;
 import com.dcr.api.model.keys.DcrproccKey;
 import com.dcr.api.model.keys.MatriitmKey;
 import com.dcr.api.response.ProdutoPendenciaResponse2;
+import com.dcr.api.response.ProdutoResponse;
 import com.dcr.api.schedule.ScheduleService;
 import com.dcr.api.service.as400.DcrproccService;
 import com.dcr.api.service.as400.MatriitmService;
@@ -535,6 +536,36 @@ public class MatrizProdutoController {
 		}   
 	}
 
+
+
+	@GetMapping(value = "/getPrototipos", produces = "application/json")
+	@Operation(summary = "Busca prototipos / itens com cópia de DCR-e")
+	@ApiResponses(value = {
+	        @ApiResponse(responseCode = "200", description = "Ok"),
+	        @ApiResponse(responseCode = "400", description = "Nenhuma protótipo encontrado!"),
+	        @ApiResponse(responseCode = "500", description = "Error!")
+	})
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<Object> getPrototipos() {
+	
+		try {
+
+			List<ProdutoResponse> lista = service.listProdutoDcreCopy();
+	        if (lista.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                    .header("Accept", "application/json")
+	                    .body("Nenhum protótipo encontrado!");
+	        }
+	        Auxiliar.formatResponse(lista);
+	        return ResponseEntity.status(HttpStatus.OK)
+		        	.header("Accept", "application/json")
+		            .body(lista);
+		} catch (Exception ae) {
+		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) 
+		    			.header("Accept", "application/json")
+		        		.body(ae.getMessage());                
+		}   
+	}
 
 
 
